@@ -1,26 +1,29 @@
 // @flow
-import React, {useContext, useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import React, {useContext, useRef, useState} from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
-
-
-import BottomSheet from 'reanimated-bottom-sheet';
-import Animated from 'react-native-reanimated';
 import CustomInputBox from "../../components/CustomInputBox";
 import ShortTextInput from "../../components/ShortTextInput";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
+import {Modalize} from "react-native-modalize";
 
 const LinkCard = ({navigation}) => {
 
     const user = useContext(UserContext)
 
-    // console.log(user)
+    const modalizeRef = useRef<Modalize>(null);
 
-    const bs = React.createRef();
-    const fall = new Animated.Value(1);
+    const OpenModal = () => {
+        modalizeRef.current?.open();
+    };
+
+    const CloseModal = () => {
+        modalizeRef.current?.close();
+    };
+
 
     const [isLoading, setIsLoading] = useState(false)
     const [cardNumber, setCardNumber] = useState("")
@@ -52,9 +55,8 @@ const LinkCard = ({navigation}) => {
                                   }`
 
         try {
-
+            setIsLoading(true)
             let res = await handleQuery(qry, user.token, false);
-
 
         } catch (e) {
             console.log(e, "AddCardNowError")
@@ -68,9 +70,7 @@ const LinkCard = ({navigation}) => {
 
     const renderInner = () => (
         <View style={{
-            backgroundColor: "#fff",
             paddingHorizontal: 20,
-            height: 510,
         }}>
             <View style={{marginHorizontal: 5}}>
                 <Text style={{fontSize: 20, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Add Card</Text>
@@ -87,7 +87,7 @@ const LinkCard = ({navigation}) => {
                     initialValue={cardNumber}
                     onChange={value => {
                         setCardNumber(value);
-                        console.log(value)
+                        // console.log(value)
 
                     }}
                     placeholderText={"Card Number"}/>
@@ -96,11 +96,10 @@ const LinkCard = ({navigation}) => {
 
             <View style={{
                 flexDirection: "row",
-                // justifyContent: "space-between",
                 width: SIZES.width * 0.9,
                 marginVertical: 20,
                 alignItems: "center",
-                // backgroundColor: "red"
+                justifyContent: "space-between",
             }}>
 
 
@@ -114,7 +113,7 @@ const LinkCard = ({navigation}) => {
                         initialValue={expiry}
                         onChange={value => {
                             setExpiry(value);
-                            console.log(value)
+                            // console.log(value)
                         }}
                         placeholderText={"Expiry"}
                         label={"Expiry date"}
@@ -134,7 +133,7 @@ const LinkCard = ({navigation}) => {
                         initialValue={cvv}
                         onChange={value => {
                             setCvv(value);
-                            console.log(value)
+                            // console.log(value)
                         }}
                         placeholderText={"Cvv"} shown label={"CVV"}/>
                 </View>
@@ -159,9 +158,21 @@ const LinkCard = ({navigation}) => {
                 loading={isLoading}
                 filled text={"Add Card now"}
                 onPress={async () => {
-                    setIsLoading(true)
-                    await AddCardNow();
-                    navigation.navigate("DebitCardSuccessScreen")
+
+
+                    try {
+
+                        if (cardNumber && expiry && pin && cvv !== "") {
+                            await AddCardNow();
+                            navigation.navigate("DebitCardSuccessScreen")
+                        }
+                    } catch (e) {
+                        console.log(e, "AddCardError")
+                        setIsLoading(false)
+
+                    }
+
+
                 }}/>
 
 
@@ -171,25 +182,20 @@ const LinkCard = ({navigation}) => {
     const renderHeader = () => (
         <View style={{
             padding: 20,
-            // backgroundColor: "#f3f0f0",
             borderTopRightRadius: 25,
             borderTopLeftRadius: 25,
             width: SIZES.width,
-            shadowColor: '#333333',
-            shadowOffset: {width: -1, height: -3},
-            shadowRadius: 2,
-            shadowOpacity: 0.4,
-            elevation: 0.3,
+
         }}>
 
-            <TouchableOpacity onPress={() => bs.current.snapTo(1)}>
+            <TouchableOpacity onPress={() => CloseModal()}>
                 <Text style={{
                     alignSelf: "flex-end",
                     color: "black",
                     fontFamily: "Nexa-Bold",
-                    fontSize: 20,
+                    fontSize: 28,
                     right: 15
-                }}>X</Text>
+                }}>x</Text>
 
             </TouchableOpacity>
 
@@ -200,25 +206,20 @@ const LinkCard = ({navigation}) => {
     return (
         <View style={styles.container}>
 
-            <BottomSheet
-                ref={bs}
-                snapPoints={[500, 0]}
-                renderContent={renderInner}
-                renderHeader={renderHeader}
-                initialSnap={1}
-                callbackNode={fall}
-                enabledGestureInteraction={true}
-                // enabledBottomInitialAnimation={true}
-            />
+
+            <Modalize
+                modalHeight={SIZES.height * 0.55}
+                handleStyle={{backgroundColor: 'transparent'}}
+                childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
+                ref={modalizeRef}>
+                {renderHeader()}
+                {renderInner()}
+            </Modalize>
 
 
-            <Animated.View style={{
-                // margin: 20,
+            <View style={{
                 paddingHorizontal: 20,
-                // paddingVertical: 20,
-                height: SIZES.height*0.9,
-                opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)),
-                // backgroundColor: Animated.add("#fff", Animated.multiply(bc, "#000"))
+                height: SIZES.height * 0.9,
             }}>
 
                 <BackButton onPress={() => navigation.pop()}/>
@@ -227,7 +228,7 @@ const LinkCard = ({navigation}) => {
                     <Text style={styles.linkCard}>Link a Card</Text>
                 </View>
 
-                <TouchableOpacity style={styles.cardBox} activeOpacity={0.6} onPress={() => bs.current.snapTo(0)}>
+                <TouchableOpacity style={styles.cardBox} activeOpacity={0.6} onPress={() => OpenModal()}>
                     <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
                     <Text style={styles.linkCardText}>Debit Card</Text>
                     <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}} resizeMode={"contain"}/>
@@ -237,7 +238,7 @@ const LinkCard = ({navigation}) => {
                     <CustomButton onPress={() => navigation.pop()} filled text={"Cancel"}/>
                 </View>
 
-            </Animated.View>
+            </View>
 
 
         </View>
@@ -250,8 +251,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        // paddingHorizontal: 20,
-
     },
     linkCard: {
         fontFamily: "Nexa-Bold",
@@ -276,10 +275,6 @@ const styles = StyleSheet.create({
     cancelButton: {
         justifyContent: "flex-end",
         flex: 2,
-        // paddingHorizontal: 20,
-
-        // backgroundColor:'cyan',
-        // height:300
     }
 
 })

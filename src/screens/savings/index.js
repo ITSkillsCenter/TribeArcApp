@@ -1,5 +1,5 @@
 // @flow
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
@@ -10,6 +10,7 @@ import Animated from "react-native-reanimated";
 import BottomSheet from "reanimated-bottom-sheet";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import {Modalize} from "react-native-modalize";
 
 
 const savings = [
@@ -24,15 +25,28 @@ const Savings = ({navigation}) => {
     const user = useContext(UserContext)
 
 
-    const bs = React.createRef();
-    const bs2 = React.createRef();
-    const fall = new Animated.Value(1);
+    const modalizeRef1 = useRef<Modalize>(null);
+    const modalizeRef2 = useRef<Modalize>(null);
+
+    const OpenModal1 = () => {
+        modalizeRef1.current?.open();
+    };
+    const OpenModal2 = () => {
+        modalizeRef2.current?.open();
+    };
+
+    const CloseModal1 = () => {
+        modalizeRef1.current?.close();
+    };
+    const CloseModal2 = () => {
+        modalizeRef2.current?.close();
+    };
+
 
     const [amountToSave, setAmountToSave] = useState("")
     const [tabStatus, setTabStatus] = useState(null)
     const [amount, setAmount] = useState("")
     const [saving, setSaving] = useState(0)
-    const [totalSavings, setTotalSavings] = useState(0)
     const [cardNum, setCardNum] = useState("")
     const [cardNumber, setCardNumber] = useState("")
     const [isLoading, setIsLoading] = useState(false)
@@ -196,7 +210,7 @@ const Savings = ({navigation}) => {
                             console.log(value)
 
                         }}
-                        placeholdeText={"Pin"}
+                        placeholderText={"Pin"}
                         mask={"9999"}
                         shown label={"Card Pin"}/>
                 </View>
@@ -223,7 +237,6 @@ const Savings = ({navigation}) => {
         <View style={{
             backgroundColor: "#fff",
             paddingHorizontal: 20,
-            height: 510,
         }}>
 
             <View style={{marginHorizontal: 5}}>
@@ -233,8 +246,8 @@ const Savings = ({navigation}) => {
             </View>
 
             <TouchableOpacity style={styles.cardBox} activeOpacity={0.8} onPress={() => {
-                bs2.current.snapTo(0);
-                bs.current.snapTo(1)
+                CloseModal1()
+                OpenModal2()
             }}>
                 <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
                 <Text style={styles.linkCardText}>Add a Card</Text>
@@ -248,26 +261,22 @@ const Savings = ({navigation}) => {
     const renderHeader2 = () => (
         <View style={{
             padding: 20,
-            backgroundColor: "#fff",
+            // backgroundColor: "#fff",
             borderTopRightRadius: 25,
             borderTopLeftRadius: 25,
             width: SIZES.width,
-            shadowColor: '#333333',
-            shadowOffset: {width: -1, height: -3},
-            shadowRadius: 2,
-            shadowOpacity: 0.4,
-            elevation: 0.3,
+
         }}>
 
 
-            <TouchableOpacity onPress={() => bs2.current.snapTo(1)}>
+            <TouchableOpacity onPress={() => CloseModal2()}>
                 <Text style={{
                     alignSelf: "flex-end",
                     color: "black",
                     fontFamily: "Nexa-Bold",
-                    fontSize: 20,
+                    fontSize: 28,
                     right: 15
-                }}>X</Text>
+                }}>x</Text>
 
             </TouchableOpacity>
 
@@ -278,25 +287,21 @@ const Savings = ({navigation}) => {
     const renderHeader = () => (
         <View style={{
             padding: 20,
-            backgroundColor: "#fff",
+            // backgroundColor: "#fff",
             borderTopRightRadius: 25,
             borderTopLeftRadius: 25,
             width: SIZES.width,
-            shadowColor: '#333333',
-            shadowOffset: {width: -1, height: -3},
-            shadowRadius: 2,
-            shadowOpacity: 0.4,
-            elevation: 0.3,
+
         }}>
 
-            <TouchableOpacity onPress={() => bs.current.snapTo(1)}>
+            <TouchableOpacity onPress={() =>  CloseModal1()}>
                 <Text style={{
                     alignSelf: "flex-end",
                     color: "black",
                     fontFamily: "Nexa-Bold",
-                    fontSize: 20,
+                    fontSize: 28,
                     right: 15
-                }}>X</Text>
+                }}>x</Text>
 
             </TouchableOpacity>
 
@@ -341,38 +346,28 @@ const Savings = ({navigation}) => {
         <View style={styles.container}>
 
 
-            <BottomSheet
-                ref={bs2}
-                snapPoints={[500, 0]}
-                renderContent={renderInner2}
-                renderHeader={renderHeader2}
-                initialSnap={1}
-                callbackNode={fall}
-                enabledGestureInteraction={true}
-                enabledBottomInitialAnimation={true}
-            />
+            <Modalize
+                modalHeight={SIZES.height * 0.4}
+                handleStyle={{backgroundColor: 'transparent'}}
+                childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
+                ref={modalizeRef1}>
+                {renderHeader()}
+                {renderInner()}
+            </Modalize>
 
-            <BottomSheet
-                ref={bs}
-                snapPoints={[300, 0]}
-                renderContent={renderInner}
-                renderHeader={renderHeader}
-                initialSnap={1}
-                callbackNode={fall}
-                enabledGestureInteraction={true}
-                enabledBottomInitialAnimation={true}
-            />
+            <Modalize
+                modalHeight={SIZES.height * 0.6}
+                handleStyle={{backgroundColor: 'transparent'}}
+                childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
+                ref={modalizeRef2}>
+                {renderHeader2()}
+                {renderInner2()}
+            </Modalize>
 
 
-            <Animated.View style={{
-                // margin: 20,
-                // backgroundColor:"cyan",
+            <View style={{
                 paddingHorizontal: 20,
-                // paddingVertical: 20,
                 height: SIZES.height*0.9,
-
-                opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)),
-                // backgroundColor: Animated.add("#fff", Animated.multiply(bc, "#000"))
             }}>
 
                 <BackButton onPress={() => navigation.pop()}/>
@@ -418,6 +413,7 @@ const Savings = ({navigation}) => {
                 </View>
                 <View style={styles.saveButton}>
                     <CustomButton loading={isLoading} filled text={"Save Money"} onPress={async () => {
+
                         if (amountToSave !== "") {
                             setIsLoading(true)
                             if (cardNum) {
@@ -427,14 +423,15 @@ const Savings = ({navigation}) => {
                                 setIsLoading(false)
 
                             } else {
-                                bs.current.snapTo(0)
+                                // bs.current.snapTo(0)
+                                OpenModal1()
                                 setIsLoading(false)
                             }
                         }
 
                     }}/>
                 </View>
-            </Animated.View>
+            </View>
 
         </View>
     );
@@ -447,12 +444,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ffffff',
-        // paddingTop:10
-        // height: SIZES.height
-        // paddingHorizontal: 20,
-
-        // marginBottom:30
-
     },
     savings: {
         fontSize: 30,

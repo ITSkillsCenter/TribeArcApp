@@ -25,6 +25,7 @@ import AddBvn from "./src/screens/addBvn";
 import ChangePassword from "./src/screens/changePassword";
 import PasswordSuccessScreen from "./src/screens/passwordSuccessScreen";
 import OtpScreen from "./src/screens/otpScreen";
+// import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
 
@@ -127,8 +128,11 @@ const App = () => {
 
 
     return (
+        // <GestureHandlerRootView>
 
-        <AuthContext.Provider value={auth}>
+
+    <AuthContext.Provider value={auth}>
+
 
             <SafeAreaView style={styles.container}>
                 {/*<StatusBar translucent={false} backgroundColor={"transparent"} />*/}
@@ -147,10 +151,15 @@ const App = () => {
                 </NavigationContainer>
             </SafeAreaView>
 
+
+
         </AuthContext.Provider>
 
+    // </GestureHandlerRootView>
 
-    )
+
+
+)
 }
 
 

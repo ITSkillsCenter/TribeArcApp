@@ -1,57 +1,61 @@
 // @flow
-import React, {useContext} from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, Image} from "react-native";
+import React, {useContext, useRef} from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import BackButton from "../../components/BackButton";
 import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
 import AccountOptions from "../../components/AccountOptions";
 import {AuthContext} from "../../context/AuthContext";
-import Animated from "react-native-reanimated";
-import BottomSheet from "reanimated-bottom-sheet";
 import CustomButton from "../../components/CustomButton";
+import {Modalize} from "react-native-modalize";
 
 
 const Profile = ({navigation}) => {
 
+
+    const modalizeRef = useRef<Modalize>(null);
+
+    const OpenModal = () => {
+        modalizeRef.current?.open();
+    };
+
+    const CloseModal = () => {
+        modalizeRef.current?.close();
+    };
+
+
     const {logout} = useContext(AuthContext)
     const user = useContext(UserContext)
 
-    const bs = React.createRef();
-    const fall = new Animated.Value(1);
-
 
     const renderHeader = () => (
+
         <View style={{
             padding: 20,
-            backgroundColor: "#fff",
             borderTopRightRadius: 25,
             borderTopLeftRadius: 25,
             width: SIZES.width,
-            shadowColor: '#333333',
-            shadowOffset: {width: -1, height: -3},
-            shadowRadius: 2,
-            shadowOpacity: 0.4,
-            elevation: 0.3,
+
         }}>
 
-            <TouchableOpacity onPress={() => bs.current.snapTo(1)}>
+            <TouchableOpacity onPress={() => CloseModal()}>
                 <Text style={{
                     alignSelf: "flex-end",
                     color: "black",
                     fontFamily: "Nexa-Bold",
-                    fontSize: 20,
+                    fontSize: 28,
                     right: 15
-                }}>X</Text>
+                }}>x</Text>
 
             </TouchableOpacity>
 
         </View>
+
     );
 
 
     const renderInner = () => (
         <View style={{
-            backgroundColor: "#fff",
             paddingHorizontal: 20,
             height: 410,
             alignItems: "center"
@@ -62,27 +66,31 @@ const Profile = ({navigation}) => {
                 want to logout?</Text>
 
             <View style={{width: SIZES.width * 0.9, marginVertical: 10}}>
-                <CustomButton onPress={() => logout()} filled text={"Confirm"}/>
+                <CustomButton
+                    onPress={() => {
+                        logout();
+                    }}
+                    filled
+                    text={"Confirm"}/>
 
             </View>
-
         </View>
     );
 
     return (
         <View>
 
-            <BottomSheet
-                ref={bs}
-                snapPoints={[400, 0]}
-                renderContent={renderInner}
-                renderHeader={renderHeader}
-                initialSnap={1}
-                callbackNode={fall}
-                enabledGestureInteraction={true}
-                enabledBottomInitialAnimation={true}
-            />
-            <Animated.View style={styles.container}>
+
+            <Modalize
+                modalHeight={SIZES.height * 0.45}
+                handleStyle={{backgroundColor: 'transparent'}}
+                childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
+                ref={modalizeRef}>
+                {renderHeader()}
+                {renderInner()}
+            </Modalize>
+
+            <View style={styles.container}>
 
                 <BackButton onPress={() => navigation.pop()}/>
                 <Text style={styles.myAccount}>My Account</Text>
@@ -121,14 +129,10 @@ const Profile = ({navigation}) => {
                 <AccountOptions
                     image={icons.logout}
                     text={"Logout"}
-                    // onPress={() => logout()}
-                    onPress={() => {
-                        bs.current.snapTo(0)
-
-                    }}
+                    onPress={() => OpenModal()}
 
                 />
-            </Animated.View>
+            </View>
         </View>
     );
 };
@@ -139,7 +143,6 @@ export default Profile
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
-        // paddingVertical: 20,
         height: SIZES.height,
         backgroundColor: COLORS.white
 
@@ -155,7 +158,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
         // height: 110,
-        height:SIZES.height*0.15,
+        height: SIZES.height * 0.15,
         width: "100%",
         // borderWidth:0.5,
         backgroundColor: 'white',
@@ -164,7 +167,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         marginVertical: 20,
         elevation: 2,
-        shadowColor:"black",
+        shadowColor: "black",
         shadowOpacity: 0.15,
         shadowOffset: {
             width: 0,

@@ -11,6 +11,7 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.66.4)
   - fmt (6.2.1)
   - glog (0.3.5)
+  - HMSegmentedControl (1.5.6)
   - lottie-ios (3.2.3)
   - lottie-react-native (5.0.1):
     - lottie-ios (~> 3.2.3)
@@ -287,7 +288,18 @@ PODS:
     - React-jsi (= 0.66.4)
     - React-logger (= 0.66.4)
     - React-perflogger (= 0.66.4)
-  - RNCAsyncStorage (1.15.15):
+  - ReactNativeNavigation (7.24.3-hotfix.1):
+    - HMSegmentedControl
+    - React-Core
+    - React-RCTImage
+    - React-RCTText
+    - ReactNativeNavigation/Core (= 7.24.3-hotfix.1)
+  - ReactNativeNavigation/Core (7.24.3-hotfix.1):
+    - HMSegmentedControl
+    - React-Core
+    - React-RCTImage
+    - React-RCTText
+  - RNCAsyncStorage (1.15.17):
     - React-Core
   - RNCClipboard (1.8.5):
     - React-Core
@@ -323,7 +335,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.10.1):
+  - RNScreens (3.10.2):
     - React-Core
     - React-RCTImage
   - RNSecureStorage (0.1.2):
@@ -369,6 +381,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeNavigation (from `../node_modules/react-native-navigation`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
@@ -382,6 +395,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - fmt
+    - HMSegmentedControl
 
 EXTERNAL SOURCES:
   boost:
@@ -452,6 +466,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeNavigation:
+    :path: "../node_modules/react-native-navigation"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCClipboard:
@@ -478,6 +494,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: fe08c1cd7e2e205718d77ad14b34957cce949b58
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
+  HMSegmentedControl: 34c1f54d822d8308e7b24f5d901ec674dfa31352
   lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
   lottie-react-native: a029a86e1689c86a07169c520ae770e84348cd20
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
@@ -507,16 +524,17 @@ SPEC CHECKSUMS:
   React-RCTVibration: e3ffca672dd3772536cb844274094b0e2c31b187
   React-runtimeexecutor: dec32ee6f2e2a26e13e58152271535fadff5455a
   ReactCommon: 57b69f6383eafcbd7da625bfa6003810332313c4
-  RNCAsyncStorage: 0bef6a21517c0254bd6bd59a3672963abfa0d18e
+  ReactNativeNavigation: cf2dba8f17529627c7ee2fa7261758bd0c21418e
+  RNCAsyncStorage: 6bd5a7ba3dde1c3facba418aa273f449bdc5437a
   RNCClipboard: cc054ad1e8a33d2a74cd13e565588b4ca928d8fd
   RNCMaskedView: c298b644a10c0c142055b3ae24d83879ecb13ccd
   RNGestureHandler: bf572f552ea324acd5b5464b8d30755b2d8c1de6
   RNReanimated: da3860204e5660c0dd66739936732197d359d753
-  RNScreens: 522705f2e5c9d27efb17f24aceb2bf8335bc7b8e
+  RNScreens: d6da2b9e29cf523832c2542f47bf1287318b1868
   RNSecureStorage: 24d433f7673a0daade43689de805933a70641731
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   Yoga: e7dc4e71caba6472ff48ad7d234389b91dadc280
 
 PODFILE CHECKSUM: 019b3fa81b711a9403fb4c883185aff28f9b15d3
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.10.2

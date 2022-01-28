@@ -29,6 +29,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-mask-text": "^0.7.0",
     "react-native-modalize": "^2.0.13",
+    "react-native-navigation": "^7.24.3-hotfix.1",
     "react-native-otp-inputs": "^7.1.1",
     "react-native-paper": "^4.11.2",
     "react-native-poll": "^0.1.2",
