@@ -23,14 +23,15 @@ const DashBoard = ({navigation}) => {
     const isFocused = useIsFocused()
 
     const [savings, setSavings] = useState("")
+    const [firstname, setFirstname]  = useState("")
+    const [lastname, setLastname]  = useState("")
     const [isCardLinked, setIsCardLinked] = useState(false)
 
 
     useEffect(() => {
         Balance()
 
-
-        CheckLinkedCard()
+        // CheckLinkedCard()
     }, [isFocused])
 
     const user = useContext(UserContext)
@@ -65,19 +66,33 @@ const DashBoard = ({navigation}) => {
 
     const Balance = async () => {
 
-        const qry = `query users {
-        users(where:{id:${user.id}}){
-            id
-            saving
-        }
-    }`
-        // con
+    //     const qry = `query users {
+    //     users(where:{id:${user.id}}){
+    //         id
+    //         saving
+    //     }
+    // }`
+
+        const qry = `query {
+                        savingAccounts(where: { user_id: ${user.id} }) {
+                        id
+                        amount_saved
+                        user_id{
+                            id
+                            firstname
+                            lastname
+                              }
+                                }
+                                    }`
+
 
         try {
 
             let res = await handleQuery(qry, user.token, false);
-            // console.log(res.data.users[0], "REZZZXXXX");
-            setSavings(res.data.users[0].saving)
+            // console.log(res.data.savingAccounts[0].user_id.firstname, "REZZZXXXX");
+            setFirstname(res.data.savingAccounts[0].user_id.firstname)
+            setLastname(res.data.savingAccounts[0].user_id.lastname)
+            setSavings(res.data.savingAccounts[0].amount_saved)
 
 
         } catch (e) {
@@ -96,13 +111,13 @@ const DashBoard = ({navigation}) => {
 
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => {
-                        navigation.navigate("Profile")
+                        navigation.navigate("Profile", {firstname, lastname})
                     }} style={styles.imgContainer}>
                         <Image style={styles.img} resizeMode={"contain"}
                                source={require("../../assets/images/userImg.png")}/>
                     </TouchableOpacity>
                     <View style={styles.nameContainer}>
-                        <Text style={styles.username}>Hello {user?.firstname},</Text>
+                        <Text style={styles.username}>Hello {firstname},</Text>
                         <Text style={styles.welcomeText}>Welcome Back!</Text>
                     </View>
                     <TouchableOpacity>
@@ -122,7 +137,7 @@ const DashBoard = ({navigation}) => {
                     }}>
                         <View>
                             <Text style={styles.tsb}>Total Savings Balance</Text>
-                            <Text style={styles.balance}>₦ {savings.toLocaleString()}</Text>
+                            <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
                         </View>
                         <TouchableOpacity onPress={() => navigation.navigate("Savings")}>
                             <Image resizeMode={"contain"} style={{width: 40, height: 40}} source={icons.plusIcon}/>

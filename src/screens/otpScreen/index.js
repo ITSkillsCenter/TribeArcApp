@@ -1,6 +1,6 @@
 // @flow
-import React, {useState} from 'react';
-import {ActivityIndicator, StyleSheet, Text, View} from "react-native";
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, Keyboard, StyleSheet, Text, View} from "react-native";
 import {COLORS} from "../../constants";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
 import TextButtonComponent from "../../components/TextButtonComponent";
@@ -15,6 +15,22 @@ const OtpScreen = ({navigation, route}) => {
     // const [otp, setOtp] = useState("");
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const [keyboardStatus, setKeyboardStatus] = useState(undefined);
+
+    useEffect(() => {
+        const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+            setKeyboardStatus("Keyboard Shown");
+        });
+        const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+            setKeyboardStatus("Keyboard Hidden");
+        });
+
+        return () => {
+            showSubscription.remove();
+            hideSubscription.remove();
+        };
+    }, []);
 
 
     const VerifyOTP = async (otpCode) => {
@@ -45,6 +61,8 @@ const OtpScreen = ({navigation, route}) => {
 
 
     const ResendOTP = async () => {
+        setLoading(true)
+
 
         let resendOtpQry = ` mutation{
                                     sendOtp(email:"${emailFromRoute}"){
@@ -55,6 +73,8 @@ const OtpScreen = ({navigation, route}) => {
         try {
 
             let otpResent = await handleQueryNoToken(resendOtpQry);
+                setLoading(false)
+
 
 
         } catch (e) {
@@ -82,8 +102,10 @@ const OtpScreen = ({navigation, route}) => {
                         setLoading(false)
                         // console.log(code)
                     }}
-                    editable={true}
-                    autoFocusOnLoad={true}
+                    editable
+                    keyboardAppearance={"dark"}
+                    autoFocusOnLoad
+                    keyboardType={"numeric"}
                     codeInputFieldStyle={styles.borderStyleBase}
                     codeInputHighlightStyle={styles.borderStyleHighLighted}
                     onCodeFilled={(code) => {
@@ -99,12 +121,13 @@ const OtpScreen = ({navigation, route}) => {
                 />
 
             </View>
+
             <View style={{alignSelf: "flex-start", bottom: 40}}>
                 <TextButtonComponent
                     text={"Did not receive OTP?  "}
                     pressable={"Resend Code"}
-                    onPress={() => {
-                        ResendOTP()
+                    onPress={async () => {
+                      await  ResendOTP()
                         setError(false)
 
                     }}
@@ -113,6 +136,7 @@ const OtpScreen = ({navigation, route}) => {
             {loading && <ActivityIndicator color={COLORS.primary} size="large"/>}
             {error && <Text style={{color: "red"}}>An error occurred, retry.</Text>}
 
+            <Text>{keyboardStatus}</Text>
 
         </View>
     );

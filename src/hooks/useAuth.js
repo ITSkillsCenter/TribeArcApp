@@ -103,12 +103,12 @@ export const useAuth = () => {
 
 
                     const user = {
-                        username: res.data.login.user.username,
+                        // username: res.data.login.user.username,
                         token: res.data.login.jwt,
                         id: res.data.login.user.id,
-                        email: res.data.login.user.email,
-                        firstname: res.data.login.user.firstname,
-                        lastname: res.data.login.user.lastname
+                        // email: res.data.login.user.email,
+                        // firstname: res.data.login.user.firstname,
+                        // lastname: res.data.login.user.lastname
                     };
 
 

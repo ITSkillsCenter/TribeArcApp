@@ -10,8 +10,11 @@ import CustomButton from "../../components/CustomButton";
 import {Modalize} from "react-native-modalize";
 
 
-const Profile = ({navigation}) => {
+const Profile = ({navigation, route}) => {
 
+    const name=route.params;
+
+    console.log(name)
 
     const modalizeRef = useRef<Modalize>(null);
 
@@ -104,7 +107,7 @@ const Profile = ({navigation}) => {
                     </View>
 
                     <View style={styles.fullNameContainer}>
-                        <Text style={styles.fullName}>{user?.firstname} {user?.lastname}</Text>
+                        <Text style={styles.fullName}>{name?.firstname} {name?.lastname}</Text>
 
                         <Text style={styles.editProfile}>Edit Profile</Text>
 

@@ -62,7 +62,6 @@ const LinkCard = ({navigation}) => {
             console.log(e, "AddCardNowError")
             setIsLoading(false)
 
-
         }
 
     }

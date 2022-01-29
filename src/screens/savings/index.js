@@ -1,13 +1,11 @@
 // @flow
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
 import CustomInputBox from "../../components/CustomInputBox";
 import ShortTextInput from "../../components/ShortTextInput";
-import Animated from "react-native-reanimated";
-import BottomSheet from "reanimated-bottom-sheet";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import {Modalize} from "react-native-modalize";
@@ -56,7 +54,7 @@ const Savings = ({navigation}) => {
 
     useEffect(() => {
 
-        CheckCard();
+        // CheckCard();
 
     }, [])
 
@@ -221,7 +219,7 @@ const Savings = ({navigation}) => {
                 text={"Add Card now"}
                 onPress={async () => {
                     if (amountToSave !== "") {
-                        if (cardNumber &&cvv &&expiry && pin !== ""){
+                        if (cardNumber && cvv && expiry && pin !== "") {
                             await AddCardNow()
                         }
                         await AddMoney()
@@ -294,7 +292,7 @@ const Savings = ({navigation}) => {
 
         }}>
 
-            <TouchableOpacity onPress={() =>  CloseModal1()}>
+            <TouchableOpacity onPress={() => CloseModal1()}>
                 <Text style={{
                     alignSelf: "flex-end",
                     color: "black",
@@ -367,7 +365,7 @@ const Savings = ({navigation}) => {
 
             <View style={{
                 paddingHorizontal: 20,
-                height: SIZES.height*0.9,
+                height: SIZES.height * 0.9,
             }}>
 
                 <BackButton onPress={() => navigation.pop()}/>
@@ -412,24 +410,28 @@ const Savings = ({navigation}) => {
                     </ScrollView>
                 </View>
                 <View style={styles.saveButton}>
-                    <CustomButton loading={isLoading} filled text={"Save Money"} onPress={async () => {
+                    <CustomButton
+                        loading={isLoading}
+                        filled={amountToSave !== ""}
+                        text={"Save Money"}
+                        onPress={async () => {
 
-                        if (amountToSave !== "") {
-                            setIsLoading(true)
-                            if (cardNum) {
-                                await AddMoney();
-                                navigation.navigate("SuccessScreen")
-                                // console.log(cardNum);
-                                setIsLoading(false)
+                            if (amountToSave !== "") {
+                                setIsLoading(true)
+                                if (cardNum) {
+                                    await AddMoney();
+                                    navigation.navigate("SuccessScreen")
+                                    // console.log(cardNum);
+                                    setIsLoading(false)
 
-                            } else {
-                                // bs.current.snapTo(0)
-                                OpenModal1()
-                                setIsLoading(false)
+                                } else {
+                                    // bs.current.snapTo(0)
+                                    OpenModal1()
+                                    setIsLoading(false)
+                                }
                             }
-                        }
 
-                    }}/>
+                        }}/>
                 </View>
             </View>
 

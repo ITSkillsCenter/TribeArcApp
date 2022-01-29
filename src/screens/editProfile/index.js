@@ -1,14 +1,24 @@
 // @flow
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
 import {COLORS, icons, SIZES} from "../../constants";
 import CustomInputBox from "../../components/CustomInputBox";
+import {UserContext} from "../../context/UserContext";
+import {handleQuery} from "../../graphql/requests";
 
 
 const EditProfile = ({navigation}) => {
+
+
+    const user = useContext(UserContext);
+
+    useEffect(() => {
+
+        GetUserData()
+    }, []);
 
 
     const [isLoading, setIsLoading] = useState(false)
@@ -16,6 +26,59 @@ const EditProfile = ({navigation}) => {
     const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [phoneNum, setPhoneNum] = useState("")
+
+
+    const GetUserData = async () => {
+        let qry = `query{
+            users(where:{id:${user.id}}){
+            firstname
+            lastname
+            email
+                }
+                    }`
+        try {
+
+            let res = await handleQuery(qry, user.token, false)
+            // console.log(res.data.users[0].email, "REZZZ")
+            setEmail(res.data.users[0].email)
+            setFirstName(res.data.users[0].firstname)
+            setLastName(res.data.users[0].lastname)
+
+
+        } catch (e) {
+            console.log(e, "GetUserDataError")
+        }
+    }
+
+
+    const UpdateUserData = async () => {
+        let qry = `mutation {
+            updateUser(
+            input: {
+            where: { id: ${user.id} }
+            data: {
+             firstname: "${firstName}",
+             lastname: "${lastName}" }}
+                ) {
+                user {
+                firstname
+                lastname
+                email
+                      }
+                    }
+                }`
+        try {
+
+            let res = await handleQuery(qry, user.token, false)
+            console.log(res.data.updateUser.user)
+
+
+
+        } catch (e) {
+            console.log(e, "GetUserDataError")
+        }
+    }
+
 
     return (
         <View style={styles.container}>
@@ -67,6 +130,9 @@ const EditProfile = ({navigation}) => {
                     initialValue={email}
                     onChange={value => setEmail(value)}
                     placeholderText={"Email Address"}
+                    props={{
+                        editable: false
+                    }}
                 />
                 <View style={{marginVertical: 5}}/>
 
@@ -82,8 +148,9 @@ const EditProfile = ({navigation}) => {
 
                 <View style={{flex: 2, justifyContent: "flex-end"}}>
                     <CustomButton
-                        onPress={() => {
-                            navigation.navigate("DashBoard")
+                        onPress={ async () => {
+                            await UpdateUserData()
+                            // navigation.navigate("DashBoard")
                         }}
                         loading={isLoading}
                         filled text={"Update Profile"}
