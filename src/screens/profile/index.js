@@ -38,7 +38,6 @@ const Profile = ({navigation, route}) => {
             borderTopRightRadius: 25,
             borderTopLeftRadius: 25,
             width: SIZES.width,
-
         }}>
 
             <TouchableOpacity onPress={() => CloseModal()}>
@@ -160,12 +159,9 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        // height: 110,
         height: SIZES.height * 0.15,
         width: "100%",
-        // borderWidth:0.5,
         backgroundColor: 'white',
-        // borderColor:"red",
         borderRadius: 15,
         paddingHorizontal: 20,
         marginVertical: 20,
@@ -175,7 +171,6 @@ const styles = StyleSheet.create({
         shadowOffset: {
             width: 0,
             height: 0
-
         }
     },
     img: {
@@ -185,7 +180,6 @@ const styles = StyleSheet.create({
     },
     fullNameContainer: {
         width: SIZES.width * 0.6,
-        // backgroundColor:"cyan",
         height: 50,
         justifyContent: "space-between",
 
@@ -194,7 +188,6 @@ const styles = StyleSheet.create({
         fontFamily: "Nexa-Bold",
         fontSize: 18,
         color: COLORS.black
-
     },
 
     editProfile: {
