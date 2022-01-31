@@ -14,6 +14,7 @@ const key = require("../assets/icons/key.png");
 const logout = require("../assets/icons/logoutImage.png");
 const camera = require("../assets/icons/camera.png");
 const blueCheck = require("../assets/icons/blueCheck.png");
+const completeProfile = require("../assets/icons/completeProfile.png");
 
 
 export default {
@@ -32,5 +33,6 @@ export default {
     key,
     logout,
     camera,
-    blueCheck
+    blueCheck,
+    completeProfile
 };

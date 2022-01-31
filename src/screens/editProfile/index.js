@@ -34,6 +34,7 @@ const EditProfile = ({navigation}) => {
             firstname
             lastname
             email
+            phone_number
                 }
                     }`
         try {
@@ -43,6 +44,7 @@ const EditProfile = ({navigation}) => {
             setEmail(res.data.users[0].email)
             setFirstName(res.data.users[0].firstname)
             setLastName(res.data.users[0].lastname)
+            setPhoneNum(res.data.users[0].phone_number)
 
 
         } catch (e) {
@@ -58,7 +60,10 @@ const EditProfile = ({navigation}) => {
             where: { id: ${user.id} }
             data: {
              firstname: "${firstName}",
-             lastname: "${lastName}" }}
+             lastname: "${lastName}",
+             phone_number:"${phoneNum}"
+              }
+             }
                 ) {
                 user {
                 firstname
@@ -69,8 +74,13 @@ const EditProfile = ({navigation}) => {
                 }`
         try {
 
+            // console.log(qry)
+
+            setIsLoading(true)
+
             let res = await handleQuery(qry, user.token, false)
-            console.log(res.data.updateUser.user)
+            // console.log(res.data.updateUser.user)
+            await setIsLoading(false)
 
 
         } catch (e) {

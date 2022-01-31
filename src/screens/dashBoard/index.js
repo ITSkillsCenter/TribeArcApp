@@ -23,8 +23,10 @@ const DashBoard = ({navigation}) => {
     const isFocused = useIsFocused()
 
     const [savings, setSavings] = useState("")
-    const [firstname, setFirstname]  = useState("")
-    const [lastname, setLastname]  = useState("")
+    const [firstname, setFirstname] = useState("")
+    const [lastname, setLastname] = useState("")
+    const [phoneNumber, setPhoneNumber] = useState(null)
+    const [bvn, setBvn] = useState("")
     const [isCardLinked, setIsCardLinked] = useState(false)
 
 
@@ -56,7 +58,6 @@ const DashBoard = ({navigation}) => {
             }
 
 
-
         } catch (e) {
             // console.log(e, "CheckLinkedCardError")
         }
@@ -70,22 +71,29 @@ const DashBoard = ({navigation}) => {
                         savingAccounts(where: { user_id: ${user.id} }) {
                         id
                         amount_saved
+                        bvn
                         user_id{
                             id
                             firstname
                             lastname
+                            phone_number
                               }
                                 }
                                     }`
 
 
         try {
+            // console.log(qry, "rererere")
 
             let res = await handleQuery(qry, user.token, false);
-            // console.log(res.data.savingAccounts[0].user_id.firstname, "REZZZXXXX");
-            setFirstname(res.data.savingAccounts[0].user_id.firstname)
-            setLastname(res.data.savingAccounts[0].user_id.lastname)
-            setSavings(res.data.savingAccounts[0].amount_saved)
+            await setFirstname(res.data.savingAccounts[0].user_id.firstname)
+            await setLastname(res.data.savingAccounts[0].user_id.lastname)
+            await setPhoneNumber(res.data.savingAccounts[0].user_id.phone_number)
+            await setBvn(res.data.savingAccounts[0].bvn)
+            await setSavings(res.data.savingAccounts[0].amount_saved)
+
+            console.log(res.data.savingAccounts[0].user_id.phone_number, "REZZZXXXX");
+
 
 
         } catch (e) {
@@ -172,23 +180,49 @@ const DashBoard = ({navigation}) => {
                         <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
                                resizeMode={"contain"}/>
                     </TouchableOpacity>}
-                    <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
-                    <TouchableOpacity onPress={()=>{navigation.navigate("AddBvn")}} style={styles.cardBox} activeOpacity={0.8}>
-                        <Image source={icons.addBvn} style={{width: 50, height: 50}}/>
-                        <Text style={styles.linkCardText}>Add your BVN</Text>
-                        <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
-                               resizeMode={"contain"}/>
-                    </TouchableOpacity>
+
+                    {bvn === null &&
+                        <>
+                            <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+                            <TouchableOpacity onPress={() => {
+                                navigation.navigate("AddBvn")
+                            }} style={styles.cardBox} activeOpacity={0.8}>
+                                <Image source={icons.addBvn} style={{width: 50, height: 50}}/>
+                                <Text style={styles.linkCardText}>Add your BVN</Text>
+                                <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
+                                       resizeMode={"contain"}/>
+                            </TouchableOpacity>
+                        </>
+
+                    }
+
 
                     <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
-                    <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}    onPress={() => navigation.navigate("CommunityQuestions")}>
+                    <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
+                                      onPress={() => navigation.navigate("CommunityQuestions")}>
                         <Image source={icons.commQuestion} style={{width: 50, height: 50}}/>
                         <Text style={styles.linkCardText}>Community Questions</Text>
                         <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
                                resizeMode={"contain"}/>
                     </TouchableOpacity>
 
+                    {firstname === null || lastname === null || phoneNumber === null &&
+                        <>
+                            <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+                            <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
+                                              onPress={() => navigation.navigate("EditProfile")}>
+                                <Image source={icons.completeProfile} style={{width: 50, height: 50}}/>
+                                <Text style={styles.linkCardText}>Complete Your profile</Text>
+                                <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
+                                       resizeMode={"contain"}/>
+                            </TouchableOpacity>
+                        </>
+                    }
+
+
+                    <View style={{height: 200, marginBottom: 310,}}/>
                 </ScrollView>
+
             </View>
 
         </SafeAreaView>
@@ -295,6 +329,8 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     cardContainer: {
+        height: "100%"
+
         // backgroundColor:"cyan",
         // paddingVertical:10,
 
@@ -310,7 +346,7 @@ const styles = StyleSheet.create({
     },
     linkCardText: {
         fontSize: 16,
-        width:SIZES.width*0.7,
+        width: SIZES.width * 0.7,
         fontFamily: "Nexa-Bold",
         // right: 100,
         color: COLORS.black,

@@ -53,6 +53,7 @@ const AddBvn = ({navigation}) => {
 
 
     const AddBvn = async () => {
+        setIsLoading(true)
 
         let updateBvn = `mutation {
                 updateSavingAccount(
@@ -69,15 +70,15 @@ const AddBvn = ({navigation}) => {
                     }
                 }`
 
-
         try {
 
-
             let bvnPost = await handleQuery(updateBvn, user.token, false)
+            await setIsLoading(false)
             console.log(bvnPost.data.updateSavingAccount.savingAccount, "updateBVNNNN")
 
 
         } catch (e) {
+            setIsLoading(false)
             console.log(e, "AddBvnError")
         }
 

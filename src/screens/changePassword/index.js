@@ -22,8 +22,12 @@ const ChangePassword = ({navigation}) => {
 
     const UpdatePassword = async () => {
 
+        await setIsLoading(true)
+
+
+
         const qry = `mutation {
-                    updateUser(input: { where: { id: user.id }, data: { password: "wordpass" } }) {
+                    updateUser(input: { where: { id: ${user.id} }, data: { password: "${confirmPassword}" } }) {
                          user {
                                id
                      }
@@ -34,6 +38,7 @@ const ChangePassword = ({navigation}) => {
         try {
 
             let res = await handleQuery(qry, user.token, false);
+            await setIsLoading(false)
 
 
         } catch (e) {
@@ -103,11 +108,14 @@ const ChangePassword = ({navigation}) => {
                         onPress={async () => {
                             try {
 
+                                if (confirmPassword !== "") {
+                                    await UpdatePassword()
+                                    navigation.navigate("PasswordSuccessScreen")
+                                }
+
                             } catch (e) {
                                 console.log(e, "error: ")
-
                             }
-                            navigation.navigate("PasswordSuccessScreen")
 
                         }}
 
