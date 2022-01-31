@@ -4,7 +4,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {
     Image,
     ImageBackground,
-    SafeAreaView,
+    SafeAreaView, ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -66,13 +66,6 @@ const DashBoard = ({navigation}) => {
 
     const Balance = async () => {
 
-    //     const qry = `query users {
-    //     users(where:{id:${user.id}}){
-    //         id
-    //         saving
-    //     }
-    // }`
-
         const qry = `query {
                         savingAccounts(where: { user_id: ${user.id} }) {
                         id
@@ -96,7 +89,7 @@ const DashBoard = ({navigation}) => {
 
 
         } catch (e) {
-            // console.log(e, "Error")
+            console.log(e, "GetBalanceError")
 
         }
 
@@ -171,7 +164,7 @@ const DashBoard = ({navigation}) => {
                 </View>
 
 
-                <View style={styles.cardContainer}>
+                <ScrollView showsVerticalScrollIndicator={false} style={styles.cardContainer}>
                     {!isCardLinked && <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
                                                         onPress={() => navigation.navigate("LinkCard")}>
                         <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
@@ -195,7 +188,7 @@ const DashBoard = ({navigation}) => {
                                resizeMode={"contain"}/>
                     </TouchableOpacity>
 
-                </View>
+                </ScrollView>
             </View>
 
         </SafeAreaView>

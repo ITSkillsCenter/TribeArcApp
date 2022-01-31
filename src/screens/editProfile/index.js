@@ -73,7 +73,6 @@ const EditProfile = ({navigation}) => {
             console.log(res.data.updateUser.user)
 
 
-
         } catch (e) {
             console.log(e, "GetUserDataError")
         }
@@ -148,9 +147,16 @@ const EditProfile = ({navigation}) => {
 
                 <View style={{flex: 2, justifyContent: "flex-end"}}>
                     <CustomButton
-                        onPress={ async () => {
-                            await UpdateUserData()
-                            // navigation.navigate("DashBoard")
+                        onPress={async () => {
+
+                            try {
+                                await UpdateUserData()
+                                navigation.navigate("DashBoard")
+
+                            } catch (e) {
+                                console.log(e, "UpdateUserError")
+                            }
+
                         }}
                         loading={isLoading}
                         filled text={"Update Profile"}

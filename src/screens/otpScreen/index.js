@@ -62,8 +62,6 @@ const OtpScreen = ({navigation, route}) => {
 
     const ResendOTP = async () => {
         setLoading(true)
-
-
         let resendOtpQry = ` mutation{
                                     sendOtp(email:"${emailFromRoute}"){
                                         ok
