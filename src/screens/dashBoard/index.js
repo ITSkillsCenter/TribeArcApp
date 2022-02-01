@@ -12,8 +12,6 @@ import {
 } from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
-import {useAuth} from "../../hooks/useAuth";
-import {requests} from "../../graphql/queries";
 import {handleQuery} from "../../graphql/requests";
 import {useIsFocused} from "@react-navigation/native";
 
@@ -63,6 +61,8 @@ const DashBoard = ({navigation}) => {
     //     }
     //
     // }
+
+
 
 
     const Balance = async () => {
@@ -119,7 +119,7 @@ const DashBoard = ({navigation}) => {
                         <Text style={styles.username}>Hello {firstname},</Text>
                         <Text style={styles.welcomeText}>Welcome Back!</Text>
                     </View>
-                    <TouchableOpacity onPress={()=>navigation.navigate("PaymentWebPage")}>
+                    <TouchableOpacity onPress={() => {}}>
                         <Image resizeMode={"contain"}
                                source={notification ? icons.notificationBell : icons.notificationDot}
                                style={styles.notification}/>

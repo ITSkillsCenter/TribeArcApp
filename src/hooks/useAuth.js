@@ -129,6 +129,7 @@ export const useAuth = () => {
                     const user = {
                         token: res.data.login.jwt,
                         id: res.data.login.user.id,
+                        email: res.data.login.user.email,
 
                     };
 
@@ -142,6 +143,18 @@ export const useAuth = () => {
 
 
             register: async (email, password) => {
+
+
+                function randomString(length, chars) {
+                    let result = '';
+                    for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+                    return result;
+                }
+
+                const rString = randomString(5, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+
+                console.log(rString)
+
 
                 let qry = `mutation {
                                 register(
