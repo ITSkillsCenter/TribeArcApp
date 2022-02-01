@@ -26,6 +26,7 @@ const EditProfile = ({navigation}) => {
     const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [phoneNum, setPhoneNum] = useState("")
+    const [profession, setProfession] = useState("")
 
 
     const GetUserData = async () => {
@@ -35,16 +36,18 @@ const EditProfile = ({navigation}) => {
             lastname
             email
             phone_number
+            profession
                 }
                     }`
         try {
 
             let res = await handleQuery(qry, user.token, false)
-            // console.log(res.data.users[0].email, "REZZZ")
-            setEmail(res.data.users[0].email)
-            setFirstName(res.data.users[0].firstname)
-            setLastName(res.data.users[0].lastname)
-            setPhoneNum(res.data.users[0].phone_number)
+            console.log(res.data.users[0].profession, "REZZZ")
+            await setEmail(res.data.users[0].email)
+            await setFirstName(res.data.users[0].firstname)
+            await setLastName(res.data.users[0].lastname)
+            await setPhoneNum(res.data.users[0].phone_number)
+            await setProfession(res.data.users[0].profession)
 
 
         } catch (e) {
@@ -62,6 +65,8 @@ const EditProfile = ({navigation}) => {
              firstname: "${firstName}",
              lastname: "${lastName}",
              phone_number:"${phoneNum}"
+             profession:"${profession}"
+             
               }
              }
                 ) {
@@ -74,7 +79,7 @@ const EditProfile = ({navigation}) => {
                 }`
         try {
 
-            // console.log(qry)
+            console.log(qry)
 
             setIsLoading(true)
 
@@ -149,6 +154,14 @@ const EditProfile = ({navigation}) => {
                     initialValue={phoneNum}
                     onChange={value => setPhoneNum(value)}
                     placeholderText={"Phone Number"}
+
+                />
+                <View style={{marginVertical: 5}}/>
+
+                <CustomInputBox
+                    initialValue={profession}
+                    onChange={value => setProfession(value)}
+                    placeholderText={"Profession"}
 
                 />
 

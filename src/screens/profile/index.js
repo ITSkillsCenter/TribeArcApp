@@ -12,7 +12,7 @@ import {Modalize} from "react-native-modalize";
 
 const Profile = ({navigation, route}) => {
 
-    const name=route.params;
+    const name = route.params;
 
     console.log(name)
 
@@ -80,19 +80,20 @@ const Profile = ({navigation, route}) => {
     );
 
     return (
-        <View>
+        <View style={{backgroundColor:COLORS.white, flex:1}}>
 
 
-            <Modalize
-                modalHeight={SIZES.height * 0.45}
-                handleStyle={{backgroundColor: 'transparent'}}
-                childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
-                ref={modalizeRef}>
-                {renderHeader()}
-                {renderInner()}
-            </Modalize>
+
 
             <View style={styles.container}>
+                <Modalize
+                    modalHeight={SIZES.height * 0.45}
+                    handleStyle={{backgroundColor: 'transparent'}}
+                    childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
+                    ref={modalizeRef}>
+                    {renderHeader()}
+                    {renderInner()}
+                </Modalize>
 
                 <BackButton onPress={() => navigation.pop()}/>
                 <Text style={styles.myAccount}>My Account</Text>
@@ -128,6 +129,9 @@ const Profile = ({navigation, route}) => {
                     navigation.navigate("ChangePassword")
 
                 }} image={icons.key} text={"Password Settings"}/>
+                <AccountOptions onPress={() => {
+                    navigation.navigate("ReferralPage")
+                }} image={icons.refer} text={"Refer your friends"}/>
                 <AccountOptions
                     image={icons.logout}
                     text={"Logout"}
@@ -144,6 +148,7 @@ export default Profile
 
 const styles = StyleSheet.create({
     container: {
+        // flex:1,
         paddingHorizontal: 20,
         height: SIZES.height,
         backgroundColor: COLORS.white
@@ -159,7 +164,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        height: SIZES.height * 0.15,
+        height: SIZES.height * 0.13,
         width: "100%",
         backgroundColor: 'white',
         borderRadius: 15,

@@ -20,6 +20,7 @@ target 'TribeArc' do
 
   pod 'RNSecureStorage', :path => '../node_modules/react-native-secure-storage'
 
+
   target 'TribeArcTests' do
     inherit! :complete
     # Pods for testing

@@ -166,7 +166,7 @@ export const useAuth = () => {
                     let res = await handleQueryNoToken(qry);
 
                     let otpQuery = `
-                                 mutation{
+                                mutation{
                                     sendOtp(email:"${email}"){
                                         ok
                                             }

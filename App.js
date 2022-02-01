@@ -16,6 +16,7 @@ import LinkCard from "./src/screens/linkCard";
 import SuccessScreen from "./src/screens/successScreen";
 import DebitCardSuccessScreen from "./src/screens/debitCardSuccessScreen";
 import Splash from "./src/screens/splash";
+import {Provider as PaperProvider} from 'react-native-paper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SettingsPage from "./src/screens/settings";
 import CommunityQuestions from "./src/screens/communityQuestions";
@@ -25,6 +26,9 @@ import AddBvn from "./src/screens/addBvn";
 import ChangePassword from "./src/screens/changePassword";
 import PasswordSuccessScreen from "./src/screens/passwordSuccessScreen";
 import OtpScreen from "./src/screens/otpScreen";
+import ReferralPage from "./src/screens/referralPage";
+import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
+import PaymentWebPage from "./src/screens/paymentWebPage";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -95,6 +99,8 @@ const App = () => {
                 <MainStack.Screen name={"AddBvn"} component={AddBvn}/>
                 <MainStack.Screen name={"ChangePassword"} component={ChangePassword}/>
                 <MainStack.Screen name={"PasswordSuccessScreen"} component={PasswordSuccessScreen}/>
+                <MainStack.Screen name={"ReferralPage"} component={ReferralPage}/>
+                <MainStack.Screen name={"PaymentWebPage"} component={PaymentWebPage}/>
 
             </MainStack.Navigator>
 
@@ -127,39 +133,73 @@ const App = () => {
     }
 
 
+    const toastConfig = {
+
+        success: (props) => (
+            <BaseToast
+                {...props}
+                style={{borderLeftColor: COLORS.primary}}
+                contentContainerStyle={{paddingHorizontal: 15}}
+                text1Style={{
+                    fontSize: 20,
+                    fontFamily: "Nexa-Bold"
+                }}
+                text2Style={{
+                    fontSize: 14,
+                    fontFamily: "Nexa-Bold"
+                }}
+            />
+        ),
+
+        error: (props) => (
+            <ErrorToast
+                {...props}
+                text1Style={{
+                    fontSize: 17
+                }}
+                text2Style={{
+                    fontSize: 15
+                }}
+            />
+        ),
+
+
+    };
+
+
     return (
         // <GestureHandlerRootView>
 
 
-    <AuthContext.Provider value={auth}>
+        <AuthContext.Provider value={auth}>
+
+            <PaperProvider>
+                <SafeAreaView style={styles.container}>
+                    {/*<StatusBar translucent={false} backgroundColor={"transparent"} />*/}
+                    <NavigationContainer>
+                        <RootStack.Navigator screenOptions={{
+                            headerShown: false, // backgroundColor:"white"
+                        }}>
+                            {/*<RootStack.Screen name={"AuthNavigation"} component={AuthNavigation}/>*/}
+                            {/*<RootStack.Screen name={"MainNavigation"} component={MainNavigation}/>*/}
+                            {/**/}
+                            {renderScreens()}
+
+                        </RootStack.Navigator>
 
 
-            <SafeAreaView style={styles.container}>
-                {/*<StatusBar translucent={false} backgroundColor={"transparent"} />*/}
-                <NavigationContainer>
-                    <RootStack.Navigator screenOptions={{
-                        headerShown: false, // backgroundColor:"white"
-                    }}>
-                        {/*<RootStack.Screen name={"AuthNavigation"} component={AuthNavigation}/>*/}
-                        {/*<RootStack.Screen name={"MainNavigation"} component={MainNavigation}/>*/}
-                        {/**/}
-                        {renderScreens()}
+                    </NavigationContainer>
+                    <Toast config={toastConfig}/>
 
-                    </RootStack.Navigator>
-
-
-                </NavigationContainer>
-            </SafeAreaView>
-
-
+                </SafeAreaView>
+            </PaperProvider>
 
         </AuthContext.Provider>
 
-    // </GestureHandlerRootView>
+        // </GestureHandlerRootView>
 
 
-
-)
+    )
 }
 
 
@@ -167,7 +207,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.white,
-        paddingTop:10,
+        paddingTop: 10,
         // height: SIZES.height,
         // alignItems: 'center',
         // justifyContent: 'center'

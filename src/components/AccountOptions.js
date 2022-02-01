@@ -22,8 +22,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: "100%",
         // height: 60,
-        height:SIZES.height*0.08,
-
+        height:SIZES.height*0.07,
         borderWidth: 0.5,
         borderRadius: 10,
         borderColor: "#dcdcdc",
