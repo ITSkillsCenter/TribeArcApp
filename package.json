@@ -32,14 +32,17 @@
     "react-native-navigation": "^7.24.3-hotfix.1",
     "react-native-otp-inputs": "^7.1.1",
     "react-native-paper": "^4.11.2",
+    "react-native-paystack-webview": "^4.0.3",
     "react-native-poll": "^0.1.2",
     "react-native-reanimated": "^2.3.1",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.10.1",
     "react-native-secure-storage": "^0.1.2",
     "react-native-splash-screen": "^3.3.0",
+    "react-native-toast-message": "^2.1.1",
     "react-native-vector-icons": "^9.0.0",
     "react-native-video": "^5.2.0",
+    "react-native-webview": "^11.17.1",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22"
   },
   "devDependencies": {

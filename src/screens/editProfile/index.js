@@ -26,6 +26,7 @@ const EditProfile = ({navigation}) => {
     const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [phoneNum, setPhoneNum] = useState("")
+    const [profession, setProfession] = useState("")
 
 
     const GetUserData = async () => {
@@ -34,15 +35,19 @@ const EditProfile = ({navigation}) => {
             firstname
             lastname
             email
+            phone_number
+            profession
                 }
                     }`
         try {
 
             let res = await handleQuery(qry, user.token, false)
-            // console.log(res.data.users[0].email, "REZZZ")
-            setEmail(res.data.users[0].email)
-            setFirstName(res.data.users[0].firstname)
-            setLastName(res.data.users[0].lastname)
+            console.log(res.data.users[0].profession, "REZZZ")
+            await setEmail(res.data.users[0].email)
+            await setFirstName(res.data.users[0].firstname)
+            await setLastName(res.data.users[0].lastname)
+            await setPhoneNum(res.data.users[0].phone_number)
+            await setProfession(res.data.users[0].profession)
 
 
         } catch (e) {
@@ -58,7 +63,12 @@ const EditProfile = ({navigation}) => {
             where: { id: ${user.id} }
             data: {
              firstname: "${firstName}",
-             lastname: "${lastName}" }}
+             lastname: "${lastName}",
+             phone_number:"${phoneNum}"
+             profession:"${profession}"
+             
+              }
+             }
                 ) {
                 user {
                 firstname
@@ -69,9 +79,13 @@ const EditProfile = ({navigation}) => {
                 }`
         try {
 
-            let res = await handleQuery(qry, user.token, false)
-            console.log(res.data.updateUser.user)
+            console.log(qry)
 
+            setIsLoading(true)
+
+            let res = await handleQuery(qry, user.token, false)
+            // console.log(res.data.updateUser.user)
+            await setIsLoading(false)
 
 
         } catch (e) {
@@ -142,15 +156,30 @@ const EditProfile = ({navigation}) => {
                     placeholderText={"Phone Number"}
 
                 />
+                <View style={{marginVertical: 5}}/>
+
+                <CustomInputBox
+                    initialValue={profession}
+                    onChange={value => setProfession(value)}
+                    placeholderText={"Profession"}
+
+                />
 
 
                 {/*</View>*/}
 
                 <View style={{flex: 2, justifyContent: "flex-end"}}>
                     <CustomButton
-                        onPress={ async () => {
-                            await UpdateUserData()
-                            // navigation.navigate("DashBoard")
+                        onPress={async () => {
+
+                            try {
+                                await UpdateUserData()
+                                navigation.navigate("DashBoard")
+
+                            } catch (e) {
+                                console.log(e, "UpdateUserError")
+                            }
+
                         }}
                         loading={isLoading}
                         filled text={"Update Profile"}

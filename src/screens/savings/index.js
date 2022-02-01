@@ -415,21 +415,22 @@ const Savings = ({navigation}) => {
                         filled={amountToSave !== ""}
                         text={"Save Money"}
                         onPress={async () => {
+                            await navigation.navigate("PaymentWebPage", amountToSave)
 
-                            if (amountToSave !== "") {
-                                setIsLoading(true)
-                                if (cardNum) {
-                                    await AddMoney();
-                                    navigation.navigate("SuccessScreen")
-                                    // console.log(cardNum);
-                                    setIsLoading(false)
-
-                                } else {
-                                    // bs.current.snapTo(0)
-                                    OpenModal1()
-                                    setIsLoading(false)
-                                }
-                            }
+                            // if (amountToSave !== "") {
+                            //     setIsLoading(true)
+                            //     if (cardNum) {
+                            //         await AddMoney();
+                            //         navigation.navigate("SuccessScreen")
+                            //         // console.log(cardNum);
+                            //         setIsLoading(false)
+                            //
+                            //     } else {
+                            //         // bs.current.snapTo(0)
+                            //         OpenModal1()
+                            //         setIsLoading(false)
+                            //     }
+                            // }
 
                         }}/>
                 </View>

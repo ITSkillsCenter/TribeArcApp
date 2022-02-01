@@ -1,16 +1,88 @@
 // @flow
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Image, Linking, StyleSheet, Text, TextInput, View} from "react-native";
 import BackButton from "../../components/BackButton";
 import {COLORS, icons, SIZES} from "../../constants";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import CustomButton from "../../components/CustomButton";
+import {UserContext} from "../../context/UserContext";
+import {handleQuery} from "../../graphql/requests";
+import savings from "../savings";
 
 
 const AddBvn = ({navigation}) => {
 
+    const user = useContext(UserContext)
+
     const [bvn, setBvn] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+    const [savingId, setSavingId] = useState(null)
+
+
+    useEffect(() => {
+
+
+        BvnIdCheck()
+
+    }, [])
+
+
+    const BvnIdCheck = async () => {
+
+        let bvnQry = `query {
+                        users(where: { id: ${user.id} }) {
+                        saving_account {
+                        id
+                                    }
+                                }
+                            }`
+
+
+        try {
+
+            let res = await handleQuery(bvnQry, user.token, false)
+            await res.data.users[0].saving_account.id
+            await setSavingId(res.data.users[0].saving_account.id)
+
+
+        } catch (e) {
+            console.log(e, "BvnCheckIDError")
+        }
+
+    }
+
+
+    const AddBvn = async () => {
+        setIsLoading(true)
+
+        let updateBvn = `mutation {
+                updateSavingAccount(
+                input: { where: { id: ${savingId} }, data: { bvn: "${bvn}", bvn_status: true } }
+                ) {
+                    savingAccount {
+                    id
+                    bvn
+                    bvn_status
+                    user_id {
+                    id
+                    }
+                        }
+                    }
+                }`
+
+        try {
+
+            let bvnPost = await handleQuery(updateBvn, user.token, false)
+            await setIsLoading(false)
+            console.log(bvnPost.data.updateSavingAccount.savingAccount, "updateBVNNNN")
+
+
+        } catch (e) {
+            setIsLoading(false)
+            console.log(e, "AddBvnError")
+        }
+
+    }
 
 
     return (
@@ -19,7 +91,6 @@ const AddBvn = ({navigation}) => {
             <Text style={styles.addBVN}>Add BVN</Text>
 
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-
 
 
                 <View style={styles.addBVNContainer}>
@@ -41,8 +112,21 @@ const AddBvn = ({navigation}) => {
                 <Text style={styles.dontKnow}>Don't know your BVN? <Text onPress={() => Linking.openURL("tel:*565*0#")}
                                                                          style={styles.dial}> Dial *565*0#</Text></Text>
 
-                <View style={{flex: 2, height:SIZES.height*0.6, justifyContent: "flex-end"}}>
-                    <CustomButton onPress={() => navigation.navigate("DashBoard")} loading={isLoading} filled
+                <View style={{flex: 2, height: SIZES.height * 0.6, justifyContent: "flex-end"}}>
+                    <CustomButton onPress={async () => {
+
+                        try {
+                            await AddBvn()
+                            navigation.navigate("DashBoard")
+
+                        } catch (e) {
+                            console.log(e, "error")
+                        }
+
+                    }
+
+
+                    } loading={isLoading} filled
                                   text={"Validate BVN"}/>
                 </View>
 
@@ -93,7 +177,7 @@ const styles = StyleSheet.create({
     textInput: {
         borderColor: "#cbc8c8",
         borderWidth: 0.3,
-        height: 45,
+        height: 55,
         borderRadius: 5,
         marginVertical: 20,
         paddingHorizontal: 20

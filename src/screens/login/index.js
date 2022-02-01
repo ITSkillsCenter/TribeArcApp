@@ -86,7 +86,7 @@ const Login = ({navigation, route}) => {
 
                         } catch (e) {
                             console.log("login error", e.message)
-                            setIsLoading(false)
+                            await setIsLoading(false)
                             {
                                 e && setIsError(true)
                             }

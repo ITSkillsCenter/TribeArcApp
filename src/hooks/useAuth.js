@@ -39,6 +39,7 @@ export const useAuth = () => {
     const auth = useMemo(() => ({
 
             login: async (email, password) => {
+
                 let qry = `mutation {
                 login(input: { identifier: "${email}", password: "${password}" }) {
                  jwt
@@ -56,7 +57,7 @@ export const useAuth = () => {
 
                 try {
                     let res = await handleQueryNoToken(qry);
-                    // console.log(res.data.login.user)
+                    console.log(res.data, "QQQQQQ")
 
 
                     let queryCommunityId = `query{
@@ -69,7 +70,6 @@ export const useAuth = () => {
                                       }`
 
 
-                    // let arr=[]
                     let qryRes = await handleQuery(queryCommunityId, res.data.login.jwt, false)
                     // console.log(qryRes.data.users[0].communities, "DAtATATTATA")
 
@@ -78,9 +78,6 @@ export const useAuth = () => {
                     })
 
                     arr.push(15)
-                    // console.log(arr, "ARRAYYY")
-
-
                     let updateCommunities = `mutation {
                         updateUser(
                         input: { where: { id: ${res.data.login.user.id} },
@@ -95,27 +92,49 @@ export const useAuth = () => {
                                   }
                                      }`
 
-
-
                     let newComm = await handleQuery(updateCommunities, res.data.login.jwt, false)
 
 
+                    let qrySavingsAcc = `query {
+                            users(where: { id: ${res.data.login.user.id} }) {
+                            id
+                            email
+                            saving_account {
+                            id
+                                    }
+                                 }
+                               }`
 
+                    let qrySavingsRes = await handleQuery(qrySavingsAcc, res.data.login.jwt, false)
+
+                    const savingAcctCheck = await qrySavingsRes.data.users[0].saving_account
+
+                    if (!savingAcctCheck) {
+
+                        let createSavingAcct = `mutation {
+                                                createSavingAccount(input: {
+                                                data: { amount_saved: 0.0, user_id: ${res.data.login.user.id}, community_id: 15 } }) {
+                                                savingAccount {
+                                                id
+                                                    }
+                                                  }
+                                               }`
+
+                        let createSavingAcctRes = await handleQuery(createSavingAcct, res.data.login.jwt, false)
+
+                    }
+
+                    // console.log(qrySavingsRes.data.users[0].saving_account, "REZXXX")
 
                     const user = {
-                        // username: res.data.login.user.username,
                         token: res.data.login.jwt,
                         id: res.data.login.user.id,
-                        // email: res.data.login.user.email,
-                        // firstname: res.data.login.user.firstname,
-                        // lastname: res.data.login.user.lastname
-                    };
+                        email: res.data.login.user.email,
 
+                    };
 
                     await SecureStorage.setItem("user", JSON.stringify(user));
                     dispatch(createAction("SET_USER", user));
-
-
 
                 } catch (e) {
                     console.log(e, "error @login")
@@ -124,6 +143,18 @@ export const useAuth = () => {
 
 
             register: async (email, password) => {
+
+
+                function randomString(length, chars) {
+                    let result = '';
+                    for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+                    return result;
+                }
+
+                const rString = randomString(5, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+
+                console.log(rString)
+
 
                 let qry = `mutation {
                                 register(
@@ -148,30 +179,29 @@ export const useAuth = () => {
                     let res = await handleQueryNoToken(qry);
 
                     let otpQuery = `
-                                 mutation{
+                                mutation{
                                     sendOtp(email:"${email}"){
                                         ok
                                             }
                                                 }`
 
 
-                    let otpVerify = await handleQueryNoToken(otpQuery);
+                    let otpQryRes = await handleQueryNoToken(otpQuery);
                     // console.log(otpVerify, " VERIFYYYY")
 
 
-                    let updateComm = `mutation {
-                                    updateUser(input: { where: { id: ${res.data.register.user.id} },
-                                    data: { communities: 15 } }) {
-                                    user {
-                                    id
-                                    communities {
-                                                id
-                                                    }
-                                                     }
-                                                }
-                                              }`
+                    // let updateComm = `mutation {
+                    //                 updateUser(input: { where: { id: ${res.data.register.user.id} },
+                    //                 data: { communities: 15 } }) {
+                    //                 user {
+                    //                 id
+                    //                 communities {
+                    //                             id
+                    //                                 }
+                    //                                  }
+                    //                             }
+                    //                           }`
 
-                    // console.log(updateComm, "UPDATEEAEAEAEE")
 
                     // let addToComm = await handleQuery(updateComm, res.data.register.jwt, false)
                     // console.log(addToComm.data, "ADDED to COMM")

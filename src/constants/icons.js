@@ -14,6 +14,12 @@ const key = require("../assets/icons/key.png");
 const logout = require("../assets/icons/logoutImage.png");
 const camera = require("../assets/icons/camera.png");
 const blueCheck = require("../assets/icons/blueCheck.png");
+const completeProfile = require("../assets/icons/completeProfile.png");
+const tranSucc = require("../assets/icons/tranSucc.png");
+const transFailed = require("../assets/icons/transFailed.png");
+const refer = require("../assets/icons/refer.png");
+const referralImg = require("../assets/icons/referralImg.png");
+const clipboard = require("../assets/icons/clipboard.png");
 
 
 export default {
@@ -32,5 +38,12 @@ export default {
     key,
     logout,
     camera,
-    blueCheck
+    blueCheck,
+    completeProfile,
+    tranSucc,
+    transFailed,
+    refer,
+    referralImg,
+    clipboard
+
 };

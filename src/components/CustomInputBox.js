@@ -1,6 +1,6 @@
 // @flow
 import React, {useState} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../constants";
 import {TextInput} from "react-native-paper";
 
@@ -11,7 +11,9 @@ const CustomInputBox = ({
                             onChange,
                             inputContainerStyle,
                             isPassword,
-                            short
+                            short,
+                            clipboard,
+                            clipboardOnPress
                         }) => {
 
 
@@ -39,13 +41,23 @@ const CustomInputBox = ({
                     }]}
                 />
 
+
                 {isPassword && <TouchableOpacity style={styles.eyesBox}
                                                  onPress={() => !passwordShown ? setPasswordShown(true) : setPasswordShown(false)}>
 
                     {passwordShown ? <Image style={styles.eye} source={icons.eyeClosed}/> :
                         <Image style={styles.eye} source={icons.eyeOpen}/>}
 
+
                 </TouchableOpacity>}
+                {clipboard &&
+
+                    <TouchableOpacity activeOpacity={0.8} onPress={clipboardOnPress}>
+                        <Image style={{width: 45, height: 50, left: 40,}} source={icons.clipboard}/>
+                    </TouchableOpacity>
+
+                }
+
 
             </View>
         </View>
