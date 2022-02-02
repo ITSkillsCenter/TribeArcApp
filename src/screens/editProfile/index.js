@@ -8,6 +8,7 @@ import {COLORS, icons, SIZES} from "../../constants";
 import CustomInputBox from "../../components/CustomInputBox";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
+import {launchImageLibrary} from "react-native-image-picker";
 
 
 const EditProfile = ({navigation}) => {
@@ -27,6 +28,7 @@ const EditProfile = ({navigation}) => {
     const [email, setEmail] = useState("")
     const [phoneNum, setPhoneNum] = useState("")
     const [profession, setProfession] = useState("")
+    const [filePath, setFilePath] = useState(null);
 
 
     const GetUserData = async () => {
@@ -54,7 +56,6 @@ const EditProfile = ({navigation}) => {
             console.log(e, "GetUserDataError")
         }
     }
-
 
     const UpdateUserData = async () => {
         let qry = `mutation {
@@ -94,6 +95,48 @@ const EditProfile = ({navigation}) => {
     }
 
 
+    const ChooseFile = async () => {
+        let options = {
+            title: "Select Image",
+            customButtons: [
+                {
+                    name: "customOptionKey",
+                    title: "Choose Photo from Custom Option",
+                },
+            ],
+            storageOptions: {
+                skipBackup: true,
+                path: "images",
+            },
+        };
+
+        await launchImageLibrary(options, (response) => {
+            console.log("Response = ", response);
+
+            if (response.didCancel) {
+                console.log("User cancelled image picker");
+            } else if (response.error) {
+                console.log("ImagePicker Error: ", response.error);
+            } else if (response.customButton) {
+                console.log(
+                    "User tapped custom button: ",
+                    response.customButton,
+                );
+                alert(response.customButton);
+            } else {
+                let source = response.assets[0].uri;
+                // You can also display the image using data:
+                // let source = {
+                //   uri: 'data:image/jpeg;base64,' + response.data
+                // };
+                setFilePath(source);
+            }
+        });
+
+
+    };
+
+
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
@@ -103,11 +146,12 @@ const EditProfile = ({navigation}) => {
 
                 {/*<View>*/}
                 <ImageBackground
-                    source={require("../../assets/images/userImg.png")}
-                    style={{width: 120, height: 120, marginVertical: 10}}>
+                    resizeMode={"contain"}
+                    source={ filePath? {uri: filePath}:require("../../assets/images/userImg.png")}
+                    style={{width: 120, height: 120, marginVertical: 10, borderRadius:130,aspectRatio:1}}>
                     <TouchableOpacity
                         activeOpacity={0.7}
-                        onPress={() => console.log("image")}
+                        onPress={() => ChooseFile()}
                         style={{
                             backgroundColor: "#EFF2FF",
                             width: 40,
@@ -121,6 +165,7 @@ const EditProfile = ({navigation}) => {
                         }}>
                         <Image
                             source={icons.camera}
+                            resizeMode={"contain"}
                             style={{width: 20, height: 20}}
                         />
                     </TouchableOpacity>
