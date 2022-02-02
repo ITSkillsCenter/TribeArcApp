@@ -415,7 +415,10 @@ const Savings = ({navigation}) => {
                         filled={amountToSave !== ""}
                         text={"Save Money"}
                         onPress={async () => {
-                            await navigation.navigate("PaymentWebPage", amountToSave)
+
+                            if (amountToSave !== "") {
+                                await navigation.navigate("PaymentWebPage", amountToSave)
+                            }
 
                             // if (amountToSave !== "") {
                             //     setIsLoading(true)

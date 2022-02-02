@@ -29,6 +29,7 @@ import OtpScreen from "./src/screens/otpScreen";
 import ReferralPage from "./src/screens/referralPage";
 import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
 import PaymentWebPage from "./src/screens/paymentWebPage";
+import RecentTransactions from "./src/screens/recentTransactions";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -101,6 +102,7 @@ const App = () => {
                 <MainStack.Screen name={"PasswordSuccessScreen"} component={PasswordSuccessScreen}/>
                 <MainStack.Screen name={"ReferralPage"} component={ReferralPage}/>
                 <MainStack.Screen name={"PaymentWebPage"} component={PaymentWebPage}/>
+                <MainStack.Screen name={"RecentTransactions"} component={RecentTransactions}/>
 
             </MainStack.Navigator>
 

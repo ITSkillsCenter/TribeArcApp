@@ -12,10 +12,11 @@ const SuccessScreen = ({navigation, route}) => {
 
     const [savings, setSavings] = useState("")
 
+    // console.log(route.params, "Amount Saved")
+
 
     useEffect(() => {
         Balance()
-
 
 
     }, [])
@@ -24,19 +25,24 @@ const SuccessScreen = ({navigation, route}) => {
 
     const Balance = async () => {
 
-        const qry = `query users {
-        users(where:{id:${user.id}}){
-            id
-            saving
-        }
-    }`
-        // con
+        const qry = `query {
+                        savingsTransactions(where: {
+                         user_id: ${user.id},
+                         status: "SUCCESS"
+                          }) {
+                        amount_paid
+                            }
+                            }`
 
         try {
 
             let res = await handleQuery(qry, user.token, false);
-            // console.log(res.data.users[0], "REZZZXXXX");
-            setSavings(res.data.users[0].saving)
+            const arr = await res.data.savingsTransactions.map((item) => {
+                return Number(item.amount_paid)
+            })
+
+            const totalSavings = await arr.reduce((a, b) => a + b, 0)
+            await setSavings(totalSavings)
 
 
         } catch (e) {
@@ -45,8 +51,6 @@ const SuccessScreen = ({navigation, route}) => {
         }
 
     }
-
-
 
 
     return (
@@ -62,7 +66,8 @@ const SuccessScreen = ({navigation, route}) => {
                 <Text style={styles.ts}>Transaction Successful!</Text>
             </View>
             <View style={styles.tsBox}>
-                <Text style={styles.desc}>Dear User you have successfully saved ₦{savings.toLocaleString()} this Month</Text>
+                <Text style={styles.desc}>Dear User you have successfully saved a total of
+                    ₦{savings.toLocaleString()}.</Text>
             </View>
 
             <View style={{marginVertical: 20}}>

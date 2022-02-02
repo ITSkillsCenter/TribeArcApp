@@ -1,60 +1,95 @@
 // @flow
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Text, ScrollView, View, StyleSheet} from "react-native";
 import {COLORS, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import RNPoll from "react-native-poll";
 import {IChoice} from "react-native-poll";
 import RNAnimated from "react-native-animated-component";
+import {handleQuery} from "../../graphql/requests";
+import {UserContext} from "../../context/UserContext";
 
 
-const choices = [
-    {id: 1, choice: "Yes", votes: 1},
-    {id: 2, choice: "No", votes: 1},
-    {id: 3, choice: "Maybe", votes: 1},
-    // {id: 4, choice: "Reebok", votes: 5},
-    // {id: 5, choice: "Under Armour", votes: 9},
-];
+// const questions = [
+//
+//     {
+//         id: 1,
+//         question: "Should the investments be limited to businesses within the continent?",
+//         totalVotes: "25",
+//         answers: [
+//             {id: 1, choice: "Yes", votes: 9},
+//             {id: 2, choice: "No", votes: 10},
+//             {id: 3, choice: "Maybe", votes: 10},
+//         ]
+//
+//     },
+//     {
+//         id: 2,
+//         question: "Where should we hold our annual conference?",
+//         totalVotes: "15",
+//         answers: [
+//             {id: 1, choice: "Lagos", votes: 10},
+//             {id: 2, choice: "Abuja", votes: 9},
+//             {id: 3, choice: "Kano", votes: 10},
+//         ]
+//     },
+//     {
+//         id: 3,
+//         question: "Should the investments meetings be scheduled to Sundays only?",
+//         totalVotes: "75",
+//         answers: [
+//             {id: 1, choice: "Yes", votes: 10},
+//             {id: 2, choice: "No", votes: 9},
+//             {id: 3, choice: "Maybe", votes: 10},
+//         ]
+//
+//     },
+//
+// ]
 
-const questions = [
-
-        {
-            id: 1,
-            question: "Should the investments be limited to businesses within the continent?",
-            totalVotes: "25",
-            answers: [
-                {id: 1, choice: "Yes", votes: 9},
-                {id: 2, choice: "No", votes: 10},
-                {id: 3, choice: "Maybe", votes: 10},
-            ]
-
-        },
-        {
-            id: 2,
-            question: "Where should we hold our annual conference?",
-            totalVotes: "15",
-            answers: [
-                {id: 1, choice: "Lagos", votes: 10},
-                {id: 2, choice: "Abuja", votes: 9},
-                {id: 3, choice: "Kano", votes: 10},
-            ]
-        },
-        {
-            id: 3,
-            question: "Should the investments meetings be scheduled to Sundays only?",
-            totalVotes: "75",
-            answers: [
-                {id: 1, choice: "Yes", votes: 10},
-                {id: 2, choice: "No", votes: 9},
-                {id: 3, choice: "Maybe", votes: 10},
-            ]
-
-        },
-
-    ]
-;
 
 const CommunityQuestions = ({navigation}) => {
+
+    const user = useContext(UserContext)
+
+    const[questions, setQuestions]=useState([])
+    // const[answers, setAnswers]=useState([])
+
+    useEffect(() => {
+
+        GetQuestion()
+
+    }, [])
+
+
+    const GetQuestion = async () => {
+
+        let qry = `query{
+            questions(where:{ community_id:15}){
+            id
+            question
+            answers{
+            id
+            choice
+                }
+              }
+            }`
+        try {
+
+            let res = await handleQuery(qry, user.token, false)
+            console.log(res.data.questions[0])
+           await setQuestions(res.data.questions)
+           // await setAnswers(res.data.questions)
+
+
+        } catch (e) {
+            console.log(e, "QuestionsError")
+        }
+
+
+    }
+
+
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
@@ -64,7 +99,11 @@ const CommunityQuestions = ({navigation}) => {
 
                 {questions.map((item, index) => (
 
-                    <View key={item.id} style={{marginBottom: 40}}>
+                    <View key={index} style={{marginBottom: 40}}>
+
+
+
+                        {/*{console.log(item.answers)}*/}
 
                         <Text style={styles.question}>Question {item.id}</Text>
                         <Text style={styles.mainQuestions}>{item.question}</Text>
@@ -72,7 +111,7 @@ const CommunityQuestions = ({navigation}) => {
                         <RNPoll
                             appearFrom="left"
                             animationDuration={750}
-                            totalVotes={30}
+                            // totalVotes={30}
                             choices={item.answers}
                             // hasBeenVoted={true}
                             // style={{backgroundColor: "cyan", marginTop:0, paddingTop:0, top:0}}

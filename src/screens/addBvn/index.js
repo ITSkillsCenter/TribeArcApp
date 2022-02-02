@@ -8,6 +8,8 @@ import CustomButton from "../../components/CustomButton";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import savings from "../savings";
+import SelectDropdown from 'react-native-select-dropdown'
+import axios from "axios";
 
 
 const AddBvn = ({navigation}) => {
@@ -15,14 +17,18 @@ const AddBvn = ({navigation}) => {
     const user = useContext(UserContext)
 
     const [bvn, setBvn] = useState("")
+    const [acctNumber, setAcctNumber] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [savingId, setSavingId] = useState(null)
+    const [banks, setBanks] = useState([])
+    const [bankCode, setBankCode] = useState("")
 
 
     useEffect(() => {
 
 
-        BvnIdCheck()
+        // BvnIdCheck()
+        BVNTransaction()
 
     }, [])
 
@@ -85,6 +91,48 @@ const AddBvn = ({navigation}) => {
     }
 
 
+    const BVNTransaction = async () => {
+        try {
+            const bankCode = await axios.get(`https://api.tribearc.com/banks/get_banks`)
+            // console.log(bankCode.data.data, "CODEEEE")
+
+            await setBanks(bankCode.data.data)
+
+        } catch (e) {
+            console.log(e, "ERRor for code")
+
+        }
+
+    }
+
+
+    const ValidateBVN = async () => {
+
+        try {
+
+            let res = await axios.post(`https://api.tribearc.com/verify/bvn`, {
+                bvn: `${bvn}`,
+                account_number: `${acctNumber}`,
+                bank_code: `${bankCode}`
+
+
+            })
+
+            console.log(res, "VALIDATERESS")
+
+
+            console.log(`${bvn}`)
+            console.log(`${acctNumber}`)
+            console.log(`${bankCode}`)
+
+        } catch (e) {
+            console.log(e, "ValidateError")
+        }
+
+
+    }
+
+
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
@@ -99,6 +147,48 @@ const AddBvn = ({navigation}) => {
                     <Text style={styles.link} onPress={() => Linking.openURL("https://tribearc.com")}>Learn more</Text>
                 </View>
 
+
+                <SelectDropdown
+                    data={banks}
+                    onSelect={(selectedItem, index) => {
+                        console.log(selectedItem.code, index)
+                        setBankCode(selectedItem.code)
+
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                        // text represented after item is selected
+                        // if data array is an array of objects then return selectedItem.property to render after item is selected
+                        return selectedItem.name
+                    }}
+                    rowTextForSelection={(item, index) => {
+                        // text represented for each item in dropdown
+                        // if data array is an array of objects then return item.property to represent item in dropdown
+                        return item.name
+                    }}
+                    rowStyle={{width: "100%"}}
+                    dropdownStyle={{width: "90%"}}
+                    defaultButtonText={"Select Bank"}
+                    buttonTextStyle={{color: COLORS.black, fontFamily: "Nexa-Book"}}
+                    buttonStyle={{
+                        width: "100%",
+                        backgroundColor: COLORS.white,
+                        borderWidth: 0.5,
+                        borderColor: COLORS.secondary,
+                        borderRadius: 5,
+                        height: 55
+                    }}
+                />
+
+
+                <TextInput
+                    placeholder={"Enter Account Number"}
+                    value={acctNumber}
+                    onChangeText={value => setAcctNumber(value)}
+                    style={styles.textInput}
+                    keyboardType={"numeric"}
+                    maxLength={10}
+                />
+
                 <TextInput
                     placeholder={"Enter BVN"}
                     value={bvn}
@@ -112,22 +202,20 @@ const AddBvn = ({navigation}) => {
                 <Text style={styles.dontKnow}>Don't know your BVN? <Text onPress={() => Linking.openURL("tel:*565*0#")}
                                                                          style={styles.dial}> Dial *565*0#</Text></Text>
 
-                <View style={{flex: 2, height: SIZES.height * 0.6, justifyContent: "flex-end"}}>
-                    <CustomButton onPress={async () => {
+                <View style={{flex: 2, height: SIZES.height * 0.4, justifyContent: "flex-end"}}>
+                    <CustomButton
+                        onPress={async () => {
+                            try {
+                                // await AddBvn()
+                                await ValidateBVN()
+                                navigation.navigate("DashBoard")
 
-                        try {
-                            await AddBvn()
-                            navigation.navigate("DashBoard")
-
-                        } catch (e) {
-                            console.log(e, "error")
-                        }
-
-                    }
-
-
-                    } loading={isLoading} filled
-                                  text={"Validate BVN"}/>
+                            } catch (e) {
+                                console.log(e, "error")
+                            }
+                        }}
+                        loading={isLoading} filled
+                        text={"Validate BVN"}/>
                 </View>
 
 
@@ -179,7 +267,8 @@ const styles = StyleSheet.create({
         borderWidth: 0.3,
         height: 55,
         borderRadius: 5,
-        marginVertical: 20,
+        // marginVertical: 20,
+        marginTop: 15,
         paddingHorizontal: 20
     },
     dial: {
@@ -190,6 +279,7 @@ const styles = StyleSheet.create({
     dontKnow: {
         color: COLORS.black,
         fontFamily: "Nexa-Book",
-        fontSize: 14
+        fontSize: 14,
+        marginVertical: 20
     }
 })

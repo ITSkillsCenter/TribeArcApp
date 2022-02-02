@@ -2,6 +2,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 
 import {
+    FlatList,
     Image,
     ImageBackground,
     SafeAreaView, ScrollView,
@@ -14,6 +15,7 @@ import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import {useIsFocused} from "@react-navigation/native";
+import moment from "moment";
 
 
 const DashBoard = ({navigation}) => {
@@ -27,47 +29,23 @@ const DashBoard = ({navigation}) => {
     const [profession, setProfession] = useState(null)
     const [bvn, setBvn] = useState("")
     const [isCardLinked, setIsCardLinked] = useState(false)
+    const [transactions, setTransactions] = useState([])
 
 
     useEffect(() => {
-        Balance()
+
+        CheckBalance()
+        FetchTransactions()
         // CheckLinkedCard()
     }, [isFocused])
 
     const user = useContext(UserContext)
 
 
-    // const CheckLinkedCard = async () => {
-    //
-    //     const qry = `query {
-    //             cards(where: { user: 1 }) {
-    //              CardNumber
-    //              Cvv
-    //              expiry
-    //             pin
-    //                 }
-    //                     }`
-    //     try {
-    //
-    //         let res = await handleQuery(qry, user.token, false);
-    //         // console.log(res.data.cards[0])
-    //         if (res.data.cards[0] !== undefined) {
-    //             setIsCardLinked(true)
-    //         }
-    //
-    //
-    //     } catch (e) {
-    //         // console.log(e, "CheckLinkedCardError")
-    //     }
-    //
-    // }
+    const CheckBalance = async () => {
 
 
-
-
-    const Balance = async () => {
-
-        const qry = `query {
+        const infoQry = `query {
                         savingAccounts(where: { user_id: ${user.id} }) {
                         id
                         amount_saved
@@ -83,21 +61,63 @@ const DashBoard = ({navigation}) => {
                                     }`
 
 
+        let qry = `query {
+                        savingsTransactions(where: {
+                         user_id: ${user.id},
+                         status: "SUCCESS"
+                          }) {
+                        amount_paid
+                            }
+                            }`
+
         try {
-            // console.log(qry, "rererere")
 
-            let res = await handleQuery(qry, user.token, false);
-            await setFirstname(res.data.savingAccounts[0].user_id.firstname)
-            await setLastname(res.data.savingAccounts[0].user_id.lastname)
-            await setPhoneNumber(res.data.savingAccounts[0].user_id.phone_number)
-            await setProfession(res.data.savingAccounts[0].user_id.profession)
-            await setBvn(res.data.savingAccounts[0].bvn)
-            await setSavings(res.data.savingAccounts[0].amount_saved)
+            let InfoRes = await handleQuery(infoQry, user.token, false);
+            await setFirstname(InfoRes.data.savingAccounts[0].user_id.firstname)
+            await setLastname(InfoRes.data.savingAccounts[0].user_id.lastname)
+            await setPhoneNumber(InfoRes.data.savingAccounts[0].user_id.phone_number)
+            await setProfession(InfoRes.data.savingAccounts[0].user_id.profession)
+            await setBvn(InfoRes.data.savingAccounts[0].bvn)
+            // await setSavings(InfoRes.data.savingAccounts[0].amount_saved)
 
-            // console.log(res.data.savingAccounts[0].user_id, "REZZZXXXX");
+            let res = await handleQuery(qry, user.token, false)
+
+            const arr = await res.data.savingsTransactions.map((item) => {
+                return Number(item.amount_paid)
+            })
+
+            const totalSavings = await arr.reduce((a, b) => a + b, 0)
+            await setSavings(totalSavings)
+            // console.log(totalSavings, "TS")
 
         } catch (e) {
-            console.log(e, "GetBalanceError")
+            console.log(e, "errorCheckBal")
+        }
+
+    }
+
+    const FetchTransactions = async () => {
+
+        let qry = `query {
+                savingsTransactions(where: { user_id: ${user.id} }, sort: "created_at:desc", limit:4) {
+                amount_paid
+                status
+                user_id {
+                    id
+                    created_at
+                            }
+                          }
+                        }`
+
+        try {
+
+            let res = await handleQuery(qry, user.token, false)
+            // console.log(res.data.savingsTransactions, " Rezzzzzzzz")
+            await setTransactions(res.data.savingsTransactions)
+
+
+        } catch (e) {
+            console.log(e, "FetchTransError")
         }
     }
 
@@ -119,7 +139,8 @@ const DashBoard = ({navigation}) => {
                         <Text style={styles.username}>Hello {firstname},</Text>
                         <Text style={styles.welcomeText}>Welcome Back!</Text>
                     </View>
-                    <TouchableOpacity onPress={() => {}}>
+                    <TouchableOpacity onPress={() => {
+                    }}>
                         <Image resizeMode={"contain"}
                                source={notification ? icons.notificationBell : icons.notificationDot}
                                style={styles.notification}/>
@@ -222,38 +243,52 @@ const DashBoard = ({navigation}) => {
                         <Text style={styles.todo}>Recent Transactions</Text>
 
                         <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
-                            <Text style={styles.seeAll}>See all</Text>
+                            <Text onPress={() => navigation.navigate("RecentTransactions")} style={styles.seeAll}>See
+                                all</Text>
                             <Image resizeMode={"contain"}
                                    style={{width: 15, height: 15, alignSelf: "center", bottom: 2}}
                                    source={icons.arrowRight}/>
                         </View>
                     </View>
 
-                    <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                      onPress={() => {
-                                      }}>
-                        <Image source={icons.tranSucc} style={{width: 50, height: 50}}/>
-                        <Text style={styles.recentTransactionText}>Card Deposit</Text>
 
-                        <View style={{alignItems: 'center', justifyContent: "space-between", height: 40}}>
-                            <Text style={{color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 20}}>N10000</Text>
-                            <Text style={{color: COLORS.black, fontFamily: "Nexa-Book"}}>Jan 12, 2022</Text>
+                    {transactions.map((item, index) => (
+
+
+                        <View key={index}>
+                            <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
+                                              onPress={() => {
+                                              }}>
+                                <Image source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
+                                       style={{width: 50, height: 50}}/>
+                                <Text style={styles.recentTransactionText}>Card Deposit</Text>
+
+                                <View style={{alignItems: 'center', justifyContent: "space-between", height: 40}}>
+                                    <Text style={{
+                                        color: COLORS.black,
+                                        fontFamily: "Nexa-Bold",
+                                        fontSize: 20
+                                    }}>₦{item?.amount_paid.toLocaleString()}</Text>
+                                    <Text style={{
+                                        color: COLORS.black,
+                                        fontFamily: "Nexa-Book"
+                                    }}>{moment(item?.user_id?.created_at).format("MMM D, YYYY")}</Text>
+                                </View>
+                            </TouchableOpacity>
+
+                            <View
+                                style={{
+                                    backgroundColor: "#EEF1F5",
+                                    height: 0.5,
+                                    width: SIZES.width * 0.9,
+                                    alignSelf: "center",
+
+                                }}
+                            />
+
                         </View>
-                    </TouchableOpacity>
-                    <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
 
-                    <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                      onPress={() => {
-                                      }}>
-                        <Image source={icons.transFailed} style={{width: 50, height: 50}}/>
-                        <Text style={styles.recentTransactionText}>Card Deposit</Text>
-
-                        <View style={{alignItems: 'center', justifyContent: "space-between", height: 40}}>
-                            <Text style={{color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 20}}>N10000</Text>
-                            <Text style={{color: COLORS.black, fontFamily: "Nexa-Book"}}>Jan 12, 2022</Text>
-                        </View>
-                    </TouchableOpacity>
-
+                    ))}
 
                     <View style={{height: 200, marginBottom: 310,}}/>
                 </ScrollView>
@@ -401,10 +436,11 @@ const styles = StyleSheet.create({
     },
     recentTransactionText: {
         fontSize: 18,
-        width: SIZES.width * 0.5,
+        width: SIZES.width * 0.4,
         fontFamily: "Nexa-Bold",
         // right: 100,
         color: COLORS.black,
         // backgroundColor:"cyan"
     },
+
 })
