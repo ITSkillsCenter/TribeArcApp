@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import {handleQuery} from "../../graphql/requests";
@@ -12,6 +12,7 @@ const RecentTransactions = ({navigation}) => {
     const user = useContext(UserContext)
 
     const [transactions, setTransactions] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
 
     useEffect(() => {
@@ -35,14 +36,18 @@ const RecentTransactions = ({navigation}) => {
                         }`
 
         try {
+            setIsLoading(true)
 
             let res = await handleQuery(qry, user.token, false)
             console.log(res.data.savingsTransactions, " Rezzzzzzzz")
             await setTransactions(res.data.savingsTransactions)
+            await setIsLoading(false)
 
 
         } catch (e) {
             console.log(e, "FetchTransError")
+            await setIsLoading(false)
+
         }
     }
 
@@ -87,7 +92,6 @@ const RecentTransactions = ({navigation}) => {
     );
 
 
-
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
@@ -95,16 +99,13 @@ const RecentTransactions = ({navigation}) => {
                 <Text style={styles.recentTran}>Recent Transactions</Text>
             </View>
 
+            {isLoading && <ActivityIndicator color={COLORS.primary} size={"large"}/>}
             <FlatList
                 data={transactions}
                 renderItem={Transactions}
                 showsVerticalScrollIndicator={false}
                 ItemSeparatorComponent={renderSeparator}
-                ListEmptyComponent={
-                    <Text>
-                        Empty transactions
-                    </Text>
-                }
+
             />
 
 

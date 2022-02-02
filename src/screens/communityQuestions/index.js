@@ -1,10 +1,9 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {Text, ScrollView, View, StyleSheet} from "react-native";
+import {ScrollView, StyleSheet, Text, View} from "react-native";
 import {COLORS, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
-import RNPoll from "react-native-poll";
-import {IChoice} from "react-native-poll";
+import RNPoll, {IChoice} from "react-native-poll";
 import RNAnimated from "react-native-animated-component";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
@@ -52,7 +51,8 @@ const CommunityQuestions = ({navigation}) => {
 
     const user = useContext(UserContext)
 
-    const[questions, setQuestions]=useState([])
+    const [questions, setQuestions] = useState([])
+    const [isSelected, setIsSelected] = useState(false)
     // const[answers, setAnswers]=useState([])
 
     useEffect(() => {
@@ -78,8 +78,8 @@ const CommunityQuestions = ({navigation}) => {
 
             let res = await handleQuery(qry, user.token, false)
             console.log(res.data.questions[0])
-           await setQuestions(res.data.questions)
-           // await setAnswers(res.data.questions)
+            await setQuestions(res.data.questions)
+            // await setAnswers(res.data.questions)
 
 
         } catch (e) {
@@ -102,7 +102,6 @@ const CommunityQuestions = ({navigation}) => {
                     <View key={index} style={{marginBottom: 40}}>
 
 
-
                         {/*{console.log(item.answers)}*/}
 
                         <Text style={styles.question}>Question {item.id}</Text>
@@ -110,10 +109,10 @@ const CommunityQuestions = ({navigation}) => {
 
                         <RNPoll
                             appearFrom="left"
-                            animationDuration={750}
-                            // totalVotes={30}
+                            animationDuration={350}
+                            totalVotes={30}
                             choices={item.answers}
-                            // hasBeenVoted={true}
+                            hasBeenVoted={isSelected}
                             // style={{backgroundColor: "cyan", marginTop:0, paddingTop:0, top:0}}
                             fillBackgroundColor={"#F5F5FF"}
                             percentageTextStyle={{fontFamily: "Nexa-Book", fontSize: 20}}
@@ -123,8 +122,14 @@ const CommunityQuestions = ({navigation}) => {
                             checkMarkIconImageSource={require("../../assets/icons/blueCheck.png")}
                             PollContainer={RNAnimated}
                             PollItemContainer={RNAnimated}
-                            onChoicePress={(selectedChoice: IChoice) =>
+                            onChoicePress={(selectedChoice: IChoice) => {
                                 console.log("SelectedChoice: ", selectedChoice)
+                                setIsSelected(true)
+
+
+
+                            }
+
                             }
                         />
 

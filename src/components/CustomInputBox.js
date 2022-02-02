@@ -1,6 +1,6 @@
 // @flow
 import React, {useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../constants";
 import {TextInput} from "react-native-paper";
 
@@ -35,8 +35,8 @@ const CustomInputBox = ({
                     activeOutlineColor={COLORS.primary}
                     outlineColor={"#C4C4C4"}
                     style={[styles.input, {
-                        ...inputContainerStyle,
                         width: short ? SIZES.width * 0.3 : SIZES.width * 0.9,
+                        ...inputContainerStyle,
                         backgroundColor: 'white',
                     }]}
                 />
@@ -52,8 +52,10 @@ const CustomInputBox = ({
                 </TouchableOpacity>}
                 {clipboard &&
 
-                    <TouchableOpacity activeOpacity={0.8} onPress={clipboardOnPress}>
-                        <Image style={{width: 45, height: 50, left: 40,}} source={icons.clipboard}/>
+                    <TouchableOpacity style={[styles.eyesBox,{top:2}]} activeOpacity={0.8} onPress={clipboardOnPress}>
+                        <Image style={[styles.eye, {
+                            width: 45, height: 50
+                        }]} source={icons.clipboard}/>
                     </TouchableOpacity>
 
                 }

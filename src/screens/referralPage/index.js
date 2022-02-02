@@ -1,6 +1,6 @@
 // @flow
 import React, {useState} from 'react';
-import {Text, View, StyleSheet, Image} from "react-native";
+import {Image, StyleSheet, Text, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomInputBox from "../../components/CustomInputBox";
@@ -37,9 +37,15 @@ const ReferralPage = ({navigation}) => {
             <CustomInputBox
                 clipboardOnPress={() => copyToClipboard()}
                 clipboard
-                short
+                // short
                 initialValue={referral}
-                placeholderText={"Referral link"}/>
+                placeholderText={"Referral link"}
+                inputContainerStyle={{width: SIZES.width * 0.8, textAlign: "center",}}
+                props={{
+                    editable: false,
+                }}
+            />
+
 
         </View>
     );
