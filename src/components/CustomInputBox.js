@@ -31,11 +31,16 @@ const CustomInputBox = ({
                     label={placeholderText}
                     value={initialValue}
                     onChangeText={onChange}
+                    // placeholderTextColor={"#999999"}
                     secureTextEntry={passwordShown}
                     activeOutlineColor={COLORS.primary}
                     outlineColor={"#C4C4C4"}
+                    Style={{color: "red"}}
+
                     style={[styles.input, {
-                        width: short ? SIZES.width * 0.3 : SIZES.width * 0.9,
+
+
+                        width: short ? SIZES.width * 0.3 : "100%",
                         ...inputContainerStyle,
                         backgroundColor: 'white',
                     }]}
@@ -82,6 +87,8 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         fontFamily: "Nexa-Book",
         position: "absolute",
+        color:"red"
+
 
     },
     eyesBox: {

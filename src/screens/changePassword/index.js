@@ -25,7 +25,6 @@ const ChangePassword = ({navigation}) => {
         await setIsLoading(true)
 
 
-
         const qry = `mutation {
                     updateUser(input: { where: { id: ${user.id} }, data: { password: "${confirmPassword}" } }) {
                          user {
@@ -74,6 +73,7 @@ const ChangePassword = ({navigation}) => {
                     <TextInput
                         placeholder={"Enter New Password"}
                         value={newPassword}
+                        placeholderTextColor={"#999999"}
                         onChangeText={value => {
                             setNewPassword(value)
                             // console.log(value,"new")
@@ -84,6 +84,8 @@ const ChangePassword = ({navigation}) => {
 
                     <TextInput
                         placeholder={"Confirm New Password"}
+                        placeholderTextColor={"#999999"}
+
                         value={confirmPassword}
                         onChangeText={value => {
                             setConfirmPassword(value)
@@ -162,6 +164,8 @@ const styles = StyleSheet.create({
         height: 55,
         borderRadius: 5,
         marginVertical: 10,
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        color: COLORS.black
+
     },
 })

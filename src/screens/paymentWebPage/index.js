@@ -8,6 +8,7 @@ import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import LottieView from "lottie-react-native";
 import CustomButton from "../../components/CustomButton";
+// import WebView from "react-native-webview";
 
 const PaymentWebPage = ({navigation, route}) => {
 
@@ -113,10 +114,22 @@ const PaymentWebPage = ({navigation, route}) => {
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
+
+            {/*<WebView*/}
+
+            {/*    source={{uri: "https://google.com"}}*/}
+            {/*    javaScriptEnabled={true}*/}
+            {/*    domStorageEnabled={true}*/}
+
+            {/*/>*/}
             <Paystack
                 paystackKey="pk_test_b0f9c1e94ea37b2ba7df563002ee8a074bc5678a"
                 amount={amount}
                 billingEmail={user.email}
+                // javaScriptEnabled={true}
+                //     source={{uri: "https://google.com"}}
+                // domStorageEnabled={true}
+                // handleWebViewMessage={}
                 activityIndicatorColor={COLORS.primary}
                 onCancel={async (e) => {
                     // handle response here
@@ -165,7 +178,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.white,
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
 
     },
     checkMark: {

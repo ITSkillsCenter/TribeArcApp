@@ -54,10 +54,12 @@ export const useAuth = () => {
                             }
                                 }`
 
+                // console.log(qry)
+
 
                 try {
                     let res = await handleQueryNoToken(qry);
-                    console.log(res.data, "QQQQQQ")
+                    // console.log(res.data, "QQQQQQ")
 
 
                     let queryCommunityId = `query{
@@ -130,6 +132,7 @@ export const useAuth = () => {
                         token: res.data.login.jwt,
                         id: res.data.login.user.id,
                         email: res.data.login.user.email,
+                        // avatar: res.data.login.user.avatar
 
                     };
 

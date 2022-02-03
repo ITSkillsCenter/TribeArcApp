@@ -16,6 +16,7 @@ import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import {useIsFocused} from "@react-navigation/native";
 import moment from "moment";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const DashBoard = ({navigation}) => {
@@ -30,6 +31,7 @@ const DashBoard = ({navigation}) => {
     const [bvn, setBvn] = useState("")
     const [isCardLinked, setIsCardLinked] = useState(false)
     const [transactions, setTransactions] = useState([])
+    const [avatar, setAvatar] = useState(null)
 
 
     useEffect(() => {
@@ -56,6 +58,7 @@ const DashBoard = ({navigation}) => {
                             lastname
                             phone_number
                             profession
+                            avatar
                               }
                                 }
                                     }`
@@ -76,9 +79,13 @@ const DashBoard = ({navigation}) => {
             await setFirstname(InfoRes.data.savingAccounts[0].user_id.firstname)
             await setLastname(InfoRes.data.savingAccounts[0].user_id.lastname)
             await setPhoneNumber(InfoRes.data.savingAccounts[0].user_id.phone_number)
+            await setAvatar(InfoRes.data.savingAccounts[0].user_id.avatar)
             await setProfession(InfoRes.data.savingAccounts[0].user_id.profession)
             await setBvn(InfoRes.data.savingAccounts[0].bvn)
             // await setSavings(InfoRes.data.savingAccounts[0].amount_saved)
+
+            await AsyncStorage.setItem("ImageLocal", InfoRes.data.savingAccounts[0].user_id.avatar)
+
 
             let res = await handleQuery(qry, user.token, false)
 
@@ -89,6 +96,7 @@ const DashBoard = ({navigation}) => {
             const totalSavings = await arr.reduce((a, b) => a + b, 0)
             await setSavings(totalSavings)
             // console.log(totalSavings, "TS")
+
 
         } catch (e) {
             console.log(e, "errorCheckBal")
@@ -101,10 +109,10 @@ const DashBoard = ({navigation}) => {
         let qry = `query {
                 savingsTransactions(where: { user_id: ${user.id} }, sort: "created_at:desc", limit:4) {
                 amount_paid
+                created_at
                 status
                 user_id {
                     id
-                    created_at
                             }
                           }
                         }`
@@ -132,8 +140,8 @@ const DashBoard = ({navigation}) => {
                     <TouchableOpacity onPress={() => {
                         navigation.navigate("Profile", {firstname, lastname})
                     }} style={styles.imgContainer}>
-                        <Image style={styles.img} resizeMode={"contain"}
-                               source={require("../../assets/images/userImg.png")}/>
+                        <Image style={styles.img} resizeMode={"cover"}
+                               source={avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}/>
                     </TouchableOpacity>
                     <View style={styles.nameContainer}>
                         <Text style={styles.username}>Hello {firstname},</Text>
@@ -272,7 +280,7 @@ const DashBoard = ({navigation}) => {
                                     <Text style={{
                                         color: COLORS.black,
                                         fontFamily: "Nexa-Book"
-                                    }}>{moment(item?.user_id?.created_at).format("MMM D, YYYY")}</Text>
+                                    }}>{moment(item?.created_at).format("MMM D, YYYY")}</Text>
                                 </View>
                             </TouchableOpacity>
 

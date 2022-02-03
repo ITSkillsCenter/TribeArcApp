@@ -183,6 +183,7 @@ const AddBvn = ({navigation}) => {
                 <TextInput
                     placeholder={"Enter Account Number"}
                     value={acctNumber}
+                    placeholderTextColor={"#999999"}
                     onChangeText={value => setAcctNumber(value)}
                     style={styles.textInput}
                     keyboardType={"numeric"}
@@ -192,6 +193,7 @@ const AddBvn = ({navigation}) => {
                 <TextInput
                     placeholder={"Enter BVN"}
                     value={bvn}
+                    placeholderTextColor={"#999999"}
                     onChangeText={value => setBvn(value)}
                     style={styles.textInput}
                     keyboardType={"numeric"}
@@ -269,7 +271,9 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         // marginVertical: 20,
         marginTop: 15,
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        color:COLORS.black
+
     },
     dial: {
         color: COLORS.primary,

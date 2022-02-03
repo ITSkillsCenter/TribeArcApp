@@ -71,6 +71,7 @@ const CommunityQuestions = ({navigation}) => {
             answers{
             id
             choice
+            votes
                 }
               }
             }`
@@ -110,7 +111,7 @@ const CommunityQuestions = ({navigation}) => {
                         <RNPoll
                             appearFrom="left"
                             animationDuration={350}
-                            totalVotes={30}
+                            totalVotes={100}
                             choices={item.answers}
                             hasBeenVoted={isSelected}
                             // style={{backgroundColor: "cyan", marginTop:0, paddingTop:0, top:0}}
@@ -126,11 +127,7 @@ const CommunityQuestions = ({navigation}) => {
                                 console.log("SelectedChoice: ", selectedChoice)
                                 setIsSelected(true)
 
-
-
-                            }
-
-                            }
+                            }}
                         />
 
                         <Text style={styles.totalVotes}>Total Votes: {item.totalVotes}</Text>

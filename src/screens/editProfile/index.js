@@ -1,5 +1,5 @@
 // @flow
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import BackButton from "../../components/BackButton";
@@ -9,6 +9,8 @@ import CustomInputBox from "../../components/CustomInputBox";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import {launchImageLibrary} from "react-native-image-picker";
+import {BASE_URL} from "../../config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const EditProfile = ({navigation}) => {
@@ -19,6 +21,7 @@ const EditProfile = ({navigation}) => {
     useEffect(() => {
 
         GetUserData()
+        GetImg()
     }, []);
 
 
@@ -29,6 +32,25 @@ const EditProfile = ({navigation}) => {
     const [phoneNum, setPhoneNum] = useState("")
     const [profession, setProfession] = useState("")
     const [filePath, setFilePath] = useState(null);
+    const [imageInfo, setImageInfo] = useState('');
+    const [avatar, setAvatar] = useState(null);
+
+
+    const GetImg = async () => {
+
+        const value = await AsyncStorage.getItem("ImageLocal")
+
+        try {
+
+            if (value !== null) {
+                await setAvatar(value)
+            }
+
+        } catch (e) {
+            console.log(e, "")
+        }
+
+    }
 
 
     const GetUserData = async () => {
@@ -44,7 +66,7 @@ const EditProfile = ({navigation}) => {
         try {
 
             let res = await handleQuery(qry, user.token, false)
-            console.log(res.data.users[0].profession, "REZZZ")
+            // console.log(res.data.users[0].profession, "REZZZ")
             await setEmail(res.data.users[0].email)
             await setFirstName(res.data.users[0].firstname)
             await setLastName(res.data.users[0].lastname)
@@ -80,7 +102,7 @@ const EditProfile = ({navigation}) => {
                 }`
         try {
 
-            console.log(qry)
+            // console.log(qry)
 
             setIsLoading(true)
 
@@ -96,21 +118,8 @@ const EditProfile = ({navigation}) => {
 
 
     const ChooseFile = async () => {
-        let options = {
-            title: "Select Image",
-            customButtons: [
-                {
-                    name: "customOptionKey",
-                    title: "Choose Photo from Custom Option",
-                },
-            ],
-            storageOptions: {
-                skipBackup: true,
-                path: "images",
-            },
-        };
 
-        await launchImageLibrary(options, (response) => {
+        await launchImageLibrary("", (response) => {
             console.log("Response = ", response);
 
             if (response.didCancel) {
@@ -125,15 +134,74 @@ const EditProfile = ({navigation}) => {
                 alert(response.customButton);
             } else {
                 let source = response.assets[0].uri;
-                // You can also display the image using data:
-                // let source = {
-                //   uri: 'data:image/jpeg;base64,' + response.data
-                // };
                 setFilePath(source);
+                setImageInfo(response.assets[0]);
             }
         });
 
 
+    };
+
+
+    const UploadFile = async () => {
+
+        const formData = new FormData();
+        formData.append('files', {
+            uri: imageInfo.uri,
+            name: imageInfo.fileName,
+            type: imageInfo.type,
+        });
+
+        try {
+            setIsLoading(true)
+
+
+            await fetch(`${BASE_URL}/upload/`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+                method: "POST",
+                body: formData,
+            }).then((res) => {
+                return res.json()
+            }).then(async (response) => {
+                await UploadNow(response[0].url)
+                await setIsLoading(false)
+                // console.log(response[0].url, "IMG")
+            })
+
+
+        } catch (e) {
+            // setLoading(false);
+            console.log('e', e);
+            console.log('e', e.response);
+        }
+    };
+
+
+    const UploadNow = async (link) => {
+
+        let query = `mutation {
+                        updateUser(input: { where: { id: ${user.id} },
+                         data: { avatar: "${link}" } }) {
+                        user {
+                        id
+                        avatar
+                            }
+                          }
+                        }`
+
+        try {
+
+
+            let {data} = await handleQuery(query, user.token, false);
+
+            // console.log(data, "DAYTAA")
+
+        } catch (e) {
+            console.log('e', e);
+            console.log('e', e.response);
+        }
     };
 
 
@@ -147,8 +215,8 @@ const EditProfile = ({navigation}) => {
                 {/*<View>*/}
                 <ImageBackground
                     resizeMode={"contain"}
-                    source={ filePath? {uri: filePath}:require("../../assets/images/userImg.png")}
-                    style={{width: 120, height: 120, marginVertical: 10, borderRadius:130,aspectRatio:1}}>
+                    source={filePath ? {uri: filePath} : avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}
+                    style={{width: 120, height: 120, marginVertical: 10, borderRadius: 130, aspectRatio: 1}}>
                     <TouchableOpacity
                         activeOpacity={0.7}
                         onPress={() => ChooseFile()}
@@ -219,7 +287,9 @@ const EditProfile = ({navigation}) => {
 
                             try {
                                 await UpdateUserData()
+                                await UploadFile()
                                 navigation.navigate("DashBoard")
+
 
                             } catch (e) {
                                 console.log(e, "UpdateUserError")

@@ -27,13 +27,16 @@ const RecentTransactions = ({navigation}) => {
         let qry = `query {
                 savingsTransactions(where: { user_id: ${user.id} }, sort: "created_at:desc", limit:15) {
                 amount_paid
+                created_at
                 status
                 user_id {
                     id
-                    created_at
                             }
                           }
                         }`
+
+
+        console.log(qry)
 
         try {
             setIsLoading(true)
@@ -71,7 +74,7 @@ const RecentTransactions = ({navigation}) => {
                         <Text style={{
                             color: COLORS.black,
                             fontFamily: "Nexa-Book"
-                        }}>{moment(item?.user_id?.created_at).format("MMM Do, YYYY")}</Text>
+                        }}>{moment(item?.created_at).format("MMM Do, YYYY")}</Text>
                     </View>
                 </TouchableOpacity>
             </View>

@@ -1,5 +1,5 @@
 // @flow
-import React, {useContext, useRef} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import BackButton from "../../components/BackButton";
 import {COLORS, icons, SIZES} from "../../constants";
@@ -8,13 +8,22 @@ import AccountOptions from "../../components/AccountOptions";
 import {AuthContext} from "../../context/AuthContext";
 import CustomButton from "../../components/CustomButton";
 import {Modalize} from "react-native-modalize";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const Profile = ({navigation, route}) => {
 
     const name = route.params;
 
-    console.log(name)
+    const [avatar, setAvatar] = useState(null)
+
+    useEffect(() => {
+
+        GetImg()
+
+    }, [])
+
+    // console.log(name)
 
     const modalizeRef = useRef<Modalize>(null);
 
@@ -29,6 +38,23 @@ const Profile = ({navigation, route}) => {
 
     const {logout} = useContext(AuthContext)
     const user = useContext(UserContext)
+
+
+    const GetImg = async () => {
+
+        const value = await AsyncStorage.getItem("ImageLocal")
+
+        try {
+
+            if (value !== null) {
+                setAvatar(value)
+            }
+
+        } catch (e) {
+            console.log(e, "")
+        }
+
+    }
 
 
     const renderHeader = () => (
@@ -80,9 +106,7 @@ const Profile = ({navigation, route}) => {
     );
 
     return (
-        <View style={{backgroundColor:COLORS.white, flex:1}}>
-
-
+        <View style={{backgroundColor: COLORS.white, flex: 1}}>
 
 
             <View style={styles.container}>
@@ -102,8 +126,8 @@ const Profile = ({navigation, route}) => {
                     navigation.navigate("EditProfile")
                 }} style={styles.userDetails}>
                     <View style={styles.imgContainer}>
-                        <Image style={styles.img} resizeMode={"contain"}
-                               source={require("../../assets/images/userImg.png")}/>
+                        <Image style={styles.img} resizeMode={"cover"}
+                               source={avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}/>
                     </View>
 
                     <View style={styles.fullNameContainer}>

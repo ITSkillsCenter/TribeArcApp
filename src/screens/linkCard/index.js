@@ -268,7 +268,8 @@ const styles = StyleSheet.create({
     linkCardText: {
         fontSize: 16,
         fontFamily: "Nexa-Bold",
-        right: 100,
+        // right: 100,
+        width:"70%",
         color: COLORS.black
     },
     cancelButton: {

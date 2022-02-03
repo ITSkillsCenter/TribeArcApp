@@ -380,6 +380,7 @@ const Savings = ({navigation}) => {
                 <View style={styles.inputBox}>
                     <TextInput
                         style={styles.textInput}
+                        placeholderTextColor={"#999999"}
                         placeholder={"Enter your monthly Savings Amount"}
                         value={amountToSave}
                         keyboardType={"numeric"}
@@ -481,7 +482,8 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         fontFamily: "Nexa-Book",
         height: 50,
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        color:COLORS.black
     },
     inputBox: {
         marginVertical: 30
