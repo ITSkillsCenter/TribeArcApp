@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, ScrollView, StyleSheet, Text, View} from "react-native";
 import {COLORS, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import RNPoll, {IChoice} from "react-native-poll";
@@ -53,6 +53,7 @@ const CommunityQuestions = ({navigation}) => {
 
     const [questions, setQuestions] = useState([])
     const [isSelected, setIsSelected] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     // const[answers, setAnswers]=useState([])
 
     useEffect(() => {
@@ -77,14 +78,75 @@ const CommunityQuestions = ({navigation}) => {
             }`
         try {
 
+            setIsLoading(true)
+
             let res = await handleQuery(qry, user.token, false)
-            console.log(res.data.questions[0])
+            // console.log(res.data.questions[0])
             await setQuestions(res.data.questions)
             // await setAnswers(res.data.questions)
+            await setIsLoading(false)
+            // console.log(res.data.questions[0].answers)
+            // const arr = await res.data.questions[0].answers.map((item) => {
+            //     return Number(item.votes)
+            // })
+
+            // console.log(arr)
 
 
         } catch (e) {
             console.log(e, "QuestionsError")
+            await setIsLoading(false)
+
+        }
+
+
+    }
+
+
+    const HandlePolls = async (question_id, answer_id, votes) => {
+
+
+        let updateVotes = `mutation {
+                            updateAnswer(input: { where: { id: ${answer_id} }, data: { votes: ${votes} } }) {
+                            answer {
+                                id
+                                choice
+                                votes
+                                    }
+                                  }
+                                }`
+
+        let createPoll = `mutation {
+                    createPoll(
+                    input: {
+                    data: { users_id: ${user.id}, question_id: ${question_id}, answer_id: ${answer_id} , community_id: 15 }
+                            }
+                            ) {
+                           poll {
+                                id
+                                question_id {
+                                    id
+                                    question
+                                }
+                                answer_id {
+                                    votes
+                                    choice
+                                    id
+                                }
+                              }
+                            }
+                          }`
+
+        // console.log(createPoll, updateVotes)
+
+        try {
+
+            await handleQuery(updateVotes, user.token, false)
+            await handleQuery(createPoll, user.token, false)
+
+
+        } catch (e) {
+            console.log(e, "handlePollError")
         }
 
 
@@ -98,7 +160,10 @@ const CommunityQuestions = ({navigation}) => {
 
             <ScrollView showsVerticalScrollIndicator={false}>
 
+                {isLoading && <ActivityIndicator size={"large"} color={COLORS.primary}/>}
+
                 {questions.map((item, index) => (
+
 
                     <View key={index} style={{marginBottom: 40}}>
 
@@ -113,7 +178,7 @@ const CommunityQuestions = ({navigation}) => {
                             animationDuration={350}
                             totalVotes={100}
                             choices={item.answers}
-                            hasBeenVoted={isSelected}
+                            // hasBeenVoted={voted}
                             // style={{backgroundColor: "cyan", marginTop:0, paddingTop:0, top:0}}
                             fillBackgroundColor={"#F5F5FF"}
                             percentageTextStyle={{fontFamily: "Nexa-Book", fontSize: 20}}
@@ -123,14 +188,22 @@ const CommunityQuestions = ({navigation}) => {
                             checkMarkIconImageSource={require("../../assets/icons/blueCheck.png")}
                             PollContainer={RNAnimated}
                             PollItemContainer={RNAnimated}
-                            onChoicePress={(selectedChoice: IChoice) => {
-                                console.log("SelectedChoice: ", selectedChoice)
-                                setIsSelected(true)
+                            onChoicePress={async (selectedChoice: IChoice) => {
+                                // console.log("SelectedChoice: ", selectedChoice.votes)
+                                let question_id = item.id
+                                let answer_id = selectedChoice.id
+                                let votes = selectedChoice.votes
+
+                                await HandlePolls(question_id, answer_id, votes)
 
                             }}
                         />
-
-                        <Text style={styles.totalVotes}>Total Votes: {item.totalVotes}</Text>
+                        {/*{console.log(item.answers.map((item) => {*/}
+                        {/*    return Number(item.votes)*/}
+                        {/*}).reduce((a, b) => a + b, 0))}*/}
+                        <Text style={styles.totalVotes}>Total Votes: {item.answers.map((item) => {
+                            return Number(item.votes)
+                        }).reduce((a, b) => a + b, 0)}</Text>
 
                     </View>
 

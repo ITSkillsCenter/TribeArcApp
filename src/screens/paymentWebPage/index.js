@@ -158,7 +158,7 @@ const PaymentWebPage = ({navigation, route}) => {
                 </View>
 
                 <View style={styles.tsBox}>
-                    <Text style={styles.ts}>Transaction failed/cancelled!</Text>
+                    <Text style={styles.ts}>Transaction failed!</Text>
                 </View>
 
                 <View style={{marginVertical: 20}}>
