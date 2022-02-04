@@ -1,11 +1,11 @@
 // @flow
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from "react-native";
 import {COLORS, SIZES} from "../../constants";
-import Video from "react-native-video";
 import vid from "../../assets/images/vid.mp4"
 import CustomButton from "../../components/CustomButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import VideoPlayer from "react-native-video-player";
 
 
 const WelcomePage = ({navigation}) => {
@@ -37,17 +37,28 @@ const WelcomePage = ({navigation}) => {
             </View>
 
 
-            <Video
-                ref={ref => (videoPlayer.current = ref)}
-                playInBackground={false}
-                // allowsExternalPlayback
-                source={{uri: "https://youtu.be/jFGa2BBQXu0"}}
-                resizeMode={"stretch"}// the video file
-                paused={true}                  // make it start
-                style={styles.backgroundVideo}  // any style you want
-                // repeat={true}
-                controls={true}// make it a loop
+            {/*<Video*/}
+            {/*    ref={ref => (videoPlayer.current = ref)}*/}
+            {/*    playInBackground={false}*/}
+            {/*    // allowsExternalPlayback*/}
+            {/*    source={{uri: "https://youtu.be/jFGa2BBQXu0"}}*/}
+            {/*    resizeMode={"stretch"}// the video file*/}
+            {/*    paused={true}                  // make it start*/}
+            {/*    style={styles.backgroundVideo}  // any style you want*/}
+            {/*    // repeat={true}*/}
+            {/*    controls={true}// make it a loop*/}
+            {/*/>*/}
+
+            <VideoPlayer
+                video={vid}
+                videoWidth={1600}
+                videoHeight={900}
+                autoplay
+                disableFullscreen
+                customStyles={styles.backgroundVideo}
+                // thumbnail={{ uri: 'https://i.picsum.photos/id/866/1600/900.jpg' }}
             />
+
 
             <View style={styles.buttonContainer}>
                 <CustomButton
