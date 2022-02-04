@@ -1,16 +1,21 @@
 // @flow
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomInputBox from "../../components/CustomInputBox";
 import Toast from "react-native-toast-message";
 import Clipboard from '@react-native-clipboard/clipboard';
+import {UserContext} from "../../context/UserContext";
+import {handleQuery} from "../../graphql/requests";
 
 
 const ReferralPage = ({navigation}) => {
 
-    const [code, setCode] = useState("we54Fg")
+
+    const user = useContext(UserContext)
+
+    const [code, setCode] = useState("")
     const [referral, setReferral] = useState(`${code}`)
 
     // const [copiedText, setCopiedText] = useState('');
@@ -23,6 +28,40 @@ const ReferralPage = ({navigation}) => {
             text2: 'Copied to clipboard'
         });
     };
+
+
+    useEffect(() => {
+
+        GetCode()
+
+    }, [])
+
+
+    const GetCode = async () => {
+
+        let qry = `query{
+            users(where:{id:${user.id}}){
+                    id
+                    referral_code
+                        }
+                    }`
+
+
+        console.log(qry)
+
+
+        try {
+
+            let res = await handleQuery(qry, user.token, false)
+
+            console.log(res.data.users[0].referral_code)
+            await setCode(res.data.users[0].referral_code)
+
+
+        } catch (e) {
+            console.log(e, "getCodeErr")
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -38,9 +77,9 @@ const ReferralPage = ({navigation}) => {
                 clipboardOnPress={() => copyToClipboard()}
                 clipboard
                 // short
-                initialValue={referral}
+                initialValue={code}
                 placeholderText={"Referral link"}
-                inputContainerStyle={{width: SIZES.width * 0.8, textAlign: "center",}}
+                inputContainerStyle={{width: SIZES.width * 0.8, textAlign: "left", fontFamily: "Nexa-Bold"}}
                 props={{
                     editable: false,
                 }}

@@ -41,7 +41,7 @@ const WelcomePage = ({navigation}) => {
                 ref={ref => (videoPlayer.current = ref)}
                 playInBackground={false}
                 // allowsExternalPlayback
-                source={vid}
+                source={{uri: "https://youtu.be/jFGa2BBQXu0"}}
                 resizeMode={"stretch"}// the video file
                 paused={true}                  // make it start
                 style={styles.backgroundVideo}  // any style you want

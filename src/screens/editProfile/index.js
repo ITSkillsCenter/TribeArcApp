@@ -281,7 +281,7 @@ const EditProfile = ({navigation}) => {
 
                 {/*</View>*/}
 
-                <View style={{flex: 2, justifyContent: "flex-end"}}>
+                <View style={{flex: 2, justifyContent: "flex-end", height:SIZES.height*0.2}}>
                     <CustomButton
                         onPress={async () => {
 
@@ -300,7 +300,6 @@ const EditProfile = ({navigation}) => {
                         filled text={"Update Profile"}
                     />
                 </View>
-
 
             </KeyboardAwareScrollView>
         </View>

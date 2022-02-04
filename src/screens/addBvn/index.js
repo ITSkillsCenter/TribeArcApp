@@ -204,7 +204,7 @@ const AddBvn = ({navigation}) => {
                 <Text style={styles.dontKnow}>Don't know your BVN? <Text onPress={() => Linking.openURL("tel:*565*0#")}
                                                                          style={styles.dial}> Dial *565*0#</Text></Text>
 
-                <View style={{flex: 2, height: SIZES.height * 0.4, justifyContent: "flex-end"}}>
+                <View style={{flex: 2, height: SIZES.height * 0.35, justifyContent: "flex-end"}}>
                     <CustomButton
                         onPress={async () => {
                             try {

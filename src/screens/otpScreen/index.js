@@ -1,10 +1,12 @@
 // @flow
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, Keyboard, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Keyboard, StyleSheet, Text, TextInput, View} from "react-native";
 import {COLORS} from "../../constants";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
 import TextButtonComponent from "../../components/TextButtonComponent";
 import {handleQueryNoToken} from "../../graphql/requests";
+import CustomInputBox from "../../components/CustomInputBox";
+import CustomButton from "../../components/CustomButton";
 
 
 const OtpScreen = ({navigation, route}) => {
@@ -12,28 +14,12 @@ const OtpScreen = ({navigation, route}) => {
     const emailFromRoute = route.params
     // console.log(dataFromRoute, "7777")
 
-    // const [otp, setOtp] = useState("");
+    const [otpCode, setOtpCode] = useState("");
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const [keyboardStatus, setKeyboardStatus] = useState(undefined);
 
-    useEffect(() => {
-        const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-            setKeyboardStatus("Keyboard Shown");
-        });
-        const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-            setKeyboardStatus("Keyboard Hidden");
-        });
-
-        return () => {
-            showSubscription.remove();
-            hideSubscription.remove();
-        };
-    }, []);
-
-
-    const VerifyOTP = async (otpCode) => {
+    const VerifyOTP = async () => {
 
         let otpQry = `mutation{
             confirmOtp(
@@ -71,8 +57,7 @@ const OtpScreen = ({navigation, route}) => {
         try {
 
             let otpResent = await handleQueryNoToken(resendOtpQry);
-                setLoading(false)
-
+            setLoading(false)
 
 
         } catch (e) {
@@ -88,44 +73,33 @@ const OtpScreen = ({navigation, route}) => {
 
             <Text style={styles.enterOtp}>Enter your OTP</Text>
             <Text style={styles.desc}>To verify email, we’ve sent a one time password (OTP) to your email address</Text>
-            <View style={{alignItems: 'center'}}>
 
 
-                <OTPInputView
-                    style={{width: '100%', height: 200,}}
-                    pinCount={6}
-                    // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-                    onCodeChanged={code => {
+            <View style={styles.inputBox}>
+                <CustomInputBox
+                    inputContainerStyle={styles.textInput}
+                    placeholderTextColor={"#999999"}
+                    placeholderText={"Enter one time password"}
+                    initialValue={otpCode}
+                    props={{
+                        maxLength: 6
+                    }}
+                    keyboardType={"numeric"}
+                    onChange={(value) => {
+                        setOtpCode(value)
                         setError(false)
                         setLoading(false)
-                        // console.log(code)
-                    }}
-                    editable
-                    keyboardAppearance={"dark"}
-                    autoFocusOnLoad
-                    keyboardType={"numeric"}
-                    codeInputFieldStyle={styles.borderStyleBase}
-                    codeInputHighlightStyle={styles.borderStyleHighLighted}
-                    onCodeFilled={(code) => {
-                        // await setOtp(code)
-                        VerifyOTP(code)
-                        // setTimeout(() => {
-                        //     console.log(otp,"Fin")
-                        //
-                        // }, 500)
-
-
                     }}
                 />
-
             </View>
 
-            <View style={{alignSelf: "flex-start", bottom: 40}}>
+
+            <View style={{alignSelf: "flex-start", bottom: 20}}>
                 <TextButtonComponent
                     text={"Did not receive OTP?  "}
                     pressable={"Resend Code"}
                     onPress={async () => {
-                      await  ResendOTP()
+                        await ResendOTP()
                         setError(false)
 
                     }}
@@ -134,7 +108,19 @@ const OtpScreen = ({navigation, route}) => {
             {loading && <ActivityIndicator color={COLORS.primary} size="large"/>}
             {error && <Text style={{color: "red"}}>An error occurred, retry.</Text>}
 
-            <Text>{keyboardStatus}</Text>
+            <View style={styles.saveButton}>
+                <CustomButton
+                    loading={loading}
+                    filled={otpCode !== ""}
+                    text={"Verify"}
+                    onPress={async () => {
+                        if (otpCode !== "") {
+                            await VerifyOTP()
+
+                        }
+
+                    }}/>
+            </View>
 
         </View>
     );
@@ -180,6 +166,23 @@ const styles = StyleSheet.create({
 
     borderStyleHighLighted: {
         borderColor: COLORS.secondary,
+    },
+    inputBox: {
+        marginVertical: 30
+    },
+
+    textInput: {
+        borderRadius: 5,
+        fontFamily: "Nexa-Bold",
+        height: 60,
+        letterSpacing: 15,
+        fontSize: 20,
+        color: COLORS.black
+    },
+    saveButton: {
+        justifyContent: "flex-end",
+        flex: 2,
+
     },
 
 

@@ -65,6 +65,17 @@ const CommunityQuestions = ({navigation}) => {
 
     const GetQuestion = async () => {
 
+
+        let getPolls = `query {
+                polls(where: { users_id: ${user.id} }) {
+                id
+                question_id {
+                    id
+                    }
+                }
+            }`
+
+
         let qry = `query{
             questions(where:{ community_id:15}){
             id
@@ -80,9 +91,27 @@ const CommunityQuestions = ({navigation}) => {
 
             setIsLoading(true)
 
+            let response = await handleQuery(getPolls, user.token, false)
+
+            // console.log(response.data.polls, "REZZZZZ")
+
+
+            const arr = response.data.polls.map((item) => {
+                return item.question_id.id
+            })
+
+            console.log(arr)
+
             let res = await handleQuery(qry, user.token, false)
-            // console.log(res.data.questions[0])
-            await setQuestions(res.data.questions)
+
+
+            const UnansweredQuestions = await res.data.questions.filter(item => !arr.includes(item.id))
+            console.log(UnansweredQuestions, "UNANSS")
+
+
+
+            // console.log(res.data.questions)
+            await setQuestions(UnansweredQuestions)
             // await setAnswers(res.data.questions)
             await setIsLoading(false)
             // console.log(res.data.questions[0].answers)

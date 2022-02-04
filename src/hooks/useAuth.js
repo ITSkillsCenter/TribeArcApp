@@ -6,6 +6,13 @@ import SecureStorage from "react-native-secure-storage";
 
 export const useAuth = () => {
 
+    function randomString(length, chars) {
+        let result = '';
+        for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+        return result;
+    }
+
+
     const [state, dispatch] = useReducer(
         (state, action) => {
             switch (action.type) {
@@ -38,6 +45,7 @@ export const useAuth = () => {
 
     const auth = useMemo(() => ({
 
+
             login: async (email, password) => {
 
                 let qry = `mutation {
@@ -62,39 +70,39 @@ export const useAuth = () => {
                     // console.log(res.data, "QQQQQQ")
 
 
-                    let queryCommunityId = `query{
-                        users(where:{id:${res.data.login.user.id}}){
-                                    id
-                                    communities{
-                                    id
-                                        }
-                                       }
-                                      }`
+                    // let queryCommunityId = `query{
+                    //     users(where:{id:${res.data.login.user.id}}){
+                    //                 id
+                    //                 communities{
+                    //                 id
+                    //                     }
+                    //                    }
+                    //                   }`
 
 
-                    let qryRes = await handleQuery(queryCommunityId, res.data.login.jwt, false)
+                    // let qryRes = await handleQuery(queryCommunityId, res.data.login.jwt, false)
                     // console.log(qryRes.data.users[0].communities, "DAtATATTATA")
 
-                    const arr = qryRes.data.users[0].communities.map((item) => {
-                        return Number(item.id)
-                    })
+                    // const arr = qryRes.data.users[0].communities.map((item) => {
+                    //     return Number(item.id)
+                    // })
 
-                    arr.push(15)
-                    let updateCommunities = `mutation {
-                        updateUser(
-                        input: { where: { id: ${res.data.login.user.id} },
-                        data: { communities: [${arr}] }}
-                        ) {
-                        user {
-                        id
-                        communities {
-                        id
-                            }
-                               }
-                                  }
-                                     }`
+                    // arr.push(15)
+                    // let updateCommunities = `mutation {
+                    //     updateUser(
+                    //     input: { where: { id: ${res.data.login.user.id} },
+                    //     data: { communities: [${arr}] }}
+                    //     ) {
+                    //     user {
+                    //     id
+                    //     communities {
+                    //     id
+                    //         }
+                    //            }
+                    //               }
+                    //                  }`
 
-                    let newComm = await handleQuery(updateCommunities, res.data.login.jwt, false)
+                    // let newComm = await handleQuery(updateCommunities, res.data.login.jwt, false)
 
 
                     let qrySavingsAcc = `query {
@@ -123,7 +131,6 @@ export const useAuth = () => {
                                                }`
 
                         let createSavingAcctRes = await handleQuery(createSavingAcct, res.data.login.jwt, false)
-
                     }
 
                     // console.log(qrySavingsRes.data.users[0].saving_account, "REZXXX")
@@ -145,19 +152,15 @@ export const useAuth = () => {
             },
 
 
-            register: async (email, password) => {
-
-
-                function randomString(length, chars) {
-                    let result = '';
-                    for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-                    return result;
-                }
-
+            register: async (email, password, referredBy) => {
                 const rString = randomString(5, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
-                console.log(rString)
 
+                let codeVerification = `mutation {
+                                        referralCheck(referral_code: "${referredBy}") {
+                                                ok
+                                                    }
+                                                  }`
 
                 let qry = `mutation {
                                 register(
@@ -165,6 +168,9 @@ export const useAuth = () => {
                                     email: "${email}"
                                     username: "${email}"
                                     password: "${password}"
+                                    referred_by: "${referredBy}"
+                                    referral_code:"${rString}"
+                                    domain_url:"investment.triberarc.com"
                                          }
                                      ) {
                                   jwt
@@ -178,36 +184,52 @@ export const useAuth = () => {
                                        }`
 
 
-                try {
-                    let res = await handleQueryNoToken(qry);
-
-                    let otpQuery = `
-                                mutation{
+                let otpQuery = `mutation{
                                     sendOtp(email:"${email}"){
                                         ok
                                             }
                                                 }`
 
 
-                    let otpQryRes = await handleQueryNoToken(otpQuery);
-                    // console.log(otpVerify, " VERIFYYYY")
+                try {
+
+                    // console.log(updateRefAndRefBY)
+                    let codeVerificationRes = await handleQueryNoToken(codeVerification);
+
+                    // console.log(codeVerificationRes.data.referralCheck.ok)
 
 
-                    // let updateComm = `mutation {
-                    //                 updateUser(input: { where: { id: ${res.data.register.user.id} },
-                    //                 data: { communities: 15 } }) {
-                    //                 user {
-                    //                 id
-                    //                 communities {
-                    //                             id
-                    //                                 }
-                    //                                  }
-                    //                             }
-                    //                           }`
+                    if (codeVerificationRes.data.referralCheck.ok) {
+
+                        let res = await handleQueryNoToken(qry);
 
 
-                    // let addToComm = await handleQuery(updateComm, res.data.register.jwt, false)
-                    // console.log(addToComm.data, "ADDED to COMM")
+                        // let updateRefAndRefBY = `mutation {
+                        //             updateUser(
+                        //                 input: {
+                        //                 where: { id: ${res.data.register.user.id} }
+                        //                 data: { referred_by: "${referredBy}", referral_code: "${rString}" }
+                        //                 }
+                        //                 ) {
+                        //                 user {
+                        //                     id
+                        //                         }
+                        //                      }
+                        //                   }`
+                        //
+                        //
+                        // console.log(updateRefAndRefBY)
+                        // console.log(res.data.register.jwt)
+
+
+                        // let updateRefCodesRes = await handleQuery(updateRefAndRefBY, res.data.register.jwt, false)
+                        // console.log(updateRefCodesRes.errors)
+
+
+                        let otpQryRes = await handleQueryNoToken(otpQuery);
+
+
+                    }
 
 
                 } catch (e) {
@@ -219,32 +241,12 @@ export const useAuth = () => {
             },
 
             logout: async () => {
-
                 await SecureStorage.removeItem("user");
                 dispatch(createAction("REMOVE_USER"));
-                // console.log("logout");
             },
 
         }), [],
     );
-
-    // useEffect(() => {
-    //     sleep(700).then(() => {
-    //         let user = AsyncStorage.getItem("user")
-    //         // .then(user => {
-    //         // console.log(user, "STORED USERRR");
-    //
-    //         if (user) {
-    //             dispatch(createAction("SET_USER", JSON.parse(user)));
-    //         } else {
-    //             dispatch(createAction("SET_LOADING", false));
-    //         }
-    //
-    //         // });
-    //     });
-    //
-    //
-    // }, []);
 
 
     useEffect(() => {
@@ -260,6 +262,7 @@ export const useAuth = () => {
 
             });
         });
+
 
     }, []);
 

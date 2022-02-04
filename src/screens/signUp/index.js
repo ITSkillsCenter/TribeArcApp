@@ -12,6 +12,7 @@ const SignUp = ({navigation}) => {
 
     const [emailOrNumber, setEmailOrNumber] = useState("");
     const [password, setPassword] = useState("");
+    const [referredBy, setReferredBy] = useState("");
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
 
@@ -58,13 +59,27 @@ const SignUp = ({navigation}) => {
                         }}
 
                     />
+
+                    <CustomInputBox
+                        placeholderText={"Referral code"}
+                        initialValue={referredBy}
+                        onChange={referredBy => {
+                            setReferredBy(referredBy);
+                            setIsError(false)
+                            setIsLoading(false)
+
+
+                        }}
+
+                    />
+
                 </View>
 
                 {isError && <Text style={{color: "red"}}>An error occurred, try again! </Text>}
 
                 <CustomButton
                     text={"Register"}
-                    filled={emailOrNumber && password && true}
+                    filled={emailOrNumber && password && referredBy && true}
                     loading={isLoading}
                     // onPress={() => {
                     //     navigation.navigate("OtpScreen", emailOrNumber)
@@ -72,9 +87,9 @@ const SignUp = ({navigation}) => {
                     onPress={async () => {
                         try {
 
-                            if (emailOrNumber && password !== "") {
+                            if (emailOrNumber && password && referredBy !== "") {
                                 setIsLoading(true)
-                                await register(emailOrNumber, password);
+                                await register(emailOrNumber, password, referredBy);
                                 navigation.navigate("OtpScreen", emailOrNumber)
                                 setIsLoading(false)
 

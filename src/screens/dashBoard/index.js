@@ -32,6 +32,8 @@ const DashBoard = ({navigation}) => {
     const [isCardLinked, setIsCardLinked] = useState(false)
     const [transactions, setTransactions] = useState([])
     const [avatar, setAvatar] = useState(null)
+    const [questions, setQuestions] = useState([])
+
 
 
     useEffect(() => {
@@ -42,6 +44,8 @@ const DashBoard = ({navigation}) => {
     }, [isFocused])
 
     const user = useContext(UserContext)
+
+
 
 
     const CheckBalance = async () => {
@@ -84,8 +88,6 @@ const DashBoard = ({navigation}) => {
             await setBvn(InfoRes.data.savingAccounts[0].bvn)
             // await setSavings(InfoRes.data.savingAccounts[0].amount_saved)
 
-            await AsyncStorage.setItem("ImageLocal", InfoRes.data.savingAccounts[0].user_id.avatar)
-
 
             let res = await handleQuery(qry, user.token, false)
 
@@ -96,6 +98,12 @@ const DashBoard = ({navigation}) => {
             const totalSavings = await arr.reduce((a, b) => a + b, 0)
             await setSavings(totalSavings)
             // console.log(totalSavings, "TS")
+
+
+            if (InfoRes.data.savingAccounts[0].user_id.avatar) {
+                await AsyncStorage.setItem("ImageLocal", InfoRes.data.savingAccounts[0].user_id.avatar)
+
+            }
 
 
         } catch (e) {
@@ -128,6 +136,64 @@ const DashBoard = ({navigation}) => {
             console.log(e, "FetchTransError")
         }
     }
+
+    const GetQuestion = async () => {
+
+
+        let getPolls = `query {
+                polls(where: { users_id: ${user.id} }) {
+                id
+                question_id {
+                    id
+                    }
+                }
+            }`
+
+
+        let qry = `query{
+            questions(where:{ community_id:15}){
+            id
+            question
+            answers{
+            id
+            choice
+            votes
+                }
+              }
+            }`
+        try {
+
+            // setIsLoading(true)
+
+            let response = await handleQuery(getPolls, user.token, false)
+
+            // console.log(response.data.polls, "REZZZZZ")
+
+
+            const arr = response.data.polls.map((item) => {
+                return item.question_id.id
+            })
+
+            // console.log(arr)
+
+            let res = await handleQuery(qry, user.token, false)
+
+            const UnansweredQuestions = await res.data.questions.filter(item => !arr.includes(item.id))
+            console.log(UnansweredQuestions, "UNANSS")
+
+            await setQuestions(UnansweredQuestions)
+
+
+
+        } catch (e) {
+            console.log(e, "QuestionsError")
+            // await setIsLoading(false)
+
+        }
+
+
+    }
+
 
 
     return (
@@ -224,14 +290,19 @@ const DashBoard = ({navigation}) => {
                     }
 
 
-                    <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
-                    <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                      onPress={() => navigation.navigate("CommunityQuestions")}>
-                        <Image source={icons.commQuestion} style={{width: 50, height: 50}}/>
-                        <Text style={styles.linkCardText}>Community Questions</Text>
-                        <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
-                               resizeMode={"contain"}/>
-                    </TouchableOpacity>
+                    {questions===[] &&
+                        <>
+                            <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+                            <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
+                                              onPress={() => navigation.navigate("CommunityQuestions")}>
+                                <Image source={icons.commQuestion} style={{width: 50, height: 50}}/>
+                                <Text style={styles.linkCardText}>Community Questions</Text>
+                                <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
+                                       resizeMode={"contain"}/>
+                            </TouchableOpacity>
+
+                        </>}
+
 
                     {!firstname || !lastname || !phoneNumber || !profession &&
                         <>
@@ -247,7 +318,7 @@ const DashBoard = ({navigation}) => {
                     }
 
 
-                    <View style={styles.recentTransaction}>
+                    {transactions.length !== 0 && <View style={styles.recentTransaction}>
                         <Text style={styles.todo}>Recent Transactions</Text>
 
                         <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
@@ -257,7 +328,7 @@ const DashBoard = ({navigation}) => {
                                    style={{width: 15, height: 15, alignSelf: "center", bottom: 2}}
                                    source={icons.arrowRight}/>
                         </View>
-                    </View>
+                    </View>}
 
 
                     {transactions.map((item, index) => (

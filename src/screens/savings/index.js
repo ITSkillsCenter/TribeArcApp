@@ -495,6 +495,7 @@ const styles = StyleSheet.create({
         // width:SIZES.width*0.9,
         height: 50,
 
+
     },
     amount: {
         fontFamily: "Nexa-Book",

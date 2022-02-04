@@ -102,7 +102,9 @@ const ChangePassword = ({navigation}) => {
 
                 </View>
 
-                <View style={{flex: 2, justifyContent: "flex-end"}}>
+                <View style={{
+                    flex: 2, justifyContent: "flex-end", height: SIZES.height * 0.2,
+                }}>
                     <CustomButton
                         loading={isLoading}
                         filled
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 20,
         // paddingVertical: 20,
-        height: SIZES.height,
+        // height: SIZES.height,
         backgroundColor: COLORS.white
     },
     box: {

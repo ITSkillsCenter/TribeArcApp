@@ -269,12 +269,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: "Nexa-Bold",
         // right: 100,
-        width:"70%",
+        width: "70%",
         color: COLORS.black
     },
     cancelButton: {
         justifyContent: "flex-end",
-        flex: 2,
+        // flex: 2,
+        height: SIZES.height * 0.7,
+        // backgroundColor:"red"
+
     }
 
 })
