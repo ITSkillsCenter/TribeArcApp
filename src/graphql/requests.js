@@ -53,8 +53,7 @@ export const handleQuery = (qry, token = "", timer = true) => {
 
 export const handleQueryNoToken = (fd, timer = false) => {
   return new Promise((resolve, reject) => {
-    axios
-        .post(
+    axios.post(
             BaseUrlGql,
             {
               query: `${fd}`,

@@ -114,6 +114,8 @@ const OtpScreen = ({navigation, route}) => {
                     filled={otpCode !== ""}
                     text={"Verify"}
                     onPress={async () => {
+                        setError(false)
+
                         if (otpCode !== "") {
                             await VerifyOTP()
 

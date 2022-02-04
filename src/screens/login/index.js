@@ -69,7 +69,7 @@ const Login = ({navigation, route}) => {
                 </View>
 
 
-                {isError && <Text style={{color: "red"}}>An error occurred, try again! </Text>}
+                {isError && <Text style={{color: "red"}}>Invalid email or password </Text>}
 
                 <CustomButton
                     text={"Login"}
@@ -85,7 +85,7 @@ const Login = ({navigation, route}) => {
                             }
 
                         } catch (e) {
-                            console.log("login error", e.message)
+                            console.log("login error:", e.message)
                             await setIsLoading(false)
                             {
                                 e && setIsError(true)

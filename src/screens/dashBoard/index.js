@@ -26,8 +26,8 @@ const DashBoard = ({navigation}) => {
     const [savings, setSavings] = useState("")
     const [firstname, setFirstname] = useState("")
     const [lastname, setLastname] = useState("")
-    const [phoneNumber, setPhoneNumber] = useState(null)
-    const [profession, setProfession] = useState(null)
+    const [phoneNumber, setPhoneNumber] = useState("")
+    const [profession, setProfession] = useState("")
     const [bvn, setBvn] = useState("")
     const [isCardLinked, setIsCardLinked] = useState(false)
     const [transactions, setTransactions] = useState([])
@@ -40,6 +40,7 @@ const DashBoard = ({navigation}) => {
 
         CheckBalance()
         FetchTransactions()
+        GetQuestion()
         // CheckLinkedCard()
     }, [isFocused])
 
@@ -290,7 +291,7 @@ const DashBoard = ({navigation}) => {
                     }
 
 
-                    {questions===[] &&
+                    {questions!==[] &&
                         <>
                             <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
                             <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}

@@ -4,7 +4,9 @@ import {createAction} from "../utils/createAction";
 import {handleQuery, handleQueryNoToken} from "../graphql/requests";
 import SecureStorage from "react-native-secure-storage";
 
+
 export const useAuth = () => {
+
 
     function randomString(length, chars) {
         let result = '';
@@ -46,7 +48,7 @@ export const useAuth = () => {
     const auth = useMemo(() => ({
 
 
-            login: async (email, password) => {
+            login: async (email, password, reject) => {
 
                 let qry = `mutation {
                 login(input: { identifier: "${email}", password: "${password}" }) {
@@ -148,11 +150,13 @@ export const useAuth = () => {
 
                 } catch (e) {
                     console.log(e, "error @login")
+                    return reject(e)
+
                 }
             },
 
 
-            register: async (email, password, referredBy) => {
+            register: async (email, password, referredBy, reject) => {
                 const rString = randomString(5, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
 
@@ -202,38 +206,13 @@ export const useAuth = () => {
                     if (codeVerificationRes.data.referralCheck.ok) {
 
                         let res = await handleQueryNoToken(qry);
-
-
-                        // let updateRefAndRefBY = `mutation {
-                        //             updateUser(
-                        //                 input: {
-                        //                 where: { id: ${res.data.register.user.id} }
-                        //                 data: { referred_by: "${referredBy}", referral_code: "${rString}" }
-                        //                 }
-                        //                 ) {
-                        //                 user {
-                        //                     id
-                        //                         }
-                        //                      }
-                        //                   }`
-                        //
-                        //
-                        // console.log(updateRefAndRefBY)
-                        // console.log(res.data.register.jwt)
-
-
-                        // let updateRefCodesRes = await handleQuery(updateRefAndRefBY, res.data.register.jwt, false)
-                        // console.log(updateRefCodesRes.errors)
-
-
                         let otpQryRes = await handleQueryNoToken(otpQuery);
-
-
                     }
 
 
                 } catch (e) {
-                    console.log(e, "error @login")
+                    console.log(e, "error @register")
+                    return reject(e)
 
                 }
 

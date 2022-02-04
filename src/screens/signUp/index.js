@@ -63,6 +63,9 @@ const SignUp = ({navigation}) => {
                     <CustomInputBox
                         placeholderText={"Referral code"}
                         initialValue={referredBy}
+                        props={{
+                            maxLength: 5
+                        }}
                         onChange={referredBy => {
                             setReferredBy(referredBy);
                             setIsError(false)
@@ -75,7 +78,7 @@ const SignUp = ({navigation}) => {
 
                 </View>
 
-                {isError && <Text style={{color: "red"}}>An error occurred, try again! </Text>}
+                {isError && <Text style={{color: "red"}}>Invalid referral code!</Text>}
 
                 <CustomButton
                     text={"Register"}
@@ -89,8 +92,9 @@ const SignUp = ({navigation}) => {
 
                             if (emailOrNumber && password && referredBy !== "") {
                                 setIsLoading(true)
-                                await register(emailOrNumber, password, referredBy);
+                                await register(emailOrNumber, password, referredBy)
                                 navigation.navigate("OtpScreen", emailOrNumber)
+
                                 setIsLoading(false)
 
 
