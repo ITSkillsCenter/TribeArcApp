@@ -38,8 +38,7 @@ const CustomInputBox = ({
                     Style={{color: "red"}}
 
                     style={[styles.input, {
-
-
+                        fontSize:20,
                         width: short ? SIZES.width * 0.3 : "100%",
                         ...inputContainerStyle,
                         backgroundColor: 'white',
@@ -84,10 +83,11 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 50,
-        borderRadius: 5,
+        // paddingVertical:2,
+        // borderRadius: 5,
         fontFamily: "Nexa-Book",
         position: "absolute",
-        color:"red"
+        // color:"red"
 
 
     },
