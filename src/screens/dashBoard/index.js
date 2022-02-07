@@ -35,7 +35,6 @@ const DashBoard = ({navigation}) => {
     const [questions, setQuestions] = useState([])
 
 
-
     useEffect(() => {
 
         CheckBalance()
@@ -45,8 +44,6 @@ const DashBoard = ({navigation}) => {
     }, [isFocused])
 
     const user = useContext(UserContext)
-
-
 
 
     const CheckBalance = async () => {
@@ -185,7 +182,6 @@ const DashBoard = ({navigation}) => {
             await setQuestions(UnansweredQuestions)
 
 
-
         } catch (e) {
             console.log(e, "QuestionsError")
             // await setIsLoading(false)
@@ -196,11 +192,10 @@ const DashBoard = ({navigation}) => {
     }
 
 
-
     return (
         <SafeAreaView style={styles.container}>
 
-            <View style={styles.container2}>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.container2}>
 
 
                 <View style={styles.header}>
@@ -261,7 +256,7 @@ const DashBoard = ({navigation}) => {
                     <Image source={icons.arrowRight} style={{width: 20, height: 20}} resizeMode={"contain"}/>
                 </TouchableOpacity>
 
-                <ScrollView showsVerticalScrollIndicator={false} style={styles.cardContainer}>
+                <View style={styles.cardContainer}>
 
                     <View style={styles.TodoBox}>
                         <Text style={styles.todo}>To - Dos</Text>
@@ -291,7 +286,7 @@ const DashBoard = ({navigation}) => {
                     }
 
 
-                    {questions!==[] &&
+                    {questions !== [] &&
                         <>
                             <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
                             <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
@@ -370,10 +365,10 @@ const DashBoard = ({navigation}) => {
 
                     ))}
 
-                    <View style={{height: 200, marginBottom: 310,}}/>
-                </ScrollView>
+                    <View style={{height: 20, marginBottom: 20,}}/>
+                </View>
 
-            </View>
+            </ScrollView>
 
         </SafeAreaView>
     );
