@@ -28,6 +28,8 @@ const savingsIcon = require("../assets/icons/savingsIcon.png");
 const addIcon = require("../assets/icons/addIcon.png");
 const invIcon = require("../assets/icons/invIcon.png");
 const acctIcon = require("../assets/icons/acctIcon.png");
+const pdficon = require("../assets/icons/pdficon.png");
+const minusButton = require("../assets/icons/minusButton.png");
 
 
 export default {
@@ -60,5 +62,7 @@ export default {
     savingsIcon,
     addIcon,
     invIcon,
-    acctIcon
+    acctIcon,
+    pdficon,
+    minusButton,
 };

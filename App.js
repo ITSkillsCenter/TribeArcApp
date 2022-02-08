@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Image, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import SplashScreen from "react-native-splash-screen";
 import {COLORS, icons} from "./src/constants";
 import SignUp from "./src/screens/signUp";
@@ -36,10 +36,11 @@ import CompleteProfile1 from "./src/screens/completeProfile1";
 import CompleteProfile2 from "./src/screens/completeProfile2";
 import ProfileCompletedSuccessScreen from "./src/screens/profileCompletedSuccessScreen";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import icon from "react-native-paper/src/components/Icon";
 import StartSaving from "./src/screens/startSaving";
 import StartInvesting from "./src/screens/startInvesting";
 import InvestmentMainScreen from "./src/screens/InvestmentMainScreen";
+import InvestmentDetailsScreen from "./src/screens/investmentDetailsScreen";
+import InvestmentTermsPage from "./src/screens/investmentTermsPage";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -119,6 +120,8 @@ const App = () => {
                 <MainStack.Screen name={"ChangePassword"} component={ChangePassword}/>
                 <MainStack.Screen name={"PasswordSuccessScreen"} component={PasswordSuccessScreen}/>
                 <MainStack.Screen name={"InvestmentMainScreen"} component={InvestmentMainScreen}/>
+                <MainStack.Screen name={"InvestmentDetailsScreen"} component={InvestmentDetailsScreen}/>
+                <MainStack.Screen name={"InvestmentTermsPage"} component={InvestmentTermsPage}/>
                 <MainStack.Screen name={"ReferralPage"} component={ReferralPage}/>
                 <MainStack.Screen name={"PaymentWebPage"} component={PaymentWebPage}/>
                 <MainStack.Screen name={"RecentTransactions"} component={RecentTransactions}/>
@@ -262,7 +265,10 @@ const App = () => {
                                                    tintColor: focused ? COLORS.primary : COLORS.tertiary
                                                }}/>
 
-                                        <Text style={{color: focused ? COLORS.primary : COLORS.tertiary, fontFamily:"Nexa-Bold" }}>Home</Text>
+                                        <Text style={{
+                                            color: focused ? COLORS.primary : COLORS.tertiary,
+                                            fontFamily: "Nexa-Bold"
+                                        }}>Home</Text>
                                     </View>
                                 ),
                             }}
@@ -282,7 +288,10 @@ const App = () => {
                                            tintColor: focused ? COLORS.primary : COLORS.tertiary
                                        }}/>
 
-                                <Text style={{color: focused ? COLORS.primary : COLORS.tertiary,  fontFamily:"Nexa-Bold"}}>Savings</Text>
+                                <Text style={{
+                                    color: focused ? COLORS.primary : COLORS.tertiary,
+                                    fontFamily: "Nexa-Bold"
+                                }}>Savings</Text>
                             </View>
                         ),
                     }}/>
@@ -352,7 +361,10 @@ const App = () => {
                                             height: 22,
                                             tintColor: focused ? COLORS.primary : COLORS.tertiary
                                         }}/>
-                                <Text style={{color: focused ? COLORS.primary : COLORS.tertiary , fontFamily:"Nexa-Bold"}}>Investment</Text>
+                                <Text style={{
+                                    color: focused ? COLORS.primary : COLORS.tertiary,
+                                    fontFamily: "Nexa-Bold"
+                                }}>Investment</Text>
 
                             </View>
                         ),
@@ -373,7 +385,8 @@ const App = () => {
                                                }}/>
                                         <Text
                                             style={{
-                                                color: focused ? COLORS.primary : COLORS.tertiary,  fontFamily:"Nexa-Bold"
+                                                color: focused ? COLORS.primary : COLORS.tertiary,
+                                                fontFamily: "Nexa-Bold"
                                             }}>Account</Text>
 
                                     </View>

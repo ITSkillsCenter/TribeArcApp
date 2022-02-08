@@ -10,7 +10,7 @@ const investments = [
         "title": "Cocoa Investment",
         "active": true,
         "investment_price": 100000,
-        "total_investment": 200,
+        "total_investors": 200,
         "duration": 12,
         "roi": 15,
         "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg"
@@ -20,18 +20,18 @@ const investments = [
         "title": "Cassava Investment",
         "active": false,
         "investment_price": 170000,
-        "total_investment": 240,
+        "total_investors": 240,
         "duration": 16,
-        "roi": 15,
+        "roi": 9,
         "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg"
     },
     {
         "title": "Real Estate Investment",
-        "active": false,
+        "active": true,
         "investment_price": 120000,
-        "total_investment": 140,
+        "total_investors": 140,
         "duration": 6,
-        "roi": 15,
+        "roi": 13,
         "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg"
     }
 
@@ -53,7 +53,7 @@ const InvestmentMainScreen = ({navigation}) => {
                 }}>
                     <View>
                         <Text style={styles.tsb}>Investment Balance</Text>
-                        <Text style={styles.balance}>₦ {}</Text>
+                        <Text style={styles.balance}>₦ 20,000 {}</Text>
                     </View>
 
                 </View>
@@ -66,21 +66,51 @@ const InvestmentMainScreen = ({navigation}) => {
                 data={investments}
                 renderItem={({item}) => (
 
-                    <View style={styles.box}>
-                        <Image source={{uri: item.image}} style={{width: 120, height: 120}}/>
-                        <View>
-                            <Text>{item.title}</Text>
-                            <Text> <Text>{item.roi}% </Text> return in {item.duration} months</Text>
-                            <View>
-                                <Text>₦{item.investment_price.toLocaleString()}</Text>
-                                <Text>Per Slot</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("InvestmentDetailsScreen", {...item})}
+                                      activeOpacity={0.8} style={styles.box}>
+                        <Image source={{uri: item.image}} style={{width: 110, height: 120, borderRadius: 10,}}/>
+                        <View style={{width: 180, paddingHorizontal: 5,}}>
+                            <Text style={styles.title}>{item.title}</Text>
+                            <Text style={styles.duration}><Text
+                                style={{color: COLORS.primary}}>{item.roi}% </Text> return
+                                in {item.duration} months</Text>
+                            <View style={{
+                                flexDirection: "row",
+                                width: 150,
+                                justifyContent: "space-between",
+                                alignItems: 'center',
+                            }}>
+                                <View>
+                                    <Text style={styles.amtInv}>₦{item.investment_price.toLocaleString()}</Text>
+                                    <Text style={styles.perSlot}>Per Slot</Text>
+                                </View>
+
+                                <View>
+                                    <Text style={styles.amtInv}>{item.total_investors}</Text>
+                                    <Text style={styles.perSlot}>Investors</Text>
+                                </View>
+
+
                             </View>
                         </View>
                         <View>
+                            {item.active ?
+                                <View style={styles.status1}>
+                                    <Text style={styles.active}>Active</Text>
+
+                                </View>
+                                :
+                                <View style={styles.status2}>
+
+                                    <Text style={styles.ended}>Ended</Text>
+
+                                </View>
+                            }
+
 
                         </View>
 
-                    </View>
+                    </TouchableOpacity>
 
 
                 )}/>
@@ -142,5 +172,58 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between"
 
+    },
+    status1: {
+        backgroundColor: "#85FCA647",
+        height: 25,
+        width: 75,
+        borderRadius: 10,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    status2: {
+        backgroundColor: "#FFB16947",
+        height: 25,
+        width: 75,
+        borderRadius: 10,
+        alignItems: "center",
+        justifyContent: "center"
+
+    },
+    active: {
+        color: "#00711F",
+        fontSize: 12,
+        fontFamily: "Nexa-Bold"
+    },
+    ended: {
+        color: "#EB996E",
+        fontSize: 12,
+        fontFamily: "Nexa-Bold"
+    },
+    title: {
+        fontSize: 20,
+        fontFamily: "Nexa-Book",
+        lineHeight: 24,
+        color: COLORS.black
+    },
+    duration: {
+        color: COLORS.black,
+        fontFamily: "Nexa-Book",
+        marginVertical: 10
+    },
+    perSlot: {
+        color: COLORS.black,
+        fontFamily: "Nexa-Book",
+        fontSize: 12,
+        opacity: 0.6
+
+    },
+    amtInv: {
+        color: COLORS.black,
+        fontFamily: "Nexa-Bold",
+        fontSize: 16
+
+
     }
+
 })
