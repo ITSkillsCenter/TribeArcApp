@@ -21,6 +21,13 @@ const refer = require("../assets/icons/refer.png");
 const referralImg = require("../assets/icons/referralImg.png");
 const clipboard = require("../assets/icons/clipboard.png");
 const balFrame = require("../assets/icons/balFrame.png");
+const circular1 = require("../assets/icons/circular1.png");
+const circular2 = require("../assets/icons/circular2.png");
+const homeIcon = require("../assets/icons/homeIcon.png");
+const savingsIcon = require("../assets/icons/savingsIcon.png");
+const addIcon = require("../assets/icons/addIcon.png");
+const invIcon = require("../assets/icons/invIcon.png");
+const acctIcon = require("../assets/icons/acctIcon.png");
 
 
 export default {
@@ -46,6 +53,12 @@ export default {
     refer,
     referralImg,
     clipboard,
-    balFrame
-
+    balFrame,
+    circular1,
+    circular2,
+    homeIcon,
+    savingsIcon,
+    addIcon,
+    invIcon,
+    acctIcon
 };

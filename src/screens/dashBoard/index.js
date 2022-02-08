@@ -209,7 +209,7 @@ const DashBoard = ({navigation}) => {
                     <Text style={styles.welcomeText}>Welcome Back!</Text>
                 </View>
                 <TouchableOpacity onPress={() => {
-                    navigation.navigate("RegistrationFee")
+                    navigation.navigate("CompleteProfile1")
                 }}>
                     <Image resizeMode={"contain"}
                            source={notification ? icons.notificationBell : icons.notificationDot}
@@ -368,7 +368,6 @@ const DashBoard = ({navigation}) => {
 
 
                     {transactions.map((item, index) => (
-
 
                         <View key={index}>
                             <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}

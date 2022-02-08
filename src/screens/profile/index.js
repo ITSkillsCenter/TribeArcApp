@@ -86,7 +86,7 @@ const Profile = ({navigation, route}) => {
         <View style={{
             paddingHorizontal: 20,
             height: 410,
-            alignItems: "center"
+            alignItems: "center",
         }}>
 
             <Text style={{fontSize: 20, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Logout?</Text>
@@ -111,15 +111,20 @@ const Profile = ({navigation, route}) => {
 
             <View style={styles.container}>
                 <Modalize
+                    modalStyle={{
+                        zIndex: 100000
+                    }}
                     modalHeight={SIZES.height * 0.45}
                     handleStyle={{backgroundColor: 'transparent'}}
-                    childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
+                    childrenStyle={{
+                        backgroundColor: COLORS.white, borderRadius: 55,
+                    }}
                     ref={modalizeRef}>
                     {renderHeader()}
                     {renderInner()}
                 </Modalize>
 
-                <BackButton onPress={() => navigation.pop()}/>
+                {/*<BackButton onPress={() => navigation.pop()}/>*/}
                 <Text style={styles.myAccount}>My Account</Text>
 
                 <TouchableOpacity activeOpacity={0.7} onPress={() => {

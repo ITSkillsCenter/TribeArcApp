@@ -178,7 +178,6 @@ const EditProfile = ({navigation}) => {
         }
     };
 
-
     const UploadNow = async (link) => {
 
         let query = `mutation {

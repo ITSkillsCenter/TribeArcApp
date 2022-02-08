@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {SafeAreaView, StatusBar, StyleSheet, View} from "react-native";
+import {Image, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import SplashScreen from "react-native-splash-screen";
-import {COLORS} from "./src/constants";
+import {COLORS, icons} from "./src/constants";
 import SignUp from "./src/screens/signUp";
 import Login from "./src/screens/login";
 import {NavigationContainer} from "@react-navigation/native";
@@ -32,6 +32,14 @@ import PaymentWebPage from "./src/screens/paymentWebPage";
 import RecentTransactions from "./src/screens/recentTransactions";
 import RegistrationFee from "./src/screens/registrationFee";
 import RegFeeSuccessScreen from "./src/screens/RegFeeSuccessScreen";
+import CompleteProfile1 from "./src/screens/completeProfile1";
+import CompleteProfile2 from "./src/screens/completeProfile2";
+import ProfileCompletedSuccessScreen from "./src/screens/profileCompletedSuccessScreen";
+import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
+import icon from "react-native-paper/src/components/Icon";
+import StartSaving from "./src/screens/startSaving";
+import StartInvesting from "./src/screens/startInvesting";
+import InvestmentMainScreen from "./src/screens/InvestmentMainScreen";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -49,6 +57,7 @@ const App = () => {
     const RootStack = createNativeStackNavigator()
     const AuthStack = createNativeStackNavigator()
     const MainStack = createNativeStackNavigator()
+    const Tab = createBottomTabNavigator();
 
 
     const CheckWelcomePage = async () => {
@@ -85,14 +94,19 @@ const App = () => {
     const MainNavigation = () => {
         return (// <View style={{flex:1, backgroundColor:"white"}}>
             <MainStack.Navigator
-                initialRouteName={viewedWelcomePage ? "DashBoard" : "WelcomePage"}
+                // initialRouteName={viewedWelcomePage ? "DashBoard" : "BottomTabs"}
+                initialRouteName={"BottomTabs"}
                 screenOptions={{
                     headerShown: false, // backgroundColor:"white"
                 }}>
                 <MainStack.Screen name={"WelcomePage"} component={WelcomePage}/>
+                <MainStack.Screen name={"BottomTabs"} component={BottomTabs}/>
                 <MainStack.Screen name={"RegistrationFee"} component={RegistrationFee}/>
+                <MainStack.Screen name={"CompleteProfile1"} component={CompleteProfile1}/>
+                <MainStack.Screen name={"CompleteProfile2"} component={CompleteProfile2}/>
+                <MainStack.Screen name={"ProfileCompletedSuccessScreen"} component={ProfileCompletedSuccessScreen}/>
                 <MainStack.Screen name={"RegFeeSuccessScreen"} component={RegFeeSuccessScreen}/>
-                <MainStack.Screen name={"DashBoard"} component={DashBoard}/>
+                {/*<MainStack.Screen name={"DashBoard"} component={DashBoard}/>*/}
                 <MainStack.Screen name={"Savings"} component={Savings}/>
                 <MainStack.Screen name={"LinkCard"} component={LinkCard}/>
                 <MainStack.Screen name={"SuccessScreen"} component={SuccessScreen}/>
@@ -104,10 +118,26 @@ const App = () => {
                 <MainStack.Screen name={"AddBvn"} component={AddBvn}/>
                 <MainStack.Screen name={"ChangePassword"} component={ChangePassword}/>
                 <MainStack.Screen name={"PasswordSuccessScreen"} component={PasswordSuccessScreen}/>
+                <MainStack.Screen name={"InvestmentMainScreen"} component={InvestmentMainScreen}/>
                 <MainStack.Screen name={"ReferralPage"} component={ReferralPage}/>
                 <MainStack.Screen name={"PaymentWebPage"} component={PaymentWebPage}/>
                 <MainStack.Screen name={"RecentTransactions"} component={RecentTransactions}/>
 
+            </MainStack.Navigator>
+
+            // </View>
+
+        );
+    };
+
+    const InvestStack = () => {
+        return (// <View style={{flex:1, backgroundColor:"white"}}>
+            <MainStack.Navigator
+                // initialRouteName={viewedWelcomePage ? "DashBoard" : "WelcomePage"}
+                screenOptions={{
+                    headerShown: false, // backgroundColor:"white"
+                }}>
+                <MainStack.Screen name={"StartInvesting"} component={StartInvesting}/>
             </MainStack.Navigator>
 
             // </View>
@@ -173,6 +203,188 @@ const App = () => {
     };
 
 
+    const TabBarCustomButton = ({children, onPress}) => {
+
+        return (
+            <TouchableOpacity
+                activeOpacity={0.6}
+                style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+                onPress={onPress}>
+
+                {children}
+
+            </TouchableOpacity>
+        );
+    };
+
+
+    const BottomTabs = ({navigation}) => {
+
+        return (
+            <Tab.Navigator
+                detachInactiveScreens
+                screenOptions={{
+                    headerShown: false,
+                    tabBarShowLabel: false,
+                    tabBarStyle: {
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        paddingHorizontal: 15,
+                        right: 0,
+                        elevation: 5,
+                        shadowOpacity: 0.1,
+                        shadowOffset: {
+                            width: 5,
+                            height: -3,
+                        },
+                        // backgroundColor: "cyan",
+                        borderTopColor: "rgba(175,174,174,0.7)",
+                        height: Platform.OS === "android" ? 85 : 50,
+                    },
+
+
+                }}>
+                <Tab.Screen name="DashBoard" component={DashBoard}
+                            options={{
+                                tabBarIcon: ({focused}) => (
+                                    <View style={{alignItems: "center"}}>
+                                        <Image source={icons.homeIcon}
+                                               resizeMode={"center"}
+
+                                               style={{
+                                                   width: 22,
+                                                   height: 22,
+                                                   tintColor: focused ? COLORS.primary : COLORS.tertiary
+                                               }}/>
+
+                                        <Text style={{color: focused ? COLORS.primary : COLORS.tertiary, fontFamily:"Nexa-Bold" }}>Home</Text>
+                                    </View>
+                                ),
+                            }}
+                />
+                <Tab.Screen
+                    name="StartSaving"
+                    component={StartSaving}
+                    options={{
+                        tabBarIcon: ({focused}) => (
+                            <View style={{alignItems: "center"}}>
+                                <Image source={icons.savingsIcon}
+                                       resizeMode={"center"}
+
+                                       style={{
+                                           width: 22,
+                                           height: 22,
+                                           tintColor: focused ? COLORS.primary : COLORS.tertiary
+                                       }}/>
+
+                                <Text style={{color: focused ? COLORS.primary : COLORS.tertiary,  fontFamily:"Nexa-Bold"}}>Savings</Text>
+                            </View>
+                        ),
+                    }}/>
+                <Tab.Screen name="DashBoard2" component={DashBoard}
+
+                            options={{
+                                tabBarIcon: ({focused}) => {
+                                    return (
+                                        <View
+                                            style={{
+                                                alignItems: "center",
+                                                height: 50,
+                                                justifyContent: "space-around",
+                                                elevation: 7,
+                                                shadowOpacity: 0.1,
+                                                shadowOffset: {
+                                                    width: 4,
+                                                    height: 5,
+                                                },
+                                            }}>
+                                            <View
+                                                style={{
+                                                    width: 70,
+                                                    height: 70,
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    bottom: 20,
+                                                    borderRadius: 35,
+
+                                                }}
+                                            >
+                                                <Image
+                                                    source={icons.addIcon}
+                                                    resizeMode={"center"}
+
+                                                    style={{
+                                                        width: 53,
+                                                        height: 53,
+                                                    }}
+                                                />
+                                            </View>
+                                        </View>
+                                    );
+                                },
+
+                                tabBarButton: (props) => (
+                                    <TabBarCustomButton
+                                        {...props}
+                                        onPress={() => navigation.navigate("DashBoard")}
+                                    />
+                                ),
+
+                            }}
+
+                />
+                <Tab.Screen
+                    name="StartInvesting"
+                    component={StartInvesting}
+                    options={{
+                        tabBarIcon: ({focused}) => (
+
+                            <View style={{alignItems: "center"}}>
+                                < Image source={icons.invIcon}
+                                        resizeMode={"center"}
+                                        style={{
+                                            width: 22,
+                                            height: 22,
+                                            tintColor: focused ? COLORS.primary : COLORS.tertiary
+                                        }}/>
+                                <Text style={{color: focused ? COLORS.primary : COLORS.tertiary , fontFamily:"Nexa-Bold"}}>Investment</Text>
+
+                            </View>
+                        ),
+                    }}
+                />
+                <Tab.Screen name="Profile" component={Profile}
+                            options={{
+                                tabBarIcon: ({focused}) => (
+
+                                    <View style={{alignItems: "center"}}>
+
+                                        <Image source={icons.acctIcon}
+                                               resizeMode={"center"}
+                                               style={{
+                                                   width: 22,
+                                                   height: 22,
+                                                   tintColor: focused ? COLORS.primary : COLORS.tertiary
+                                               }}/>
+                                        <Text
+                                            style={{
+                                                color: focused ? COLORS.primary : COLORS.tertiary,  fontFamily:"Nexa-Bold"
+                                            }}>Account</Text>
+
+                                    </View>
+
+                                ),
+                            }}/>
+            </Tab.Navigator>
+        );
+    };
+
+
     return (
         // <GestureHandlerRootView>
 
@@ -195,6 +407,7 @@ const App = () => {
 
 
                     </NavigationContainer>
+
                     <Toast config={toastConfig}/>
 
                 </SafeAreaView>
