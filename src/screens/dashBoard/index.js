@@ -2,14 +2,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 
 import {
-    FlatList,
-    Image,
-    ImageBackground,
-    SafeAreaView, ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+    Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View
 } from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
@@ -19,9 +12,18 @@ import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
+// const frames = [
+//     {"name": "Total Savings Balance"},
+//     {"name": "Investment Account Balance"},
+//     {"name": "Voluntary Account Balance"}
+// ]
+
+
 const DashBoard = ({navigation}) => {
     let notification = true;
     const isFocused = useIsFocused()
+
+    // const frames = ["Total Savings Balance", "Investment Account Balance", "Voluntary Account Balance"]
 
     const [savings, setSavings] = useState("")
     const [firstname, setFirstname] = useState("")
@@ -100,7 +102,6 @@ const DashBoard = ({navigation}) => {
 
             if (InfoRes.data.savingAccounts[0].user_id.avatar) {
                 await AsyncStorage.setItem("ImageLocal", InfoRes.data.savingAccounts[0].user_id.avatar)
-
             }
 
 
@@ -164,7 +165,6 @@ const DashBoard = ({navigation}) => {
             // setIsLoading(true)
 
             let response = await handleQuery(getPolls, user.token, false)
-
             // console.log(response.data.polls, "REZZZZZ")
 
 
@@ -192,52 +192,93 @@ const DashBoard = ({navigation}) => {
     }
 
 
-    return (
-        <SafeAreaView style={styles.container}>
+    return (<SafeAreaView style={styles.container}>
 
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.container2}>
+        <View style={styles.container2}>
 
 
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => {
-                        navigation.navigate("Profile", {firstname, lastname})
-                    }} style={styles.imgContainer}>
-                        <Image style={styles.img} resizeMode={"cover"}
-                               source={avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}/>
-                    </TouchableOpacity>
-                    <View style={styles.nameContainer}>
-                        <Text style={styles.username}>Hello {firstname},</Text>
-                        <Text style={styles.welcomeText}>Welcome Back!</Text>
-                    </View>
-                    <TouchableOpacity onPress={() => {
-                    }}>
-                        <Image resizeMode={"contain"}
-                               source={notification ? icons.notificationBell : icons.notificationDot}
-                               style={styles.notification}/>
-                    </TouchableOpacity>
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => {
+                    navigation.navigate("Profile", {firstname, lastname})
+                }} style={styles.imgContainer}>
+                    <Image style={styles.img} resizeMode={"cover"}
+                           source={avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}/>
+                </TouchableOpacity>
+                <View style={styles.nameContainer}>
+                    <Text style={styles.username}>Hello {firstname},</Text>
+                    <Text style={styles.welcomeText}>Welcome Back!</Text>
                 </View>
+                <TouchableOpacity onPress={() => {
+                    navigation.navigate("RegistrationFee")
+                }}>
+                    <Image resizeMode={"contain"}
+                           source={notification ? icons.notificationBell : icons.notificationDot}
+                           style={styles.notification}/>
+                </TouchableOpacity>
+            </View>
 
 
-                <View style={styles.balanceFrame}>
-                    <View style={{
-                        flexDirection: "row",
-                        justifyContent: 'space-between',
-                        paddingHorizontal: 20,
-                        alignItems: 'center'
-                    }}>
-                        <View>
-                            <Text style={styles.tsb}>Total Savings Balance</Text>
-                            <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
-                        </View>
-                        <TouchableOpacity onPress={() => navigation.navigate("Savings")}>
-                            <Image resizeMode={"contain"} style={{width: 40, height: 40}} source={icons.plusIcon}/>
-                        </TouchableOpacity>
-                    </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
 
-                    <Image resizeMode={"contain"} source={icons.ellipse} style={{width: 80, height: 50, top: 30}}/>
+                <View>
+                    <ScrollView snapToAlignment={"start"} horizontal showsHorizontalScrollIndicator={false}>
+
+                        <ImageBackground source={icons.balFrame} style={styles.balanceFrame}>
+                            <View style={{
+                                flexDirection: "row",
+                                justifyContent: 'space-between',
+                                paddingHorizontal: 40,
+                                alignItems: 'center'
+                            }}>
+                                <View>
+                                    <Text style={styles.tsb}>Total Savings Balance</Text>
+                                    <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
+                                </View>
+                                <TouchableOpacity onPress={() => navigation.navigate("Savings")}>
+                                    <Image resizeMode={"contain"} style={{width: 40, height: 40}}
+                                           source={icons.plusIcon}/>
+                                </TouchableOpacity>
+                            </View>
+                        </ImageBackground>
+                        <ImageBackground source={icons.balFrame} style={styles.balanceFrame}>
+                            <View style={{
+                                flexDirection: "row",
+                                justifyContent: 'space-between',
+                                paddingHorizontal: 40,
+                                alignItems: 'center'
+                            }}>
+                                <View>
+                                    <Text style={styles.tsb}>Investment Account Balance</Text>
+                                    <Text style={styles.balance}>₦ {}</Text>
+                                </View>
+                                <TouchableOpacity onPress={() => navigation.navigate("Savings")}>
+                                    <Image resizeMode={"contain"} style={{width: 40, height: 40}}
+                                           source={icons.plusIcon}/>
+                                </TouchableOpacity>
+                            </View>
+                        </ImageBackground>
+                        <ImageBackground source={icons.balFrame} style={[styles.balanceFrame, {marginRight: 0}]}>
+                            <View style={{
+                                flexDirection: "row",
+                                justifyContent: 'space-between',
+                                paddingHorizontal: 40,
+                                alignItems: 'center'
+                            }}>
+                                <View>
+                                    <Text style={styles.tsb}>Voluntary Account Balance</Text>
+                                    <Text style={styles.balance}>₦ {}</Text>
+                                </View>
+                                <TouchableOpacity onPress={() => navigation.navigate("Savings")}>
+                                    <Image resizeMode={"contain"} style={{width: 40, height: 40}}
+                                           source={icons.plusIcon}/>
+                                </TouchableOpacity>
+                            </View>
+                        </ImageBackground>
+
+                    </ScrollView>
+
+
                 </View>
-
-                {/*<View style={styles.balanceFrameContainer}>*/}
 
 
                 <TouchableOpacity activeOpacity={0.8} style={styles.saveFrame}
@@ -248,13 +289,16 @@ const DashBoard = ({navigation}) => {
                     </View>
 
                     <View style={{justifyContent: "space-between", right: 25, height: 50}}>
-                        <Text style={{fontFamily: "Nexa-Bold", color: COLORS.black, letterSpacing: 0.8}}>SAVE FOR THE
+                        <Text style={{fontFamily: "Nexa-Bold", color: COLORS.black, letterSpacing: 0.8}}>SAVE FOR
+                            THE
                             FUTURE</Text>
-                        <Text style={{color: "#A19FCD"}}>Tap to get started with Tribearc</Text>
+                        <Text style={{color: "#A19FCD", fontFamily: "Nexa-Book"}}>Tap to get started with
+                            Tribearc</Text>
                     </View>
 
                     <Image source={icons.arrowRight} style={{width: 20, height: 20}} resizeMode={"contain"}/>
                 </TouchableOpacity>
+
 
                 <View style={styles.cardContainer}>
 
@@ -270,48 +314,44 @@ const DashBoard = ({navigation}) => {
                                resizeMode={"contain"}/>
                     </TouchableOpacity>}
 
-                    {bvn === null &&
-                        <>
-                            <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
-                            <TouchableOpacity onPress={() => {
-                                navigation.navigate("AddBvn")
-                            }} style={styles.cardBox} activeOpacity={0.8}>
-                                <Image source={icons.addBvn} style={{width: 50, height: 50}}/>
-                                <Text style={styles.linkCardText}>Add your BVN</Text>
-                                <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
-                                       resizeMode={"contain"}/>
-                            </TouchableOpacity>
-                        </>
+                    {bvn === null && <>
+                        <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate("AddBvn")
+                        }} style={styles.cardBox} activeOpacity={0.8}>
+                            <Image source={icons.addBvn} style={{width: 50, height: 50}}/>
+                            <Text style={styles.linkCardText}>Add your BVN</Text>
+                            <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
+                                   resizeMode={"contain"}/>
+                        </TouchableOpacity>
+                    </>
 
                     }
 
 
-                    {questions !== [] &&
-                        <>
-                            <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
-                            <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                              onPress={() => navigation.navigate("CommunityQuestions")}>
-                                <Image source={icons.commQuestion} style={{width: 50, height: 50}}/>
-                                <Text style={styles.linkCardText}>Community Questions</Text>
-                                <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
-                                       resizeMode={"contain"}/>
-                            </TouchableOpacity>
+                    {questions !== [] && <>
+                        <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+                        <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
+                                          onPress={() => navigation.navigate("CommunityQuestions")}>
+                            <Image source={icons.commQuestion} style={{width: 50, height: 50}}/>
+                            <Text style={styles.linkCardText}>Community Questions</Text>
+                            <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
+                                   resizeMode={"contain"}/>
+                        </TouchableOpacity>
 
-                        </>}
+                    </>}
 
 
-                    {!firstname || !lastname || !phoneNumber || !profession &&
-                        <>
-                            <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
-                            <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                              onPress={() => navigation.navigate("EditProfile")}>
-                                <Image source={icons.completeProfile} style={{width: 50, height: 50}}/>
-                                <Text style={styles.linkCardText}>Complete Your profile</Text>
-                                <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
-                                       resizeMode={"contain"}/>
-                            </TouchableOpacity>
-                        </>
-                    }
+                    {!firstname || !lastname || !phoneNumber || !profession && <>
+                        <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+                        <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
+                                          onPress={() => navigation.navigate("EditProfile")}>
+                            <Image source={icons.completeProfile} style={{width: 50, height: 50}}/>
+                            <Text style={styles.linkCardText}>Complete Your profile</Text>
+                            <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
+                                   resizeMode={"contain"}/>
+                        </TouchableOpacity>
+                    </>}
 
 
                     {transactions.length !== 0 && <View style={styles.recentTransaction}>
@@ -340,13 +380,10 @@ const DashBoard = ({navigation}) => {
 
                                 <View style={{alignItems: 'center', justifyContent: "space-between", height: 40}}>
                                     <Text style={{
-                                        color: COLORS.black,
-                                        fontFamily: "Nexa-Bold",
-                                        fontSize: 20
+                                        color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 20
                                     }}>₦{item?.amount_paid.toLocaleString()}</Text>
                                     <Text style={{
-                                        color: COLORS.black,
-                                        fontFamily: "Nexa-Book"
+                                        color: COLORS.black, fontFamily: "Nexa-Book"
                                     }}>{moment(item?.created_at).format("MMM D, YYYY")}</Text>
                                 </View>
                             </TouchableOpacity>
@@ -367,11 +404,12 @@ const DashBoard = ({navigation}) => {
 
                     <View style={{height: 20, marginBottom: 20,}}/>
                 </View>
-
             </ScrollView>
 
-        </SafeAreaView>
-    );
+
+        </View>
+
+    </SafeAreaView>);
 };
 
 export default DashBoard
@@ -379,52 +417,25 @@ export default DashBoard
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: COLORS.white,
-        // height:"100%"
-    },
-    container2: {
-        paddingHorizontal: 20,
-        paddingVertical: 30,
-        backgroundColor: COLORS.white
-    },
-    header: {
+        flex: 1, backgroundColor: COLORS.white, // height:"100%"
+    }, container2: {
+        paddingHorizontal: 20, paddingVertical: 30, backgroundColor: COLORS.white
+    }, header: {
         // width: SIZES.width,
-        flexDirection: "row",
-        alignItems: 'center',
-        justifyContent: "space-between"
-    },
-    imgContainer: {},
-    img: {
-        width: 50,
-        height: 50,
-        borderRadius: 50
-    },
-    nameContainer: {
+        flexDirection: "row", alignItems: 'center', justifyContent: "space-between"
+    }, imgContainer: {}, img: {
+        width: 50, height: 50, borderRadius: 50
+    }, nameContainer: {
         // backgroundColor:"cyan",
-        width: SIZES.width * 0.5,
-        height: 50,
-        justifyContent: "space-between",
-        marginHorizontal: 15,
-        right: 10
+        width: SIZES.width * 0.5, height: 50, justifyContent: "space-between", marginHorizontal: 15, right: 10
 
-    },
-    username: {
-        fontSize: 16,
-        color: COLORS.black,
-        fontFamily: "Nexa-Book"
-    },
-    welcomeText: {
-        color: COLORS.primary,
-        fontSize: 20,
-        fontFamily: "Nexa-Bold"
-    },
-    notification: {
-        width: 40,
-        height: 40,
-        // alignSelf:'flex-end'
-    },
-    balanceFrameContainer: {
+    }, username: {
+        fontSize: 16, color: COLORS.black, fontFamily: "Nexa-Book"
+    }, welcomeText: {
+        color: COLORS.primary, fontSize: 20, fontFamily: "Nexa-Bold"
+    }, notification: {
+        width: 40, height: 40, // alignSelf:'flex-end'
+    }, balanceFrameContainer: {
         // width: SIZES.width,
         borderRadius: 15,
         backgroundColor: COLORS.white,
@@ -432,19 +443,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginVertical: 50
 
-    },
-    balanceFrame: {
-        marginVertical: 40,
-        borderRadius: 15,
-        // padding: 20,
-        height: 200,
-        backgroundColor: COLORS.primary,
-        width: SIZES.width * 0.9,
-        alignSelf: "center",
-        justifyContent: "center",
-        // alignItems: 'center'
-    },
-    saveFrame: {
+    }, balanceFrame: {
+        marginTop: 5, borderRadius: 15, // padding: 20,
+        height: 200, marginRight: 20, // backgroundColor: COLORS.primary,
+        width: SIZES.width * 0.8, alignSelf: "flex-start", justifyContent: "center", // alignItems: 'center'
+    }, saveFrame: {
         backgroundColor: '#EFF2FF',
         height: 120,
         width: SIZES.width * 0.9,
@@ -454,68 +457,38 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         padding: 20
 
-    },
-    tsb: {
-        color: COLORS.white,
-        fontFamily: "Nexa-Bold",
-        marginVertical: 20
-    },
-    balance: {
-        color: COLORS.white,
-        fontFamily: "Nexa-Bold",
-        fontSize: 24
-    },
-    TodoBox: {
+    }, tsb: {
+        color: COLORS.white, fontFamily: "Nexa-Bold", marginVertical: 20
+    }, balance: {
+        color: COLORS.white, fontFamily: "Nexa-Bold", fontSize: 24
+    }, TodoBox: {
         marginVertical: 30
-    },
-    todo: {
-        color: COLORS.black,
-        fontFamily: "Nexa-Bold",
-        fontSize: 20
-    },
-    cardContainer: {
+    }, todo: {
+        color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 20
+    }, cardContainer: {
         height: "100%"
 
         // backgroundColor:"cyan",
         // paddingVertical:10,
 
-    },
-    cardBox: {
+    }, cardBox: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        marginVertical: 10,
-        // backgroundColor:'cyan'
+        marginVertical: 10, // backgroundColor:'cyan'
 
 
-    },
-    linkCardText: {
-        fontSize: 18,
-        width: SIZES.width * 0.6,
-        fontFamily: "Nexa-Bold",
-        // right: 100,
-        color: COLORS.black,
-        // backgroundColor:"cyan"
-    },
-    recentTransaction: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginVertical: 30
+    }, linkCardText: {
+        fontSize: 18, width: SIZES.width * 0.6, fontFamily: "Nexa-Bold", // right: 100,
+        color: COLORS.black, // backgroundColor:"cyan"
+    }, recentTransaction: {
+        flexDirection: "row", justifyContent: "space-between", marginVertical: 30
 
-    },
-    seeAll: {
-        color: COLORS.primary,
-        fontFamily: "Nexa-Book",
-        fontSize: 20,
-        alignSelf: "center"
-    },
-    recentTransactionText: {
-        fontSize: 18,
-        width: SIZES.width * 0.4,
-        fontFamily: "Nexa-Bold",
-        // right: 100,
-        color: COLORS.black,
-        // backgroundColor:"cyan"
+    }, seeAll: {
+        color: COLORS.primary, fontFamily: "Nexa-Book", fontSize: 20, alignSelf: "center"
+    }, recentTransactionText: {
+        fontSize: 18, width: SIZES.width * 0.4, fontFamily: "Nexa-Bold", // right: 100,
+        color: COLORS.black, // backgroundColor:"cyan"
     },
 
 })

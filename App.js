@@ -30,6 +30,7 @@ import ReferralPage from "./src/screens/referralPage";
 import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
 import PaymentWebPage from "./src/screens/paymentWebPage";
 import RecentTransactions from "./src/screens/recentTransactions";
+import RegistrationFee from "./src/screens/registrationFee";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -88,6 +89,7 @@ const App = () => {
                     headerShown: false, // backgroundColor:"white"
                 }}>
                 <MainStack.Screen name={"WelcomePage"} component={WelcomePage}/>
+                <MainStack.Screen name={"RegistrationFee"} component={RegistrationFee}/>
                 <MainStack.Screen name={"DashBoard"} component={DashBoard}/>
                 <MainStack.Screen name={"Savings"} component={Savings}/>
                 <MainStack.Screen name={"LinkCard"} component={LinkCard}/>

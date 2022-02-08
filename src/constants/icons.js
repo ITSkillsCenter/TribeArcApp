@@ -20,6 +20,7 @@ const transFailed = require("../assets/icons/transFailed.png");
 const refer = require("../assets/icons/refer.png");
 const referralImg = require("../assets/icons/referralImg.png");
 const clipboard = require("../assets/icons/clipboard.png");
+const balFrame = require("../assets/icons/balFrame.png");
 
 
 export default {
@@ -44,6 +45,7 @@ export default {
     transFailed,
     refer,
     referralImg,
-    clipboard
+    clipboard,
+    balFrame
 
 };
