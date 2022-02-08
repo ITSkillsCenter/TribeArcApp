@@ -329,7 +329,7 @@ const DashBoard = ({navigation}) => {
                     }
 
 
-                    {questions !== [] && <>
+                    {questions.length > 0 && <>
                         <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
                         <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
                                           onPress={() => navigation.navigate("CommunityQuestions")}>

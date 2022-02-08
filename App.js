@@ -31,6 +31,7 @@ import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
 import PaymentWebPage from "./src/screens/paymentWebPage";
 import RecentTransactions from "./src/screens/recentTransactions";
 import RegistrationFee from "./src/screens/registrationFee";
+import RegFeeSuccessScreen from "./src/screens/RegFeeSuccessScreen";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -90,6 +91,7 @@ const App = () => {
                 }}>
                 <MainStack.Screen name={"WelcomePage"} component={WelcomePage}/>
                 <MainStack.Screen name={"RegistrationFee"} component={RegistrationFee}/>
+                <MainStack.Screen name={"RegFeeSuccessScreen"} component={RegFeeSuccessScreen}/>
                 <MainStack.Screen name={"DashBoard"} component={DashBoard}/>
                 <MainStack.Screen name={"Savings"} component={Savings}/>
                 <MainStack.Screen name={"LinkCard"} component={LinkCard}/>

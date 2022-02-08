@@ -64,6 +64,7 @@ export const RegistrationFee = ({navigation}) => {
             // channels={JSON.stringify(["card","ussd"])}
             onSuccess={async (res) => {
                 // await TransactionData(res)
+                await navigation.navigate("RegFeeSuccessScreen")
                 console.log(res, "RESDSD")
                 // handle response here
             }}
