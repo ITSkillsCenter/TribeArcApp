@@ -16,10 +16,11 @@ const savings = [
     {"key": "2", "amount": "10,000"},
     {"key": "3", "amount": "15,000"},
     {"key": "4", "amount": "20,000"},
-    {"key": "5", "amount": "50,000"}
+    {"key": "5", "amount": "50,000"},
+    {"key": "6", "amount": "100,000"},
 ]
 
-const Savings = ({navigation}) => {
+const Savings = ({navigation, route}) => {
     const user = useContext(UserContext)
 
 
@@ -364,6 +365,7 @@ const Savings = ({navigation}) => {
 
 
             <View style={{
+                flex: 1,
                 paddingHorizontal: 20,
                 height: SIZES.height * 0.9,
             }}>
@@ -391,9 +393,9 @@ const Savings = ({navigation}) => {
                     />
                 </View>
 
-                <View style={{height: 50}}>
-                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-                                contentContainerStyle={{justifyContent: "space-between"}} style={styles.amountBox}>
+                <View style={{height:"50%"}}>
+                    <View horizontal showsHorizontalScrollIndicator={false}
+                          contentContainerStyle={{justifyContent: "space-between",}} style={styles.amountBox}>
                         {savings.map((item, index) => (
                             <TouchableOpacity
                                 key={index}
@@ -408,13 +410,23 @@ const Savings = ({navigation}) => {
                                 </Text>
                             </TouchableOpacity>
                         ))}
-                    </ScrollView>
+                    </View>
+
+
                 </View>
+
+                <View>
+
+                </View>
+
+
                 <View style={styles.saveButton}>
+
+                    <Text> {route.params}</Text>
                     <CustomButton
                         loading={isLoading}
                         filled={amountToSave !== ""}
-                        text={"Save Money"}
+                        text={"Save Now"}
                         onPress={async () => {
 
                             if (amountToSave !== "") {
@@ -483,13 +495,14 @@ const styles = StyleSheet.create({
         fontFamily: "Nexa-Book",
         height: 50,
         paddingHorizontal: 20,
-        color:COLORS.black
+        color: COLORS.black
     },
     inputBox: {
         marginVertical: 30
     },
     amountBox: {
-        // flexDirection: 'row',
+        flexDirection: 'row',
+        flexWrap: "wrap",
         // justifyContent: "space-between",
         // backgroundColor: 'cyan',
         // width:SIZES.width*0.9,
@@ -501,7 +514,8 @@ const styles = StyleSheet.create({
         fontFamily: "Nexa-Book",
         fontSize: 16,
         color: COLORS.secondary,
-        marginVertical: 10
+        marginVertical: 10,
+        alignSelf: "center"
     },
     amountContainer: {
         backgroundColor: '#f5f5fa',
@@ -509,15 +523,19 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         marginRight: 10,
         // elevation: 0.3,
-        alignSelf: "center"
+        alignSelf: "center",
+        width: "30%",
+        marginBottom: 10
+
 
     },
     saveButton: {
         justifyContent: "flex-end",
         flex: 2,
+        // alignSelf: "auto",
         // paddingHorizontal: 20,
 
-        // backgroundColor:'cyan',
+        // backgroundColor: 'cyan',
         // height:100
     },
     cardBox: {

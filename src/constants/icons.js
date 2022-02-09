@@ -30,6 +30,9 @@ const invIcon = require("../assets/icons/invIcon.png");
 const acctIcon = require("../assets/icons/acctIcon.png");
 const pdficon = require("../assets/icons/pdficon.png");
 const minusButton = require("../assets/icons/minusButton.png");
+const savHand = require("../assets/icons/savHand.png");
+const savPig = require("../assets/icons/savPig.png");
+const shortBalFrame = require("../assets/icons/shortBalFrame.png");
 
 
 export default {
@@ -65,4 +68,7 @@ export default {
     acctIcon,
     pdficon,
     minusButton,
+    savHand,
+    savPig,
+    shortBalFrame
 };

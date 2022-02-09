@@ -5,7 +5,7 @@ import {COLORS, icons, SIZES,} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
 
-const InvestmentDetailsScreen = ({navigation, route}) => {
+const MyInvestmentDetailsScreen = ({navigation, route}) => {
 
     const [counter, setCounter] = useState(0)
 
@@ -65,7 +65,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
                 </View>
                 <View style={styles.invBox}>
-                    <Text style={styles.invTitle}>Slots Left</Text>
+                    <Text style={styles.invTitle}>Slots Bought</Text>
                     <Text style={styles.invBoxDet}>40</Text>
 
                 </View>
@@ -73,51 +73,13 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
             </View>
 
-            <View style={styles.invNowBox}>
-                <View
-                    style={{width: "35%", justifyContent: "space-between", alignItems: "center", flexDirection: "row"}}>
-                    <TouchableOpacity
-                        onPress={() => setCounter(Math.max(1, counter - 1))}
-                        style={{
-                            width: 25,
-                            height: 25,
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}>
-                        <Image source={icons.minusButton} style={{width: 70, height: 70}}/>
 
-                    </TouchableOpacity>
-
-                    <Text
-                        style={styles.counter}>{counter}</Text>
-
-
-                    <TouchableOpacity
-                        onPress={() => setCounter(counter + 1)}
-                        style={{
-                            width: 25,
-                            height: 25,
-                            alignItems: "center",
-                            justifyContent: "center"
-                        }}>
-                        <Image source={icons.addIcon} style={{width: 25, height: 25}}/>
-
-                    </TouchableOpacity>
-
-
-                </View>
-                <View style={{width: "48%"}}>
-                    <CustomButton onPress={() => navigation.navigate("InvestmentTermsPage")} filled
-                                  text={"Invest Now"}/>
-                </View>
-
-            </View>
         </View>
     );
 };
 
 
-export default InvestmentDetailsScreen
+export default MyInvestmentDetailsScreen
 
 const styles = StyleSheet.create({
     container: {

@@ -41,6 +41,9 @@ import StartInvesting from "./src/screens/startInvesting";
 import InvestmentMainScreen from "./src/screens/InvestmentMainScreen";
 import InvestmentDetailsScreen from "./src/screens/investmentDetailsScreen";
 import InvestmentTermsPage from "./src/screens/investmentTermsPage";
+import MyInvestmentDetailsScreen from "./src/screens/myInvestmentDetailsScreen";
+import savingsMainScreen from "./src/screens/savingsMainScreen";
+import SavingsMainScreen from "./src/screens/savingsMainScreen";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -109,6 +112,7 @@ const App = () => {
                 <MainStack.Screen name={"RegFeeSuccessScreen"} component={RegFeeSuccessScreen}/>
                 {/*<MainStack.Screen name={"DashBoard"} component={DashBoard}/>*/}
                 <MainStack.Screen name={"Savings"} component={Savings}/>
+                <MainStack.Screen name={"SavingsMainScreen"} component={SavingsMainScreen}/>
                 <MainStack.Screen name={"LinkCard"} component={LinkCard}/>
                 <MainStack.Screen name={"SuccessScreen"} component={SuccessScreen}/>
                 <MainStack.Screen name={"DebitCardSuccessScreen"} component={DebitCardSuccessScreen}/>
@@ -121,6 +125,7 @@ const App = () => {
                 <MainStack.Screen name={"PasswordSuccessScreen"} component={PasswordSuccessScreen}/>
                 <MainStack.Screen name={"InvestmentMainScreen"} component={InvestmentMainScreen}/>
                 <MainStack.Screen name={"InvestmentDetailsScreen"} component={InvestmentDetailsScreen}/>
+                <MainStack.Screen name={"MyInvestmentDetailsScreen"} component={MyInvestmentDetailsScreen}/>
                 <MainStack.Screen name={"InvestmentTermsPage"} component={InvestmentTermsPage}/>
                 <MainStack.Screen name={"ReferralPage"} component={ReferralPage}/>
                 <MainStack.Screen name={"PaymentWebPage"} component={PaymentWebPage}/>

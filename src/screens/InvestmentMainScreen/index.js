@@ -5,7 +5,7 @@ import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 
 
-const investments = [
+const allInvestments = [
     {
         "title": "Cocoa Investment",
         "active": true,
@@ -13,7 +13,8 @@ const investments = [
         "total_investors": 200,
         "duration": 12,
         "roi": 15,
-        "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg"
+        "image": "https://i.im.ge/2021/07/07/FZ6by.png",
+        "user_id": "1"
 
     },
     {
@@ -23,7 +24,9 @@ const investments = [
         "total_investors": 240,
         "duration": 16,
         "roi": 9,
-        "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg"
+        "image": "https://i.im.ge/2021/07/07/FZ01L.png",
+        "user_id": "2"
+
     },
     {
         "title": "Real Estate Investment",
@@ -32,8 +35,25 @@ const investments = [
         "total_investors": 140,
         "duration": 6,
         "roi": 13,
-        "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg"
+        "image": "https://i.im.ge/2021/07/07/FZ01L.png",
+        "user_id": "3"
+
     }
+
+]
+
+const myInvestments = [
+    {
+        "title": "Cocoa Investment",
+        "active": true,
+        "investment_price": 100000,
+        "total_investors": 200,
+        "duration": 12,
+        "roi": 15,
+        "image": "https://i.im.ge/2021/07/07/FZ6by.png",
+        "user_id": "1"
+
+    },
 
 ]
 
@@ -43,29 +63,104 @@ const InvestmentMainScreen = ({navigation}) => {
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
 
-            <Text style={styles.inv}>My Investment</Text>
-            <ImageBackground source={icons.balFrame} style={styles.balanceFrame}>
-                <View style={{
-                    flexDirection: "row",
-                    justifyContent: 'space-between',
-                    paddingHorizontal: 40,
-                    alignItems: 'center'
-                }}>
-                    <View>
-                        <Text style={styles.tsb}>Investment Balance</Text>
-                        <Text style={styles.balance}>₦ 20,000 {}</Text>
-                    </View>
-
-                </View>
-            </ImageBackground>
-
-            <Text style={styles.allInv}>All Investments</Text>
-
 
             <FlatList
-                data={investments}
-                renderItem={({item}) => (
+                data={allInvestments}
+                showsVerticalScrollIndicator={false}
+                ListHeaderComponent={
+                    <>
 
+                        <Text style={styles.inv}>My Investment</Text>
+                        <ImageBackground  resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
+                            <View style={{
+                                // flexDirection: "row",
+                                // justifyContent: 'space-between',
+                                paddingHorizontal: 40,
+                                // alignItems: 'center'
+                            }}>
+
+                                <View>
+                                    <Text style={styles.tsb}>Investment Balance</Text>
+                                    <Text style={styles.balance}>₦ 20,000,000 {}</Text>
+                                </View>
+
+                            </View>
+                        </ImageBackground>
+
+                        {
+                            <>
+                                <Text style={styles.allInv}>My Investments</Text>
+
+                                <FlatList
+                                    data={myInvestments}
+                                    showsVerticalScrollIndicator={false}
+                                    renderItem={({item}) => (
+
+                                        <TouchableOpacity
+                                            onPress={() => navigation.navigate("MyInvestmentDetailsScreen", {...item})}
+                                            activeOpacity={0.8} style={styles.box}>
+                                            <Image source={{uri: item.image}}
+                                                   style={{width: 110, height: 120, borderRadius: 10,}}/>
+                                            <View style={{width: 180, paddingHorizontal: 5,}}>
+                                                <Text style={styles.title}>{item.title}</Text>
+                                                <Text style={styles.duration}><Text
+                                                    style={{color: COLORS.primary}}>{item.roi}% </Text> return
+                                                    in {item.duration} months</Text>
+                                                <View style={{
+                                                    flexDirection: "row",
+                                                    width: 150,
+                                                    justifyContent: "space-between",
+                                                    alignItems: 'center',
+                                                }}>
+                                                    <View>
+                                                        <Text
+                                                            style={styles.amtInv}>₦{item.investment_price.toLocaleString()}</Text>
+                                                        <Text style={styles.perSlot}>Per Slot</Text>
+                                                    </View>
+
+                                                    <View>
+                                                        <Text style={styles.amtInv}>{item.total_investors}</Text>
+                                                        <Text style={styles.perSlot}>Investors</Text>
+                                                    </View>
+
+
+                                                </View>
+                                            </View>
+                                            <View>
+                                                {item.active ?
+                                                    <View style={styles.status1}>
+                                                        <Text style={styles.active}>Active</Text>
+
+                                                    </View>
+                                                    :
+                                                    <View style={styles.status2}>
+
+                                                        <Text style={styles.ended}>Ended</Text>
+
+                                                    </View>
+                                                }
+
+
+                                            </View>
+
+                                        </TouchableOpacity>
+
+                                    )
+
+
+                                    }/>
+
+
+                            </>
+                        }
+
+
+                        <Text style={styles.allInv}>All Investments</Text>
+                    </>
+
+
+                }
+                renderItem={({item}) => (
                     <TouchableOpacity onPress={() => navigation.navigate("InvestmentDetailsScreen", {...item})}
                                       activeOpacity={0.8} style={styles.box}>
                         <Image source={{uri: item.image}} style={{width: 110, height: 120, borderRadius: 10,}}/>
@@ -84,7 +179,6 @@ const InvestmentMainScreen = ({navigation}) => {
                                     <Text style={styles.amtInv}>₦{item.investment_price.toLocaleString()}</Text>
                                     <Text style={styles.perSlot}>Per Slot</Text>
                                 </View>
-
                                 <View>
                                     <Text style={styles.amtInv}>{item.total_investors}</Text>
                                     <Text style={styles.perSlot}>Investors</Text>
@@ -97,19 +191,13 @@ const InvestmentMainScreen = ({navigation}) => {
                             {item.active ?
                                 <View style={styles.status1}>
                                     <Text style={styles.active}>Active</Text>
-
                                 </View>
                                 :
                                 <View style={styles.status2}>
-
                                     <Text style={styles.ended}>Ended</Text>
-
                                 </View>
                             }
-
-
                         </View>
-
                     </TouchableOpacity>
 
 
@@ -152,6 +240,7 @@ const styles = StyleSheet.create({
         padding: 20
     },
     tsb: {
+        fontSize: 18,
         color: COLORS.white,
         fontFamily: "Nexa-Bold",
         marginVertical: 20

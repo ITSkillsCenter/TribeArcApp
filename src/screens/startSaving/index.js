@@ -4,7 +4,7 @@ import {Image, StyleSheet, Text, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import CustomButton from "../../components/CustomButton";
 
-const StartSaving = () => {
+const StartSaving = ({navigation}) => {
     return (
         <View style={styles.container}>
             <Text style={styles.savings}>Savings</Text>
@@ -15,7 +15,7 @@ const StartSaving = () => {
             <Text style={styles.startSavings}>Start Saving</Text>
             <Text style={styles.startSavingText}>Start saving with tribe arc</Text>
 
-            <CustomButton filled text={"Save Now"}/>
+            <CustomButton onPress={() => navigation.navigate("SavingsMainScreen")} filled text={"Save Now"}/>
 
 
         </View>

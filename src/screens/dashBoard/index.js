@@ -185,7 +185,6 @@ const DashBoard = ({navigation}) => {
         } catch (e) {
             console.log(e, "QuestionsError")
             // await setIsLoading(false)
-
         }
 
 
@@ -198,12 +197,10 @@ const DashBoard = ({navigation}) => {
 
 
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => {
-                    navigation.navigate("Profile", {firstname, lastname})
-                }} style={styles.imgContainer}>
+                <View style={styles.imgContainer}>
                     <Image style={styles.img} resizeMode={"cover"}
                            source={avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}/>
-                </TouchableOpacity>
+                </View>
                 <View style={styles.nameContainer}>
                     <Text style={styles.username}>Hello {firstname},</Text>
                     <Text style={styles.welcomeText}>Welcome Back!</Text>
@@ -234,7 +231,7 @@ const DashBoard = ({navigation}) => {
                                     <Text style={styles.tsb}>Total Savings Balance</Text>
                                     <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
                                 </View>
-                                <TouchableOpacity onPress={() => navigation.navigate("Savings")}>
+                                <TouchableOpacity onPress={() => navigation.navigate("SavingsMainScreen")}>
                                     <Image resizeMode={"contain"} style={{width: 40, height: 40}}
                                            source={icons.plusIcon}/>
                                 </TouchableOpacity>
@@ -251,7 +248,7 @@ const DashBoard = ({navigation}) => {
                                     <Text style={styles.tsb}>Investment Account Balance</Text>
                                     <Text style={styles.balance}>₦ {}</Text>
                                 </View>
-                                <TouchableOpacity onPress={() => navigation.navigate("Savings")}>
+                                <TouchableOpacity onPress={() => navigation.navigate("")}>
                                     <Image resizeMode={"contain"} style={{width: 40, height: 40}}
                                            source={icons.plusIcon}/>
                                 </TouchableOpacity>
@@ -268,7 +265,7 @@ const DashBoard = ({navigation}) => {
                                     <Text style={styles.tsb}>Voluntary Account Balance</Text>
                                     <Text style={styles.balance}>₦ {}</Text>
                                 </View>
-                                <TouchableOpacity onPress={() => navigation.navigate("Savings")}>
+                                <TouchableOpacity onPress={() => navigation.navigate("")}>
                                     <Image resizeMode={"contain"} style={{width: 40, height: 40}}
                                            source={icons.plusIcon}/>
                                 </TouchableOpacity>
@@ -282,7 +279,7 @@ const DashBoard = ({navigation}) => {
 
 
                 <TouchableOpacity activeOpacity={0.8} style={styles.saveFrame}
-                                  onPress={() => navigation.navigate("Savings")}>
+                                  onPress={() => navigation.navigate("SavingsMainScreen")}>
 
                     <View>
                         <Image source={icons.pigIcon} resizeMode={"contain"} style={{width: 55, height: 55}}/>
