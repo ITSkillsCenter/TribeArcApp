@@ -364,6 +364,7 @@ const DashBoard = ({navigation}) => {
                     </View>}
 
 
+
                     {transactions.map((item, index) => (
 
                         <View key={index}>
