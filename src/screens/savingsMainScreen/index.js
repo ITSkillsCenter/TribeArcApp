@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: COLORS.white,
         fontFamily: "Nexa-Bold",
-        marginVertical: 20
+        marginVertical: 10
     },
     balance: {
         color: COLORS.white,

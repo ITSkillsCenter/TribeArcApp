@@ -44,6 +44,7 @@ import InvestmentTermsPage from "./src/screens/investmentTermsPage";
 import MyInvestmentDetailsScreen from "./src/screens/myInvestmentDetailsScreen";
 import savingsMainScreen from "./src/screens/savingsMainScreen";
 import SavingsMainScreen from "./src/screens/savingsMainScreen";
+import SavingsAccountPage from "./src/screens/savingsAccountPage";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -113,6 +114,7 @@ const App = () => {
                 {/*<MainStack.Screen name={"DashBoard"} component={DashBoard}/>*/}
                 <MainStack.Screen name={"Savings"} component={Savings}/>
                 <MainStack.Screen name={"SavingsMainScreen"} component={SavingsMainScreen}/>
+                <MainStack.Screen name={"SavingsAccountPage"} component={SavingsAccountPage}/>
                 <MainStack.Screen name={"LinkCard"} component={LinkCard}/>
                 <MainStack.Screen name={"SuccessScreen"} component={SuccessScreen}/>
                 <MainStack.Screen name={"DebitCardSuccessScreen"} component={DebitCardSuccessScreen}/>

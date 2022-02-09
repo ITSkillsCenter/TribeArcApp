@@ -453,20 +453,27 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         padding: 20
 
-    }, tsb: {
-        color: COLORS.white, fontFamily: "Nexa-Bold", marginVertical: 20
-    }, balance: {
-        color: COLORS.white, fontFamily: "Nexa-Bold", fontSize: 24
-    }, TodoBox: {
+    },
+    tsb: {
+        color: COLORS.white,
+        fontFamily: "Nexa-Bold",
+        marginVertical: 20
+    },
+    balance: {
+        color: COLORS.white,
+        fontFamily: "Nexa-Bold",
+        fontSize: 24
+    },
+    TodoBox: {
         marginVertical: 30
-    }, todo: {
-        color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 20
-    }, cardContainer: {
+    },
+    todo: {
+        color: COLORS.black,
+        fontFamily: "Nexa-Bold",
+        fontSize: 18
+    },
+    cardContainer: {
         height: "100%"
-
-        // backgroundColor:"cyan",
-        // paddingVertical:10,
-
     }, cardBox: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -475,15 +482,26 @@ const styles = StyleSheet.create({
 
 
     }, linkCardText: {
-        fontSize: 18, width: SIZES.width * 0.6, fontFamily: "Nexa-Bold", // right: 100,
+        fontSize: 18,
+        width: SIZES.width * 0.6,
+        fontFamily: "Nexa-Bold", // right: 100,
         color: COLORS.black, // backgroundColor:"cyan"
-    }, recentTransaction: {
-        flexDirection: "row", justifyContent: "space-between", marginVertical: 30
+    },
+    recentTransaction: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginVertical: 30
 
-    }, seeAll: {
-        color: COLORS.primary, fontFamily: "Nexa-Book", fontSize: 20, alignSelf: "center"
-    }, recentTransactionText: {
-        fontSize: 18, width: SIZES.width * 0.4, fontFamily: "Nexa-Bold", // right: 100,
+    },
+    seeAll: {
+        color: COLORS.primary,
+        fontFamily: "Nexa-Book",
+        fontSize: 18,
+        alignSelf: "center",
+    },
+    recentTransactionText: {
+        fontSize: 18, width: SIZES.width * 0.4,
+        fontFamily: "Nexa-Bold", // right: 100,
         color: COLORS.black, // backgroundColor:"cyan"
     },
 
