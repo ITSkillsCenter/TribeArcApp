@@ -33,6 +33,9 @@ const minusButton = require("../assets/icons/minusButton.png");
 const savHand = require("../assets/icons/savHand.png");
 const savPig = require("../assets/icons/savPig.png");
 const shortBalFrame = require("../assets/icons/shortBalFrame.png");
+const dateImg = require("../assets/icons/dateImg.png");
+const settingsIcon = require("../assets/icons/settingsIcon.png");
+const onImage = require("../assets/icons/onImage.png");
 
 
 export default {
@@ -70,5 +73,8 @@ export default {
     minusButton,
     savHand,
     savPig,
-    shortBalFrame
+    shortBalFrame,
+    dateImg,
+    settingsIcon,
+    onImage
 };

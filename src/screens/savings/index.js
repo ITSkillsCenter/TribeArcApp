@@ -27,6 +27,8 @@ const Savings = ({navigation, route}) => {
     const modalizeRef1 = useRef<Modalize>(null);
     const modalizeRef2 = useRef<Modalize>(null);
 
+    const [date, setDate] = useState("")
+
     const OpenModal1 = () => {
         modalizeRef1.current?.open();
     };
@@ -393,7 +395,7 @@ const Savings = ({navigation, route}) => {
                     />
                 </View>
 
-                <View style={{height:"50%"}}>
+                <View style={{height: "20%"}}>
                     <View horizontal showsHorizontalScrollIndicator={false}
                           contentContainerStyle={{justifyContent: "space-between",}} style={styles.amountBox}>
                         {savings.map((item, index) => (
@@ -415,7 +417,28 @@ const Savings = ({navigation, route}) => {
 
                 </View>
 
-                <View>
+                <View style={{flexDirection: "row", alignItems: "center"}}>
+                    <TextInput
+                        style={styles.datePicker}
+                        placeholder={"Enter date of the month for withdrawal"}
+                        value={date}
+                        onChangeText={setDate}
+
+
+                    />
+
+                    <TouchableOpacity style={{
+                        justifyContent: "center",
+                        marginRight: 20
+                    }}>
+                        <Image style={{ marginRight: 40,
+                            width: 20,
+                            height: 20,
+                            alignSelf: 'flex-end',
+                            position: "absolute",}} source={icons.dateImg}/>
+
+                    </TouchableOpacity>
+
 
                 </View>
 
@@ -564,5 +587,14 @@ const styles = StyleSheet.create({
     textTabActive: {
         color: COLORS.white
 
+    },
+    datePicker: {
+        borderRadius: 5,
+        borderWidth: 0.5,
+        borderColor: "#C4C4C4",
+        height: 50,
+        paddingHorizontal: 20,
+        width: "100%",
+        position: "absolute"
     }
 })
