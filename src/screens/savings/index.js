@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Image, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
@@ -9,6 +9,8 @@ import ShortTextInput from "../../components/ShortTextInput";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import {Modalize} from "react-native-modalize";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from "react-native-datepicker";
 
 
 const savings = [
@@ -27,7 +29,26 @@ const Savings = ({navigation, route}) => {
     const modalizeRef1 = useRef<Modalize>(null);
     const modalizeRef2 = useRef<Modalize>(null);
 
-    const [date, setDate] = useState("")
+
+    const [date, setDate] = useState("");
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+    };
+
+    const showMode = (currentMode) => {
+        setShow(true);
+        // setMode(currentMode);
+    };
+
+    const showDatepicker = () => {
+        showMode('date');
+    };
+
 
     const OpenModal1 = () => {
         modalizeRef1.current?.open();
@@ -417,33 +438,50 @@ const Savings = ({navigation, route}) => {
 
                 </View>
 
-                <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <TextInput
-                        style={styles.datePicker}
-                        placeholder={"Enter date of the month for withdrawal"}
-                        value={date}
-                        onChangeText={setDate}
 
-
-                    />
-
-                    <TouchableOpacity style={{
-                        justifyContent: "center",
-                        marginRight: 20
-                    }}>
-                        <Image style={{ marginRight: 40,
-                            width: 20,
-                            height: 20,
-                            alignSelf: 'flex-end',
-                            position: "absolute",}} source={icons.dateImg}/>
-
-                    </TouchableOpacity>
-
-
-                </View>
+                <DatePicker
+                    style={styles.datePickerStyle}
+                    date={date}
+                    mode="date"
+                    placeholder="Enter your the amount of monthly savings"
+                    format="DD/MM/YYYY"
+                    minDate="01-01-2022"
+                    maxDate="01-01-2030"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    iconSource={icons.dateImg}
+                    customStyles={{
+                        dateIcon: {
+                            position: 'absolute',
+                            right: -2,
+                            top: 4,
+                            marginLeft: 0,
+                        },
+                        dateInput: {
+                            borderColor: "#C4C4C4",
+                            alignItems: "flex-start",
+                            borderWidth: 0.5,
+                            borderRadius: 5,
+                            paddingHorizontal: 10,
+                            height: 50
+                        },
+                        placeholderText: {
+                            fontSize: 17,
+                            color: "gray"
+                        },
+                        dateText: {
+                            fontSize: 17,
+                        }
+                    }}
+                    onDateChange={(date) => {
+                        setDate(date);
+                        // console.log(date)
+                    }}
+                />
 
 
                 <View style={styles.saveButton}>
+
 
                     <Text> {route.params}</Text>
                     <CustomButton
@@ -596,5 +634,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         width: "100%",
         position: "absolute"
+    },
+    datePickerStyle: {
+        width: "100%"
+
     }
 })
