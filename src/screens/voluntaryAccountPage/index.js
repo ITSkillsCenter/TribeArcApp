@@ -4,6 +4,7 @@ import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, Vi
 import {COLORS, icons, SIZES} from "../../constants";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import moment from "moment";
+import BackButton from "../../components/BackButton";
 
 
 const data = [
@@ -110,7 +111,7 @@ const data3 = [
 ]
 
 
-const SavingsAccountPage = ({navigation}) => {
+const VoluntaryAccountPage = ({navigation}) => {
 
 
     const [active, setActive] = useState()
@@ -152,42 +153,26 @@ const SavingsAccountPage = ({navigation}) => {
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
                                                     onPress={() => {
                                                     }}>
-                                      <Image source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
+                                      <Image source={icons.tranSucc}
                                              style={{width: 50, height: 50}}/>
 
                                       <View style={{justifyContent: "space-between", height: 50}}>
-                                          {item.status === "SUCCESS" ?
-                                              <Text style={styles.recentTransactionText}>Card Deposit
-                                                  Successful</Text> :
-                                              <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
-                                          <Text style={{
-                                              color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
-                                          }}>₦{item?.amount_paid.toLocaleString()}</Text>
-                                      </View>
 
-                                      <View style={{alignItems: 'center', justifyContent: "space-between", height: 50}}>
-
-                                          {item.status === "SUCCESS" ? <View style={styles.saved}>
-                                                  <Text style={{
-                                                      color: COLORS.white,
-                                                      fontSize: 11,
-                                                      fontFamily: "Nexa-Bold"
-                                                  }}>Saved</Text>
-                                              </View>
-                                              : <View style={styles.retryBox}>
-                                                  <Text style={{
-                                                      color: COLORS.white,
-                                                      fontSize: 11,
-                                                      fontFamily: "Nexa-Bold"
-                                                  }}>Try
-                                                      Again</Text>
-                                              </View>
-                                          }
+                                          <Text style={styles.recentTransactionText}>Voluntary Saving</Text>
 
                                           <Text style={{
                                               fontSize: 12,
                                               color: COLORS.black, fontFamily: "Nexa-Book"
                                           }}>{moment(item?.created_at).format("MMM D, YYYY")}</Text>
+
+                                      </View>
+
+                                      <View style={{alignItems: 'center', justifyContent: "space-between", height: 50}}>
+
+
+                                          <Text style={{
+                                              color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
+                                          }}>₦{item?.amount_paid.toLocaleString()}</Text>
                                       </View>
                                   </TouchableOpacity>
 
@@ -364,13 +349,13 @@ const SavingsAccountPage = ({navigation}) => {
                                 style={{width: 10, height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>}
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("TabTwo")}>
-                            <Text>Pending</Text>
+                            <Text>Top-Ups</Text>
                             {/*<View style={{width: "100%", height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>*/}
 
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("TabThree")}>
 
-                            <Text>Saved</Text>
+                            <Text>Withdrawal</Text>
                             {/*<View style={{width: "100%", height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>*/}
 
                         </TouchableOpacity>
@@ -401,17 +386,15 @@ const SavingsAccountPage = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={()=>navigation.navigate("AutosaveSettingsPage")} activeOpacity={0.8} style={styles.settingsBox}>
-                <Image source={icons.settingsIcon} style={{width: 30, height: 30}}/>
-            </TouchableOpacity>
+            <BackButton onPress={() => navigation.pop()}/>
 
 
-            <Text style={styles.savings}>Savings Account</Text>
+            <Text style={styles.savings}>Voluntary Account</Text>
             <ImageBackground source={icons.shortBalFrame} style={styles.balanceFrame}>
                 <View style={{paddingHorizontal: 40,}}>
                     <View>
-                        <Text style={styles.tsb}>Savings Account Balance</Text>
-                        <Text style={styles.balance}>₦ 20,000,000 {}</Text>
+                        <Text style={styles.tsb}>Voluntary Account Balance</Text>
+                        <Text style={styles.balance}>₦ 60,000,000 {}</Text>
                     </View>
                 </View>
             </ImageBackground>
@@ -419,24 +402,44 @@ const SavingsAccountPage = ({navigation}) => {
 
             <View style={styles.autosaveBox}>
 
-                <View>
-                    <Text style={styles.autosaveText}>Autosave Amount</Text>
-                    <Text style={styles.autosaveAmt}>₦ 10,000</Text>
-                </View>
+                <TouchableOpacity activeOpacity={0.7}
+                                  style={{
+                                      flexDirection: "row",
+                                      alignItems: "center",
+                                      justifyContent: "space-between",
+                                      width: "30%"
+                                  }}>
+                    <Image style={{width: 40, height: 40}} source={icons.topUpicon}/>
+                    <Text style={{fontSize: 14, color: COLORS.primary, fontFamily: "Nexa-Book"}}>Top Up</Text>
 
-                <View>
-                    <Text style={styles.autosaveText}>Next Payment Date</Text>
-                    <Text style={styles.autosaveAmt2}>2 April, 2022. Thursday</Text>
-                </View>
+
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={()=>navigation.navigate("WithdrawalScreen")}
+
+                    activeOpacity={0.7}
+                                  style={{
+                                      flexDirection: "row",
+                                      alignItems: "center",
+                                      justifyContent: "space-between",
+                                      width: "35%"
+                                  }}>
+
+                    <Image style={{width: 40, height: 40}} source={icons.withdraw}/>
+                    <Text style={{fontSize: 14, color: COLORS.primary, fontFamily: "Nexa-Book"}}>Withdraw</Text>
+
+
+                </TouchableOpacity>
             </View>
 
 
             <View style={styles.recentTransaction}>
-                <Text style={styles.todo}>Savings Transactions</Text>
+                <Text style={styles.todo}>Transactions</Text>
 
                 <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
                     <Text onPress={() => {
-                        navigation.navigate("SavingsTransactionPage")
+                        navigation.navigate("VoluntaryTransactionPage")
                     }} style={styles.seeAll}>See
                         all</Text>
                     <Image resizeMode={"contain"}
@@ -453,7 +456,7 @@ const SavingsAccountPage = ({navigation}) => {
 };
 
 
-export default SavingsAccountPage
+export default VoluntaryAccountPage
 
 const styles = StyleSheet.create({
     container: {
@@ -507,7 +510,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         paddingHorizontal: 20,
-        marginBottom: 30
+        marginBottom: 5,
+        // elevation:0.2,
+        // shadowOpacity:0.3,
+        // shadowColor:"#000",
+        // shadowOffset:{
+        //     width:0,
+        //     height:0
+        // }
     },
     autosaveText: {
         color: COLORS.primary,

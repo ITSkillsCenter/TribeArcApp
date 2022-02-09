@@ -1,9 +1,11 @@
 // @flow
 import React, {useState} from 'react';
-import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
+import BackButton from "../../components/BackButton";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import moment from "moment";
+
 
 
 const data = [
@@ -110,10 +112,12 @@ const data3 = [
 ]
 
 
-const SavingsAccountPage = ({navigation}) => {
+const SavingsTransactionPage = ({navigation}) => {
 
 
     const [active, setActive] = useState()
+
+
 
 
     const TopTabs = createMaterialTopTabNavigator();
@@ -399,51 +403,18 @@ const SavingsAccountPage = ({navigation}) => {
     }
 
 
+
+
+
+
+
+
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={()=>navigation.navigate("AutosaveSettingsPage")} activeOpacity={0.8} style={styles.settingsBox}>
-                <Image source={icons.settingsIcon} style={{width: 30, height: 30}}/>
-            </TouchableOpacity>
+            <BackButton onPress={() => navigation.pop()}/>
+            <Text style={styles.savings}>Savings Transactions</Text>
 
-
-            <Text style={styles.savings}>Savings Account</Text>
-            <ImageBackground source={icons.shortBalFrame} style={styles.balanceFrame}>
-                <View style={{paddingHorizontal: 40,}}>
-                    <View>
-                        <Text style={styles.tsb}>Savings Account Balance</Text>
-                        <Text style={styles.balance}>₦ 20,000,000 {}</Text>
-                    </View>
-                </View>
-            </ImageBackground>
-
-
-            <View style={styles.autosaveBox}>
-
-                <View>
-                    <Text style={styles.autosaveText}>Autosave Amount</Text>
-                    <Text style={styles.autosaveAmt}>₦ 10,000</Text>
-                </View>
-
-                <View>
-                    <Text style={styles.autosaveText}>Next Payment Date</Text>
-                    <Text style={styles.autosaveAmt2}>2 April, 2022. Thursday</Text>
-                </View>
-            </View>
-
-
-            <View style={styles.recentTransaction}>
-                <Text style={styles.todo}>Savings Transactions</Text>
-
-                <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
-                    <Text onPress={() => {
-                        navigation.navigate("SavingsTransactionPage")
-                    }} style={styles.seeAll}>See
-                        all</Text>
-                    <Image resizeMode={"contain"}
-                           style={{width: 15, height: 15, alignSelf: "center", bottom: 2}}
-                           source={icons.arrowRight}/>
-                </View>
-            </View>
 
             {TopTab()}
 
@@ -452,8 +423,7 @@ const SavingsAccountPage = ({navigation}) => {
     );
 };
 
-
-export default SavingsAccountPage
+export default SavingsTransactionPage
 
 const styles = StyleSheet.create({
     container: {
@@ -461,82 +431,13 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         paddingHorizontal: 20
     },
-    settingsBox: {
-        width: 30,
-        height: 30,
-        alignSelf: "flex-end",
-        marginTop: 20
-    },
     savings: {
         fontSize: 26,
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
         marginVertical: 10
     },
-    balanceFrame: {
-        borderRadius: 15, // padding: 20,
-        height: 200,
-        width: SIZES.width,
-        alignSelf: "center",
-        justifyContent: "center",
 
-        backgroundColor: ""
-    },
-    saveFrame: {
-        backgroundColor: '#EFF2FF',
-        height: 120,
-        width: SIZES.width * 0.9,
-        borderRadius: 15,
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: "space-between",
-        padding: 20
-    },
-    tsb: {
-        fontSize: 18,
-        color: COLORS.white,
-        fontFamily: "Nexa-Bold",
-        marginVertical: 10
-    },
-    balance: {
-        color: COLORS.white,
-        fontFamily: "Nexa-Bold",
-        fontSize: 24
-    },
-    autosaveBox: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        paddingHorizontal: 20,
-        marginBottom: 30
-    },
-    autosaveText: {
-        color: COLORS.primary,
-        fontSize: 16,
-        // marginBottom: 10,
-        fontFamily: "Nexa-Book"
-
-    },
-    autosaveAmt: {
-        color: COLORS.black,
-        fontFamily: "Nexa-Bold",
-        fontSize: 20,
-        marginTop: 10
-
-
-    },
-    autosaveAmt2: {
-        color: COLORS.black,
-        fontFamily: "Nexa-Book",
-        fontSize: 12,
-        alignSelf: "flex-end",
-        marginTop: 15
-    },
-    recentTransaction: {
-        flexDirection: "row", justifyContent: "space-between", marginVertical: 30
-
-    }, seeAll: {
-        color: COLORS.primary, fontFamily: "Nexa-Book", fontSize: 18, alignSelf: "center"
-    },
     recentTransactionText: {
         fontSize: 14,
         width: SIZES.width * 0.4,
@@ -581,4 +482,5 @@ const styles = StyleSheet.create({
 
 
     }
+
 })

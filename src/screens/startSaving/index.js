@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
         fontSize: 22,
-        marginTop: 70
+        marginTop: 20
     },
     startSavings: {
         alignSelf: "center",

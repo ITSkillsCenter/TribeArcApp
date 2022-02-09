@@ -34,7 +34,7 @@ const SavingsMainScreen = ({navigation}) => {
                         <Text style={styles.amt}>₦ 0.00</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate("Savings", "isVoluntary")} activeOpacity={0.85}
+                <TouchableOpacity onPress={() => navigation.navigate("VoluntaryAccountPage", "isVoluntary")} activeOpacity={0.85}
                                   style={styles.box}>
                     <Image source={icons.savHand} style={{width: 60, height: 60}}/>
                     <View style={styles.textBox}>

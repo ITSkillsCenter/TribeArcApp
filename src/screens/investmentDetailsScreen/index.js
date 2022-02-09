@@ -189,7 +189,8 @@ const styles = StyleSheet.create({
         flex: 2,
         flexDirection: "row",
         justifyContent: "space-between",
-        width: "100%"
+        width: "100%",
+        alignItems:"center"
     },
     counter: {
         fontSize: 20,

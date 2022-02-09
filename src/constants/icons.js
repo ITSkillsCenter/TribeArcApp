@@ -36,6 +36,8 @@ const shortBalFrame = require("../assets/icons/shortBalFrame.png");
 const dateImg = require("../assets/icons/dateImg.png");
 const settingsIcon = require("../assets/icons/settingsIcon.png");
 const onImage = require("../assets/icons/onImage.png");
+const topUpicon = require("../assets/icons/topUpicon.png");
+const withdraw = require("../assets/icons/withdraw.png");
 
 
 export default {
@@ -76,5 +78,7 @@ export default {
     shortBalFrame,
     dateImg,
     settingsIcon,
-    onImage
+    onImage,
+    topUpicon,
+    withdraw
 };

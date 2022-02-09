@@ -10,6 +10,7 @@ import {handleQuery} from "../../graphql/requests";
 import {useIsFocused} from "@react-navigation/native";
 import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {cyan50} from "react-native-paper/lib/typescript/styles/colors";
 
 
 // const frames = [
@@ -198,7 +199,7 @@ const DashBoard = ({navigation}) => {
 
             <View style={styles.header}>
                 <View style={styles.imgContainer}>
-                    <Image style={styles.img} resizeMode={"cover"}
+                    <Image style={styles.img}
                            source={avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}/>
                 </View>
                 <View style={styles.nameContainer}>
@@ -217,10 +218,10 @@ const DashBoard = ({navigation}) => {
 
             <ScrollView showsVerticalScrollIndicator={false}>
 
-                <View>
-                    <ScrollView snapToAlignment={"start"} horizontal showsHorizontalScrollIndicator={false}>
+                <View style={{width:"100%", marginBottom:15}}>
+                    <ScrollView  horizontal showsHorizontalScrollIndicator={false}>
 
-                        <ImageBackground source={icons.balFrame} style={styles.balanceFrame}>
+                        <ImageBackground resizeMode={"contain"} source={icons.balFrame} style={styles.balanceFrame}>
                             <View style={{
                                 flexDirection: "row",
                                 justifyContent: 'space-between',
@@ -237,7 +238,7 @@ const DashBoard = ({navigation}) => {
                                 </TouchableOpacity>
                             </View>
                         </ImageBackground>
-                        <ImageBackground source={icons.balFrame} style={styles.balanceFrame}>
+                        <ImageBackground resizeMode={"contain"} source={icons.balFrame} style={styles.balanceFrame}>
                             <View style={{
                                 flexDirection: "row",
                                 justifyContent: 'space-between',
@@ -254,7 +255,7 @@ const DashBoard = ({navigation}) => {
                                 </TouchableOpacity>
                             </View>
                         </ImageBackground>
-                        <ImageBackground source={icons.balFrame} style={[styles.balanceFrame, {marginRight: 0}]}>
+                        <ImageBackground resizeMode={"contain"} source={icons.balFrame} style={[styles.balanceFrame, {marginRight: 0}]}>
                             <View style={{
                                 flexDirection: "row",
                                 justifyContent: 'space-between',
@@ -420,7 +421,8 @@ const styles = StyleSheet.create({
     }, header: {
         // width: SIZES.width,
         flexDirection: "row", alignItems: 'center', justifyContent: "space-between"
-    }, imgContainer: {}, img: {
+    },
+    imgContainer: {}, img: {
         width: 50, height: 50, borderRadius: 50
     }, nameContainer: {
         // backgroundColor:"cyan",
@@ -436,15 +438,23 @@ const styles = StyleSheet.create({
         // width: SIZES.width,
         borderRadius: 15,
         backgroundColor: COLORS.white,
-        alignItems: 'center',
+        // alignItems: 'center',
         justifyContent: "center",
         marginVertical: 50
 
     }, balanceFrame: {
-        marginTop: 5, borderRadius: 15, // padding: 20,
-        height: 200, marginRight: 20, // backgroundColor: COLORS.primary,
-        width: SIZES.width * 0.8, alignSelf: "flex-start", justifyContent: "center", // alignItems: 'center'
-    }, saveFrame: {
+        marginTop: 5,
+        borderRadius: 15, // padding: 20,
+        height: 200,
+        width:350,
+        marginRight: 10,
+        // backgroundColor: COLORS.primary,
+        // width: SIZES.width ,
+        // alignSelf: "flex-start",
+        justifyContent: "center",
+        // alignItems: 'center'
+    },
+    saveFrame: {
         backgroundColor: '#EFF2FF',
         height: 120,
         width: SIZES.width * 0.9,

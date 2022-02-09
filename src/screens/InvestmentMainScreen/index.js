@@ -71,7 +71,7 @@ const InvestmentMainScreen = ({navigation}) => {
                     <>
 
                         <Text style={styles.inv}>My Investment</Text>
-                        <ImageBackground  resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
+                        <ImageBackground  source={icons.shortBalFrame} style={styles.balanceFrame}>
                             <View style={{
                                 // flexDirection: "row",
                                 // justifyContent: 'space-between',

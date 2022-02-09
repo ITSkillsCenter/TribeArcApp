@@ -45,6 +45,11 @@ import MyInvestmentDetailsScreen from "./src/screens/myInvestmentDetailsScreen";
 import savingsMainScreen from "./src/screens/savingsMainScreen";
 import SavingsMainScreen from "./src/screens/savingsMainScreen";
 import SavingsAccountPage from "./src/screens/savingsAccountPage";
+import SavingsTransactionPage from "./src/screens/savingsTransactionPage";
+import AutosaveSettingsPage from "./src/screens/autosaveSettingsPage";
+import VoluntaryAccountPage from "./src/screens/voluntaryAccountPage";
+import VoluntaryTransactionPage from "./src/screens/voluntaryTransactionPage";
+import WithdrawalScreen from "./src/screens/withdrawalScreen";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -115,6 +120,11 @@ const App = () => {
                 <MainStack.Screen name={"Savings"} component={Savings}/>
                 <MainStack.Screen name={"SavingsMainScreen"} component={SavingsMainScreen}/>
                 <MainStack.Screen name={"SavingsAccountPage"} component={SavingsAccountPage}/>
+                <MainStack.Screen name={"SavingsTransactionPage"} component={SavingsTransactionPage}/>
+                <MainStack.Screen name={"AutosaveSettingsPage"} component={AutosaveSettingsPage}/>
+                <MainStack.Screen name={"VoluntaryAccountPage"} component={VoluntaryAccountPage}/>
+                <MainStack.Screen name={"VoluntaryTransactionPage"} component={VoluntaryTransactionPage}/>
+                <MainStack.Screen name={"WithdrawalScreen"} component={WithdrawalScreen}/>
                 <MainStack.Screen name={"LinkCard"} component={LinkCard}/>
                 <MainStack.Screen name={"SuccessScreen"} component={SuccessScreen}/>
                 <MainStack.Screen name={"DebitCardSuccessScreen"} component={DebitCardSuccessScreen}/>
