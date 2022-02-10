@@ -42,7 +42,6 @@ import InvestmentMainScreen from "./src/screens/InvestmentMainScreen";
 import InvestmentDetailsScreen from "./src/screens/investmentDetailsScreen";
 import InvestmentTermsPage from "./src/screens/investmentTermsPage";
 import MyInvestmentDetailsScreen from "./src/screens/myInvestmentDetailsScreen";
-import savingsMainScreen from "./src/screens/savingsMainScreen";
 import SavingsMainScreen from "./src/screens/savingsMainScreen";
 import SavingsAccountPage from "./src/screens/savingsAccountPage";
 import SavingsTransactionPage from "./src/screens/savingsTransactionPage";
@@ -62,10 +61,14 @@ const App = () => {
 
     const {auth, state} = useAuth();
     const [viewedWelcomePage, setViewedWelcomePage] = useState(false)
+    const [savingWlc, setSavingWlc] = useState(false)
+    const [investWlc, setInvestWlc] = useState(false)
 
     useEffect(() => {
         SplashScreen.hide()
         CheckWelcomePage()
+        CheckSavingWlc()
+        CheckInvestWlc()
 
     }, [])
 
@@ -90,6 +93,31 @@ const App = () => {
             console.log("error @viewWelcome", error)
         }
     }
+
+
+    const CheckSavingWlc = async () => {
+        try {
+            const value = await AsyncStorage.getItem("@savingWlc");
+            if (value !== null) {
+                setSavingWlc(true);
+            }
+        } catch (error) {
+            console.log("Error @savingWlc: ", error);
+
+        }
+    };
+
+    const CheckInvestWlc = async () => {
+        try {
+            const value = await AsyncStorage.getItem("@investWlc");
+            if (value !== null) {
+                setInvestWlc(true);
+            }
+        } catch (error) {
+            console.log("Error @investWlc: ", error);
+
+        }
+    };
 
 
     const AuthNavigation = () => {
@@ -304,7 +332,7 @@ const App = () => {
                 />
                 <Tab.Screen
                     name="StartSaving"
-                    component={StartSaving}
+                    component={savingWlc ? SavingsMainScreen : StartSaving}
                     options={{
                         tabBarIcon: ({focused}) => (
                             <View style={{alignItems: "center"}}>
@@ -378,7 +406,7 @@ const App = () => {
                 />
                 <Tab.Screen
                     name="StartInvesting"
-                    component={StartInvesting}
+                    component={investWlc ? InvestmentMainScreen : StartInvesting}
                     options={{
                         tabBarIcon: ({focused}) => (
 

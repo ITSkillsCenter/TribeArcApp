@@ -207,7 +207,7 @@ const DashBoard = ({navigation}) => {
                     <Text style={styles.welcomeText}>Welcome Back!</Text>
                 </View>
                 <TouchableOpacity onPress={() => {
-                    navigation.navigate("CompleteProfile1")
+                    navigation.navigate("RegistrationFee")
                 }}>
                     <Image resizeMode={"contain"}
                            source={notification ? icons.notificationBell : icons.notificationDot}
@@ -448,11 +448,7 @@ const styles = StyleSheet.create({
         height: 200,
         width:350,
         marginRight: 10,
-        // backgroundColor: COLORS.primary,
-        // width: SIZES.width ,
-        // alignSelf: "flex-start",
         justifyContent: "center",
-        // alignItems: 'center'
     },
     saveFrame: {
         backgroundColor: '#EFF2FF',

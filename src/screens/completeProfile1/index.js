@@ -9,6 +9,9 @@ import CustomButton from "../../components/CustomButton";
 import {BASE_URL} from "../../config";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import CustomTextInput from "../../components/CustomTextInput";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+
 
 const CompleteProfile1 = ({navigation}) => {
 
@@ -20,6 +23,8 @@ const CompleteProfile1 = ({navigation}) => {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
+    const [nextOfKin, setNextOfKin] = useState("")
+    const [nofNumber, setNofNumber] = useState("")
     const [isLoading, setIsLoading] = useState(false)
 
 
@@ -164,7 +169,7 @@ const CompleteProfile1 = ({navigation}) => {
             <ImageBackground
                 resizeMode={"contain"}
                 source={filePath ? {uri: filePath} : avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}
-                style={{width: 120, height: 120, marginVertical: 20, borderRadius: 130, aspectRatio: 1}}>
+                style={{width: 110, height: 110,  borderRadius: 10, aspectRatio: 1, marginBottom:10}}>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => ChooseFile()}
@@ -188,22 +193,42 @@ const CompleteProfile1 = ({navigation}) => {
             </ImageBackground>
 
 
-            <CustomInputBox
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+
+            <CustomTextInput
                 initialValue={firstName}
                 onChange={value => setFirstName(value)}
                 placeholderText={"Enter First Name"}
+                title={"First Name"}
             />
 
-            <CustomInputBox
+            <CustomTextInput
                 initialValue={lastName}
                 onChange={value => setLastName(value)}
                 placeholderText={"Enter Last Name"}
+                title={"Last Name"}
             />
-            <CustomInputBox
+            <CustomTextInput
                 initialValue={phoneNumber}
                 onChange={value => setPhoneNumber(value)}
-                placeholderText={"Enter Phone Name"}
+                placeholderText={"Enter Phone Number"}
+                title={"Phone Number"}
             />
+            <CustomTextInput
+                initialValue={nextOfKin}
+                onChange={value => setNextOfKin(value)}
+                placeholderText={"Enter Next of Kin's Name"}
+                title={"Next of Kin"}
+            />
+
+            <CustomTextInput
+                initialValue={nofNumber}
+                onChange={value => setNofNumber(value)}
+                placeholderText={"Enter Next of Kin's Number"}
+                title={"Next of Kin's Phone Number"}
+            />
+            </KeyboardAwareScrollView>
+
 
             <View style={styles.saveButton}>
                 <CustomButton
@@ -258,7 +283,7 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
         fontSize: 18,
-        marginVertical: 20
+        marginBottom: 10
 
     },
     saveButton: {

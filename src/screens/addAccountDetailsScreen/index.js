@@ -58,7 +58,7 @@ const AddAccountDetailsScreen = ({navigation}) => {
                 <CustomTextInput placeholderText={"Enter Bank Name"} title={"Bank Name"}/>
             </View>
 
-            <View style={{justifyContent: "flex-end", height: SIZES.height * 0.4}}>
+            <View style={{justifyContent: "flex-end", flex:2}}>
                 <CustomButton onPress={()=> navigation.navigate("AccountDetailsSavedSuccess")} filled text={"Save"}/>
 
             </View>
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         color: COLORS.black
     },
     title: {
-        color: COLORS.black,
+        color: COLORS.primary,
         fontSize: 14,
         marginBottom: 5,
         opacity: 0.6,

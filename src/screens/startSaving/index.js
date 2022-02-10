@@ -1,8 +1,9 @@
 // @flow
 import React from 'react';
 import {Image, StyleSheet, Text, View} from "react-native";
-import {COLORS, icons, SIZES} from "../../constants";
+import {COLORS, SIZES} from "../../constants";
 import CustomButton from "../../components/CustomButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const StartSaving = ({navigation}) => {
     return (
@@ -15,7 +16,10 @@ const StartSaving = ({navigation}) => {
             <Text style={styles.startSavings}>Start Saving</Text>
             <Text style={styles.startSavingText}>Start saving with tribe arc</Text>
 
-            <CustomButton onPress={() => navigation.navigate("SavingsMainScreen")} filled text={"Save Now"}/>
+            <CustomButton onPress={async () => {
+                await AsyncStorage.setItem("@savingWlc", "true");
+                navigation.navigate("SavingsMainScreen")
+            }} filled text={"Save Now"}/>
 
 
         </View>

@@ -204,24 +204,27 @@ const AddBvn = ({navigation}) => {
                 <Text style={styles.dontKnow}>Don't know your BVN? <Text onPress={() => Linking.openURL("tel:*565*0#")}
                                                                          style={styles.dial}> Dial *565*0#</Text></Text>
 
-                <View style={{flex: 2, height: SIZES.height * 0.35, justifyContent: "flex-end"}}>
-                    <CustomButton
-                        onPress={async () => {
-                            try {
-                                // await AddBvn()
-                                await ValidateBVN()
-                                navigation.navigate("DashBoard")
 
-                            } catch (e) {
-                                console.log(e, "error")
-                            }
-                        }}
-                        loading={isLoading} filled
-                        text={"Validate BVN"}/>
-                </View>
 
 
             </KeyboardAwareScrollView>
+
+
+            <View style={{flex: 2, justifyContent: "flex-end"}}>
+                <CustomButton
+                    onPress={async () => {
+                        try {
+                            // await AddBvn()
+                            await ValidateBVN()
+                            navigation.navigate("DashBoard")
+
+                        } catch (e) {
+                            console.log(e, "error")
+                        }
+                    }}
+                    loading={isLoading} filled
+                    text={"Validate BVN"}/>
+            </View>
         </View>
 
     );

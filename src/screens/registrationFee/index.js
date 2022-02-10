@@ -1,10 +1,11 @@
 // @flow
 import React, {useContext, useRef, useState} from 'react';
-import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {COLORS, icons, SIZES} from "../../constants";
+import {ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {COLORS, icons} from "../../constants";
 import CustomButton from "../../components/CustomButton";
 import {Paystack} from "react-native-paystack-webview/lib";
 import {UserContext} from "../../context/UserContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export const RegistrationFee = ({navigation}) => {
@@ -27,7 +28,7 @@ export const RegistrationFee = ({navigation}) => {
         <Text style={styles.regFeeInfo}>You're required to pay a registration fee to start saving and investing on
             tribe arc</Text>
 
-        <ImageBackground source={icons.balFrame} style={[styles.balanceFrame, {marginRight: 0}]}>
+        <ImageBackground resizeMode={"contain"} source={icons.balFrame} style={styles.balanceFrame}>
             <View style={{
                 justifyContent: 'space-between', paddingHorizontal: 40, alignItems: 'center'
             }}>
@@ -65,6 +66,7 @@ export const RegistrationFee = ({navigation}) => {
             onSuccess={async (res) => {
                 // await TransactionData(res)
                 await navigation.navigate("RegFeeSuccessScreen")
+
                 console.log(res, "RESDSD")
                 // handle response here
             }}
@@ -97,11 +99,16 @@ const styles = StyleSheet.create({
         color: COLORS.black, fontSize: 28, fontFamily: "Nexa-Bold", marginVertical: 20
     }, regFeeInfo: {
         color: COLORS.black, fontSize: 16, fontFamily: "Nexa-Book", marginVertical: 20, lineHeight: 28, opacity: 0.7
-    }, balanceFrame: {
-        marginTop: 5, borderRadius: 15, // padding: 20,
-        height: 200, width: SIZES.width, alignSelf: "center", justifyContent: "center", // alignItems: 'center'
+    },
+    balanceFrame: {
+        marginTop: 5,
+        borderRadius: 15, // padding: 20,
+        height: 200,
+        width: 380,
+        marginRight: 10,
+        justifyContent: "center",
     }, regFeeText: {
-        color: COLORS.white, fontFamily: "Nexa-Bold", fontSize: 14
+        color: COLORS.white, fontFamily: "Nexa-Bold", fontSize: 16
     }, balance: {
         color: COLORS.white, fontFamily: "Nexa-Bold", fontSize: 24, marginTop: 15
     }

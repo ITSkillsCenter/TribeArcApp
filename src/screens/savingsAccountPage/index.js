@@ -109,11 +109,32 @@ const data3 = [
     }
 ]
 
+const tabs = [
+    {
+        key: "1",
+        tabStatus: "All",
+        isTab: "TabOne"
+    },
+    {
+        key: "2",
+        tabStatus: "Pending",
+        isTab: "TabTwo"
+
+    },
+    {
+        key: "3",
+        tabStatus: "Saved",
+        isTab: "TabThree"
+
+    },
+];
+
 
 const SavingsAccountPage = ({navigation}) => {
 
 
-    const [active, setActive] = useState()
+    const [tabStatus, setTabStatus] = useState("All");
+
 
 
     const TopTabs = createMaterialTopTabNavigator();
@@ -126,8 +147,9 @@ const SavingsAccountPage = ({navigation}) => {
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    paddingHorizontal: 30,
+                    // paddingHorizontal: 30,
                     height: 30,
+                    marginBottom:10
 
                 }}
                 onPress={onPress}>
@@ -353,28 +375,23 @@ const SavingsAccountPage = ({navigation}) => {
                 }}
 
                 tabBar={({navigation}) => <CustomTabBar children={
-                    <>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => {
-                            navigation.navigate("TabOne")
-                            setActive(true)
-                        }}>
-                            <Text>All</Text>
+                    tabs.map((item, index) => (
 
-                            {active && <View
-                                style={{width: 10, height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>}
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("TabTwo")}>
-                            <Text>Pending</Text>
-                            {/*<View style={{width: "100%", height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>*/}
+                        <View style={{width: "30%", height: 40, justifyContent: "center", marginVertical: 5, alignSelf:"center"}}>
+                            <TouchableOpacity style={{width: "100%", alignItems: "center", marginVertical: 5}}
+                                              key={index} activeOpacity={0.8}
+                                              onPress={() => {
+                                                  navigation.navigate(item.isTab)
+                                                  setTabStatus(item.tabStatus)
+                                              }}>
+                                <Text style={styles.tabStatusText}>{item.tabStatus}</Text>
 
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("TabThree")}>
+                            </TouchableOpacity>
+                            <View style={[styles.btnTab, tabStatus === item.tabStatus && styles.btnTabActive]}/>
+                        </View>
 
-                            <Text>Saved</Text>
-                            {/*<View style={{width: "100%", height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>*/}
 
-                        </TouchableOpacity>
-                    </>
+                    ))
 
                 }/>}
             >
@@ -401,7 +418,8 @@ const SavingsAccountPage = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={()=>navigation.navigate("AutosaveSettingsPage")} activeOpacity={0.8} style={styles.settingsBox}>
+            <TouchableOpacity onPress={() => navigation.navigate("AutosaveSettingsPage")} activeOpacity={0.8}
+                              style={styles.settingsBox}>
                 <Image source={icons.settingsIcon} style={{width: 30, height: 30}}/>
             </TouchableOpacity>
 
@@ -479,8 +497,6 @@ const styles = StyleSheet.create({
         width: SIZES.width,
         alignSelf: "center",
         justifyContent: "center",
-
-        backgroundColor: ""
     },
     saveFrame: {
         backgroundColor: '#EFF2FF',
@@ -507,7 +523,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         paddingHorizontal: 20,
-        marginBottom: 30
+        marginBottom: 20
     },
     autosaveText: {
         color: COLORS.primary,
@@ -532,7 +548,7 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
     recentTransaction: {
-        flexDirection: "row", justifyContent: "space-between", marginVertical: 30
+        flexDirection: "row", justifyContent: "space-between", marginVertical: 20
 
     }, seeAll: {
         color: COLORS.primary, fontFamily: "Nexa-Book", fontSize: 18, alignSelf: "center"
@@ -578,7 +594,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 5
-
-
+    },
+    btnTab: {
+        height: 3,
+        borderRadius: 5,
+    },
+    btnTabActive: {
+        backgroundColor: COLORS.primary,
+    }, tabStatusText: {
+        fontSize: 16,
+        fontFamily: "Nexa-Bold",
+        color: COLORS.black
     }
+
 })

@@ -111,11 +111,32 @@ const data3 = [
     }
 ]
 
+const tabs = [
+    {
+        key: "1",
+        tabStatus: "All",
+        isTab: "TabOne"
+    },
+    {
+        key: "2",
+        tabStatus: "Pending",
+        isTab: "TabTwo"
+
+    },
+    {
+        key: "3",
+        tabStatus: "Saved",
+        isTab: "TabThree"
+
+    },
+];
+
+
 
 const SavingsTransactionPage = ({navigation}) => {
 
 
-    const [active, setActive] = useState()
+    const [tabStatus, setTabStatus] = useState("All");
 
 
 
@@ -130,8 +151,9 @@ const SavingsTransactionPage = ({navigation}) => {
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    paddingHorizontal: 30,
                     height: 30,
+                    marginVertical:10,
+
 
                 }}
                 onPress={onPress}>
@@ -357,28 +379,23 @@ const SavingsTransactionPage = ({navigation}) => {
                 }}
 
                 tabBar={({navigation}) => <CustomTabBar children={
-                    <>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => {
-                            navigation.navigate("TabOne")
-                            setActive(true)
-                        }}>
-                            <Text>All</Text>
+                    tabs.map((item, index) => (
 
-                            {active && <View
-                                style={{width: 10, height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>}
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("TabTwo")}>
-                            <Text>Pending</Text>
-                            {/*<View style={{width: "100%", height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>*/}
+                        <View style={{width: "30%", height: 40, justifyContent: "center", marginVertical: 5, alignSelf:"center"}}>
+                            <TouchableOpacity style={{width: "100%", alignItems: "center", marginVertical: 5}}
+                                              key={index} activeOpacity={0.8}
+                                              onPress={() => {
+                                                  navigation.navigate(item.isTab)
+                                                  setTabStatus(item.tabStatus)
+                                              }}>
+                                <Text style={styles.tabStatusText}>{item.tabStatus}</Text>
 
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("TabThree")}>
+                            </TouchableOpacity>
+                            <View style={[styles.btnTab, tabStatus === item.tabStatus && styles.btnTabActive]}/>
+                        </View>
 
-                            <Text>Saved</Text>
-                            {/*<View style={{width: "100%", height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>*/}
 
-                        </TouchableOpacity>
-                    </>
+                    ))
 
                 }/>}
             >
@@ -481,6 +498,17 @@ const styles = StyleSheet.create({
         borderRadius: 5
 
 
+    },
+    btnTab: {
+        height: 3,
+        borderRadius: 5,
+    },
+    btnTabActive: {
+        backgroundColor: COLORS.primary,
+    }, tabStatusText: {
+        fontSize: 16,
+        fontFamily: "Nexa-Bold",
+        color: COLORS.black
     }
 
 })

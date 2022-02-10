@@ -1,22 +1,23 @@
 // @flow
 import React, {useContext, useState} from 'react';
-import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, Text, View} from "react-native";
 import {COLORS, icons} from "../../constants";
 import BackButton from "../../components/BackButton";
-import {launchImageLibrary} from "react-native-image-picker";
-import CustomInputBox from "../../components/CustomInputBox";
 import CustomButton from "../../components/CustomButton";
-import {BASE_URL} from "../../config";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import CustomTextInput from "../../components/CustomTextInput";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const CompleteProfile2 = ({navigation}) => {
 
     const user = useContext(UserContext)
 
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [phoneNumber, setPhoneNumber] = useState("")
+    const [profession, setProfession] = useState("")
+    const [designation, setDesignation] = useState("")
+    const [remuneration, setRemuneration] = useState("")
     const [isLoading, setIsLoading] = useState(false)
 
 
@@ -51,6 +52,7 @@ const CompleteProfile2 = ({navigation}) => {
             await setIsLoading(false)
 
 
+
         } catch (e) {
             console.log(e, "GetUserDataError")
         }
@@ -62,37 +64,45 @@ const CompleteProfile2 = ({navigation}) => {
             <BackButton onPress={() => navigation.pop()}/>
 
             <View style={styles.box}>
-                <Image style={{height: 80, width: 80, right: 15}} source={icons.circular1}/>
+                <Image style={{height: 80, width: 80, right: 15}} source={icons.circular2}/>
                 <View style={styles.box2}>
                     <Text style={styles.text1}>Complete your Profile</Text>
                     <Text style={styles.text2}>please complete the fields below</Text>
                 </View>
             </View>
 
-            <Text style={styles.perInfo}>Work info</Text>
+            <Text style={styles.perInfo}>Work Info</Text>
 
 
-            <CustomInputBox
-                initialValue={firstName}
-                onChange={value => setFirstName(value)}
-                placeholderText={"Enter First Name"}
-            />
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
-            <CustomInputBox
-                initialValue={lastName}
-                onChange={value => setLastName(value)}
-                placeholderText={"Enter Last Name"}
-            />
-            <CustomInputBox
-                initialValue={phoneNumber}
-                onChange={value => setPhoneNumber(value)}
-                placeholderText={"Enter Phone Name"}
-            />
+                <CustomTextInput
+                    initialValue={profession}
+                    onChange={value => setProfession(value)}
+                    placeholderText={"Enter Profession"}
+                    title={"Profession"}
+                />
+
+                <CustomTextInput
+                    initialValue={designation}
+                    onChange={value => setDesignation(value)}
+                    placeholderText={"Enter Designation"}
+                    title={"Designation"}
+                />
+                <CustomTextInput
+                    initialValue={remuneration}
+                    onChange={value => setRemuneration(value)}
+                    placeholderText={"Enter Remuneration"}
+                    title={"Remuneration"}
+                />
+
+            </KeyboardAwareScrollView>
+
 
             <View style={styles.saveButton}>
                 <CustomButton
                     loading={isLoading}
-                    filled={firstName !== "" && lastName !== "" && phoneNumber !== ""}
+                    filled={profession !== "" && designation !== "" && remuneration !== ""}
                     text={"Submit"}
                     onPress={async () => {
 

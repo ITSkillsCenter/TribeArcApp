@@ -1,8 +1,9 @@
 // @flow
 import React from 'react';
 import {Image, StyleSheet, Text, View} from "react-native";
-import {COLORS, icons, SIZES} from "../../constants";
+import {COLORS, SIZES} from "../../constants";
 import CustomButton from "../../components/CustomButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const StartInvesting = ({navigation}) => {
     return (
@@ -15,7 +16,11 @@ const StartInvesting = ({navigation}) => {
             <Text style={styles.startSavings}>Start Investing!</Text>
             <Text style={styles.startSavingText}>Start investing in opportunities with tribe arc</Text>
 
-            <CustomButton onPress={()=>navigation.navigate("InvestmentMainScreen")} filled text={"Invest Now"}/>
+            <CustomButton onPress={async () => {
+                await AsyncStorage.setItem("@investWlc", "true");
+
+                navigation.navigate("InvestmentMainScreen")
+            }} filled text={"Invest Now"}/>
 
 
         </View>

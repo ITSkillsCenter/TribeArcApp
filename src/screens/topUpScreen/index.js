@@ -15,7 +15,7 @@ const TopUpScreen = ({navigation}) => {
 
 
             <Text style={styles.withdraw}>Top-Up</Text>
-            <Text style={styles.withdrawDesc}>Withdrawal from Voluntary Account</Text>
+            <Text style={styles.withdrawDesc}>Enter Amount to save</Text>
 
             <View style={{marginTop: 30}}>
 
@@ -23,12 +23,13 @@ const TopUpScreen = ({navigation}) => {
                 <CustomTextInput placeholderText={"e.g 20,000"} title={"Amount to Top-Up"}/>
 
 
-                <CustomTextInput placeholderText={"Enter Password"} title={"Destination"}/>
+                <CustomTextInput props={{
+                    editable: false
+                }} placeholderText={"Voluntary Account"} title={"Destination"}/>
             </View>
 
-            <View style={{justifyContent: "flex-end", height: SIZES.height * 0.45}}>
+            <View style={{flex:2, justifyContent: "flex-end"}}>
                 <CustomButton filled text={"Proceed"}/>
-
             </View>
 
 

@@ -148,7 +148,7 @@ const WithdrawalScreen = ({navigation}) => {
                 <CustomTextInput placeholderText={"Enter Password"} title={"Tribe arc password"}/>
             </View>
 
-            <View style={{justifyContent: "flex-end", height: SIZES.height * 0.4}}>
+            <View style={{flex:2, justifyContent: "flex-end"}}>
                 <CustomButton onPress={OpenModal} filled text={"Submit"}/>
 
             </View>

@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import BackButton from "../../components/BackButton";
 import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
@@ -14,6 +14,21 @@ import CustomButton from "../../components/CustomButton";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 
+const tabs = [
+    {
+        key: "1",
+        tabStatus: "Personal Info",
+        isTab: "TabOne"
+    },
+    {
+        key: "2",
+        tabStatus: "Work Info",
+        isTab: "TabTwo"
+
+    },
+];
+
+
 const EditProfile = ({navigation}) => {
 
 
@@ -24,6 +39,9 @@ const EditProfile = ({navigation}) => {
         GetUserData()
         GetImg()
     }, []);
+
+
+    const [tabStatus, setTabStatus] = useState("Personal Info");
 
 
     const [isLoading, setIsLoading] = useState(false)
@@ -206,9 +224,6 @@ const EditProfile = ({navigation}) => {
     };
 
 
-    const [active, setActive] = useState()
-
-
     const TopTabs = createMaterialTopTabNavigator();
 
     const CustomTabBar = ({children, onPress}) => {
@@ -218,8 +233,9 @@ const EditProfile = ({navigation}) => {
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    paddingHorizontal: 30,
                     height: 30,
+                    marginBottom: 10
+
 
                 }}
                 onPress={onPress}>
@@ -233,59 +249,64 @@ const EditProfile = ({navigation}) => {
     const TabOne = () => {
 
         return (
-            <View style={styles.tabOneContainer}>
-                <CustomTextInput
-                    initialValue={firstName}
-                    onChange={value => setFirstName(value)}
-                    placeholderText={"First Name"}
-                    title={"First Name"}/>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.tabOneContainer}>
+
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
 
-                <CustomTextInput
-                    title={"Last Name"}
-                    initialValue={lastName}
-                    onChange={value => setLastName(value)}
-                    placeholderText={"Last Name"}
-
-                />
-
-                <CustomTextInput
-                    title={"Email"}
-
-                    initialValue={email}
-                    onChange={value => setEmail(value)}
-                    placeholderText={"Email Address"}
-                    props={{
-                        editable: false
-                    }}
-
-                />
-
-                <CustomTextInput
-                    title={"Phone Number"}
-                    initialValue={phoneNum}
-                    onChange={value => setPhoneNum(value)}
-                    placeholderText={"Phone Number"}
-                />
+                    <CustomTextInput
+                        initialValue={firstName}
+                        onChange={value => setFirstName(value)}
+                        placeholderText={"First Name"}
+                        title={"First Name"}/>
 
 
-                <CustomTextInput
-                    title={"Next of kin's Name"}
-                    initialValue={nextOfKin}
-                    onChange={value => setNextOfKin(value)}
-                    placeholderText={"Next of kin's Name"}
+                    <CustomTextInput
+                        title={"Last Name"}
+                        initialValue={lastName}
+                        onChange={value => setLastName(value)}
+                        placeholderText={"Last Name"}
 
-                />
+                    />
+
+                    <CustomTextInput
+                        title={"Email"}
+
+                        initialValue={email}
+                        onChange={value => setEmail(value)}
+                        placeholderText={"Email Address"}
+                        props={{
+                            editable: false
+                        }}
+
+                    />
+
+                    <CustomTextInput
+                        title={"Phone Number"}
+                        initialValue={phoneNum}
+                        onChange={value => setPhoneNum(value)}
+                        placeholderText={"Phone Number"}
+                    />
 
 
-                <CustomTextInput
-                    title={"Next of kin's Phone Number"}
-                    initialValue={nextOfKinPhoneNum}
-                    onChange={value => setNextOfKinPhoneNum(value)}
-                    placeholderText={"Next of kin's Phone Number"}
-                />
+                    <CustomTextInput
+                        title={"Next of kin's Name"}
+                        initialValue={nextOfKin}
+                        onChange={value => setNextOfKin(value)}
+                        placeholderText={"Next of kin's Name"}
 
-            </View>
+                    />
+
+
+                    <CustomTextInput
+                        title={"Next of kin's Phone Number"}
+                        initialValue={nextOfKinPhoneNum}
+                        onChange={value => setNextOfKinPhoneNum(value)}
+                        placeholderText={"Next of kin's Phone Number"}
+                    />
+                </KeyboardAwareScrollView>
+
+            </ScrollView>
 
 
         )
@@ -295,6 +316,7 @@ const EditProfile = ({navigation}) => {
 
         return (
             <View style={styles.tabOneContainer}>
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
 
                 <CustomTextInput
@@ -319,6 +341,9 @@ const EditProfile = ({navigation}) => {
 
                 />
 
+                </KeyboardAwareScrollView>
+
+
             </View>
 
         )
@@ -328,26 +353,25 @@ const EditProfile = ({navigation}) => {
     function TopTab() {
         return (
             <TopTabs.Navigator
-                screenOptions={{
-                    // tabBarActiveTintColor: ({focused}) => focused ? "red" : "green"
-                }}
-
                 tabBar={({navigation}) => <CustomTabBar children={
-                    <>
-                        <TouchableOpacity activeOpacity={0.2} onPress={() => {
-                            navigation.navigate("TabOne")
-                            setActive(true)
-                        }}>
-                            <Text>Personal Info</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("TabTwo")}>
-                            <Text>Work Info</Text>
-                            {/*<View style={{width: "100%", height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>*/}
 
-                        </TouchableOpacity>
+                    tabs.map((item, index) => (
 
-                    </>
+                        <View style={{width: "45%", height: 80, justifyContent: "center", marginVertical: 5}}>
+                            <TouchableOpacity style={{width: "100%", alignItems: "center", marginVertical: 5}}
+                                              key={index} activeOpacity={0.8}
+                                              onPress={() => {
+                                                  navigation.navigate(item.isTab)
+                                                  setTabStatus(item.tabStatus)
+                                              }}>
+                                <Text style={styles.tabStatusText}>{item.tabStatus}</Text>
 
+                            </TouchableOpacity>
+                            <View style={[styles.btnTab, tabStatus === item.tabStatus && styles.btnTabActive]}/>
+                        </View>
+
+
+                    ))
                 }/>}
             >
                 <TopTabs.Screen
@@ -368,81 +392,72 @@ const EditProfile = ({navigation}) => {
 
 
     return (
-        <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
             <Text style={styles.myProfile}>My Profile</Text>
 
+            {/*<View>*/}
 
-                {/*<View>*/}
-                <ImageBackground
-                    resizeMode={"contain"}
-                    source={filePath ? {uri: filePath} : avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}
+            <ImageBackground
+                resizeMode={"contain"}
+                source={filePath ? {uri: filePath} : avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}
+                style={{
+                    width: 120,
+                    height: 120,
+                    marginBottom: 20,
+                    borderRadius: 130,
+                    aspectRatio: 1,
+                    alignSelf: "center"
+                }}>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => ChooseFile()}
                     style={{
-                        width: 120,
-                        height: 120,
-                        // marginVertical: 10,
-                        borderRadius: 130,
-                        aspectRatio: 1,
-                        alignSelf: "center"
+                        backgroundColor: "#EFF2FF",
+                        width: 40,
+                        height: 40,
+                        alignSelf: "flex-end",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        top: 80,
+                        borderRadius: 40
+                        // flex:1
                     }}>
-                    <TouchableOpacity
-                        activeOpacity={0.7}
-                        onPress={() => ChooseFile()}
-                        style={{
-                            backgroundColor: "#EFF2FF",
-                            width: 40,
-                            height: 40,
-                            alignSelf: "flex-end",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            top: 80,
-                            borderRadius: 40
-                            // flex:1
-                        }}>
-                        <Image
-                            source={icons.camera}
-                            resizeMode={"contain"}
-                            style={{width: 20, height: 20}}
-                        />
-                    </TouchableOpacity>
-                </ImageBackground>
+                    <Image
+                        source={icons.camera}
+                        resizeMode={"contain"}
+                        style={{width: 20, height: 20}}
+                    />
+                </TouchableOpacity>
+            </ImageBackground>
 
-                {TopTab()}
+            {TopTab()}
+            {/*</View>*/}
 
 
-                {/*<CustomInputBox*/}
-                {/*    initialValue={profession}*/}
-                {/*    onChange={value => setProfession(value)}*/}
-                {/*    placeholderText={"Profession"}*/}
+            {/*<View style={{flex:2, justifyContent:"flex-end"}}>*/}
+            <CustomButton
+                onPress={async () => {
 
-                {/*/>*/}
-
-
-                {/*</View>*/}
-
-                {/*<View style={{ justifyContent: "flex-end", }}>*/}
-                <CustomButton
-                    onPress={async () => {
-
-                        try {
-                            await UpdateUserData()
-                            await UploadFile()
-                            navigation.navigate("DashBoard")
+                    try {
+                        await UpdateUserData()
+                        await UploadFile()
+                        navigation.navigate("DashBoard")
 
 
-                        } catch (e) {
-                            console.log(e, "UpdateUserError")
-                        }
+                    } catch (e) {
+                        console.log(e, "UpdateUserError")
+                    }
 
-                    }}
-                    loading={isLoading}
-                    filled text={"Update Profile"}
-                />
-                {/*</View>*/}
+                }}
+                loading={isLoading}
+                filled text={"Update Profile"}
+            />
+
+            {/*</View>*/}
+
 
         </View>
-        </KeyboardAwareScrollView>
 
 
     );
@@ -468,6 +483,20 @@ const styles = StyleSheet.create({
     tabOneContainer: {
         flex: 1,
         backgroundColor: COLORS.white,
+        paddingTop: 20
     },
+    btnTab: {
+        height: 3,
+        borderRadius: 5,
+    },
+    btnTabActive: {
+        backgroundColor: COLORS.primary,
+    },
+    tabStatusText: {
+        fontSize: 16,
+        fontFamily: "Nexa-Bold",
+        color: COLORS.black
+    }
+
 
 })

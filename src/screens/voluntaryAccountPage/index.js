@@ -111,10 +111,31 @@ const data3 = [
 ]
 
 
+const tabs = [
+    {
+        key: "1",
+        tabStatus: "All",
+        isTab: "TabOne"
+    },
+    {
+        key: "2",
+        tabStatus: "Top-Ups",
+        isTab: "TabTwo"
+
+    },
+    {
+        key: "3",
+        tabStatus: "Withdrawal",
+        isTab: "TabThree"
+
+    },
+];
+
+
 const VoluntaryAccountPage = ({navigation}) => {
 
 
-    const [active, setActive] = useState()
+    const [tabStatus, setTabStatus] = useState("All");
 
 
     const TopTabs = createMaterialTopTabNavigator();
@@ -127,8 +148,11 @@ const VoluntaryAccountPage = ({navigation}) => {
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    paddingHorizontal: 30,
-                    height: 30,
+                    // marginVertical:
+                    // paddingHorizontal: 10,
+                    height: 40,
+                    marginBottom:10
+                    // backgroundColor:"cyan"
 
                 }}
                 onPress={onPress}>
@@ -338,28 +362,23 @@ const VoluntaryAccountPage = ({navigation}) => {
                 }}
 
                 tabBar={({navigation}) => <CustomTabBar children={
-                    <>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => {
-                            navigation.navigate("TabOne")
-                            setActive(true)
-                        }}>
-                            <Text>All</Text>
+                    tabs.map((item, index) => (
 
-                            {active && <View
-                                style={{width: 10, height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>}
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("TabTwo")}>
-                            <Text>Top-Ups</Text>
-                            {/*<View style={{width: "100%", height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>*/}
+                        <View  key={index} style={{width: "30%", height: 40, justifyContent: "center", marginVertical: 5, alignSelf:"center"}}>
+                            <TouchableOpacity style={{width: "100%", alignItems: "center", marginVertical: 5}}
+                                              activeOpacity={0.8}
+                                              onPress={() => {
+                                                  navigation.navigate(item.isTab)
+                                                  setTabStatus(item.tabStatus)
+                                              }}>
+                                <Text style={styles.tabStatusText}>{item.tabStatus}</Text>
 
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("TabThree")}>
+                            </TouchableOpacity>
+                            <View style={[styles.btnTab, tabStatus === item.tabStatus && styles.btnTabActive]}/>
+                        </View>
 
-                            <Text>Withdrawal</Text>
-                            {/*<View style={{width: "100%", height: 2, backgroundColor: COLORS.primary, borderRadius: 5}}/>*/}
 
-                        </TouchableOpacity>
-                    </>
+                    ))
 
                 }/>}
             >
@@ -402,7 +421,9 @@ const VoluntaryAccountPage = ({navigation}) => {
 
             <View style={styles.autosaveBox}>
 
-                <TouchableOpacity activeOpacity={0.7}
+                <TouchableOpacity
+                    onPress={()=>navigation.navigate("TopUpScreen")}
+                    activeOpacity={0.7}
                                   style={{
                                       flexDirection: "row",
                                       alignItems: "center",
@@ -559,6 +580,7 @@ const styles = StyleSheet.create({
     tabOneContainer: {
         flex: 1,
         backgroundColor: COLORS.white,
+        // paddingTop: 20
     },
     cardBox: {
         flexDirection: "row",
@@ -589,6 +611,26 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         borderRadius: 5
 
+    },
+    btnTab: {
+        height: 3,
+        // marginHorizontal: 5,
+        // marginRight: 10,
+        // marginVertical: 5,
+        // borderWidth: 0.25,
+        // alignItems: "center",
+        // borderColor: COLORS.grey,
+        borderRadius: 5,
+        // justifyContent: "center",
 
+    },
+    btnTabActive: {
+        backgroundColor: COLORS.primary,
+        // borderColor: COLORS.primary,
+    }, tabStatusText: {
+        fontSize: 16,
+        fontFamily: "Nexa-Bold",
+        color: COLORS.black
     }
+
 })

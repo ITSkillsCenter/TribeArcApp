@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 50,
-        fontSize: 18,
+        fontSize: 16,
         paddingHorizontal: 10,
         borderRadius: 5,
         opacity:0.7,
