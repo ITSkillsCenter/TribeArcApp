@@ -1,88 +1,13 @@
 // @flow
-import React, {useRef} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {COLORS, icons, SIZES} from "../../constants";
+import React from 'react';
+import {StyleSheet, Text, View} from "react-native";
+import {COLORS, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomTextInput from "../../components/CustomTextInput";
 import SelectDropdown from "react-native-select-dropdown";
 import CustomButton from "../../components/CustomButton";
-import {Modalize} from "react-native-modalize";
 
-const WithdrawalScreen = ({navigation}) => {
-
-
-    const modalizeRef = useRef<Modalize>(null);
-
-    const OpenModal = () => {
-        modalizeRef.current?.open();
-    };
-
-    const CloseModal = () => {
-        modalizeRef.current?.close();
-    };
-
-
-    const renderInner = () => (
-        <View style={{
-            backgroundColor: "#fff",
-            paddingHorizontal: 20,
-        }}>
-            <Text style={styles.modalAutoCharge}>Withdrawal destination</Text>
-
-
-            <View style={styles.addAcctBox}>
-                <Image style={{width: 30, height: 30}} source={icons.plusIconWhite}/>
-                <Text style={styles.addAcct}>Add New Account</Text>
-            </View>
-
-            <View style={styles.addAcctBox2}>
-
-                <View style={{justifyContent: "space-between", height: 50}}>
-                    <Text style={{color: COLORS.black, fontSize: 18, fontFamily: "Nexa-Bold"}}>Andron James</Text>
-
-                    <View style={{flexDirection: "row", width: "70%", justifyContent: "space-between"}}>
-                        <Text style={{color: COLORS.black, fontSize: 14, fontFamily: "Nexa-Book"}}>Access Bank</Text>
-                        <Text style={{color: COLORS.black, fontSize: 14, fontFamily: "Nexa-Book"}}>089675435</Text>
-
-                    </View>
-
-                </View>
-
-                <Image source={icons.smallCheck} style={{width: 30, height: 30}}/>
-
-
-            </View>
-
-
-            <CustomButton onPress={() => navigation.navigate("WithdrawalSuccessScreen")} filled text={"Submit"}/>
-
-
-        </View>
-    );
-
-    const renderHeader = () => (
-        <View style={{
-            padding: 20,
-            // backgroundColor: "#fff",
-            borderTopRightRadius: 25,
-            borderTopLeftRadius: 25,
-            width: SIZES.width,
-
-        }}>
-
-            <TouchableOpacity onPress={() => CloseModal()}>
-                <Text style={{
-                    alignSelf: "flex-end",
-                    color: "black",
-                    fontFamily: "Nexa-Book",
-                    fontSize: 28,
-                    right: 15
-                }}>x</Text>
-
-            </TouchableOpacity>
-
-        </View>
-    );
+const AddAccountDetailsScreen = ({navigation}) => {
 
 
     return (
@@ -90,26 +15,11 @@ const WithdrawalScreen = ({navigation}) => {
             <BackButton onPress={() => navigation.pop()}/>
 
 
-            <Modalize
-                modalHeight={SIZES.height * 0.5}
-                handleStyle={{backgroundColor: 'transparent'}}
-                childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
-                ref={modalizeRef}>
-                {renderHeader()}
-                {renderInner()}
-            </Modalize>
-
-
-            <Text style={styles.withdraw}>Withdrawal</Text>
-            <Text style={styles.withdrawDesc}>Withdrawal from Voluntary Account</Text>
+            <Text style={styles.withdraw}>Account Details</Text>
 
             <View style={{marginTop: 30}}>
 
-
-                <CustomTextInput placeholderText={"e.g 20,000"} title={"Amount to withdraw"}/>
-
-
-                <Text style={styles.title}>Withdrawal Destination</Text>
+                <Text style={styles.title}>Bank Name</Text>
 
                 <SelectDropdown
                     data={[]}
@@ -130,7 +40,7 @@ const WithdrawalScreen = ({navigation}) => {
                     }}
                     rowStyle={{width: "100%"}}
                     dropdownStyle={{width: "90%"}}
-                    defaultButtonText={"Select Account"}
+                    defaultButtonText={"Select Bank"}
                     buttonTextStyle={{
                         color: COLORS.black,
                         fontSize: 12,
@@ -144,12 +54,12 @@ const WithdrawalScreen = ({navigation}) => {
                         borderRadius: 5,
                     }}
                 />
-
-                <CustomTextInput placeholderText={"Enter Password"} title={"Tribe arc password"}/>
+                <CustomTextInput placeholderText={"Enter Bank Account Number"} title={"Bank Account Number"}/>
+                <CustomTextInput placeholderText={"Enter Bank Name"} title={"Bank Name"}/>
             </View>
 
             <View style={{justifyContent: "flex-end", height: SIZES.height * 0.4}}>
-                <CustomButton onPress={OpenModal} filled text={"Submit"}/>
+                <CustomButton onPress={()=> navigation.navigate("AccountDetailsSavedSuccess")} filled text={"Save"}/>
 
             </View>
 
@@ -158,7 +68,7 @@ const WithdrawalScreen = ({navigation}) => {
     );
 };
 
-export default WithdrawalScreen
+export default AddAccountDetailsScreen
 
 const styles = StyleSheet.create({
 

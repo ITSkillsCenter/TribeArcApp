@@ -1,7 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import BackButton from "../../components/BackButton";
+import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
 import AccountOptions from "../../components/AccountOptions";
@@ -106,18 +105,17 @@ const Profile = ({navigation, route}) => {
     );
 
     return (
-        <View style={{backgroundColor: COLORS.white, flex: 1}}>
+        <ScrollView style={{backgroundColor: COLORS.white, flex: 1}}>
 
 
             <View style={styles.container}>
                 <Modalize
-                    modalStyle={{
-                        zIndex: 100000
-                    }}
-                    modalHeight={SIZES.height * 0.45}
+
+                    modalHeight={SIZES.height * 0.5}
                     handleStyle={{backgroundColor: 'transparent'}}
                     childrenStyle={{
-                        backgroundColor: COLORS.white, borderRadius: 55,
+                        backgroundColor: COLORS.white,
+                        borderRadius: 55,
                     }}
                     ref={modalizeRef}>
                     {renderHeader()}
@@ -152,6 +150,11 @@ const Profile = ({navigation, route}) => {
                 <AccountOptions onPress={() => {
                     navigation.navigate("AddBvn")
                 }} image={icons.addBvn} text={"Add your BVN"}/>
+
+                <AccountOptions onPress={() => {
+                    navigation.navigate("AccountDetailsPage")
+                }} image={icons.acctDet} text={"Account Details"}/>
+
                 <AccountOptions onPress={() => {
                 }} image={icons.linkCard} text={"Card Settings"}/>
                 <AccountOptions onPress={() => {
@@ -168,7 +171,7 @@ const Profile = ({navigation, route}) => {
 
                 />
             </View>
-        </View>
+        </ScrollView>
     );
 };
 

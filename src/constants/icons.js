@@ -38,6 +38,9 @@ const settingsIcon = require("../assets/icons/settingsIcon.png");
 const onImage = require("../assets/icons/onImage.png");
 const topUpicon = require("../assets/icons/topUpicon.png");
 const withdraw = require("../assets/icons/withdraw.png");
+const plusIconWhite = require("../assets/icons/plusIconWhite.png");
+const smallCheck = require("../assets/icons/smallCheck.png");
+const acctDet = require("../assets/icons/acctDet.png");
 
 
 export default {
@@ -80,5 +83,8 @@ export default {
     settingsIcon,
     onImage,
     topUpicon,
-    withdraw
+    withdraw,
+    plusIconWhite,
+    smallCheck,
+    acctDet
 };

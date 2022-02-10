@@ -50,6 +50,11 @@ import AutosaveSettingsPage from "./src/screens/autosaveSettingsPage";
 import VoluntaryAccountPage from "./src/screens/voluntaryAccountPage";
 import VoluntaryTransactionPage from "./src/screens/voluntaryTransactionPage";
 import WithdrawalScreen from "./src/screens/withdrawalScreen";
+import WithdrawalSuccessScreen from "./src/screens/withdrawalSuccessScreen";
+import TopUpScreen from "./src/screens/topUpScreen";
+import AccountDetailsPage from "./src/screens/accountDetailsPage";
+import AddAccountDetailsScreen from "./src/screens/addAccountDetailsScreen";
+import AccountDetailsSavedSuccess from "./src/screens/accountDetailsSavedSuccess";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -125,9 +130,14 @@ const App = () => {
                 <MainStack.Screen name={"VoluntaryAccountPage"} component={VoluntaryAccountPage}/>
                 <MainStack.Screen name={"VoluntaryTransactionPage"} component={VoluntaryTransactionPage}/>
                 <MainStack.Screen name={"WithdrawalScreen"} component={WithdrawalScreen}/>
+                <MainStack.Screen name={"WithdrawalSuccessScreen"} component={WithdrawalSuccessScreen}/>
+                <MainStack.Screen name={"TopUpScreen"} component={TopUpScreen}/>
+                <MainStack.Screen name={"AccountDetailsPage"} component={AccountDetailsPage}/>
                 <MainStack.Screen name={"LinkCard"} component={LinkCard}/>
                 <MainStack.Screen name={"SuccessScreen"} component={SuccessScreen}/>
                 <MainStack.Screen name={"DebitCardSuccessScreen"} component={DebitCardSuccessScreen}/>
+                <MainStack.Screen name={"AddAccountDetailsScreen"} component={AddAccountDetailsScreen}/>
+                <MainStack.Screen name={"AccountDetailsSavedSuccess"} component={AccountDetailsSavedSuccess}/>
                 <MainStack.Screen name={"SettingsPage"} component={SettingsPage}/>
                 <MainStack.Screen name={"CommunityQuestions"} component={CommunityQuestions}/>
                 <MainStack.Screen name={"Profile"} component={Profile}/>
@@ -312,7 +322,7 @@ const App = () => {
                             </View>
                         ),
                     }}/>
-                <Tab.Screen name="DashBoard2" component={DashBoard}
+                <Tab.Screen name="TopUpScreen" component={TopUpScreen}
 
                             options={{
                                 tabBarIcon: ({focused}) => {
@@ -357,7 +367,7 @@ const App = () => {
                                 tabBarButton: (props) => (
                                     <TabBarCustomButton
                                         {...props}
-                                        onPress={() => navigation.navigate("DashBoard")}
+                                        onPress={() => navigation.navigate("TopUpScreen")}
                                     />
                                 ),
 

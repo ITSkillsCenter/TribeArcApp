@@ -48,12 +48,12 @@ const styles = StyleSheet.create({
     container: {
         // alignItems: 'center',
         // justifyContent: 'center',
-        marginVertical: 20,
+        marginVertical: 10,
         backgroundColor: 'white',
         // marginTop:50
     },
     title: {
-        color: COLORS.black,
+        color: COLORS.primary,
         fontSize: 14,
         marginBottom: 5,
         opacity: 0.6,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         paddingHorizontal: 10,
         borderRadius: 5,
-        opacity:0.5,
+        opacity:0.7,
         fontFamily: "Nexa-Book",
         // position: "absolute",
         // color:"red"
