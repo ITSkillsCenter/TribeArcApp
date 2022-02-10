@@ -126,10 +126,6 @@ const PaymentWebPage = ({navigation, route}) => {
                 paystackKey="pk_test_b0f9c1e94ea37b2ba7df563002ee8a074bc5678a"
                 amount={amount}
                 billingEmail={user.email}
-                // javaScriptEnabled={true}
-                //     source={{uri: "https://google.com"}}
-                // domStorageEnabled={true}
-                // handleWebViewMessage={}
                 activityIndicatorColor={COLORS.primary}
                 onCancel={async (e) => {
                     // handle response here

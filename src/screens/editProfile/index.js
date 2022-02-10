@@ -10,6 +10,8 @@ import {BASE_URL} from "../../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import CustomTextInput from "../../components/CustomTextInput";
+import CustomButton from "../../components/CustomButton";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 
 const EditProfile = ({navigation}) => {
@@ -30,6 +32,8 @@ const EditProfile = ({navigation}) => {
     const [email, setEmail] = useState("")
     const [phoneNum, setPhoneNum] = useState("")
     const [profession, setProfession] = useState("")
+    const [designation, setDesignation] = useState("")
+    const [remuneration, setRemuneration] = useState("")
     const [filePath, setFilePath] = useState(null);
     const [imageInfo, setImageInfo] = useState('');
     const [avatar, setAvatar] = useState(null);
@@ -140,7 +144,6 @@ const EditProfile = ({navigation}) => {
 
 
     };
-
 
     const UploadFile = async () => {
 
@@ -293,7 +296,28 @@ const EditProfile = ({navigation}) => {
         return (
             <View style={styles.tabOneContainer}>
 
-                <Text>Tab2</Text>
+
+                <CustomTextInput
+                    initialValue={profession}
+                    onChange={value => setProfession(value)}
+                    placeholderText={"Profession"}
+                    title={"Profession"}/>
+
+
+                <CustomTextInput
+                    title={"Designation"}
+                    initialValue={designation}
+                    onChange={value => setDesignation(value)}
+                    placeholderText={"Designation"}
+
+                />
+                <CustomTextInput
+                    title={"Monthly Remuneration"}
+                    initialValue={remuneration}
+                    onChange={value => setRemuneration(value)}
+                    placeholderText={"Enter Monthly Remuneration"}
+
+                />
 
             </View>
 
@@ -344,81 +368,81 @@ const EditProfile = ({navigation}) => {
 
 
     return (
+        <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
             <Text style={styles.myProfile}>My Profile</Text>
-            {/*<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>*/}
 
 
-            {/*<View>*/}
-            <ImageBackground
-                resizeMode={"contain"}
-                source={filePath ? {uri: filePath} : avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}
-                style={{
-                    width: 120,
-                    height: 120,
-                    // marginVertical: 10,
-                    borderRadius: 130,
-                    aspectRatio: 1,
-                    alignSelf: "center"
-                }}>
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={() => ChooseFile()}
+                {/*<View>*/}
+                <ImageBackground
+                    resizeMode={"contain"}
+                    source={filePath ? {uri: filePath} : avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}
                     style={{
-                        backgroundColor: "#EFF2FF",
-                        width: 40,
-                        height: 40,
-                        alignSelf: "flex-end",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        top: 80,
-                        borderRadius: 40
-                        // flex:1
+                        width: 120,
+                        height: 120,
+                        // marginVertical: 10,
+                        borderRadius: 130,
+                        aspectRatio: 1,
+                        alignSelf: "center"
                     }}>
-                    <Image
-                        source={icons.camera}
-                        resizeMode={"contain"}
-                        style={{width: 20, height: 20}}
-                    />
-                </TouchableOpacity>
-            </ImageBackground>
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={() => ChooseFile()}
+                        style={{
+                            backgroundColor: "#EFF2FF",
+                            width: 40,
+                            height: 40,
+                            alignSelf: "flex-end",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            top: 80,
+                            borderRadius: 40
+                            // flex:1
+                        }}>
+                        <Image
+                            source={icons.camera}
+                            resizeMode={"contain"}
+                            style={{width: 20, height: 20}}
+                        />
+                    </TouchableOpacity>
+                </ImageBackground>
 
-            {TopTab()}
-
-
-            {/*<CustomInputBox*/}
-            {/*    initialValue={profession}*/}
-            {/*    onChange={value => setProfession(value)}*/}
-            {/*    placeholderText={"Profession"}*/}
-
-            {/*/>*/}
-
-
-            {/*</View>*/}
-
-            {/*<View style={{flex: 2, justifyContent: "flex-end", height:SIZES.height*0.2}}>*/}
-            {/*    <CustomButton*/}
-            {/*        onPress={async () => {*/}
-
-            {/*            try {*/}
-            {/*                await UpdateUserData()*/}
-            {/*                await UploadFile()*/}
-            {/*                navigation.navigate("DashBoard")*/}
+                {TopTab()}
 
 
-            {/*            } catch (e) {*/}
-            {/*                console.log(e, "UpdateUserError")*/}
-            {/*            }*/}
+                {/*<CustomInputBox*/}
+                {/*    initialValue={profession}*/}
+                {/*    onChange={value => setProfession(value)}*/}
+                {/*    placeholderText={"Profession"}*/}
 
-            {/*        }}*/}
-            {/*        loading={isLoading}*/}
-            {/*        filled text={"Update Profile"}*/}
-            {/*    />*/}
-            {/*</View>*/}
+                {/*/>*/}
 
-            {/*</KeyboardAwareScrollView>*/}
+
+                {/*</View>*/}
+
+                {/*<View style={{ justifyContent: "flex-end", }}>*/}
+                <CustomButton
+                    onPress={async () => {
+
+                        try {
+                            await UpdateUserData()
+                            await UploadFile()
+                            navigation.navigate("DashBoard")
+
+
+                        } catch (e) {
+                            console.log(e, "UpdateUserError")
+                        }
+
+                    }}
+                    loading={isLoading}
+                    filled text={"Update Profile"}
+                />
+                {/*</View>*/}
+
         </View>
+        </KeyboardAwareScrollView>
 
 
     );

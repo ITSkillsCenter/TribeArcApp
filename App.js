@@ -55,6 +55,7 @@ import TopUpScreen from "./src/screens/topUpScreen";
 import AccountDetailsPage from "./src/screens/accountDetailsPage";
 import AddAccountDetailsScreen from "./src/screens/addAccountDetailsScreen";
 import AccountDetailsSavedSuccess from "./src/screens/accountDetailsSavedSuccess";
+import CardSettings from "./src/screens/cardSettings";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -137,6 +138,7 @@ const App = () => {
                 <MainStack.Screen name={"SuccessScreen"} component={SuccessScreen}/>
                 <MainStack.Screen name={"DebitCardSuccessScreen"} component={DebitCardSuccessScreen}/>
                 <MainStack.Screen name={"AddAccountDetailsScreen"} component={AddAccountDetailsScreen}/>
+                <MainStack.Screen name={"CardSettings"} component={CardSettings}/>
                 <MainStack.Screen name={"AccountDetailsSavedSuccess"} component={AccountDetailsSavedSuccess}/>
                 <MainStack.Screen name={"SettingsPage"} component={SettingsPage}/>
                 <MainStack.Screen name={"CommunityQuestions"} component={CommunityQuestions}/>

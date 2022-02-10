@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
         // marginVertical: 20,
         marginTop: 15,
         paddingHorizontal: 20,
-        color:COLORS.black
+        color: COLORS.black
 
     },
     dial: {

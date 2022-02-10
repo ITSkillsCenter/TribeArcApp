@@ -21,7 +21,7 @@ const ReferralPage = ({navigation}) => {
     // const [copiedText, setCopiedText] = useState('');
 
     const copyToClipboard = async () => {
-        await Clipboard.setString(code);
+        await Clipboard.setString(`Join the moving train with TribeArc business community. Use my referral code- ${code}`);
         await Toast.show({
             type: 'success',
             text1: code,
@@ -47,14 +47,14 @@ const ReferralPage = ({navigation}) => {
                     }`
 
 
-        console.log(qry)
+        // console.log(qry)
 
 
         try {
 
             let res = await handleQuery(qry, user.token, false)
 
-            console.log(res.data.users[0].referral_code)
+            // console.log(res.data.users[0].referral_code)
             await setCode(res.data.users[0].referral_code)
 
 
@@ -72,18 +72,35 @@ const ReferralPage = ({navigation}) => {
             <Text style={styles.refer}>Refer a friend</Text>
             <Text style={styles.secureFutureText}>To Secure their future too</Text>
 
+            <View style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: 30,
+                marginBottom:10
+            }}>
+                <Text style={{fontSize: 14, fontFamily: "Nexa-Book", color: COLORS.black}}>Copy Referral Message</Text>
 
-            <CustomInputBox
-                clipboardOnPress={() => copyToClipboard()}
-                clipboard
-                // short
-                initialValue={code}
-                placeholderText={"Referral link"}
-                inputContainerStyle={{width: SIZES.width * 0.8, textAlign: "left", fontFamily: "Nexa-Bold"}}
-                props={{
-                    editable: false,
-                }}
-            />
+                <View style={{alignItems: "center", flexDirection: "row", justifyContent: "center"}}>
+                    <Image style={{width: 20, height: 20}}
+                           source={icons.clipboard}/>
+                    <Text
+                        onPress={() => copyToClipboard()}
+                        style={{
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: 12,
+                            fontFamily: "Nexa-Book",
+                            color: COLORS.primary
+                        }}>Copy</Text>
+
+                </View>
+
+            </View>
+
+            <View style={styles.box}>
+                <Text style={styles.desc}>Join the moving train with TribeArc business community. Use my referral code- {code}</Text>
+            </View>
 
 
         </View>
@@ -108,17 +125,29 @@ const styles = StyleSheet.create({
         marginVertical: SIZES.height * 0.08
     },
     refer: {
-        fontSize: 28,
+        fontSize: 26,
         alignSelf: "center",
         fontFamily: "Nexa-Bold",
         color: COLORS.black
     },
     secureFutureText: {
-        fontSize: 20,
+        fontSize: 18,
         alignSelf: "center",
         fontFamily: "Nexa-Book",
         color: "#999999",
         marginVertical: 15
+    },
+    box:{
+        padding:20,
+        borderWidth:0.5,
+        borderColor:COLORS.primary,
+        borderRadius:10,
+    },
+    desc:{
+        fontSize: 16,
+        alignSelf: "center",
+        fontFamily: "Nexa-Book",
+        color: COLORS.black
     }
 
 })

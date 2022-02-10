@@ -156,6 +156,8 @@ const Profile = ({navigation, route}) => {
                 }} image={icons.acctDet} text={"Account Details"}/>
 
                 <AccountOptions onPress={() => {
+                    navigation.navigate("CardSettings")
+
                 }} image={icons.linkCard} text={"Card Settings"}/>
                 <AccountOptions onPress={() => {
                     navigation.navigate("ChangePassword")
