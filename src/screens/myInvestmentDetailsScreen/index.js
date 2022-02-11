@@ -9,7 +9,7 @@ const MyInvestmentDetailsScreen = ({navigation, route}) => {
 
     const [counter, setCounter] = useState(0)
 
-    console.log(route.params)
+    // console.log(route.params)
 
     const investments = route.params
 
@@ -66,7 +66,7 @@ const MyInvestmentDetailsScreen = ({navigation, route}) => {
                 </View>
                 <View style={styles.invBox}>
                     <Text style={styles.invTitle}>Slots Bought</Text>
-                    <Text style={styles.invBoxDet}>40</Text>
+                    <Text style={styles.invBoxDet}>{investments.slotBought}</Text>
 
                 </View>
 
