@@ -57,18 +57,12 @@ export const RegistrationFee = ({navigation}) => {
             billingEmail={user.email}
             activityIndicatorColor={COLORS.primary}
             onCancel={async (e) => {
-                // handle response here
-                // await Cancelled()
                 console.log(e, "PaymentError")
-                // await setCancelled(true)
             }}
-            // channels={JSON.stringify(["card","ussd"])}
             onSuccess={async (res) => {
                 // await TransactionData(res)
                 await navigation.navigate("RegFeeSuccessScreen")
-
                 console.log(res, "RESDSD")
-                // handle response here
             }}
             autoStart={false}
             ref={paystackWebViewRef}
@@ -104,7 +98,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
         borderRadius: 15, // padding: 20,
         height: 200,
-        width: 380,
+        width: "100%",
         marginRight: 10,
         justifyContent: "center",
     }, regFeeText: {

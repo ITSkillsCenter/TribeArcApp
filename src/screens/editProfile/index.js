@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import BackButton from "../../components/BackButton";
 import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
@@ -83,6 +83,10 @@ const EditProfile = ({navigation}) => {
             email
             phone_number
             profession
+            next_of_kin
+            next_of_kin_number
+            designation
+            remuneration
                 }
                     }`
         try {
@@ -94,6 +98,10 @@ const EditProfile = ({navigation}) => {
             await setLastName(res.data.users[0].lastname)
             await setPhoneNum(res.data.users[0].phone_number)
             await setProfession(res.data.users[0].profession)
+            await setNextOfKin(res.data.users[0].next_of_kin)
+            await setNextOfKinPhoneNum(res.data.users[0].next_of_kin_number)
+            await setDesignation(res.data.users[0].designation)
+            await setRemuneration(res.data.users[0].remuneration)
 
 
         } catch (e) {
@@ -102,34 +110,40 @@ const EditProfile = ({navigation}) => {
     }
 
     const UpdateUserData = async () => {
+
+
         let qry = `mutation {
-            updateUser(
-            input: {
-            where: { id: ${user.id} }
-            data: {
-             firstname: "${firstName}",
-             lastname: "${lastName}",
-             phone_number:"${phoneNum}"
-             profession:"${profession}"
-             
-              }
-             }
-                ) {
-                user {
-                firstname
-                lastname
-                email
-                      }
-                    }
-                }`
+  updateUser(
+    input: {
+      where: { id: ${user.id} }
+      data: {
+        firstname: "${firstName}"
+        lastname: "${lastName}"
+        phone_number: "${phoneNum}"
+        profession: "${profession}"
+        next_of_kin: "${nextOfKin}"
+        next_of_kin_number: "${nextOfKinPhoneNum}"
+        designation: "${designation}"
+        remuneration: "${remuneration}"
+      }
+    }
+  ) {
+    user {
+      firstname
+      lastname
+      email
+    }
+  }
+}`
+
+
         try {
 
             // console.log(qry)
-
             setIsLoading(true)
 
             let res = await handleQuery(qry, user.token, false)
-            // console.log(res.data.updateUser.user)
+            console.log(res.data.updateUser.user)
             await setIsLoading(false)
 
 
@@ -224,28 +238,6 @@ const EditProfile = ({navigation}) => {
     };
 
 
-    const TopTabs = createMaterialTopTabNavigator();
-
-    const CustomTabBar = ({children, onPress}) => {
-        return (
-            <View
-                style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    height: 30,
-                    marginBottom: 10
-
-
-                }}
-                onPress={onPress}>
-                {children}
-            </View>
-        );
-
-
-    }
-
     const TabOne = () => {
 
         return (
@@ -258,6 +250,7 @@ const EditProfile = ({navigation}) => {
                         initialValue={firstName}
                         onChange={value => setFirstName(value)}
                         placeholderText={"First Name"}
+                        // onFocus={() => setFirstName(firstName)}
                         title={"First Name"}/>
 
 
@@ -286,6 +279,9 @@ const EditProfile = ({navigation}) => {
                         initialValue={phoneNum}
                         onChange={value => setPhoneNum(value)}
                         placeholderText={"Phone Number"}
+                        props={{
+                            keyboardType: "numeric"
+                        }}
                     />
 
 
@@ -303,7 +299,12 @@ const EditProfile = ({navigation}) => {
                         initialValue={nextOfKinPhoneNum}
                         onChange={value => setNextOfKinPhoneNum(value)}
                         placeholderText={"Next of kin's Phone Number"}
+                        props={{
+                            keyboardType: "numeric"
+                        }}
                     />
+
+
                 </KeyboardAwareScrollView>
 
             </ScrollView>
@@ -318,75 +319,63 @@ const EditProfile = ({navigation}) => {
             <View style={styles.tabOneContainer}>
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
+                    <CustomTextInput
+                        initialValue={profession}
+                        onChange={value => setProfession(value)}
+                        placeholderText={"Profession"}
+                        title={"Profession"}/>
 
-                <CustomTextInput
-                    initialValue={profession}
-                    onChange={value => setProfession(value)}
-                    placeholderText={"Profession"}
-                    title={"Profession"}/>
+                    <CustomTextInput
+                        title={"Designation"}
+                        initialValue={designation}
+                        onChange={value => setDesignation(value)}
+                        placeholderText={"Designation"}/>
 
-
-                <CustomTextInput
-                    title={"Designation"}
-                    initialValue={designation}
-                    onChange={value => setDesignation(value)}
-                    placeholderText={"Designation"}
-
-                />
-                <CustomTextInput
-                    title={"Monthly Remuneration"}
-                    initialValue={remuneration}
-                    onChange={value => setRemuneration(value)}
-                    placeholderText={"Enter Monthly Remuneration"}
-
-                />
+                    <CustomTextInput
+                        title={"Monthly Remuneration"}
+                        initialValue={remuneration}
+                        onChange={value => setRemuneration(value)}
+                        placeholderText={"Enter Monthly Remuneration"}
+                        props={{
+                            keyboardType: "numeric"
+                        }}
+                    />
 
                 </KeyboardAwareScrollView>
-
-
             </View>
-
         )
     }
 
 
     function TopTab() {
         return (
-            <TopTabs.Navigator
-                tabBar={({navigation}) => <CustomTabBar children={
 
-                    tabs.map((item, index) => (
+            <View style={{flexDirection: "row", justifyContent: "space-between"}}>
 
-                        <View style={{width: "45%", height: 80, justifyContent: "center", marginVertical: 5}}>
-                            <TouchableOpacity style={{width: "100%", alignItems: "center", marginVertical: 5}}
-                                              key={index} activeOpacity={0.8}
-                                              onPress={() => {
-                                                  navigation.navigate(item.isTab)
-                                                  setTabStatus(item.tabStatus)
-                                              }}>
-                                <Text style={styles.tabStatusText}>{item.tabStatus}</Text>
 
-                            </TouchableOpacity>
-                            <View style={[styles.btnTab, tabStatus === item.tabStatus && styles.btnTabActive]}/>
+                {tabs.map((item, index) => (
+
+                    <TouchableOpacity
+                        activeOpacity={0.8}
+                        onPress={() => {
+                            setTabStatus(item.tabStatus)
+                        }}
+                        key={index}
+                        style={{
+                            width: "45%",
+                            height: 60,
+                            justifyContent: "center",
+                        }}>
+                        <View style={{width: "100%", alignItems: "center", marginVertical: 5}}>
+                            <Text style={styles.tabStatusText}>{item.tabStatus}</Text>
                         </View>
+                        <View style={[styles.btnTab, tabStatus === item.tabStatus && styles.btnTabActive]}/>
+                    </TouchableOpacity>
 
 
-                    ))
-                }/>}
-            >
-                <TopTabs.Screen
-                    name={"TabOne"}
-                    component={TabOne}
-                    options={{}}
-                />
-                <TopTabs.Screen
-                    name={"TabTwo"}
-                    component={TabTwo}
-                    options={{tabBarLabel: "Pending"}}
-                />
+                ))}
+            </View>
 
-
-            </TopTabs.Navigator>
         );
     }
 
@@ -431,11 +420,11 @@ const EditProfile = ({navigation}) => {
                 </TouchableOpacity>
             </ImageBackground>
 
+
             {TopTab()}
-            {/*</View>*/}
 
+            {tabStatus === "Personal Info" ? TabOne() : TabTwo()}
 
-            {/*<View style={{flex:2, justifyContent:"flex-end"}}>*/}
             <CustomButton
                 onPress={async () => {
 
@@ -483,7 +472,7 @@ const styles = StyleSheet.create({
     tabOneContainer: {
         flex: 1,
         backgroundColor: COLORS.white,
-        paddingTop: 20
+        // paddingTop: 10
     },
     btnTab: {
         height: 3,

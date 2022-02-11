@@ -10,9 +10,10 @@ const CustomTextInput = ({
                              onChange,
                              inputContainerStyle,
                              title,
-                             short,
-                             clipboard,
-                             clipboardOnPress
+                             onEndEditing,
+                             onFocus,
+                             onBlur
+
                          }) => {
 
 
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         paddingHorizontal: 10,
         borderRadius: 5,
-        opacity:0.7,
+        // opacity:0.7,
         fontFamily: "Nexa-Book",
         // position: "absolute",
         // color:"red"

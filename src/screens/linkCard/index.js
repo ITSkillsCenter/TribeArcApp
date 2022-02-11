@@ -54,6 +54,7 @@ const LinkCard = ({navigation}) => {
                                     }
                                   }`
 
+
         try {
             setIsLoading(true)
             let res = await handleQuery(qry, user.token, false);
@@ -205,7 +206,6 @@ const LinkCard = ({navigation}) => {
     return (
         <View style={styles.container}>
 
-
             <Modalize
                 modalHeight={SIZES.height * 0.55}
                 handleStyle={{backgroundColor: 'transparent'}}
@@ -215,28 +215,19 @@ const LinkCard = ({navigation}) => {
                 {renderInner()}
             </Modalize>
 
+            <BackButton onPress={() => navigation.pop()}/>
+            <Text style={styles.linkCard}>Link a Card</Text>
 
-            <View style={{
-                paddingHorizontal: 20,
-                height: SIZES.height * 0.9,
-            }}>
 
-                <BackButton onPress={() => navigation.pop()}/>
+            <TouchableOpacity style={styles.cardBox} activeOpacity={0.6} onPress={() => OpenModal()}>
+                <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
+                <Text style={styles.linkCardText}>Debit Card</Text>
+                <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}} resizeMode={"contain"}/>
+            </TouchableOpacity>
 
-                <View>
-                    <Text style={styles.linkCard}>Link a Card</Text>
-                </View>
 
-                <TouchableOpacity style={styles.cardBox} activeOpacity={0.6} onPress={() => OpenModal()}>
-                    <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
-                    <Text style={styles.linkCardText}>Debit Card</Text>
-                    <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}} resizeMode={"contain"}/>
-                </TouchableOpacity>
-
-                <View style={styles.cancelButton}>
-                    <CustomButton onPress={() => navigation.pop()} filled text={"Cancel"}/>
-                </View>
-
+            <View style={styles.cancelButton}>
+                <CustomButton onPress={() => navigation.pop()} filled text={"Cancel"}/>
             </View>
 
 
@@ -250,6 +241,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        paddingHorizontal: 20
     },
     linkCard: {
         fontFamily: "Nexa-Bold",
@@ -274,10 +266,7 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         justifyContent: "flex-end",
-        // flex: 2,
-        height: SIZES.height * 0.7,
-        // backgroundColor:"red"
-
+        flex: 2,
     }
 
 })

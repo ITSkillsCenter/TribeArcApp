@@ -16,11 +16,11 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
-            <Text style={styles.title}>{investments.title}</Text>
+            <Text style={styles.title}>{investments.name}</Text>
 
             <Image
                 resizeMode={"cover"}
-                source={{uri: investments.image}}
+                source={{uri: investments?.image}}
                 style={{width: "100%", height: SIZES.height * 0.25}}
             />
 
@@ -32,9 +32,9 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                             fontFamily: "Nexa-Book",
                             color: COLORS.black,
                             marginVertical: 5
-                        }}>{investments.title}</Text>
+                        }}>{investments.name}</Text>
                     <Text
-                        style={{fontSize: 14, fontFamily: "Nexa-Bold"}}>₦{investments.investment_price.toLocaleString()}
+                        style={{fontSize: 14, fontFamily: "Nexa-Bold"}}>₦{investments?.price_per_slot.toLocaleString()}
                         <Text style={{fontSize: 12, fontFamily: "Nexa-Book", color: COLORS.black, opacity: 0.7}}> Per
                             Slot</Text></Text>
                 </View>
@@ -48,25 +48,25 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
             <View style={styles.invContainer}>
                 <View style={styles.invBox}>
                     <Text style={styles.invTitle}>Total Funding Required</Text>
-                    <Text style={styles.invBoxDet}>₦ 20,000,000 </Text>
+                    <Text style={styles.invBoxDet}>₦ {investments?.funds_required.toLocaleString()} </Text>
 
                 </View>
                 <View style={styles.invBox}>
                     <Text style={styles.invTitle}>Funds Raised</Text>
 
-                    <Text style={styles.invBoxDet}>₦ 5,000,000 </Text>
+                    <Text style={styles.invBoxDet}>₦ {investments?.funds_raised.toLocaleString()} </Text>
 
 
                 </View>
                 <View style={styles.invBox}>
                     <Text style={styles.invTitle}>Investors</Text>
-                    <Text style={styles.invBoxDet}>{investments.total_investors}</Text>
+                    <Text style={styles.invBoxDet}>{investments?.users_id.length}</Text>
 
 
                 </View>
                 <View style={styles.invBox}>
                     <Text style={styles.invTitle}>Slots Left</Text>
-                    <Text style={styles.invBoxDet}>40</Text>
+                    <Text style={styles.invBoxDet}>{`${investments?.total_slot - investments?.users_id.length}`}</Text>
 
                 </View>
 
@@ -190,16 +190,16 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         width: "100%",
-        alignItems:"center"
+        alignItems: "center"
     },
     counter: {
         fontSize: 20,
         fontFamily: "Nexa-Bold",
         backgroundColor: COLORS.white,
-        justifyContent:"center",
+        justifyContent: "center",
         elevation: 2,
-        borderRadius:10,
-        padding:10,
+        borderRadius: 10,
+        padding: 10,
         shadowRadius: 0.7,
         shadowOpacity: 0.2,
         shadowOffset: {

@@ -109,7 +109,6 @@ const CommunityQuestions = ({navigation}) => {
             console.log(UnansweredQuestions, "UNANSS")
 
 
-
             // console.log(res.data.questions)
             await setQuestions(UnansweredQuestions)
             // await setAnswers(res.data.questions)
@@ -185,7 +184,7 @@ const CommunityQuestions = ({navigation}) => {
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
-            <Text style={styles.CommQues}>Community Questions</Text>
+            <Text style={styles.CommQues}>Community Polls</Text>
 
             <ScrollView showsVerticalScrollIndicator={false}>
 

@@ -12,7 +12,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Profile = ({navigation, route}) => {
 
-    const name = route.params;
+    const user = useContext(UserContext)
+    // console.log(user)
 
     const [avatar, setAvatar] = useState(null)
 
@@ -36,7 +37,6 @@ const Profile = ({navigation, route}) => {
 
 
     const {logout} = useContext(AuthContext)
-    const user = useContext(UserContext)
 
 
     const GetImg = async () => {
@@ -134,7 +134,7 @@ const Profile = ({navigation, route}) => {
                     </View>
 
                     <View style={styles.fullNameContainer}>
-                        <Text style={styles.fullName}>{name?.firstname} {name?.lastname}</Text>
+                        <Text style={styles.fullName}>{user.firstname} {user.lastname}</Text>
 
                         <Text style={styles.editProfile}>Edit Profile</Text>
 

@@ -205,8 +205,6 @@ const AddBvn = ({navigation}) => {
                                                                          style={styles.dial}> Dial *565*0#</Text></Text>
 
 
-
-
             </KeyboardAwareScrollView>
 
 

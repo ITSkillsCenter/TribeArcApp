@@ -141,6 +141,8 @@ export const useAuth = () => {
                         token: res.data.login.jwt,
                         id: res.data.login.user.id,
                         email: res.data.login.user.email,
+                        firstname:res.data.login.user.firstname,
+                        lastname:res.data.login.user.lastname
                         // avatar: res.data.login.user.avatar
 
                     };
