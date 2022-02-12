@@ -1,5 +1,5 @@
 // @flow
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {
     ActivityIndicator,
     FlatList,
@@ -13,6 +13,7 @@ import {
 import {COLORS, icons, SIZES} from "../../constants";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import {useFocusEffect} from "@react-navigation/native";
 
 
 const InvestmentMainScreen = ({navigation}) => {
@@ -23,13 +24,19 @@ const InvestmentMainScreen = ({navigation}) => {
 
     const [investments, setInvestments] = useState([])
     const [myInvestments, setMyInvestments] = useState([])
-    const [slotBought, setSlotBought] = useState("")
+    const [myInvId, setMyInvId] = useState("")
     const [loading, setLoading] = useState(false)
+
+
+    useFocusEffect(
+        useCallback(() => {
+            GetInvestments()
+        }, [])
+    )
 
 
     useEffect(() => {
 
-        GetInvestments()
 
     }, [])
 
@@ -41,6 +48,7 @@ const InvestmentMainScreen = ({navigation}) => {
   qry2: usersInvestments(where: { users_id: ${user.id}, community: 15 }) {
     slot_bought
     investment {
+    id
       name
       image
       roi
@@ -51,6 +59,11 @@ const InvestmentMainScreen = ({navigation}) => {
       total_slot
       status
       duration_in_months
+        users_investments {
+        users_id {
+          id
+        }
+      }
       users_id {
         id
       }
@@ -58,6 +71,7 @@ const InvestmentMainScreen = ({navigation}) => {
   }
 
   qry1: investments {
+    id
     name
     image
     roi
@@ -68,6 +82,11 @@ const InvestmentMainScreen = ({navigation}) => {
     total_slot
     status
     duration_in_months
+      users_investments {
+      users_id {
+        id
+      }
+    }
     users_id {
       id
     }
@@ -77,17 +96,23 @@ const InvestmentMainScreen = ({navigation}) => {
 
         try {
 
+
             setLoading(true)
             const getAllInvRes = await handleQuery(qry, user.token, false)
 
             await setInvestments(getAllInvRes.data.qry1)
+            // console.log(getAllInvRes.data.qry1[0].users_investments[0].users_id.id,"LOLLLL")
 
             const allMyInv = getAllInvRes.data.qry2.map((item) => {
                 return item.investment
             })
+
+
+            console.log(allMyInv, "alllll")
             await setMyInvestments(allMyInv)
 
-            await setSlotBought(getAllInvRes.data.qry2[0].slot_bought)
+            // setMyInvId(getAllInvRes.data.qry2.id)
+
 
             setLoading(false)
 
@@ -111,142 +136,145 @@ const InvestmentMainScreen = ({navigation}) => {
 
 
                     <FlatList
-                data={investments}
-                showsVerticalScrollIndicator={false}
-                ListHeaderComponent={
+                        data={investments}
+                        showsVerticalScrollIndicator={false}
+                        ListHeaderComponent={
 
-                    <>
-                        <ImageBackground source={icons.shortBalFrame} style={styles.balanceFrame}>
-                            <View style={{
-                                paddingHorizontal: 40,
-                            }}>
-                                <View>
-                                    <Text style={styles.tsb}>Investment Balance</Text>
-                                    <Text style={styles.balance}>₦ 20,000,000 {}</Text>
-                                </View>
-
-                            </View>
-                        </ImageBackground>
-
-                        {
                             <>
-                                {myInvestments.length > 0 && <Text style={styles.allInv}>My Investments</Text>}
+                                <ImageBackground source={icons.shortBalFrame} style={styles.balanceFrame}>
+                                    <View style={{
+                                        paddingHorizontal: 40,
+                                    }}>
+                                        <View>
+                                            <Text style={styles.tsb}>Investment Balance</Text>
+                                            <Text style={styles.balance}>₦ 20,000,000 {}</Text>
+                                        </View>
 
-                                <FlatList
-                                    data={myInvestments}
-                                    showsVerticalScrollIndicator={false}
-                                    renderItem={({item}) => (
+                                    </View>
+                                </ImageBackground>
 
-                                        loading ? <ActivityIndicator size={"large"} color={COLORS.primary}/> :
-                                            <TouchableOpacity
-                                                onPress={() => navigation.navigate("MyInvestmentDetailsScreen", {
-                                                    ...item,
-                                                    slotBought
-                                                })}
-                                                activeOpacity={0.8} style={styles.box}>
-                                                <Image source={{uri: item.image}}
-                                                       style={{width: 110, height: 120, borderRadius: 10,}}/>
-                                                <View style={{width: 180, paddingHorizontal: 5,}}>
-                                                    <Text style={styles.title}>{item.name}</Text>
-                                                    <Text style={styles.duration}><Text
-                                                        style={{color: COLORS.primary}}>{item.roi}%</Text> return
-                                                        in {item?.duration} months</Text>
-                                                    <View style={{
-                                                        flexDirection: "row",
-                                                        width: 150,
-                                                        justifyContent: "space-between",
-                                                        alignItems: 'center',
-                                                    }}>
+                                {
+                                    <>
+                                        {myInvestments.length > 0 && <Text style={styles.allInv}>My Investments</Text>}
+
+                                        <FlatList
+                                            data={myInvestments}
+                                            showsVerticalScrollIndicator={false}
+                                            renderItem={({item}) => (
+
+                                                loading ? <ActivityIndicator size={"large"} color={COLORS.primary}/> :
+                                                    <TouchableOpacity
+                                                        onPress={() => navigation.navigate("MyInvestmentDetailsScreen", {
+                                                            ...item
+
+                                                        })}
+                                                        activeOpacity={0.8} style={styles.box}>
+                                                        <Image source={{uri: item.image}}
+                                                               style={{width: 110, height: 120, borderRadius: 10,}}/>
+                                                        <View style={{width: 180, paddingHorizontal: 5,}}>
+                                                            <Text style={styles.title}>{item.name}</Text>
+                                                            <Text style={styles.duration}><Text
+                                                                style={{color: COLORS.primary}}>{item.roi}%</Text> return
+                                                                in {item?.duration_in_months} months</Text>
+                                                            <View style={{
+                                                                flexDirection: "row",
+                                                                width: "100%",
+                                                                justifyContent: "space-between",
+                                                                alignItems: 'center',
+                                                                // backgroundColor:"red"
+                                                            }}>
+                                                                <View >
+                                                                    <Text
+                                                                        style={styles.amtInv}>₦{item.price_per_slot.toLocaleString()}</Text>
+                                                                    <Text style={styles.perSlot}>Per Slot</Text>
+                                                                </View>
+
+                                                                <View style={{alignItems: "center"}}>
+                                                                    <Text
+                                                                        style={styles.amtInv}>{item.users_investments.length}</Text>
+                                                                    <Text style={styles.perSlot}>Investors</Text>
+                                                                </View>
+
+
+                                                            </View>
+                                                        </View>
                                                         <View>
-                                                            <Text
-                                                                style={styles.amtInv}>₦{item.price_per_slot.toLocaleString()}</Text>
-                                                            <Text style={styles.perSlot}>Per Slot</Text>
+                                                            {item.status === "ACTIVE" ?
+                                                                <View style={styles.status1}>
+                                                                    <Text style={styles.active}>Active</Text>
+
+                                                                </View>
+                                                                :
+                                                                <View style={styles.status2}>
+
+                                                                    <Text style={styles.ended}>Ended</Text>
+
+                                                                </View>
+                                                            }
+
+
                                                         </View>
 
-                                                        <View style={{alignItems: "center"}}>
-                                                            <Text style={styles.amtInv}>{item.users_id.length}</Text>
-                                                            <Text style={styles.perSlot}>Investors</Text>
-                                                        </View>
+                                                    </TouchableOpacity>
+
+                                            )
 
 
-                                                    </View>
-                                                </View>
-                                                <View>
-                                                    {item.status === "ACTIVE" ?
-                                                        <View style={styles.status1}>
-                                                            <Text style={styles.active}>Active</Text>
-
-                                                        </View>
-                                                        :
-                                                        <View style={styles.status2}>
-
-                                                            <Text style={styles.ended}>Ended</Text>
-
-                                                        </View>
-                                                    }
+                                            }/>
 
 
-                                                </View>
-
-                                            </TouchableOpacity>
-
-                                    )
+                                    </>
+                                }
 
 
-                                    }/>
-
-
+                                <Text style={styles.allInv}>All Investments</Text>
                             </>
                         }
+                        renderItem={({item}) => (
 
 
-                        <Text style={styles.allInv}>All Investments</Text>
-                    </>
-                }
-                renderItem={({item}) => (
+                            <TouchableOpacity onPress={() => navigation.navigate("InvestmentDetailsScreen", {...item})}
+                                              activeOpacity={0.8} style={styles.box}>
+                                <Image source={{uri: item.image}} style={{width: 110, height: 120, borderRadius: 10,}}/>
+                                <View style={{width: 180, paddingHorizontal: 5,}}>
+                                    <Text style={styles.title}>{item.name}</Text>
+                                    <Text style={styles.duration}><Text
+                                        style={{color: COLORS.primary}}>{item.roi}%</Text> return
+                                        in {item.duration_in_months} months</Text>
+                                    <View style={{
+                                        flexDirection: "row",
+                                        width: 150,
+                                        justifyContent: "space-between",
+                                        alignItems: 'center',
+                                    }}>
+
+                                        <View>
+                                            <Text style={styles.amtInv}>₦{item.price_per_slot.toLocaleString()}</Text>
+                                            <Text style={styles.perSlot}>Per Slot</Text>
+                                        </View>
+                                        <View style={{alignItems: "center"}}>
+                                            <Text style={styles.amtInv}>{item.users_investments.length}</Text>
+                                            <Text style={styles.perSlot}>Investors</Text>
+                                        </View>
 
 
-                    <TouchableOpacity onPress={() => navigation.navigate("InvestmentDetailsScreen", {...item})}
-                                      activeOpacity={0.8} style={styles.box}>
-                        <Image source={{uri: item.image}} style={{width: 110, height: 120, borderRadius: 10,}}/>
-                        <View style={{width: 180, paddingHorizontal: 5,}}>
-                            <Text style={styles.title}>{item.name}</Text>
-                            <Text style={styles.duration}><Text
-                                style={{color: COLORS.primary}}>{item.roi}%</Text> return
-                                in {item.duration_in_months} months</Text>
-                            <View style={{
-                                flexDirection: "row",
-                                width: 150,
-                                justifyContent: "space-between",
-                                alignItems: 'center',
-                            }}>
+                                    </View>
+                                </View>
                                 <View>
-                                    <Text style={styles.amtInv}>₦{item.price_per_slot.toLocaleString()}</Text>
-                                    <Text style={styles.perSlot}>Per Slot</Text>
+                                    {item.status === "ACTIVE" ?
+                                        <View style={styles.status1}>
+                                            <Text style={styles.active}>Active</Text>
+                                        </View>
+                                        :
+                                        <View style={styles.status2}>
+                                            <Text style={styles.ended}>Ended</Text>
+                                        </View>
+                                    }
                                 </View>
-                                <View style={{alignItems: "center"}}>
-                                    <Text style={styles.amtInv}>{item.users_id.length}</Text>
-                                    <Text style={styles.perSlot}>Investors</Text>
-                                </View>
+                            </TouchableOpacity>
 
 
-                            </View>
-                        </View>
-                        <View>
-                            {item.status === "ACTIVE" ?
-                                <View style={styles.status1}>
-                                    <Text style={styles.active}>Active</Text>
-                                </View>
-                                :
-                                <View style={styles.status2}>
-                                    <Text style={styles.ended}>Ended</Text>
-                                </View>
-                            }
-                        </View>
-                    </TouchableOpacity>
-
-
-                )}/>}
+                        )}/>}
 
             <View style={{marginBottom: "20%", backgroundColor: "transparent"}}/>
 

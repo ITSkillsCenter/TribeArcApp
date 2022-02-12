@@ -1,17 +1,52 @@
 // @flow
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES,} from "../../constants";
 import BackButton from "../../components/BackButton";
-import CustomButton from "../../components/CustomButton";
+import {handleQuery} from "../../graphql/requests";
+import {UserContext} from "../../context/UserContext";
 
 const MyInvestmentDetailsScreen = ({navigation, route}) => {
 
-    const [counter, setCounter] = useState(0)
 
-    // console.log(route.params)
+    const user = useContext(UserContext);
+
+    const [slotBought, setSlotBought] = useState(0)
 
     const investments = route.params
+
+
+
+
+    useEffect(() => {
+        SlotBought()
+    }, []);
+
+
+    const SlotBought = async () => {
+
+        let qry = `query {
+  usersInvestments(where: { investment: ${investments.id}, users_id: ${user.id} }) {
+    id
+    slot_bought
+  }
+}`
+        try {
+
+            // console.log(qry)
+
+            let qryRes = await handleQuery(qry, user.token, false)
+
+            console.log(qryRes.data.usersInvestments[0].slot_bought)
+           await setSlotBought(qryRes.data.usersInvestments[0].slot_bought)
+
+
+        } catch (e) {
+            console.log(e, "getSlotBoughtErr")
+
+        }
+    }
+
 
     return (
         <View style={styles.container}>
@@ -38,7 +73,8 @@ const MyInvestmentDetailsScreen = ({navigation, route}) => {
                         <Text style={{fontSize: 12, fontFamily: "Nexa-Book", color: COLORS.black, opacity: 0.7}}> Per
                             Slot</Text></Text>
                 </View>
-                <TouchableOpacity style={styles.pdf}>
+                <TouchableOpacity onPress={() => navigation.navigate("PdfPage", investments.business_plan)}
+                                  style={styles.pdf}>
                     <Image source={icons.pdficon} style={{width: 15, height: 20}}/>
                     <Text style={{fontSize: 16, fontFamily: 'Nexa-Bold'}}>Business Plan</Text>
                 </TouchableOpacity>
@@ -60,13 +96,13 @@ const MyInvestmentDetailsScreen = ({navigation, route}) => {
                 </View>
                 <View style={styles.invBox}>
                     <Text style={styles.invTitle}>Investors</Text>
-                    <Text style={styles.invBoxDet}>{investments?.users_id.length}</Text>
+                    <Text style={styles.invBoxDet}>{investments?.users_investments.length}</Text>
 
 
                 </View>
                 <View style={styles.invBox}>
                     <Text style={styles.invTitle}>Slots Bought</Text>
-                    <Text style={styles.invBoxDet}>{investments.slotBought}</Text>
+                    <Text style={styles.invBoxDet}>{slotBought}</Text>
 
                 </View>
 
@@ -157,10 +193,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: "Nexa-Bold",
         backgroundColor: COLORS.white,
-        justifyContent:"center",
+        justifyContent: "center",
         elevation: 2,
-        borderRadius:10,
-        padding:10,
+        borderRadius: 10,
+        padding: 10,
         shadowRadius: 0.7,
         shadowOpacity: 0.2,
         shadowOffset: {

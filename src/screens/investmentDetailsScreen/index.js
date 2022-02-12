@@ -1,22 +1,110 @@
 // @flow
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES,} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
+import {handleQuery} from "../../graphql/requests";
+import {UserContext} from "../../context/UserContext";
 
 const InvestmentDetailsScreen = ({navigation, route}) => {
 
     const [counter, setCounter] = useState(0)
 
-    console.log(route.params)
+    const user = useContext(UserContext);
+
 
     const investments = route.params
+
+
+    useEffect(() => {
+
+
+    }, [])
+
+
+    const HandleInvest = async () => {
+
+
+        let slotBoughtQry = `query {
+  usersInvestments(where: { users_id: ${user.id}, investment: ${investments.id} }) {
+    id
+    slot_bought
+  }
+}`
+
+
+        try {
+
+            const slotBoughtRes = await handleQuery(slotBoughtQry, user.token, false)
+
+
+            if (slotBoughtRes.data.usersInvestments.length > 0) {
+
+                // console.log(slotBoughtRes.data.usersInvestments[0].id)
+
+
+                let updInv = `mutation {
+                    updateUsersInvestment(input: { where: { id: ${slotBoughtRes.data.usersInvestments[0].id} },
+                    data: { slot_bought: ${slotBoughtRes.data.usersInvestments[0].slot_bought + counter} } }) {
+                    usersInvestment {
+                    slot_bought
+                    }
+                    }
+                    }`
+
+                // console.log(updInv)
+
+                const updInvRes = await handleQuery(updInv, user.token, false)
+                console.log(updInvRes)
+            }
+
+            if (slotBoughtRes.data.usersInvestments.length < 1) {
+
+                // slotBoughtRes.data.usersInvestments[0].slot_bought
+
+                let mtn = `mutation {
+                createUsersInvestment(
+                    input: {
+                    data: {
+                     users_id: ${user.id}
+                        investment: ${investments.id}
+                         community: 15
+                    slot_bought: ${counter}
+                 status: INVESTING
+                    }
+                        }
+                        ) {
+                    usersInvestment {
+                 investment {
+                     name
+                        }
+                slot_bought
+                users_id {
+                    id
+                }
+                }
+                    }
+                        }`
+
+
+                // console.log(mtn)
+                const crtInv = await handleQuery(mtn, user.token, false)
+                console.log(crtInv)
+            }
+
+
+        } catch (e) {
+            console.log(e, "HandleInvestErr")
+        }
+    }
+
 
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
             <Text style={styles.title}>{investments.name}</Text>
+
 
             <Image
                 resizeMode={"cover"}
@@ -38,7 +126,8 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                         <Text style={{fontSize: 12, fontFamily: "Nexa-Book", color: COLORS.black, opacity: 0.7}}> Per
                             Slot</Text></Text>
                 </View>
-                <TouchableOpacity style={styles.pdf}>
+                <TouchableOpacity onPress={() => navigation.navigate("PdfPage", investments.business_plan)}
+                                  style={styles.pdf}>
                     <Image source={icons.pdficon} style={{width: 15, height: 20}}/>
                     <Text style={{fontSize: 16, fontFamily: 'Nexa-Bold'}}>Business Plan</Text>
                 </TouchableOpacity>
@@ -59,14 +148,14 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
                 </View>
                 <View style={styles.invBox}>
-                    <Text style={styles.invTitle}>Investors</Text>
-                    <Text style={styles.invBoxDet}>{investments?.users_id.length}</Text>
+                    <Text style={styles.invTitle}>Investor(s)</Text>
+                    <Text style={styles.invBoxDet}>{investments?.users_investments.length}</Text>
 
 
                 </View>
                 <View style={styles.invBox}>
                     <Text style={styles.invTitle}>Slots Left</Text>
-                    <Text style={styles.invBoxDet}>{`${investments?.total_slot - investments?.users_id.length}`}</Text>
+                    <Text style={styles.invBoxDet}>{`${investments?.total_slot - investments?.users_investments.length}`}</Text>
 
                 </View>
 
@@ -107,7 +196,15 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
                 </View>
                 <View style={{width: "48%"}}>
-                    <CustomButton onPress={() => navigation.navigate("InvestmentTermsPage")} filled
+                    <CustomButton onPress={async () => {
+
+                        if (counter > 0) {
+                            await HandleInvest()
+
+                        }
+
+                        // navigation.navigate("InvestmentTermsPage")
+                    }} filled
                                   text={"Invest Now"}/>
                 </View>
 
