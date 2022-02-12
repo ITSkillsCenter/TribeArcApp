@@ -1,17 +1,17 @@
 // @flow
 import React from 'react';
 import {StyleSheet, Text, View} from "react-native";
-import {COLORS, SIZES} from "../../constants";
+import {COLORS} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomTextInput from "../../components/CustomTextInput";
 import CustomButton from "../../components/CustomButton";
 
-const TopUpScreen = ({navigation}) => {
+const TopUpScreen = ({navigation, route}) => {
 
 
     return (
         <View style={styles.container}>
-            <BackButton onPress={() => navigation.pop()}/>
+        <BackButton onPress={() => navigation.pop()}/>
 
 
             <Text style={styles.withdraw}>Top-Up</Text>
@@ -28,7 +28,7 @@ const TopUpScreen = ({navigation}) => {
                 }} placeholderText={"Voluntary Account"} title={"Destination"}/>
             </View>
 
-            <View style={{flex:2, justifyContent: "flex-end"}}>
+            <View style={{flex: 2, justifyContent: "flex-end"}}>
                 <CustomButton filled text={"Proceed"}/>
             </View>
 

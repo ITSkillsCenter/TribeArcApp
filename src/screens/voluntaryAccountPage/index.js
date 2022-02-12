@@ -1,5 +1,5 @@
 // @flow
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
@@ -132,13 +132,31 @@ const tabs = [
 ];
 
 
-const VoluntaryAccountPage = ({navigation}) => {
+const VoluntaryAccountPage = ({navigation, route}) => {
 
 
     const [tabStatus, setTabStatus] = useState("All");
 
 
+    const voluntary_bal = route.params
+
+
     const TopTabs = createMaterialTopTabNavigator();
+
+
+    useEffect(() => {
+
+
+    }, []);
+
+
+
+
+
+
+
+
+
 
     const CustomTabBar = ({children, onPress}) => {
         return (
@@ -151,7 +169,7 @@ const VoluntaryAccountPage = ({navigation}) => {
                     // marginVertical:
                     // paddingHorizontal: 10,
                     height: 40,
-                    marginBottom:10
+                    marginBottom: 10
                     // backgroundColor:"cyan"
 
                 }}
@@ -364,7 +382,13 @@ const VoluntaryAccountPage = ({navigation}) => {
                 tabBar={({navigation}) => <CustomTabBar children={
                     tabs.map((item, index) => (
 
-                        <View  key={index} style={{width: "30%", height: 40, justifyContent: "center", marginVertical: 5, alignSelf:"center"}}>
+                        <View key={index} style={{
+                            width: "30%",
+                            height: 40,
+                            justifyContent: "center",
+                            marginVertical: 5,
+                            alignSelf: "center"
+                        }}>
                             <TouchableOpacity style={{width: "100%", alignItems: "center", marginVertical: 5}}
                                               activeOpacity={0.8}
                                               onPress={() => {
@@ -413,7 +437,7 @@ const VoluntaryAccountPage = ({navigation}) => {
                 <View style={{paddingHorizontal: 40,}}>
                     <View>
                         <Text style={styles.tsb}>Voluntary Account Balance</Text>
-                        <Text style={styles.balance}>₦ 60,000,000 {}</Text>
+                        <Text style={styles.balance}>₦ {voluntary_bal?.toLocaleString()}</Text>
                     </View>
                 </View>
             </ImageBackground>
@@ -422,14 +446,14 @@ const VoluntaryAccountPage = ({navigation}) => {
             <View style={styles.autosaveBox}>
 
                 <TouchableOpacity
-                    onPress={()=>navigation.navigate("TopUpScreen")}
+                    onPress={() => navigation.navigate("TopUpScreen")}
                     activeOpacity={0.7}
-                                  style={{
-                                      flexDirection: "row",
-                                      alignItems: "center",
-                                      justifyContent: "space-between",
-                                      width: "30%"
-                                  }}>
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        width: "30%"
+                    }}>
                     <Image style={{width: 40, height: 40}} source={icons.topUpicon}/>
                     <Text style={{fontSize: 14, color: COLORS.primary, fontFamily: "Nexa-Book"}}>Top Up</Text>
 
@@ -437,15 +461,15 @@ const VoluntaryAccountPage = ({navigation}) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={()=>navigation.navigate("WithdrawalScreen")}
+                    onPress={() => navigation.navigate("WithdrawalScreen")}
 
                     activeOpacity={0.7}
-                                  style={{
-                                      flexDirection: "row",
-                                      alignItems: "center",
-                                      justifyContent: "space-between",
-                                      width: "35%"
-                                  }}>
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        width: "35%"
+                    }}>
 
                     <Image style={{width: 40, height: 40}} source={icons.withdraw}/>
                     <Text style={{fontSize: 14, color: COLORS.primary, fontFamily: "Nexa-Book"}}>Withdraw</Text>

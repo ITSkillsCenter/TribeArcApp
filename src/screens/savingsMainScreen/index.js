@@ -1,11 +1,56 @@
 // @flow
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
+import BackButton from "../../components/BackButton";
+import {handleQuery} from "../../graphql/requests";
+import {UserContext} from "../../context/UserContext";
 
-const SavingsMainScreen = ({navigation}) => {
+const SavingsMainScreen = ({navigation, route}) => {
+
+    const user = useContext(UserContext)
+
+    const [savings, setSavings] = useState("")
+    const [voluntary, setVoluntary] = useState("")
+    const [totalBalance, setTotalBalance] = useState("")
+
+    useEffect(() => {
+
+        CheckBalance()
+
+    }, []);
+
+
+    const CheckBalance = async () => {
+
+
+        let qry = `query {
+                savingAccounts(where: { user_id: ${user.id} }) {
+                    voluntary_funds
+                    amount_saved
+                                }
+                            }`
+        try {
+
+            const bal = await handleQuery(qry, user.token, false)
+            // console.log(bal.data.savingAccounts[0].user_id)
+
+            await setSavings(bal.data.savingAccounts[0].amount_saved)
+            await setVoluntary(bal.data.savingAccounts[0].voluntary_funds)
+            await setTotalBalance(bal.data.savingAccounts[0].amount_saved + bal.data.savingAccounts[0].voluntary_funds)
+
+
+        } catch (e) {
+            console.log(e, "errorCheckBal")
+        }
+
+    }
+
+
     return (
         <View style={styles.container}>
+
+            {route.params && <BackButton onPress={() => navigation.pop()}/>}
 
 
             <Text style={styles.inv}>Savings</Text>
@@ -17,30 +62,31 @@ const SavingsMainScreen = ({navigation}) => {
                     // alignItems: 'center'
                 }}>
                     <View>
-                        <Text style={styles.tsb}>Savings Balance</Text>
-                        <Text style={styles.balance}>₦ 20,000,000 {}</Text>
+                        <Text style={styles.tsb}>Total Savings Balance</Text>
+                        <Text style={styles.balance}>₦ {totalBalance?.toLocaleString()}</Text>
                     </View>
 
                 </View>
             </ImageBackground>
 
             <View style={styles.rootBox}>
-                <TouchableOpacity onPress={() => navigation.navigate("Savings", "isInvestment")} activeOpacity={0.85}
+                <TouchableOpacity onPress={() => navigation.navigate("SavingsAccountPage", savings)} activeOpacity={0.85}
                                   style={styles.box}>
                     <Image source={icons.savPig} style={{width: 60, height: 60}}/>
                     <View style={styles.textBox}>
                         <Text style={styles.savAcct}>Savings Account</Text>
                         <Text style={styles.savDesc}>Total monthly saving automatically debited</Text>
-                        <Text style={styles.amt}>₦ 0.00</Text>
+                        <Text style={styles.amt}>₦ {savings?.toLocaleString()}</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate("VoluntaryAccountPage", "isVoluntary")} activeOpacity={0.85}
+                <TouchableOpacity onPress={() => navigation.navigate("VoluntaryAccountPage", voluntary)}
+                                  activeOpacity={0.85}
                                   style={styles.box}>
                     <Image source={icons.savHand} style={{width: 60, height: 60}}/>
                     <View style={styles.textBox}>
                         <Text style={styles.savAcct}>Voluntary Account</Text>
                         <Text style={styles.savDesc}>Total voluntary saving that can be withdrawn anytime</Text>
-                        <Text style={styles.amt}>₦ 0.00</Text>
+                        <Text style={styles.amt}>₦ {voluntary.toLocaleString()}</Text>
                     </View>
                 </TouchableOpacity>
 

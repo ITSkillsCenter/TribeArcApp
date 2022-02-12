@@ -264,7 +264,6 @@ const EditProfile = ({navigation}) => {
 
                     <CustomTextInput
                         title={"Email"}
-
                         initialValue={email}
                         onChange={value => setEmail(value)}
                         placeholderText={"Email Address"}

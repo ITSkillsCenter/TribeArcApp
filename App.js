@@ -16,7 +16,7 @@ import LinkCard from "./src/screens/linkCard";
 import SuccessScreen from "./src/screens/successScreen";
 import DebitCardSuccessScreen from "./src/screens/debitCardSuccessScreen";
 import Splash from "./src/screens/splash";
-import {Provider as PaperProvider} from 'react-native-paper';
+import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SettingsPage from "./src/screens/settings";
 import CommunityQuestions from "./src/screens/communityQuestions";
@@ -161,7 +161,6 @@ const App = () => {
                 <MainStack.Screen name={"VoluntaryTransactionPage"} component={VoluntaryTransactionPage}/>
                 <MainStack.Screen name={"WithdrawalScreen"} component={WithdrawalScreen}/>
                 <MainStack.Screen name={"WithdrawalSuccessScreen"} component={WithdrawalSuccessScreen}/>
-                <MainStack.Screen name={"TopUpScreen"} component={TopUpScreen}/>
                 <MainStack.Screen name={"AccountDetailsPage"} component={AccountDetailsPage}/>
                 <MainStack.Screen name={"LinkCard"} component={LinkCard}/>
                 <MainStack.Screen name={"SuccessScreen"} component={SuccessScreen}/>
@@ -184,6 +183,8 @@ const App = () => {
                 <MainStack.Screen name={"ReferralPage"} component={ReferralPage}/>
                 <MainStack.Screen name={"PaymentWebPage"} component={PaymentWebPage}/>
                 <MainStack.Screen name={"RecentTransactions"} component={RecentTransactions}/>
+                <MainStack.Screen name={"TopUpScreen"} component={TopUpScreen}/>
+
 
             </MainStack.Navigator>
 
@@ -354,7 +355,9 @@ const App = () => {
                             </View>
                         ),
                     }}/>
-                <Tab.Screen name="TopUpScreen" component={TopUpScreen}
+                <Tab.Screen
+                    name="TopUpScreenDummy"
+                    component={TopUpScreen}
 
                             options={{
                                 tabBarIcon: ({focused}) => {
@@ -457,13 +460,23 @@ const App = () => {
     };
 
 
+    const theme = {
+        ...DefaultTheme,
+        roundness: 2,
+        colors: {
+            ...DefaultTheme.colors,
+            primary: COLORS.primary,
+            accent: COLORS.secondary,
+        },
+    };
+
     return (
         // <GestureHandlerRootView>
 
 
         <AuthContext.Provider value={auth}>
 
-            <PaperProvider>
+            <PaperProvider theme={theme}>
                 <SafeAreaView style={styles.container}>
                     {/*<StatusBar translucent={false} backgroundColor={"transparent"} />*/}
                     <NavigationContainer>

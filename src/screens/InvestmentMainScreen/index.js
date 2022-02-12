@@ -96,6 +96,8 @@ const InvestmentMainScreen = ({navigation}) => {
 
         try {
 
+            console.log(qry)
+
 
             setLoading(true)
             const getAllInvRes = await handleQuery(qry, user.token, false)

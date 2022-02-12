@@ -2,9 +2,7 @@
 import React, {useContext, useState} from 'react';
 import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons} from "../../constants";
-import BackButton from "../../components/BackButton";
 import {launchImageLibrary} from "react-native-image-picker";
-import CustomInputBox from "../../components/CustomInputBox";
 import CustomButton from "../../components/CustomButton";
 import {BASE_URL} from "../../config";
 import {handleQuery} from "../../graphql/requests";
@@ -63,7 +61,8 @@ const CompleteProfile1 = ({navigation}) => {
              firstname: "${firstName}",
              lastname: "${lastName}",
              phone_number:"${phoneNumber}"
-             
+             next_of_kin: "${nextOfKin}"
+             next_of_kin_number: "${nofNumber}"
               }
              }
                 ) {
@@ -76,7 +75,7 @@ const CompleteProfile1 = ({navigation}) => {
                 }`
         try {
 
-            // console.log(qry)
+            console.log(qry)
 
             setIsLoading(true)
 
@@ -169,7 +168,7 @@ const CompleteProfile1 = ({navigation}) => {
             <ImageBackground
                 resizeMode={"contain"}
                 source={filePath ? {uri: filePath} : avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}
-                style={{width: 110, height: 110,  borderRadius: 10, aspectRatio: 1, marginBottom:10}}>
+                style={{width: 110, height: 110, borderRadius: 10, aspectRatio: 1, marginBottom: 10}}>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => ChooseFile()}
@@ -195,49 +194,64 @@ const CompleteProfile1 = ({navigation}) => {
 
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
-            <CustomTextInput
-                initialValue={firstName}
-                onChange={value => setFirstName(value)}
-                placeholderText={"Enter First Name"}
-                title={"First Name"}
-            />
+                <CustomTextInput
+                    initialValue={firstName}
+                    onChange={value => setFirstName(value)}
+                    placeholderText={"Enter First Name"}
+                    title={"First Name"}
+                />
 
-            <CustomTextInput
-                initialValue={lastName}
-                onChange={value => setLastName(value)}
-                placeholderText={"Enter Last Name"}
-                title={"Last Name"}
-            />
-            <CustomTextInput
-                initialValue={phoneNumber}
-                onChange={value => setPhoneNumber(value)}
-                placeholderText={"Enter Phone Number"}
-                title={"Phone Number"}
-            />
-            <CustomTextInput
-                initialValue={nextOfKin}
-                onChange={value => setNextOfKin(value)}
-                placeholderText={"Enter Next of Kin's Name"}
-                title={"Next of Kin"}
-            />
+                <CustomTextInput
+                    initialValue={lastName}
+                    onChange={value => setLastName(value)}
+                    placeholderText={"Enter Last Name"}
+                    title={"Last Name"}
+                />
+                <CustomTextInput
+                    initialValue={phoneNumber}
+                    onChange={value => setPhoneNumber(value)}
+                    placeholderText={"Enter Phone Number"}
+                    title={"Phone Number"}
+                    props={{
+                        keyboardType: "numeric"
+                    }}
+                />
+                <CustomTextInput
+                    initialValue={nextOfKin}
+                    onChange={value => setNextOfKin(value)}
+                    placeholderText={"Enter Next of Kin's Name"}
+                    title={"Next of Kin"}
+                />
 
-            <CustomTextInput
-                initialValue={nofNumber}
-                onChange={value => setNofNumber(value)}
-                placeholderText={"Enter Next of Kin's Number"}
-                title={"Next of Kin's Phone Number"}
-            />
+                <CustomTextInput
+                    initialValue={nofNumber}
+                    onChange={value => setNofNumber(value)}
+                    placeholderText={"Enter Next of Kin's Number"}
+                    title={"Next of Kin's Phone Number"}
+                    props={{
+                        keyboardType: "numeric"
+                    }}
+                />
             </KeyboardAwareScrollView>
 
 
             <View style={styles.saveButton}>
                 <CustomButton
                     loading={isLoading}
-                    filled={firstName !== "" && lastName !== "" && phoneNumber !== ""}
+                    filled={firstName !== "" && lastName !== "" && phoneNumber !== "" && nextOfKin !== "" && nofNumber !== ""}
                     text={"Save & Continue"}
                     onPress={async () => {
 
-                        await navigation.navigate("CompleteProfile2")
+
+                        try {
+                            await UpdateUserData()
+                            await UploadFile()
+                            navigation.navigate("CompleteProfile2")
+
+
+                        } catch (e) {
+                            console.log(e, "UpdateUserError")
+                        }
 
 
                     }}/>
@@ -260,7 +274,7 @@ const styles = StyleSheet.create({
     box: {
         flexDirection: "row",
         height: 80,
-        marginVertical:10
+        marginVertical: 10
         // backgroundColor: "red"
 
     },

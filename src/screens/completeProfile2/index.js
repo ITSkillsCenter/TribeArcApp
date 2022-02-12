@@ -27,17 +27,17 @@ const CompleteProfile2 = ({navigation}) => {
             input: {
             where: { id: ${user.id} }
             data: {
-             firstname: "${firstName}",
-             lastname: "${lastName}",
-             phone_number:"${phoneNumber}"
+             profession: "${profession}"
+             designation: "${designation}"
+            remuneration: "${remuneration}"
              
               }
              }
                 ) {
                 user {
-                firstname
-                lastname
-                email
+                profession
+                designation
+                remuneration
                       }
                     }
                 }`
@@ -105,8 +105,14 @@ const CompleteProfile2 = ({navigation}) => {
                     filled={profession !== "" && designation !== "" && remuneration !== ""}
                     text={"Submit"}
                     onPress={async () => {
+                        try {
+                            await UpdateUserData()
+                            await navigation.navigate("ProfileCompletedSuccessScreen")
 
-                        await navigation.navigate("ProfileCompletedSuccessScreen")
+                        } catch (e) {
+                            console.log(e, "UpdateUserError2")
+                        }
+
 
 
                     }}/>

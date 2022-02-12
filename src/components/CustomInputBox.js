@@ -38,7 +38,7 @@ const CustomInputBox = ({
                     Style={{color: "red"}}
 
                     style={[styles.input, {
-                        fontSize:20,
+                        fontSize:16,
                         width: short ? SIZES.width * 0.3 : "100%",
                         ...inputContainerStyle,
                         backgroundColor: 'white',

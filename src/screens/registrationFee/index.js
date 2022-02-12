@@ -5,17 +5,38 @@ import {COLORS, icons} from "../../constants";
 import CustomButton from "../../components/CustomButton";
 import {Paystack} from "react-native-paystack-webview/lib";
 import {UserContext} from "../../context/UserContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {BASE_URL} from "../../config";
+import axios from "axios";
 
 
 export const RegistrationFee = ({navigation}) => {
 
     const user = useContext(UserContext)
 
+    // console.log(user)
+
     const paystackWebViewRef = useRef();
 
 
     const [isLoading, setIsLoading] = useState(false)
+
+
+    const PayRegFee = async (ref) => {
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`
+        }
+
+        await axios.post(`${BASE_URL}/verify/transaction`, {
+            community_id: 15,
+            user_id: user.id,
+            type: "isRegister",
+            amount: 20000,
+            reference: `${ref}`
+        }, {headers: headers}).then((response) => console.log(response.data))
+            .catch((err) => console.log(err, "Err"))
+
+    }
 
 
     return (<View style={styles.container}>
@@ -52,7 +73,7 @@ export const RegistrationFee = ({navigation}) => {
         </View>
 
         <Paystack
-            paystackKey="pk_test_b0f9c1e94ea37b2ba7df563002ee8a074bc5678a"
+            paystackKey="pk_test_52d14b2ac56f0420095618159b5dac28891bd754"
             amount={20000}
             billingEmail={user.email}
             activityIndicatorColor={COLORS.primary}
@@ -61,8 +82,9 @@ export const RegistrationFee = ({navigation}) => {
             }}
             onSuccess={async (res) => {
                 // await TransactionData(res)
-                await navigation.navigate("RegFeeSuccessScreen")
-                console.log(res, "RESDSD")
+                // await navigation.navigate("RegFeeSuccessScreen")
+                console.log(res.data.transactionRef.reference, "RESDSD")
+                await PayRegFee(res.data.transactionRef.reference)
             }}
             autoStart={false}
             ref={paystackWebViewRef}

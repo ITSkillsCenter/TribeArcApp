@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {Image, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
@@ -9,7 +9,6 @@ import ShortTextInput from "../../components/ShortTextInput";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import {Modalize} from "react-native-modalize";
-import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from "react-native-datepicker";
 
 
@@ -495,7 +494,6 @@ const Savings = ({navigation, route}) => {
                             // }
 
                             navigation.navigate("SavingsAccountPage")
-
 
 
                         }}/>

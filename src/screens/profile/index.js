@@ -8,6 +8,7 @@ import {AuthContext} from "../../context/AuthContext";
 import CustomButton from "../../components/CustomButton";
 import {Modalize} from "react-native-modalize";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {handleQuery} from "../../graphql/requests";
 
 
 const Profile = ({navigation, route}) => {
@@ -16,10 +17,40 @@ const Profile = ({navigation, route}) => {
     // console.log(user)
 
     const [avatar, setAvatar] = useState(null)
+    const [firstname, setFirstname] = useState("")
+    const [lastname, setLastname] = useState("")
+
 
     useEffect(() => {
 
         GetImg()
+
+        const GetName = async () => {
+
+            let qry = `query{
+                users(where:{id:${user.id}}){
+                 firstname
+                lastname
+                        }
+                       }`
+
+            try {
+
+                const name = await handleQuery(qry, user.token, false)
+
+                console.log(name.data.users[0])
+                await setFirstname(name.data.users[0].firstname)
+                await setLastname(name.data.users[0].lastname)
+
+
+            } catch (e) {
+
+                console.log(e, "GetNameErr")
+            }
+
+        }
+
+        GetName()
 
     }, [])
 
@@ -134,7 +165,7 @@ const Profile = ({navigation, route}) => {
                     </View>
 
                     <View style={styles.fullNameContainer}>
-                        <Text style={styles.fullName}>{user.firstname} {user.lastname}</Text>
+                        <Text style={styles.fullName}>{firstname} {lastname}</Text>
 
                         <Text style={styles.editProfile}>Edit Profile</Text>
 

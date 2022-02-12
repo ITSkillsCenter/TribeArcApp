@@ -1,113 +1,12 @@
 // @flow
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import moment from "moment";
+import {handleQuery} from "../../graphql/requests";
+import {UserContext} from "../../context/UserContext";
 
-
-const data = [
-    {
-        "amount_paid": 15000,
-        "created_at": "2022-02-09T09:49:48.638Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 5000,
-        "created_at": "2022-02-04T16:18:07.799Z",
-        "status": "FAILED",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 10000,
-        "created_at": "2022-02-04T15:54:45.921Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 10000,
-        "created_at": "2022-02-04T08:59:54.793Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    }
-]
-const data2 = [
-    {
-        "amount_paid": 15000,
-        "created_at": "2022-02-09T09:49:48.638Z",
-        "status": "FAILED",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 5000,
-        "created_at": "2022-02-04T16:18:07.799Z",
-        "status": "FAILED",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 10000,
-        "created_at": "2022-02-04T15:54:45.921Z",
-        "status": "FAILED",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 10000,
-        "created_at": "2022-02-04T08:59:54.793Z",
-        "status": "FAILED",
-        "user_id": {
-            "id": "180"
-        }
-    }
-]
-const data3 = [
-    {
-        "amount_paid": 15000,
-        "created_at": "2022-02-09T09:49:48.638Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 5000,
-        "created_at": "2022-02-04T16:18:07.799Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 10000,
-        "created_at": "2022-02-04T15:54:45.921Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 10000,
-        "created_at": "2022-02-04T08:59:54.793Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    }
-]
 
 const tabs = [
     {
@@ -130,11 +29,67 @@ const tabs = [
 ];
 
 
-const SavingsAccountPage = ({navigation}) => {
+const SavingsAccountPage = ({navigation, route}) => {
+
+    const savings = route.params
+
+    const user = useContext(UserContext);
 
 
     const [tabStatus, setTabStatus] = useState("All");
+    const [allTrx, setAllTrx] = useState([]);
+    const [pending, setPending] = useState([]);
+    const [saved, setSaved] = useState([]);
 
+    useEffect(() => {
+
+        GetTransactionHistory()
+
+    }, []);
+
+
+    const GetTransactionHistory = async () => {
+
+        let trx = `query {
+  qry1: savingsTransactions(
+    where: { user_id: ${user.id}, destination: "Savings Wallet" }
+    sort: "created_at:desc"
+    limit: 4
+  ) {
+    amount_paid
+    created_at
+    status
+  }
+  qry2: savingsTransactions(
+    where: { user_id: ${user.id}, status: "FAILED" }
+    sort: "created_at:desc"
+    limit: 4
+  ) {
+    amount_paid
+    created_at
+    status
+  }
+}
+
+`
+
+        try {
+
+            const trxRes = await handleQuery(trx, user.token, false)
+
+            // console.log(trxRes.data.qry1)
+
+            await setPending(trxRes.data.qry2)
+            await setSaved(trxRes.data.qry1)
+            await setAllTrx(trxRes.data.qry2.concat(trxRes.data.qry1))
+
+
+        } catch (e) {
+            console.log(e, "GetTransactionHistoryErr")
+        }
+
+
+    }
 
 
     const TopTabs = createMaterialTopTabNavigator();
@@ -149,7 +104,7 @@ const SavingsAccountPage = ({navigation}) => {
                     alignItems: "center",
                     // paddingHorizontal: 30,
                     height: 30,
-                    marginBottom:10
+                    marginBottom: 10
 
                 }}
                 onPress={onPress}>
@@ -167,7 +122,7 @@ const SavingsAccountPage = ({navigation}) => {
 
         return (
             <View style={styles.tabOneContainer}>
-                <FlatList data={data}
+                <FlatList data={allTrx}
                           key={item => item.index}
                           renderItem={({item, index}) => (
                               <View>
@@ -234,7 +189,7 @@ const SavingsAccountPage = ({navigation}) => {
 
         return (
             <View style={styles.tabOneContainer}>
-                <FlatList data={data2}
+                <FlatList data={pending}
                           key={item => item.index}
                           renderItem={({item, index}) => (
                               <View>
@@ -302,7 +257,7 @@ const SavingsAccountPage = ({navigation}) => {
 
         return (
             <View style={styles.tabOneContainer}>
-                <FlatList data={data3}
+                <FlatList data={saved}
                           key={item => item.index}
                           renderItem={({item, index}) => (
                               <View>
@@ -377,9 +332,15 @@ const SavingsAccountPage = ({navigation}) => {
                 tabBar={({navigation}) => <CustomTabBar children={
                     tabs.map((item, index) => (
 
-                        <View style={{width: "30%", height: 40, justifyContent: "center", marginVertical: 5, alignSelf:"center"}}>
+                        <View key={index} style={{
+                            width: "30%",
+                            height: 40,
+                            justifyContent: "center",
+                            marginVertical: 5,
+                            alignSelf: "center"
+                        }}>
                             <TouchableOpacity style={{width: "100%", alignItems: "center", marginVertical: 5}}
-                                              key={index} activeOpacity={0.8}
+                                              activeOpacity={0.8}
                                               onPress={() => {
                                                   navigation.navigate(item.isTab)
                                                   setTabStatus(item.tabStatus)
@@ -429,7 +390,7 @@ const SavingsAccountPage = ({navigation}) => {
                 <View style={{paddingHorizontal: 40,}}>
                     <View>
                         <Text style={styles.tsb}>Savings Account Balance</Text>
-                        <Text style={styles.balance}>₦ 20,000,000 {}</Text>
+                        <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
                     </View>
                 </View>
             </ImageBackground>
@@ -438,7 +399,7 @@ const SavingsAccountPage = ({navigation}) => {
             <View style={styles.autosaveBox}>
 
                 <View>
-                    <Text style={styles.autosaveText}>Autosave Amount</Text>
+                    <Text style={styles.autosaveText}>Autocharge Amount</Text>
                     <Text style={styles.autosaveAmt}>₦ 10,000</Text>
                 </View>
 

@@ -1,16 +1,12 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
 
-import {
-    Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View
-} from "react-native";
+import {Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import {useIsFocused} from "@react-navigation/native";
 import moment from "moment";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {cyan50} from "react-native-paper/lib/typescript/styles/colors";
 
 
 // const frames = [
@@ -27,6 +23,9 @@ const DashBoard = ({navigation}) => {
     // const frames = ["Total Savings Balance", "Investment Account Balance", "Voluntary Account Balance"]
 
     const [savings, setSavings] = useState("")
+    const [voluntary, setVoluntary] = useState("")
+    const [totalBalance, setTotalBalance] = useState("")
+
     const [firstname, setFirstname] = useState("")
     const [lastname, setLastname] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
@@ -48,62 +47,36 @@ const DashBoard = ({navigation}) => {
 
     const user = useContext(UserContext)
 
-
     const CheckBalance = async () => {
 
 
-        const infoQry = `query {
-                        savingAccounts(where: { user_id: ${user.id} }) {
-                        id
-                        amount_saved
-                        bvn
-                        user_id{
+        let qry = `query {
+                savingAccounts(where: { user_id: ${user.id} }) {
+                    voluntary_funds
+                    amount_saved
+                        user_id {
                             id
                             firstname
                             lastname
                             phone_number
                             profession
                             avatar
-                              }
+                                    }
                                 }
-                                    }`
-
-
-        let qry = `query {
-                        savingsTransactions(where: {
-                         user_id: ${user.id},
-                         status: "SUCCESS"
-                          }) {
-                        amount_paid
-                            }
                             }`
-
         try {
 
-            let InfoRes = await handleQuery(infoQry, user.token, false);
-            await setFirstname(InfoRes.data.savingAccounts[0].user_id.firstname)
-            await setLastname(InfoRes.data.savingAccounts[0].user_id.lastname)
-            await setPhoneNumber(InfoRes.data.savingAccounts[0].user_id.phone_number)
-            await setAvatar(InfoRes.data.savingAccounts[0].user_id.avatar)
-            await setProfession(InfoRes.data.savingAccounts[0].user_id.profession)
-            await setBvn(InfoRes.data.savingAccounts[0].bvn)
-            // await setSavings(InfoRes.data.savingAccounts[0].amount_saved)
+            const bal = await handleQuery(qry, user.token, false)
+            // console.log(bal.data.savingAccounts[0].user_id)
 
-
-            let res = await handleQuery(qry, user.token, false)
-
-            const arr = await res.data.savingsTransactions.map((item) => {
-                return Number(item.amount_paid)
-            })
-
-            const totalSavings = await arr.reduce((a, b) => a + b, 0)
-            await setSavings(totalSavings)
-            // console.log(totalSavings, "TS")
-
-
-            if (InfoRes.data.savingAccounts[0].user_id.avatar) {
-                await AsyncStorage.setItem("ImageLocal", InfoRes.data.savingAccounts[0].user_id.avatar)
-            }
+            await setSavings(bal.data.savingAccounts[0].amount_saved)
+            await setVoluntary(bal.data.savingAccounts[0].voluntary_funds)
+            await setTotalBalance(bal.data.savingAccounts[0].amount_saved + bal.data.savingAccounts[0].voluntary_funds)
+            await setFirstname(bal.data.savingAccounts[0].user_id.firstname)
+            await setLastname(bal.data.savingAccounts[0].user_id.lastname)
+            await setAvatar(bal.data.savingAccounts[0].user_id.avatar)
+            await setPhoneNumber(bal.data.savingAccounts[0].user_id.phone_number)
+            await setProfession(bal.data.savingAccounts[0].user_id.profession)
 
 
         } catch (e) {
@@ -111,6 +84,7 @@ const DashBoard = ({navigation}) => {
         }
 
     }
+
 
     const FetchTransactions = async () => {
 
@@ -126,6 +100,8 @@ const DashBoard = ({navigation}) => {
                         }`
 
         try {
+
+            // console.log(qry)
 
             let res = await handleQuery(qry, user.token, false)
             // console.log(res.data.savingsTransactions, " Rezzzzzzzz")
@@ -178,7 +154,7 @@ const DashBoard = ({navigation}) => {
             let res = await handleQuery(qry, user.token, false)
 
             const UnansweredQuestions = await res.data.questions.filter(item => !arr.includes(item.id))
-            console.log(UnansweredQuestions, "UNANSS")
+            // console.log(UnansweredQuestions, "UNANSS")
 
             await setQuestions(UnansweredQuestions)
 
@@ -218,8 +194,8 @@ const DashBoard = ({navigation}) => {
 
             <ScrollView showsVerticalScrollIndicator={false}>
 
-                <View style={{width:"100%", marginBottom:15}}>
-                    <ScrollView  horizontal showsHorizontalScrollIndicator={false}>
+                <View style={{width: "100%", marginBottom: 15}}>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
 
                         <ImageBackground resizeMode={"contain"} source={icons.balFrame} style={styles.balanceFrame}>
                             <View style={{
@@ -230,9 +206,10 @@ const DashBoard = ({navigation}) => {
                             }}>
                                 <View>
                                     <Text style={styles.tsb}>Total Savings Balance</Text>
-                                    <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
+                                    <Text style={styles.balance}>₦ {totalBalance?.toLocaleString()}</Text>
                                 </View>
-                                <TouchableOpacity onPress={() => navigation.navigate("SavingsMainScreen")}>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate("SavingsMainScreen", "backButton")}>
                                     <Image resizeMode={"contain"} style={{width: 40, height: 40}}
                                            source={icons.plusIcon}/>
                                 </TouchableOpacity>
@@ -247,15 +224,16 @@ const DashBoard = ({navigation}) => {
                             }}>
                                 <View>
                                     <Text style={styles.tsb}>Investment Account Balance</Text>
-                                    <Text style={styles.balance}>₦ {}</Text>
+                                    <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
                                 </View>
-                                <TouchableOpacity onPress={() => navigation.navigate("")}>
+                                <TouchableOpacity onPress={() => navigation.navigate("Savings")}>
                                     <Image resizeMode={"contain"} style={{width: 40, height: 40}}
                                            source={icons.plusIcon}/>
                                 </TouchableOpacity>
                             </View>
                         </ImageBackground>
-                        <ImageBackground resizeMode={"contain"} source={icons.balFrame} style={[styles.balanceFrame, {marginRight: 0}]}>
+                        <ImageBackground resizeMode={"contain"} source={icons.balFrame}
+                                         style={[styles.balanceFrame, {marginRight: 0}]}>
                             <View style={{
                                 flexDirection: "row",
                                 justifyContent: 'space-between',
@@ -264,9 +242,9 @@ const DashBoard = ({navigation}) => {
                             }}>
                                 <View>
                                     <Text style={styles.tsb}>Voluntary Account Balance</Text>
-                                    <Text style={styles.balance}>₦ {}</Text>
+                                    <Text style={styles.balance}>₦ {voluntary?.toLocaleString()}</Text>
                                 </View>
-                                <TouchableOpacity onPress={() => navigation.navigate("")}>
+                                <TouchableOpacity onPress={() => navigation.navigate("TopUpScreen", "backButton")}>
                                     <Image resizeMode={"contain"} style={{width: 40, height: 40}}
                                            source={icons.plusIcon}/>
                                 </TouchableOpacity>
@@ -280,8 +258,7 @@ const DashBoard = ({navigation}) => {
 
 
                 <TouchableOpacity activeOpacity={0.8} style={styles.saveFrame}
-                                  onPress={() => navigation.navigate("SavingsMainScreen")}>
-
+                                  onPress={() => navigation.navigate("SavingsMainScreen", "backButton")}>
                     <View>
                         <Image source={icons.pigIcon} resizeMode={"contain"} style={{width: 55, height: 55}}/>
                     </View>
@@ -299,7 +276,6 @@ const DashBoard = ({navigation}) => {
 
 
                 <View style={styles.cardContainer}>
-
                     <View style={styles.TodoBox}>
                         <Text style={styles.todo}>To - Dos</Text>
                     </View>
@@ -363,7 +339,6 @@ const DashBoard = ({navigation}) => {
                                    source={icons.arrowRight}/>
                         </View>
                     </View>}
-
 
 
                     {transactions.map((item, index) => (
@@ -446,7 +421,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
         borderRadius: 15, // padding: 20,
         height: 200,
-        width:350,
+        width: 350,
         marginRight: 10,
         justifyContent: "center",
     },
