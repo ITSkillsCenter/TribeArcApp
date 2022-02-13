@@ -7,7 +7,7 @@ import CustomButton from "../../components/CustomButton";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 
-const ProfileCompletedSuccessScreen = ({navigation, route}) => {
+const PaymentSuccessScreen = ({navigation, route}) => {
 
 
     return (
@@ -20,21 +20,21 @@ const ProfileCompletedSuccessScreen = ({navigation, route}) => {
             </View>
 
             <View style={styles.tsBox}>
-                <Text style={styles.ts}>Profile Completed!</Text>
+                <Text style={styles.ts}>Payment Successful!</Text>
             </View>
             <View style={styles.tsBox}>
-                <Text style={styles.desc}>Dear User your profile has been successfully completed.</Text>
+                <Text style={styles.desc}>Dear User your wallet has been was credited.</Text>
             </View>
 
             <View style={{marginVertical: 20}}>
-                <CustomButton filled onPress={() => navigation.navigate("BottomTabs")} text={"Ok"}/>
+                <CustomButton filled onPress={() => navigation.navigate("DashBoard")} text={"Ok"}/>
             </View>
 
         </View>
     );
 };
 
-export default ProfileCompletedSuccessScreen
+export default PaymentSuccessScreen
 
 
 const styles = StyleSheet.create({

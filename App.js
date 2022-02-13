@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import SplashScreen from "react-native-splash-screen";
 import {COLORS, icons} from "./src/constants";
@@ -56,6 +56,8 @@ import AddAccountDetailsScreen from "./src/screens/addAccountDetailsScreen";
 import AccountDetailsSavedSuccess from "./src/screens/accountDetailsSavedSuccess";
 import CardSettings from "./src/screens/cardSettings";
 import PdfPage from "./src/screens/pdfPage";
+import PaymentSuccessScreen from "./src/screens/paymentSuccessScreen";
+import {handleQuery} from "./src/graphql/requests";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -64,9 +66,16 @@ const App = () => {
     const [viewedWelcomePage, setViewedWelcomePage] = useState(false)
     const [savingWlc, setSavingWlc] = useState(false)
     const [investWlc, setInvestWlc] = useState(false)
+    const [paidRegFee, setPaidRegFee] = useState(false);
+
+
 
     useEffect(() => {
-        SplashScreen.hide()
+
+        setTimeout(()=>{
+            SplashScreen.hide()
+
+        },1000)
         CheckWelcomePage()
         CheckSavingWlc()
         CheckInvestWlc()
@@ -137,10 +146,44 @@ const App = () => {
 
 
     const MainNavigation = () => {
+
+        const user = useContext(UserContext);
+
+
+        useEffect(() => {
+
+            ChkRegFee()
+
+        }, []);
+
+
+        const ChkRegFee = async () => {
+
+
+            let qry = `query {
+                    users(where: { id: ${user.id} }) {
+                        paid_reg_fee
+                                    }
+                                }`
+
+
+            try {
+                const qryRes = await handleQuery(qry, user.token, false)
+                console.log(qryRes.data.users[0].paid_reg_fee)
+               await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
+
+
+            } catch (e) {
+                console.log(e, "ChkRegFeeErr")
+            }
+
+        }
+
+
         return (// <View style={{flex:1, backgroundColor:"white"}}>
             <MainStack.Navigator
                 // initialRouteName={viewedWelcomePage ? "DashBoard" : "BottomTabs"}
-                initialRouteName={"BottomTabs"}
+                initialRouteName={paidRegFee? "BottomTabs": "RegistrationFee"}
                 screenOptions={{
                     headerShown: false, // backgroundColor:"white"
                 }}>
@@ -179,6 +222,7 @@ const App = () => {
                 <MainStack.Screen name={"InvestmentMainScreen"} component={InvestmentMainScreen}/>
                 <MainStack.Screen name={"InvestmentDetailsScreen"} component={InvestmentDetailsScreen}/>
                 <MainStack.Screen name={"MyInvestmentDetailsScreen"} component={MyInvestmentDetailsScreen}/>
+                <MainStack.Screen name={"PaymentSuccessScreen"} component={PaymentSuccessScreen}/>
                 <MainStack.Screen name={"InvestmentTermsPage"} component={InvestmentTermsPage}/>
                 <MainStack.Screen name={"ReferralPage"} component={ReferralPage}/>
                 <MainStack.Screen name={"PaymentWebPage"} component={PaymentWebPage}/>
@@ -359,54 +403,54 @@ const App = () => {
                     name="TopUpScreenDummy"
                     component={TopUpScreen}
 
-                            options={{
-                                tabBarIcon: ({focused}) => {
-                                    return (
-                                        <View
+                    options={{
+                        tabBarIcon: ({focused}) => {
+                            return (
+                                <View
+                                    style={{
+                                        alignItems: "center",
+                                        height: 50,
+                                        justifyContent: "space-around",
+                                        elevation: 7,
+                                        shadowOpacity: 0.1,
+                                        shadowOffset: {
+                                            width: 4,
+                                            height: 5,
+                                        },
+                                    }}>
+                                    <View
+                                        style={{
+                                            width: 70,
+                                            height: 70,
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            bottom: 20,
+                                            borderRadius: 35,
+
+                                        }}
+                                    >
+                                        <Image
+                                            source={icons.addIcon}
+                                            resizeMode={"center"}
+
                                             style={{
-                                                alignItems: "center",
-                                                height: 50,
-                                                justifyContent: "space-around",
-                                                elevation: 7,
-                                                shadowOpacity: 0.1,
-                                                shadowOffset: {
-                                                    width: 4,
-                                                    height: 5,
-                                                },
-                                            }}>
-                                            <View
-                                                style={{
-                                                    width: 70,
-                                                    height: 70,
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                    bottom: 20,
-                                                    borderRadius: 35,
+                                                width: 53,
+                                                height: 53,
+                                            }}
+                                        />
+                                    </View>
+                                </View>
+                            );
+                        },
 
-                                                }}
-                                            >
-                                                <Image
-                                                    source={icons.addIcon}
-                                                    resizeMode={"center"}
+                        tabBarButton: (props) => (
+                            <TabBarCustomButton
+                                {...props}
+                                onPress={() => navigation.navigate("TopUpScreen")}
+                            />
+                        ),
 
-                                                    style={{
-                                                        width: 53,
-                                                        height: 53,
-                                                    }}
-                                                />
-                                            </View>
-                                        </View>
-                                    );
-                                },
-
-                                tabBarButton: (props) => (
-                                    <TabBarCustomButton
-                                        {...props}
-                                        onPress={() => navigation.navigate("TopUpScreen")}
-                                    />
-                                ),
-
-                            }}
+                    }}
 
                 />
                 <Tab.Screen

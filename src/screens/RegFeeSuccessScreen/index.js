@@ -27,7 +27,7 @@ const RegFeeSuccessScreen = ({navigation, route}) => {
             </View>
 
             <View style={{marginVertical: 20}}>
-                <CustomButton filled onPress={() => navigation.navigate("DashBoard")} text={"Ok"}/>
+                <CustomButton filled onPress={() => navigation.navigate("CompleteProfile1")} text={"Ok"}/>
             </View>
 
         </View>

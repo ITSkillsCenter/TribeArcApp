@@ -9,13 +9,6 @@ import {useIsFocused} from "@react-navigation/native";
 import moment from "moment";
 
 
-// const frames = [
-//     {"name": "Total Savings Balance"},
-//     {"name": "Investment Account Balance"},
-//     {"name": "Voluntary Account Balance"}
-// ]
-
-
 const DashBoard = ({navigation}) => {
     let notification = true;
     const isFocused = useIsFocused()
@@ -35,6 +28,7 @@ const DashBoard = ({navigation}) => {
     const [transactions, setTransactions] = useState([])
     const [avatar, setAvatar] = useState(null)
     const [questions, setQuestions] = useState([])
+    const [regFeePaid, setRegFeePaid] = useState(false)
 
 
     useEffect(() => {
@@ -61,10 +55,12 @@ const DashBoard = ({navigation}) => {
                             phone_number
                             profession
                             avatar
+                            paid_reg_fee
                                     }
                                 }
                             }`
         try {
+
 
             const bal = await handleQuery(qry, user.token, false)
             // console.log(bal.data.savingAccounts[0].user_id)
@@ -77,6 +73,8 @@ const DashBoard = ({navigation}) => {
             await setAvatar(bal.data.savingAccounts[0].user_id.avatar)
             await setPhoneNumber(bal.data.savingAccounts[0].user_id.phone_number)
             await setProfession(bal.data.savingAccounts[0].user_id.profession)
+            await setRegFeePaid(bal.data.savingAccounts[0].user_id.paid_reg_fee)
+            // console.log(bal.data.savingAccounts[0].user_id.paid_reg_fee)
 
 
         } catch (e) {
@@ -209,7 +207,7 @@ const DashBoard = ({navigation}) => {
                                     <Text style={styles.balance}>₦ {totalBalance?.toLocaleString()}</Text>
                                 </View>
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate("SavingsMainScreen", "backButton")}>
+                                    onPress={() => navigation.navigate(regFeePaid ? "SavingsMainScreen" : "RegistrationFee", "backButton")}>
                                     <Image resizeMode={"contain"} style={{width: 40, height: 40}}
                                            source={icons.plusIcon}/>
                                 </TouchableOpacity>
@@ -226,7 +224,8 @@ const DashBoard = ({navigation}) => {
                                     <Text style={styles.tsb}>Investment Account Balance</Text>
                                     <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
                                 </View>
-                                <TouchableOpacity onPress={() => navigation.navigate("Savings")}>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate(regFeePaid ? "Savings" : "RegistrationFee")}>
                                     <Image resizeMode={"contain"} style={{width: 40, height: 40}}
                                            source={icons.plusIcon}/>
                                 </TouchableOpacity>
@@ -244,7 +243,8 @@ const DashBoard = ({navigation}) => {
                                     <Text style={styles.tsb}>Voluntary Account Balance</Text>
                                     <Text style={styles.balance}>₦ {voluntary?.toLocaleString()}</Text>
                                 </View>
-                                <TouchableOpacity onPress={() => navigation.navigate("TopUpScreen", "backButton")}>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate(regFeePaid ? "TopUpScreen" : "RegistrationFee", "backButton")}>
                                     <Image resizeMode={"contain"} style={{width: 40, height: 40}}
                                            source={icons.plusIcon}/>
                                 </TouchableOpacity>
@@ -258,7 +258,7 @@ const DashBoard = ({navigation}) => {
 
 
                 <TouchableOpacity activeOpacity={0.8} style={styles.saveFrame}
-                                  onPress={() => navigation.navigate("SavingsMainScreen", "backButton")}>
+                                  onPress={() => navigation.navigate(regFeePaid ? "SavingsMainScreen" : "RegistrationFee", "backButton")}>
                     <View>
                         <Image source={icons.pigIcon} resizeMode={"contain"} style={{width: 55, height: 55}}/>
                     </View>
@@ -281,7 +281,7 @@ const DashBoard = ({navigation}) => {
                     </View>
 
                     {!isCardLinked && <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                                        onPress={() => navigation.navigate("LinkCard")}>
+                                                        onPress={() => navigation.navigate(regFeePaid ? "LinkCard" : "RegistrationFee")}>
                         <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
                         <Text style={styles.linkCardText}>Link a Card</Text>
                         <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
@@ -291,7 +291,7 @@ const DashBoard = ({navigation}) => {
                     {bvn === null && <>
                         <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
                         <TouchableOpacity onPress={() => {
-                            navigation.navigate("AddBvn")
+                            navigation.navigate(regFeePaid ? "AddBvn" : "RegistrationFee")
                         }} style={styles.cardBox} activeOpacity={0.8}>
                             <Image source={icons.addBvn} style={{width: 50, height: 50}}/>
                             <Text style={styles.linkCardText}>Add your BVN</Text>
@@ -306,7 +306,7 @@ const DashBoard = ({navigation}) => {
                     {questions.length > 0 && <>
                         <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
                         <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                          onPress={() => navigation.navigate("CommunityQuestions")}>
+                                          onPress={() => navigation.navigate(regFeePaid ? "CommunityQuestions" : "RegistrationFee")}>
                             <Image source={icons.commQuestion} style={{width: 50, height: 50}}/>
                             <Text style={styles.linkCardText}>Community Questions</Text>
                             <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
@@ -332,7 +332,7 @@ const DashBoard = ({navigation}) => {
                         <Text style={styles.todo}>Recent Transactions</Text>
 
                         <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
-                            <Text onPress={() => navigation.navigate("RecentTransactions")} style={styles.seeAll}>See
+                            <Text onPress={() => navigation.navigate(regFeePaid ? "RecentTransactions" : "RegistrationFee")} style={styles.seeAll}>See
                                 all</Text>
                             <Image resizeMode={"contain"}
                                    style={{width: 15, height: 15, alignSelf: "center", bottom: 2}}

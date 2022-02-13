@@ -33,15 +33,21 @@ export const RegistrationFee = ({navigation}) => {
             type: "isRegister",
             amount: 20000,
             reference: `${ref}`
-        }, {headers: headers}).then((response) => console.log(response.data))
+        }, {headers: headers}).then((response) => {
+            console.log(response.data)
+            navigation.navigate("RegFeeSuccessScreen")
+
+        })
             .catch((err) => console.log(err, "Err"))
+
+
 
     }
 
 
     return (<View style={styles.container}>
         <TouchableOpacity activeOpacity={0.7} style={styles.skipBackground}
-                          onPress={() => navigation.navigate("DashBoard")}>
+                          onPress={() => navigation.navigate("BottomTabs")}>
             <Text style={styles.skip}>Skip</Text>
         </TouchableOpacity>
 

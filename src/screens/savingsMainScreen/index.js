@@ -1,10 +1,11 @@
 // @flow
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import {useFocusEffect} from "@react-navigation/native";
 
 const SavingsMainScreen = ({navigation, route}) => {
 
@@ -17,9 +18,17 @@ const SavingsMainScreen = ({navigation, route}) => {
 
     useEffect(() => {
 
-        CheckBalance()
 
     }, []);
+
+
+    useFocusEffect(
+        useCallback(
+            () => {
+                CheckBalance()
+
+            }, [])
+    )
 
 
     const CheckBalance = async () => {
@@ -123,7 +132,7 @@ const styles = StyleSheet.create({
         width: "100%",
         alignSelf: "center",
         justifyContent: "center",
-        marginVertical:20
+        marginVertical: 20
 
     },
     saveFrame: {

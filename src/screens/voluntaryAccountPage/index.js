@@ -1,115 +1,25 @@
 // @flow
-import React, {useEffect, useState} from 'react';
-import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import React, {useContext, useEffect, useState} from 'react';
+import {
+    ActivityIndicator,
+    FlatList,
+    Image,
+    ImageBackground,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import moment from "moment";
 import BackButton from "../../components/BackButton";
+import {UserContext} from "../../context/UserContext";
+import {handleQuery} from "../../graphql/requests";
+import LottieView from "lottie-react-native";
 
 
-const data = [
-    {
-        "amount_paid": 15000,
-        "created_at": "2022-02-09T09:49:48.638Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 5000,
-        "created_at": "2022-02-04T16:18:07.799Z",
-        "status": "FAILED",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 10000,
-        "created_at": "2022-02-04T15:54:45.921Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 10000,
-        "created_at": "2022-02-04T08:59:54.793Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    }
-]
-const data2 = [
-    {
-        "amount_paid": 15000,
-        "created_at": "2022-02-09T09:49:48.638Z",
-        "status": "FAILED",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 5000,
-        "created_at": "2022-02-04T16:18:07.799Z",
-        "status": "FAILED",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 10000,
-        "created_at": "2022-02-04T15:54:45.921Z",
-        "status": "FAILED",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 10000,
-        "created_at": "2022-02-04T08:59:54.793Z",
-        "status": "FAILED",
-        "user_id": {
-            "id": "180"
-        }
-    }
-]
-const data3 = [
-    {
-        "amount_paid": 15000,
-        "created_at": "2022-02-09T09:49:48.638Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 5000,
-        "created_at": "2022-02-04T16:18:07.799Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 10000,
-        "created_at": "2022-02-04T15:54:45.921Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    },
-    {
-        "amount_paid": 10000,
-        "created_at": "2022-02-04T08:59:54.793Z",
-        "status": "SUCCESS",
-        "user_id": {
-            "id": "180"
-        }
-    }
-]
-
+const data3 = []
 
 const tabs = [
     {
@@ -135,7 +45,14 @@ const tabs = [
 const VoluntaryAccountPage = ({navigation, route}) => {
 
 
+    const user = useContext(UserContext);
+
+
     const [tabStatus, setTabStatus] = useState("All");
+
+    const [topUps, setTopUps] = useState([]);
+    const [allTrx, setAllTrx] = useState([]);
+    const [loading, setLoading] = useState(false);
 
 
     const voluntary_bal = route.params
@@ -145,17 +62,58 @@ const VoluntaryAccountPage = ({navigation, route}) => {
 
 
     useEffect(() => {
-
+        getVoluntaryTransactions()
 
     }, []);
 
 
+    const getVoluntaryTransactions = async () => {
+
+        let VolTrx = `query {
+  qry1: savingsTransactions(
+    where: { user_id: ${user.id}, destination: "Voluntary Wallet" }
+    sort: "created_at:desc"
+    limit: 4
+  ) {
+    amount_paid
+    created_at
+    status
+  }
+  qry2: savingsTransactions(
+    where: { user_id: ${user.id}, status: "FAILED" }
+    sort: "created_at:desc"
+    limit: 4
+  ) {
+    amount_paid
+    created_at
+    status
+  }
+}`
 
 
+        try {
 
 
+            setLoading(true)
+            const volTrxRes = await handleQuery(VolTrx, user.token, false)
+
+            // console.log(volTrxRes.data.qry1)
+
+            await setTopUps(volTrxRes.data.qry1)
+            await setAllTrx(volTrxRes.data.qry1.concat(volTrxRes.data.qry2))
 
 
+            setLoading(false)
+
+
+        } catch (e) {
+            console.log(e, "getVoluntaryTransactionsErr")
+            setLoading(false)
+
+        }
+
+
+    }
 
 
     const CustomTabBar = ({children, onPress}) => {
@@ -188,32 +146,45 @@ const VoluntaryAccountPage = ({navigation, route}) => {
 
         return (
             <View style={styles.tabOneContainer}>
-                <FlatList data={data}
+                <FlatList data={allTrx}
                           key={item => item.index}
+                          scrollEnabled={false}
+                          ListEmptyComponent={
+                              <View style={{alignItems:"center", justifyContent:"center",}}>
+
+                                  <LottieView style={{width:250,height:250}} source={require("../../assets/images/emptyAnim.json")}  autoPlay={true}/>
+                              </View>
+                          }
                           renderItem={({item, index}) => (
                               <View>
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
                                                     onPress={() => {
                                                     }}>
-                                      <Image source={icons.tranSucc}
+                                      <Image source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
                                              style={{width: 50, height: 50}}/>
 
-                                      <View style={{justifyContent: "space-between", height: 50}}>
+                                      <View style={{
+                                          justifyContent: "space-between",
+                                          height: 50,
+                                          paddingLeft: 10,
+                                          width: "55%"
+                                      }}>
 
                                           <Text style={styles.recentTransactionText}>Voluntary Saving</Text>
 
                                           <Text style={{
+                                              opacity: 0.8,
                                               fontSize: 12,
                                               color: COLORS.black, fontFamily: "Nexa-Book"
-                                          }}>{moment(item?.created_at).format("MMM D, YYYY")}</Text>
+                                          }}>{moment(item?.created_at).format("D MMM, YYYY.  dddd")}</Text>
 
                                       </View>
 
-                                      <View style={{alignItems: 'center', justifyContent: "space-between", height: 50}}>
+                                      <View style={{alignItems: 'flex-end', height: 50, width: "25%"}}>
 
 
                                           <Text style={{
-                                              color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
+                                              color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 16
                                           }}>₦{item?.amount_paid.toLocaleString()}</Text>
                                       </View>
                                   </TouchableOpacity>
@@ -239,8 +210,15 @@ const VoluntaryAccountPage = ({navigation, route}) => {
 
         return (
             <View style={styles.tabOneContainer}>
-                <FlatList data={data2}
+                <FlatList data={topUps}
+                          scrollEnabled={false}
                           key={item => item.index}
+                          ListEmptyComponent={
+                              <View style={{alignItems:"center", justifyContent:"center",}}>
+
+                                  <LottieView style={{width:250,height:250}} source={require("../../assets/images/emptyAnim.json")}  autoPlay={true}/>
+                              </View>
+                          }
                           renderItem={({item, index}) => (
                               <View>
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
@@ -309,6 +287,12 @@ const VoluntaryAccountPage = ({navigation, route}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={data3}
                           key={item => item.index}
+                          ListEmptyComponent={
+                              <View style={{alignItems:"center", justifyContent:"center",}}>
+
+                                  <LottieView style={{width:250,height:250}} source={require("../../assets/images/emptyAnim.json")}  autoPlay={true}/>
+                              </View>
+                          }
                           renderItem={({item, index}) => (
                               <View>
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
@@ -376,7 +360,10 @@ const VoluntaryAccountPage = ({navigation, route}) => {
         return (
             <TopTabs.Navigator
                 screenOptions={{
-                    tabBarActiveTintColor: ({focused}) => focused ? "red" : "green"
+                    tabBarActiveTintColor: ({focused}) => focused ? "red" : "green",
+                    swipeEnabled: false
+
+
                 }}
 
                 tabBar={({navigation}) => <CustomTabBar children={
@@ -493,7 +480,7 @@ const VoluntaryAccountPage = ({navigation, route}) => {
                 </View>
             </View>
 
-            {TopTab()}
+            {loading ? <ActivityIndicator color={COLORS.secondary} size={"small"}/> : TopTab()}
 
 
         </View>
@@ -527,7 +514,7 @@ const styles = StyleSheet.create({
         width: "100%",
         alignSelf: "center",
         justifyContent: "center",
-        marginVertical:20
+        marginVertical: 20
 
     },
     saveFrame: {

@@ -16,6 +16,7 @@ import moment from "moment";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import BackButton from "../../components/BackButton";
+import LottieView from "lottie-react-native";
 
 
 const tabs = [
@@ -143,6 +144,13 @@ const SavingsAccountPage = ({navigation, route}) => {
                 <FlatList data={allTrx}
                           key={item => item.index}
                           scrollEnabled={false}
+                          ListEmptyComponent={
+                              <View style={{alignItems: "center", justifyContent: "center",}}>
+
+                                  <LottieView style={{width: 250, height: 250}}
+                                              source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
+                              </View>
+                          }
                           renderItem={({item, index}) => (
                               <View>
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
@@ -211,6 +219,13 @@ const SavingsAccountPage = ({navigation, route}) => {
                 <FlatList data={pending}
                           key={item => item.index}
                           scrollEnabled={false}
+                          ListEmptyComponent={
+                              <View style={{alignItems: "center", justifyContent: "center",}}>
+
+                                  <LottieView style={{width: 250, height: 250}}
+                                              source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
+                              </View>
+                          }
                           renderItem={({item, index}) => (
                               <View>
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
@@ -280,6 +295,13 @@ const SavingsAccountPage = ({navigation, route}) => {
                 <FlatList data={saved}
                           key={item => item.index}
                           scrollEnabled={false}
+                          ListEmptyComponent={
+                              <View style={{alignItems: "center", justifyContent: "center",}}>
+
+                                  <LottieView style={{width: 250, height: 250}}
+                                              source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
+                              </View>
+                          }
                           renderItem={({item, index}) => (
                               <View>
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
@@ -446,7 +468,7 @@ const SavingsAccountPage = ({navigation, route}) => {
                 </View>
             </View>
 
-            {loading ? <ActivityIndicator color={COLORS.primary} size={"large"}/> : TopTab()}
+            {loading ? <ActivityIndicator color={COLORS.secondary} size={"small"}/> : TopTab()}
 
 
         </View>
@@ -480,7 +502,7 @@ const styles = StyleSheet.create({
         width: "100%",
         alignSelf: "center",
         justifyContent: "center",
-        marginVertical:20
+        marginVertical: 20
     },
     saveFrame: {
         backgroundColor: '#EFF2FF',
