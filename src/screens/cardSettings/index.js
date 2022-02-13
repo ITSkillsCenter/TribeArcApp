@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, ImageBackground, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, FlatList, ImageBackground, StyleSheet, Text, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
@@ -13,6 +13,7 @@ const CardSettings = ({navigation}) => {
     const user = useContext(UserContext);
 
     const [cards, setCards] = useState([]);
+    const [loading, setLoading] = useState(false);
 
 
     useEffect(() => {
@@ -32,15 +33,20 @@ const CardSettings = ({navigation}) => {
 }`
 
         try {
+            setLoading(true)
 
             const cardRes = await handleQuery(qry, user.token, false)
             await setCards(cardRes.data.users[0].credit_cards)
 
             // console.log(cardRes.data.users[0].credit_cards, "REZZ")
 
+            setLoading(false)
+
 
         } catch (e) {
             console.log(e, "GetAllCardsErr")
+            setLoading(false)
+
         }
 
     }
@@ -53,35 +59,36 @@ const CardSettings = ({navigation}) => {
 
             <Text style={styles.inv}>Card Settings</Text>
 
+            {loading ? <ActivityIndicator size={"large"} color={COLORS.primary}/> :
+                <FlatList
+                    data={cards}
+                    key={item => item.id}
+                    style={{width: "100%", height: "70%"}}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({item}) => (
 
-            <FlatList
-                data={cards}
-                key={item => item.id}
-                style={{width:"100%",height:"70%"}}
-                showsVerticalScrollIndicator={false}
-                renderItem={({item}) => (
 
+                        <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame}
+                                         style={styles.balanceFrame}>
+                            <View style={{
+                                // flexDirection: "row",
+                                // justifyContent: 'space-between',
+                                paddingHorizontal: 40,
+                                // alignItems: 'center'
+                            }}>
 
-                    <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
-                        <View style={{
-                            // flexDirection: "row",
-                            // justifyContent: 'space-between',
-                            paddingHorizontal: 40,
-                            // alignItems: 'center'
-                        }}>
+                                <View>
+                                    <Text style={styles.tsb}>**** **** **** {item.authorization_payload.last4}</Text>
+                                    <Text
+                                        style={styles.cardType}>{item.authorization_payload.card_type} {item.authorization_payload.exp_month}/{item.authorization_payload.exp_year}</Text>
+                                </View>
 
-                            <View>
-                                <Text style={styles.tsb}>**** **** **** {item.authorization_payload.last4}</Text>
-                                <Text
-                                    style={styles.cardType}>{item.authorization_payload.card_type} {item.authorization_payload.exp_month}/{item.authorization_payload.exp_year}</Text>
                             </View>
+                        </ImageBackground>
 
-                        </View>
-                    </ImageBackground>
+                    )}
 
-                )}
-
-            />
+                />}
 
 
             <View style={{flex: 2, justifyContent: "flex-end"}}>
@@ -136,7 +143,6 @@ const styles = StyleSheet.create({
         fontFamily: "Nexa-Bold",
         fontSize: 18
     },
-
 
 
 })
