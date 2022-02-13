@@ -1,11 +1,21 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {
+    ActivityIndicator,
+    FlatList,
+    Image,
+    ImageBackground,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import moment from "moment";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import BackButton from "../../components/BackButton";
 
 
 const tabs = [
@@ -31,7 +41,8 @@ const tabs = [
 
 const SavingsAccountPage = ({navigation, route}) => {
 
-    const savings = route.params
+    const savings = route.params.savings
+    const autocharge = route.params.autocharge
 
     const user = useContext(UserContext);
 
@@ -40,6 +51,8 @@ const SavingsAccountPage = ({navigation, route}) => {
     const [allTrx, setAllTrx] = useState([]);
     const [pending, setPending] = useState([]);
     const [saved, setSaved] = useState([]);
+    const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
 
@@ -75,6 +88,8 @@ const SavingsAccountPage = ({navigation, route}) => {
 
         try {
 
+            setLoading(true)
+
             const trxRes = await handleQuery(trx, user.token, false)
 
             // console.log(trxRes.data.qry1)
@@ -83,9 +98,12 @@ const SavingsAccountPage = ({navigation, route}) => {
             await setSaved(trxRes.data.qry1)
             await setAllTrx(trxRes.data.qry2.concat(trxRes.data.qry1))
 
+            setLoading(false)
 
         } catch (e) {
             console.log(e, "GetTransactionHistoryErr")
+            setLoading(false)
+
         }
 
 
@@ -124,6 +142,7 @@ const SavingsAccountPage = ({navigation, route}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={allTrx}
                           key={item => item.index}
+                          scrollEnabled={false}
                           renderItem={({item, index}) => (
                               <View>
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
@@ -139,7 +158,7 @@ const SavingsAccountPage = ({navigation, route}) => {
                                               <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
                                           <Text style={{
                                               color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
-                                          }}>₦{item?.amount_paid.toLocaleString()}</Text>
+                                          }}>₦ {item?.amount_paid.toLocaleString()}</Text>
                                       </View>
 
                                       <View style={{alignItems: 'center', justifyContent: "space-between", height: 50}}>
@@ -191,6 +210,7 @@ const SavingsAccountPage = ({navigation, route}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={pending}
                           key={item => item.index}
+                          scrollEnabled={false}
                           renderItem={({item, index}) => (
                               <View>
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
@@ -206,7 +226,7 @@ const SavingsAccountPage = ({navigation, route}) => {
                                               <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
                                           <Text style={{
                                               color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
-                                          }}>₦{item?.amount_paid.toLocaleString()}</Text>
+                                          }}>₦ {item?.amount_paid.toLocaleString()}</Text>
                                       </View>
 
                                       <View style={{alignItems: 'center', justifyContent: "space-between", height: 50}}>
@@ -259,6 +279,7 @@ const SavingsAccountPage = ({navigation, route}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={saved}
                           key={item => item.index}
+                          scrollEnabled={false}
                           renderItem={({item, index}) => (
                               <View>
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
@@ -274,7 +295,7 @@ const SavingsAccountPage = ({navigation, route}) => {
                                               <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
                                           <Text style={{
                                               color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
-                                          }}>₦{item?.amount_paid.toLocaleString()}</Text>
+                                          }}>₦ {item?.amount_paid.toLocaleString()}</Text>
                                       </View>
 
                                       <View style={{alignItems: 'center', justifyContent: "space-between", height: 50}}>
@@ -326,7 +347,8 @@ const SavingsAccountPage = ({navigation, route}) => {
         return (
             <TopTabs.Navigator
                 screenOptions={{
-                    tabBarActiveTintColor: ({focused}) => focused ? "red" : "green"
+                    tabBarActiveTintColor: ({focused}) => focused ? "red" : "green",
+                    swipeEnabled: false
                 }}
 
                 tabBar={({navigation}) => <CustomTabBar children={
@@ -379,10 +401,10 @@ const SavingsAccountPage = ({navigation, route}) => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => navigation.navigate("AutosaveSettingsPage")} activeOpacity={0.8}
-                              style={styles.settingsBox}>
-                <Image source={icons.settingsIcon} style={{width: 30, height: 30}}/>
-            </TouchableOpacity>
+            <BackButton onPress={() => navigation.pop()} ifSettings
+                        settingPress={() => navigation.navigate("AutosaveSettingsPage")}
+                        settingStyle={styles.settingsBox
+                        }/>
 
 
             <Text style={styles.savings}>Savings Account</Text>
@@ -400,7 +422,7 @@ const SavingsAccountPage = ({navigation, route}) => {
 
                 <View>
                     <Text style={styles.autosaveText}>Autocharge Amount</Text>
-                    <Text style={styles.autosaveAmt}>₦ 10,000</Text>
+                    <Text style={styles.autosaveAmt}>₦ {autocharge?.toLocaleString()}</Text>
                 </View>
 
                 <View>
@@ -424,7 +446,7 @@ const SavingsAccountPage = ({navigation, route}) => {
                 </View>
             </View>
 
-            {TopTab()}
+            {loading ? <ActivityIndicator color={COLORS.primary} size={"large"}/> : TopTab()}
 
 
         </View>
@@ -444,13 +466,13 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         alignSelf: "flex-end",
-        marginTop: 20
+        // marginTop: 20
     },
     savings: {
         fontSize: 26,
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
-        marginVertical: 10
+        // marginVertical: 10
     },
     balanceFrame: {
         borderRadius: 15, // padding: 20,
@@ -484,7 +506,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         paddingHorizontal: 20,
-        marginBottom: 20
+        marginBottom: 10
     },
     autosaveText: {
         color: COLORS.primary,

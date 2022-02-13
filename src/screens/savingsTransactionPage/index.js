@@ -1,11 +1,12 @@
 // @flow
-import React, {useState} from 'react';
-import {FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import React, {useContext, useEffect, useState} from 'react';
+import {ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import moment from "moment";
-
+import {handleQuery} from "../../graphql/requests";
+import {UserContext} from "../../context/UserContext";
 
 
 const data = [
@@ -132,13 +133,66 @@ const tabs = [
 ];
 
 
-
 const SavingsTransactionPage = ({navigation}) => {
 
+    const user = useContext(UserContext);
 
     const [tabStatus, setTabStatus] = useState("All");
 
 
+    const [allTrx, setAllTrx] = useState([]);
+    const [pending, setPending] = useState([]);
+    const [saved, setSaved] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+
+        GetTransactionHistory()
+
+    }, []);
+
+
+    const GetTransactionHistory = async () => {
+
+        let trx = `query {
+  qry1: savingsTransactions(
+    where: { user_id: ${user.id}, destination: "Savings Wallet" }
+    sort: "created_at:desc"
+  ) {
+    amount_paid
+    created_at
+    status
+  }
+  qry2: savingsTransactions(
+    where: { user_id: ${user.id}, status: "FAILED" }
+    sort: "created_at:desc"
+  ) {
+    amount_paid
+    created_at
+    status
+  }
+}
+
+`
+
+        try {
+            setLoading(true)
+
+            const trxRes = await handleQuery(trx, user.token, false)
+
+            await setPending(trxRes.data.qry2)
+            await setSaved(trxRes.data.qry1)
+            await setAllTrx(trxRes.data.qry2.concat(trxRes.data.qry1))
+            setLoading(false)
+
+
+        } catch (e) {
+            console.log(e, "GetTransactionHistoryErr")
+            setLoading(false)
+        }
+
+
+    }
 
 
     const TopTabs = createMaterialTopTabNavigator();
@@ -152,7 +206,7 @@ const SavingsTransactionPage = ({navigation}) => {
                     justifyContent: "space-between",
                     alignItems: "center",
                     height: 30,
-                    marginVertical:10,
+                    marginVertical: 10,
 
 
                 }}
@@ -171,7 +225,7 @@ const SavingsTransactionPage = ({navigation}) => {
 
         return (
             <View style={styles.tabOneContainer}>
-                <FlatList data={data}
+                <FlatList data={allTrx}
                           key={item => item.index}
                           renderItem={({item, index}) => (
                               <View>
@@ -238,7 +292,7 @@ const SavingsTransactionPage = ({navigation}) => {
 
         return (
             <View style={styles.tabOneContainer}>
-                <FlatList data={data2}
+                <FlatList data={pending}
                           key={item => item.index}
                           renderItem={({item, index}) => (
                               <View>
@@ -306,7 +360,7 @@ const SavingsTransactionPage = ({navigation}) => {
 
         return (
             <View style={styles.tabOneContainer}>
-                <FlatList data={data3}
+                <FlatList data={saved}
                           key={item => item.index}
                           renderItem={({item, index}) => (
                               <View>
@@ -381,7 +435,13 @@ const SavingsTransactionPage = ({navigation}) => {
                 tabBar={({navigation}) => <CustomTabBar children={
                     tabs.map((item, index) => (
 
-                        <View style={{width: "30%", height: 40, justifyContent: "center", marginVertical: 5, alignSelf:"center"}}>
+                        <View style={{
+                            width: "30%",
+                            height: 40,
+                            justifyContent: "center",
+                            marginVertical: 5,
+                            alignSelf: "center"
+                        }}>
                             <TouchableOpacity style={{width: "100%", alignItems: "center", marginVertical: 5}}
                                               key={index} activeOpacity={0.8}
                                               onPress={() => {
@@ -420,20 +480,13 @@ const SavingsTransactionPage = ({navigation}) => {
     }
 
 
-
-
-
-
-
-
-
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
             <Text style={styles.savings}>Savings Transactions</Text>
 
 
-            {TopTab()}
+            {loading ? <ActivityIndicator color={COLORS.primary} size={"large"}/> : TopTab()}
 
 
         </View>

@@ -1,17 +1,85 @@
 // @flow
-import React, {useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Image, StyleSheet, Switch, Text, TouchableOpacity, View} from "react-native";
 import BackButton from "../../components/BackButton";
 import {COLORS, icons, SIZES} from "../../constants";
 import {Modalize} from "react-native-modalize";
 import CustomButton from "../../components/CustomButton";
+import {UserContext} from "../../context/UserContext";
+import {handleQuery} from "../../graphql/requests";
 
 const AutosaveSettingsPage = ({navigation}) => {
 
-    const [status, setStatus] = useState("OFF")
+    const user = useContext(UserContext);
+
     const [isEnabled, setIsEnabled] = useState(false)
+    const [savingsAcctId, setSavingsAcctId] = useState(null)
+    const [loading, setLoading] = useState(false)
+
 
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+
+    useEffect(() => {
+
+        AutoSaveCheck()
+
+    }, []);
+
+
+    const AutoSaveCheck = async () => {
+
+
+        let qry = `query {
+                savingAccounts(where: { user_id: ${user.id} }) {
+                    id
+                        auto_charge
+                                }
+                            }`
+
+
+        try {
+
+            const qryRes = await handleQuery(qry, user.token, false)
+            // console.log(qryRes.data.savingAccounts[0].id)
+            await setIsEnabled(qryRes.data.savingAccounts[0].auto_charge)
+            await setSavingsAcctId(qryRes.data.savingAccounts[0].id)
+
+
+        } catch (e) {
+            console.log(e, "AutoSaveChkErr")
+        }
+
+
+    }
+
+
+    const AutoSaveToggle = async () => {
+
+
+        let qry = `mutation {
+                    updateSavingAccount(
+                    input: { where: { id: ${savingsAcctId} }, data: { auto_charge: ${isEnabled} } }
+                        ) {
+                            savingAccount {
+                            id
+                                    }
+                                }
+                            }`
+
+
+        try {
+            setLoading(true)
+            const qryRes = await handleQuery(qry, user.token, false)
+            setLoading(false)
+        } catch (e) {
+            console.log(e, "AutoSaveErr")
+            setLoading(false)
+
+        }
+
+
+    }
 
 
     const modalizeRef = useRef<Modalize>(null);
@@ -50,7 +118,17 @@ const AutosaveSettingsPage = ({navigation}) => {
                 />
             </View>
 
-            <CustomButton filled text={"Save"}/>
+            <CustomButton onPress={async () => {
+                try {
+
+                    await AutoSaveToggle()
+                    CloseModal()
+
+                } catch (e) {
+                    console.log(e, "saveERR")
+                }
+
+            }} loading={loading} filled text={"Save"}/>
 
 
         </View>

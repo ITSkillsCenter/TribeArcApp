@@ -13,6 +13,7 @@ const SavingsMainScreen = ({navigation, route}) => {
     const [savings, setSavings] = useState("")
     const [voluntary, setVoluntary] = useState("")
     const [totalBalance, setTotalBalance] = useState("")
+    const [autocharge, setAutocharge] = useState("")
 
     useEffect(() => {
 
@@ -26,17 +27,20 @@ const SavingsMainScreen = ({navigation, route}) => {
 
         let qry = `query {
                 savingAccounts(where: { user_id: ${user.id} }) {
+                    id
                     voluntary_funds
                     amount_saved
+                    amount_to_save
                                 }
                             }`
         try {
 
             const bal = await handleQuery(qry, user.token, false)
-            // console.log(bal.data.savingAccounts[0].user_id)
+            // console.log(bal.data.savingAccounts[0].amount_to_save)
 
             await setSavings(bal.data.savingAccounts[0].amount_saved)
             await setVoluntary(bal.data.savingAccounts[0].voluntary_funds)
+            await setAutocharge(bal.data.savingAccounts[0].amount_to_save)
             await setTotalBalance(bal.data.savingAccounts[0].amount_saved + bal.data.savingAccounts[0].voluntary_funds)
 
 
@@ -70,7 +74,8 @@ const SavingsMainScreen = ({navigation, route}) => {
             </ImageBackground>
 
             <View style={styles.rootBox}>
-                <TouchableOpacity onPress={() => navigation.navigate("SavingsAccountPage", savings)} activeOpacity={0.85}
+                <TouchableOpacity onPress={() => navigation.navigate("SavingsAccountPage", {savings, autocharge})}
+                                  activeOpacity={0.85}
                                   style={styles.box}>
                     <Image source={icons.savPig} style={{width: 60, height: 60}}/>
                     <View style={styles.textBox}>
