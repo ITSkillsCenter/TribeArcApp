@@ -1,16 +1,16 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import BackButton from "../../components/BackButton";
 import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import {launchImageLibrary} from "react-native-image-picker";
 import {BASE_URL} from "../../config";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import CustomTextInput from "../../components/CustomTextInput";
 import CustomButton from "../../components/CustomButton";
+import FastImage from 'react-native-fast-image'
+
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 
@@ -37,7 +37,7 @@ const EditProfile = ({navigation}) => {
     useEffect(() => {
 
         GetUserData()
-        GetImg()
+        // GetImg()
     }, []);
 
 
@@ -59,27 +59,28 @@ const EditProfile = ({navigation}) => {
     const [nextOfKinPhoneNum, setNextOfKinPhoneNum] = useState("")
 
 
-    const GetImg = async () => {
-
-        const value = await AsyncStorage.getItem("ImageLocal")
-
-        try {
-
-            if (value !== null) {
-                await setAvatar(value)
-            }
-
-        } catch (e) {
-            console.log(e, "")
-        }
-
-    }
+    // const GetImg = async () => {
+    //
+    //     const value = await AsyncStorage.getItem("ImageLocal")
+    //
+    //     try {
+    //
+    //         if (value !== null) {
+    //             await setAvatar(value)
+    //         }
+    //
+    //     } catch (e) {
+    //         console.log(e, "")
+    //     }
+    //
+    // }
 
     const GetUserData = async () => {
         let qry = `query{
             users(where:{id:${user.id}}){
             firstname
             lastname
+            avatar
             email
             phone_number
             profession
@@ -96,6 +97,7 @@ const EditProfile = ({navigation}) => {
             await setEmail(res.data.users[0].email)
             await setFirstName(res.data.users[0].firstname)
             await setLastName(res.data.users[0].lastname)
+            await setAvatar(res.data.users[0].avatar)
             await setPhoneNum(res.data.users[0].phone_number)
             await setProfession(res.data.users[0].profession)
             await setNextOfKin(res.data.users[0].next_of_kin)
@@ -385,18 +387,26 @@ const EditProfile = ({navigation}) => {
             <Text style={styles.myProfile}>My Profile</Text>
 
             {/*<View>*/}
+            <View style={{
+                flexDirection: "row", marginBottom: 20, alignItems:"center", justifyContent:"center"
+            }}>
 
-            <ImageBackground
-                resizeMode={"contain"}
-                source={filePath ? {uri: filePath} : avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}
-                style={{
-                    width: 120,
-                    height: 120,
-                    marginBottom: 20,
-                    borderRadius: 130,
-                    aspectRatio: 1,
-                    alignSelf: "center"
-                }}>
+                <FastImage
+                    // resizeMode={"contain"}
+                    resizeMode={FastImage.resizeMode.cover}
+                    source={filePath ? {uri: filePath} : avatar ? {
+                        uri: avatar,
+                        priority: FastImage.priority.normal
+                    } : require("../../assets/images/userImg.png")}
+                    style={{
+                        width: 120,
+                        height: 120,
+                        borderRadius: 130,
+                        alignSelf: "center",
+                    }}>
+
+                </FastImage>
+
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => ChooseFile()}
@@ -404,11 +414,12 @@ const EditProfile = ({navigation}) => {
                         backgroundColor: "#EFF2FF",
                         width: 40,
                         height: 40,
-                        alignSelf: "flex-end",
+                        alignSelf: "center",
                         alignItems: "center",
                         justifyContent: "center",
-                        top: 80,
-                        borderRadius: 40
+                        right:40,
+                        top: 40,
+                        borderRadius: 40,
                         // flex:1
                     }}>
                     <Image
@@ -417,7 +428,8 @@ const EditProfile = ({navigation}) => {
                         style={{width: 20, height: 20}}
                     />
                 </TouchableOpacity>
-            </ImageBackground>
+
+            </View>
 
 
             {TopTab()}

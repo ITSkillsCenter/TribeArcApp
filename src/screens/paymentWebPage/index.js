@@ -1,5 +1,5 @@
 // @flow
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {StyleSheet, Text, View} from "react-native";
 import {Paystack} from "react-native-paystack-webview/lib";
 import {COLORS, SIZES} from "../../constants";
@@ -8,6 +8,8 @@ import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import LottieView from "lottie-react-native";
 import CustomButton from "../../components/CustomButton";
+import axios from "axios";
+import {BASE_URL} from "../../config";
 // import WebView from "react-native-webview";
 
 const PaymentWebPage = ({navigation, route}) => {
@@ -23,53 +25,23 @@ const PaymentWebPage = ({navigation, route}) => {
     const paystackWebViewRef = useRef();
 
 
-    const TransactionData = async (res) => {
-
-        let qry = `mutation {
-                createSavingsTransaction(
-                input: {
-                    data: {
-                    reference: "${res.transactionRef.trxref}"
-                    amount_paid: ${amount}
-                    status: ${res.status.toUpperCase()}
-                    user_id: ${user.id} 
-                    community_id: 15
-                }
-                }
-            ) {
-                    savingsTransaction {
-                        id
-                        user_id {
-                                id
-      }
-    }
-  }
-}`
-
-
-        try {
-
-            // console.log(qry, "QRYYYY")
-
-            let qryRes = await handleQuery(qry, user.token, false)
-            // console.log(qryRes, "QRYRESSS")
-
-
-            if (res.status) {
-                navigation.navigate("SuccessScreen", route.params)
-            }
-
-
-            // console.log(res.data.event, "REZZZZ")
-            // console.log(res.status, "Statussss")
-            // console.log(res.transactionRef.trxref, "trxreffff")
-
-        } catch (e) {
-
-            console.log(e, "ERRORtrx")
-
-
+    const TransactionData = async (ref, amount) => {
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`
         }
+
+        await axios.post(`${BASE_URL}/verify/transaction`, {
+            community_id: 15,
+            user_id: user.id,
+            type: "isSavings",
+            amount: amount,
+            reference: `${ref}`
+        }, {headers: headers}).then((response) => console.log(response.data))
+            .catch((err) => console.log(err, "Err"))
+
+        navigation.navigate("SuccessScreen")
+
     }
 
 
@@ -115,15 +87,8 @@ const PaymentWebPage = ({navigation, route}) => {
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
 
-            {/*<WebView*/}
-
-            {/*    source={{uri: "https://google.com"}}*/}
-            {/*    javaScriptEnabled={true}*/}
-            {/*    domStorageEnabled={true}*/}
-
-            {/*/>*/}
             <Paystack
-                paystackKey="pk_test_b0f9c1e94ea37b2ba7df563002ee8a074bc5678a"
+                paystackKey="pk_test_52d14b2ac56f0420095618159b5dac28891bd754"
                 amount={amount}
                 billingEmail={user.email}
                 activityIndicatorColor={COLORS.primary}
@@ -135,7 +100,7 @@ const PaymentWebPage = ({navigation, route}) => {
                 }}
                 // channels={JSON.stringify(["card","ussd"])}
                 onSuccess={async (res) => {
-                    await TransactionData(res)
+                    await TransactionData(res.data.transactionRef.reference, amount)
                     console.log(res, "RESDSD")
                     // handle response here
                 }}

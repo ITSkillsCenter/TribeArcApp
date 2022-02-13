@@ -38,8 +38,6 @@ const InvestmentMainScreen = ({navigation}) => {
     )
 
 
-
-
     const ChkRegFee = async () => {
 
         let qry = `query {
@@ -53,7 +51,7 @@ const InvestmentMainScreen = ({navigation}) => {
             const qryRes = await handleQuery(qry, user.token, false)
             console.log(qryRes.data.users[0].paid_reg_fee)
             await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
-                // console.log(qryRes.data.users[0].paid_reg_fee)
+            // console.log(qryRes.data.users[0].paid_reg_fee)
 
 
         } catch (e) {
@@ -61,10 +59,6 @@ const InvestmentMainScreen = ({navigation}) => {
         }
 
     }
-
-
-
-
 
 
     const GetInvestments = async () => {
@@ -128,14 +122,14 @@ const InvestmentMainScreen = ({navigation}) => {
 
         try {
 
-            // console.log(qry)
+            console.log(qry)
 
 
             setLoading(true)
             const getAllInvRes = await handleQuery(qry, user.token, false)
 
             await setInvestments(getAllInvRes.data.qry1)
-            // console.log(getAllInvRes.data.qry1[0].users_investments[0].users_id.id,"LOLLLL")
+            // console.log(getAllInvRes.data.qry1,"LOLLLL")
 
             const allMyInv = getAllInvRes.data.qry2.map((item) => {
                 return item.investment
@@ -167,7 +161,7 @@ const InvestmentMainScreen = ({navigation}) => {
 
 
             {
-                loading ? <ActivityIndicator size={"large"} color={COLORS.primary}/> :
+                loading ? <ActivityIndicator size={"small"} color={COLORS.secondary}/> :
 
 
                     <FlatList
@@ -176,7 +170,8 @@ const InvestmentMainScreen = ({navigation}) => {
                         ListHeaderComponent={
 
                             <>
-                                <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
+                                <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame}
+                                                 style={styles.balanceFrame}>
                                     <View style={{
                                         paddingHorizontal: 40,
                                     }}>
@@ -199,8 +194,8 @@ const InvestmentMainScreen = ({navigation}) => {
 
                                                 loading ? <ActivityIndicator size={"large"} color={COLORS.primary}/> :
                                                     <TouchableOpacity
-                                                        onPress={() => navigation.navigate(paidRegFee?"MyInvestmentDetailsScreen":"RegistrationFee", {
-                                                            ...item
+                                                        onPress={() => navigation.navigate(paidRegFee ? "MyInvestmentDetailsScreen" : "RegistrationFee", {
+                                                            ...item,
 
                                                         })}
                                                         activeOpacity={0.8} style={styles.box}>
@@ -268,8 +263,11 @@ const InvestmentMainScreen = ({navigation}) => {
                         renderItem={({item}) => (
 
 
-                            <TouchableOpacity onPress={() => navigation.navigate(paidRegFee?"InvestmentDetailsScreen":"RegistrationFee", {...item})}
-                                              activeOpacity={0.8} style={styles.box}>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate(paidRegFee ? "InvestmentDetailsScreen" : "RegistrationFee", {
+                                    ...item, invBal
+                                })}
+                                activeOpacity={0.8} style={styles.box}>
                                 <Image source={{uri: item.image}} style={{width: 110, height: 120, borderRadius: 10,}}/>
                                 <View style={{width: 180, paddingHorizontal: 5,}}>
                                     <Text style={styles.title}>{item.name}</Text>

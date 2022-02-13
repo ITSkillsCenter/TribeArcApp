@@ -55,21 +55,12 @@ const SavingsAccountPage = ({navigation, route}) => {
     const [loading, setLoading] = useState(false);
 
 
-
-
     useEffect(() => {
 
         GetTransactionHistory()
 
 
-
     }, []);
-
-
-
-
-
-
 
 
     const GetTransactionHistory = async () => {
@@ -441,11 +432,19 @@ const SavingsAccountPage = ({navigation, route}) => {
 
             <Text style={styles.savings}>Savings Account</Text>
             <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
-                <View style={{paddingHorizontal: 40,}}>
+                <View style={{paddingHorizontal: 40, flexDirection:"row", justifyContent:"space-between"}}>
                     <View>
                         <Text style={styles.tsb}>Savings Account Balance</Text>
                         <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
                     </View>
+
+
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("Savings")}>
+                        <Image resizeMode={"contain"} style={{width: 35, height: 35}}
+                               source={icons.plusIcon}/>
+                    </TouchableOpacity>
+
                 </View>
             </ImageBackground>
 

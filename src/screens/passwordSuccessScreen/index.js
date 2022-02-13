@@ -23,7 +23,7 @@ const PasswordSuccessScreen = ({navigation}) => {
             </View>
 
             <View style={{marginVertical: 20}}>
-                <CustomButton onPress={() => navigation.navigate("DashBoard")} filled text={"Ok"}/>
+                <CustomButton onPress={() => navigation.navigate("BottomTabs")} filled text={"Ok"}/>
             </View>
 
         </View>

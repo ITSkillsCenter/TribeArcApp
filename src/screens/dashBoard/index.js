@@ -1,21 +1,12 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
 
-import {
-    Alert,
-    Image,
-    ImageBackground,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
-} from "react-native";
+import {Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import {useIsFocused} from "@react-navigation/native";
+import FastImage from 'react-native-fast-image'
 import moment from "moment";
 
 
@@ -37,6 +28,7 @@ const DashBoard = ({navigation}) => {
     const [transactions, setTransactions] = useState([])
     const [avatar, setAvatar] = useState(null)
     const [questions, setQuestions] = useState([])
+    const [creditCards, setCreditCards] = useState([])
     const [regFeePaid, setRegFeePaid] = useState(false)
 
 
@@ -65,11 +57,16 @@ const DashBoard = ({navigation}) => {
                             profession
                             avatar
                             paid_reg_fee
+                            credit_cards{
+                                    id
+                                        }
                                     }
                                 }
                             }`
         try {
 
+
+            // console.log(qry)
 
             const bal = await handleQuery(qry, user.token, false)
             // console.log(bal.data.savingAccounts[0].user_id)
@@ -83,7 +80,8 @@ const DashBoard = ({navigation}) => {
             await setPhoneNumber(bal.data.savingAccounts[0].user_id.phone_number)
             await setProfession(bal.data.savingAccounts[0].user_id.profession)
             await setRegFeePaid(bal.data.savingAccounts[0].user_id.paid_reg_fee)
-            // console.log(bal.data.savingAccounts[0].user_id.paid_reg_fee)
+            await setCreditCards(bal.data.savingAccounts[0].user_id.credit_cards)
+            // console.log(bal.data.savingAccounts[0].user_id.credit_cards)
 
 
         } catch (e) {
@@ -121,7 +119,6 @@ const DashBoard = ({navigation}) => {
     }
 
     const GetQuestion = async () => {
-
 
         let getPolls = `query {
                 polls(where: { users_id: ${user.id} }) {
@@ -182,8 +179,11 @@ const DashBoard = ({navigation}) => {
 
             <View style={styles.header}>
                 <View style={styles.imgContainer}>
-                    <Image style={styles.img}
-                           source={avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}/>
+                    <FastImage style={styles.img}
+                               source={avatar ? {
+                                   uri: avatar,
+                                   priority: FastImage.priority.normal
+                               } : require("../../assets/images/userImg.png")}/>
                 </View>
                 <View style={styles.nameContainer}>
                     <Text style={styles.username}>Hello {firstname},</Text>
@@ -285,12 +285,12 @@ const DashBoard = ({navigation}) => {
 
 
                 <View style={styles.cardContainer}>
-                    <View style={styles.TodoBox}>
+                    {creditCards.length > 0 && bvn !== null && questions.length < 0 && <View style={styles.TodoBox}>
                         <Text style={styles.todo}>To - Dos</Text>
-                    </View>
+                    </View>}
 
-                    {!isCardLinked && <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                                        onPress={() => navigation.navigate(regFeePaid ? "LinkCard" : "RegistrationFee")}>
+                    {creditCards.length < 0 && <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
+                                                                 onPress={() => navigation.navigate(regFeePaid ? "LinkCard" : "RegistrationFee")}>
                         <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
                         <Text style={styles.linkCardText}>Link a Card</Text>
                         <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
@@ -325,16 +325,16 @@ const DashBoard = ({navigation}) => {
                     </>}
 
 
-                    {!firstname || !lastname || !phoneNumber || !profession && <>
-                        <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
-                        <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                          onPress={() => navigation.navigate("EditProfile")}>
-                            <Image source={icons.completeProfile} style={{width: 50, height: 50}}/>
-                            <Text style={styles.linkCardText}>Complete Your profile</Text>
-                            <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
-                                   resizeMode={"contain"}/>
-                        </TouchableOpacity>
-                    </>}
+                    {/*{!firstname || !lastname || !phoneNumber || !profession && <>*/}
+                    {/*    <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>*/}
+                    {/*    <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}*/}
+                    {/*                      onPress={() => navigation.navigate("EditProfile")}>*/}
+                    {/*        <Image source={icons.completeProfile} style={{width: 50, height: 50}}/>*/}
+                    {/*        <Text style={styles.linkCardText}>Complete Your profile</Text>*/}
+                    {/*        <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}*/}
+                    {/*               resizeMode={"contain"}/>*/}
+                    {/*    </TouchableOpacity>*/}
+                    {/*</>}*/}
 
 
                     {transactions.length !== 0 && <View style={styles.recentTransaction}>
@@ -483,7 +483,7 @@ const styles = StyleSheet.create({
     recentTransaction: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginVertical: 30
+        marginVertical: 20
 
     },
     seeAll: {

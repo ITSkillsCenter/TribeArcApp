@@ -6,10 +6,9 @@ import {COLORS, icons, SIZES} from "../../constants";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import CustomButton from "../../components/CustomButton";
 import {UserContext} from "../../context/UserContext";
-import {handleQuery} from "../../graphql/requests";
-import savings from "../savings";
 import SelectDropdown from 'react-native-select-dropdown'
 import axios from "axios";
+import {BASE_URL} from "../../config";
 
 
 const AddBvn = ({navigation}) => {
@@ -33,62 +32,62 @@ const AddBvn = ({navigation}) => {
     }, [])
 
 
-    const BvnIdCheck = async () => {
-
-        let bvnQry = `query {
-                        users(where: { id: ${user.id} }) {
-                        saving_account {
-                        id
-                                    }
-                                }
-                            }`
-
-
-        try {
-
-            let res = await handleQuery(bvnQry, user.token, false)
-            await res.data.users[0].saving_account.id
-            await setSavingId(res.data.users[0].saving_account.id)
-
-
-        } catch (e) {
-            console.log(e, "BvnCheckIDError")
-        }
-
-    }
-
-
-    const AddBvn = async () => {
-        setIsLoading(true)
-
-        let updateBvn = `mutation {
-                updateSavingAccount(
-                input: { where: { id: ${savingId} }, data: { bvn: "${bvn}", bvn_status: true } }
-                ) {
-                    savingAccount {
-                    id
-                    bvn
-                    bvn_status
-                    user_id {
-                    id
-                    }
-                        }
-                    }
-                }`
-
-        try {
-
-            let bvnPost = await handleQuery(updateBvn, user.token, false)
-            await setIsLoading(false)
-            console.log(bvnPost.data.updateSavingAccount.savingAccount, "updateBVNNNN")
+    // const BvnIdCheck = async () => {
+    //
+    //     let bvnQry = `query {
+    //                     users(where: { id: ${user.id} }) {
+    //                     saving_account {
+    //                     id
+    //                                 }
+    //                             }
+    //                         }`
+    //
+    //
+    //     try {
+    //
+    //         let res = await handleQuery(bvnQry, user.token, false)
+    //         await res.data.users[0].saving_account.id
+    //         await setSavingId(res.data.users[0].saving_account.id)
+    //
+    //
+    //     } catch (e) {
+    //         console.log(e, "BvnCheckIDError")
+    //     }
+    //
+    // }
 
 
-        } catch (e) {
-            setIsLoading(false)
-            console.log(e, "AddBvnError")
-        }
-
-    }
+    // const AddBvn = async () => {
+    //     setIsLoading(true)
+    //
+    //     let updateBvn = `mutation {
+    //             updateSavingAccount(
+    //             input: { where: { id: ${savingId} }, data: { bvn: "${bvn}", bvn_status: true } }
+    //             ) {
+    //                 savingAccount {
+    //                 id
+    //                 bvn
+    //                 bvn_status
+    //                 user_id {
+    //                 id
+    //                 }
+    //                     }
+    //                 }
+    //             }`
+    //
+    //     try {
+    //
+    //         let bvnPost = await handleQuery(updateBvn, user.token, false)
+    //         await setIsLoading(false)
+    //         console.log(bvnPost.data.updateSavingAccount.savingAccount, "updateBVNNNN")
+    //
+    //
+    //     } catch (e) {
+    //         setIsLoading(false)
+    //         console.log(e, "AddBvnError")
+    //     }
+    //
+    // }
 
 
     const BVNTransaction = async () => {
@@ -108,26 +107,62 @@ const AddBvn = ({navigation}) => {
 
     const ValidateBVN = async () => {
 
-        try {
 
-            let res = await axios.post(`https://api.tribearc.com/verify/bvn`, {
-                bvn: `${bvn}`,
-                account_number: `${acctNumber}`,
-                bank_code: `${bankCode}`
 
+        console.log(`${bvn}`)
+            console.log(`${acctNumber}`)
+            console.log(`${bankCode}`)
+        setIsLoading(true)
+
+
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`
+        }
+
+        await axios.post(`${BASE_URL}/verify/bvn`, {
+            bvn: bvn,
+            account_number: acctNumber,
+            bank_code: bankCode
+        }, {headers: headers}).then((response) => {
+            console.log(response.data)
+            setIsLoading(false)
+            navigation.navigate("BottomTabs")
+
+
+        })
+            .catch((err) => {
+                console.log(err, "Err")
+                setIsLoading(false)
 
             })
 
-            console.log(res, "VALIDATERESS")
 
-
-            console.log(`${bvn}`)
-            console.log(`${acctNumber}`)
-            console.log(`${bankCode}`)
-
-        } catch (e) {
-            console.log(e, "ValidateError")
-        }
+        // try {
+        //     setIsLoading(true)
+        //
+        //     let res = await axios.post(`https://api.tribearc.com/verify/bvn`, {
+        //         bvn: `${bvn}`,
+        //         account_number: `${acctNumber}`,
+        //         bank_code: `${bankCode}`
+        //
+        //
+        //     })
+        //
+        //     console.log(res, "VALIDATERESS")
+        //
+        //
+        //     console.log(`${bvn}`)
+        //     console.log(`${acctNumber}`)
+        //     console.log(`${bankCode}`)
+        //     setIsLoading(false)
+        //     navigation.navigate("BottomTabs")
+        //
+        //
+        // } catch (e) {
+        //     console.log(e, "ValidateError")
+        //     setIsLoading(false)
+        // }
 
 
     }
@@ -214,7 +249,6 @@ const AddBvn = ({navigation}) => {
                         try {
                             // await AddBvn()
                             await ValidateBVN()
-                            navigation.navigate("DashBoard")
 
                         } catch (e) {
                             console.log(e, "error")

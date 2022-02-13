@@ -23,11 +23,11 @@ const PaymentSuccessScreen = ({navigation, route}) => {
                 <Text style={styles.ts}>Payment Successful!</Text>
             </View>
             <View style={styles.tsBox}>
-                <Text style={styles.desc}>Dear User your wallet has been was credited.</Text>
+                <Text style={styles.desc}>Dear User your wallet has been credited.</Text>
             </View>
 
             <View style={{marginVertical: 20}}>
-                <CustomButton filled onPress={() => navigation.navigate("DashBoard")} text={"Ok"}/>
+                <CustomButton filled onPress={() => navigation.navigate("BottomTabs")} text={"Ok"}/>
             </View>
 
         </View>

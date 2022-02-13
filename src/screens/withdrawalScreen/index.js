@@ -54,7 +54,9 @@ const WithdrawalScreen = ({navigation}) => {
             </View>
 
 
-            <CustomButton onPress={() => navigation.navigate("WithdrawalSuccessScreen")} filled text={"Submit"}/>
+            <CustomButton onPress={() => {
+                // navigation.navigate("WithdrawalSuccessScreen")
+            }} filled text={"Submit"}/>
 
 
         </View>

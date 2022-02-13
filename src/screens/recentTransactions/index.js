@@ -36,13 +36,13 @@ const RecentTransactions = ({navigation}) => {
                         }`
 
 
-        console.log(qry)
+        // console.log(qry)
 
         try {
             setIsLoading(true)
 
             let res = await handleQuery(qry, user.token, false)
-            console.log(res.data.savingsTransactions, " Rezzzzzzzz")
+            // console.log(res.data.savingsTransactions, " Rezzzzzzzz")
             await setTransactions(res.data.savingsTransactions)
             await setIsLoading(false)
 
@@ -102,7 +102,7 @@ const RecentTransactions = ({navigation}) => {
                 <Text style={styles.recentTran}>Recent Transactions</Text>
             </View>
 
-            {isLoading && <ActivityIndicator color={COLORS.primary} size={"large"}/>}
+            {isLoading && <ActivityIndicator color={COLORS.secondary} size={"small"}/>}
             <FlatList
                 data={transactions}
                 renderItem={Transactions}

@@ -9,6 +9,8 @@ import CustomButton from "../../components/CustomButton";
 import {Modalize} from "react-native-modalize";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {handleQuery} from "../../graphql/requests";
+import FastImage from 'react-native-fast-image'
+
 import {useFocusEffect} from "@react-navigation/native";
 
 
@@ -196,8 +198,8 @@ const Profile = ({navigation, route}) => {
                     navigation.navigate("EditProfile")
                 }} style={styles.userDetails}>
                     <View style={styles.imgContainer}>
-                        <Image style={styles.img} resizeMode={"cover"}
-                               source={avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}/>
+                        <FastImage style={styles.img} resizeMode={"cover"}
+                               source={avatar ? {uri: avatar,priority: FastImage.priority.normal} : require("../../assets/images/userImg.png")}/>
                     </View>
 
                     <View style={styles.fullNameContainer}>

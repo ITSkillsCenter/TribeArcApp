@@ -102,31 +102,33 @@ const ChangePassword = ({navigation}) => {
 
                 </View>
 
-                <View style={{
-                    flex: 2, justifyContent: "flex-end", height: SIZES.height * 0.2,
-                }}>
-                    <CustomButton
-                        loading={isLoading}
-                        filled
-                        text={"Update Password"}
-                        onPress={async () => {
-                            try {
 
-                                if (confirmPassword !== "") {
-                                    await UpdatePassword()
-                                    navigation.navigate("PasswordSuccessScreen")
-                                }
-
-                            } catch (e) {
-                                console.log(e, "error: ")
-                            }
-
-                        }}
-
-                    />
-                </View>
 
             </KeyboardAwareScrollView>
+
+            <View style={{
+                flex: 2, justifyContent: "flex-end",
+            }}>
+                <CustomButton
+                    loading={isLoading}
+                    filled
+                    text={"Update Password"}
+                    onPress={async () => {
+                        try {
+
+                            if (confirmPassword !== "") {
+                                await UpdatePassword()
+                                navigation.navigate("PasswordSuccessScreen")
+                            }
+
+                        } catch (e) {
+                            console.log(e, "error: ")
+                        }
+
+                    }}
+
+                />
+            </View>
 
         </View>
 

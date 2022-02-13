@@ -442,9 +442,9 @@ const Savings = ({navigation, route}) => {
                     style={styles.datePickerStyle}
                     date={date}
                     mode="date"
-                    placeholder="Enter your the amount of monthly savings"
+                    placeholder="Pick your monthly savings date"
                     format="DD/MM/YYYY"
-                    minDate="01-01-2022"
+                    minDate="01-01-2009"
                     maxDate="01-01-2030"
                     confirmBtnText="Confirm"
                     cancelBtnText="Cancel"
@@ -462,11 +462,15 @@ const Savings = ({navigation, route}) => {
                             borderWidth: 0.5,
                             borderRadius: 5,
                             paddingHorizontal: 10,
-                            height: 50
+                            height: 50,
+                            fontFamily: "Nexa-Book"
                         },
                         placeholderText: {
-                            fontSize: 17,
-                            color: "gray"
+                            fontSize: 14,
+                            opacity: 0.7,
+                            color: "gray",
+                            fontFamily: "Nexa-Book"
+
                         },
                         dateText: {
                             fontSize: 17,
@@ -489,11 +493,11 @@ const Savings = ({navigation, route}) => {
                         text={"Save Now"}
                         onPress={async () => {
 
-                            // if (amountToSave !== "") {
-                            //     await navigation.navigate("PaymentWebPage", amountToSave)
-                            // }
+                            if (amountToSave !== "") {
+                                await navigation.navigate("PaymentWebPage", amountToSave)
+                            }
 
-                            navigation.navigate("SavingsAccountPage")
+                            // navigation.navigate("SavingsAccountPage")
 
 
                         }}/>

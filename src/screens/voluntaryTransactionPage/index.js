@@ -129,6 +129,7 @@ const VoluntaryTransactionPage = ({navigation}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={allTrx}
                           key={item => item.index}
+                          showsVerticalScrollIndicator={false}
                           ListEmptyComponent={
                               <View style={{alignItems: "center", justifyContent: "center",}}>
 
@@ -193,6 +194,7 @@ const VoluntaryTransactionPage = ({navigation}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={topUps}
                           key={item => item.index}
+                          showsVerticalScrollIndicator={false}
                           ListEmptyComponent={
                               <View style={{alignItems: "center", justifyContent: "center",}}>
 
@@ -268,6 +270,7 @@ const VoluntaryTransactionPage = ({navigation}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={data3}
                           key={item => item.index}
+                          showsVerticalScrollIndicator={false}
                           ListEmptyComponent={
                               <View style={{alignItems: "center", justifyContent: "center"}}>
 
@@ -349,24 +352,24 @@ const VoluntaryTransactionPage = ({navigation}) => {
                 tabBar={({navigation}) => <CustomTabBar children={
                     tabs.map((item, index) => (
 
-                        <View key={index} style={{
+                        <TouchableOpacity activeOpacity={0.8}
+                                          onPress={() => {
+                                              navigation.navigate(item.isTab)
+                                              setTabStatus(item.tabStatus)
+                                          }} key={index} style={{
                             width: "30%",
                             height: 40,
                             justifyContent: "center",
                             marginVertical: 5,
                             alignSelf: "center"
                         }}>
-                            <TouchableOpacity style={{width: "100%", alignItems: "center", marginVertical: 5}}
-                                              activeOpacity={0.8}
-                                              onPress={() => {
-                                                  navigation.navigate(item.isTab)
-                                                  setTabStatus(item.tabStatus)
-                                              }}>
+                            <View style={{width: "100%", alignItems: "center", marginVertical: 5}}
+                            >
                                 <Text style={styles.tabStatusText}>{item.tabStatus}</Text>
 
-                            </TouchableOpacity>
+                            </View>
                             <View style={[styles.btnTab, tabStatus === item.tabStatus && styles.btnTabActive]}/>
-                        </View>
+                        </TouchableOpacity>
 
 
                     ))

@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Alert, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES,} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
@@ -10,17 +10,50 @@ import {UserContext} from "../../context/UserContext";
 const InvestmentDetailsScreen = ({navigation, route}) => {
 
     const [counter, setCounter] = useState(0)
+    const [loading, setLoading] = useState(false)
+    const [slotBought, setSlotBought] = useState(0);
+
 
     const user = useContext(UserContext);
 
 
     const investments = route.params
+    // console.log(investments.price_per_slot)
 
 
     useEffect(() => {
-
+        GetSlotLeft()
 
     }, [])
+
+
+    const GetSlotLeft = async () => {
+
+        let slt = `query {
+  usersInvestments(where: { investment: ${investments.id} }) {
+    slot_bought
+  }
+}`
+
+        try {
+            const sltRes = await handleQuery(slt, user.token, false)
+            // console.log(sltRes.data.usersInvestments)
+
+            const newArr = sltRes.data.usersInvestments.map((item) => {
+                return item.slot_bought
+            })
+
+            // console.log(newArr)
+
+            setSlotBought(newArr.reduce((a, b) => a + b, 0))
+
+
+        } catch (e) {
+            console.log(e, "GetSlotLeftErr")
+        }
+
+
+    }
 
 
     const HandleInvest = async () => {
@@ -45,18 +78,33 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
 
                 let updInv = `mutation {
-                    updateUsersInvestment(input: { where: { id: ${slotBoughtRes.data.usersInvestments[0].id} },
+                  mtn1:  updateUsersInvestment(input: { where: { id: ${slotBoughtRes.data.usersInvestments[0].id} },
                     data: { slot_bought: ${slotBoughtRes.data.usersInvestments[0].slot_bought + counter} } }) {
                     usersInvestment {
                     slot_bought
                     }
                     }
+                    
+                     mtn2: updateInvestment(
+    input: { where: { id: ${investments.id} }, data: { funds_raised: ${investments.funds_raised + counter * investments.price_per_slot} } }
+  ) {
+    investment {
+      id
+    }
+  }
+                    
                     }`
 
                 // console.log(updInv)
+                setLoading(true)
+
 
                 const updInvRes = await handleQuery(updInv, user.token, false)
-                console.log(updInvRes)
+                setLoading(false)
+
+                navigation.navigate("BottomTabs")
+
+                // console.log(updInvRes)
             }
 
             if (slotBoughtRes.data.usersInvestments.length < 1) {
@@ -64,7 +112,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                 // slotBoughtRes.data.usersInvestments[0].slot_bought
 
                 let mtn = `mutation {
-                createUsersInvestment(
+               mtn1: createUsersInvestment(
                     input: {
                     data: {
                      users_id: ${user.id}
@@ -85,17 +133,33 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                 }
                 }
                     }
+                    
+                     mtn2: updateInvestment(
+    input: { where: { id: ${investments.id} }, data: { funds_raised: ${investments.funds_raised + counter * investments.price_per_slot} } }
+  ) {
+    investment {
+      id
+    }
+  }
+                    
                         }`
 
 
                 // console.log(mtn)
+                setLoading(true)
                 const crtInv = await handleQuery(mtn, user.token, false)
-                console.log(crtInv)
+                // console.log(crtInv)
+                setLoading(false)
+
+                navigation.navigate("BottomTabs")
+
             }
 
 
         } catch (e) {
             console.log(e, "HandleInvestErr")
+            setLoading(false)
+
         }
     }
 
@@ -155,7 +219,8 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                 </View>
                 <View style={styles.invBox}>
                     <Text style={styles.invTitle}>Slots Left</Text>
-                    <Text style={styles.invBoxDet}>{`${investments?.total_slot - investments?.users_investments.length}`}</Text>
+                    <Text
+                        style={styles.invBoxDet}>{`${investments?.total_slot - slotBought}`}</Text>
 
                 </View>
 
@@ -196,12 +261,22 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
                 </View>
                 <View style={{width: "48%"}}>
-                    <CustomButton onPress={async () => {
+                    <CustomButton loading={loading} onPress={async () => {
 
-                        if (counter > 0) {
-                            await HandleInvest()
+                        if (counter > 0 && counter < investments?.total_slot - slotBought) {
+                            if (investments.invBal > (counter * investments.price_per_slot)) {
+
+                                await HandleInvest()
+
+                                // Alert.alert("can invest")
+
+                            } else {
+                                Alert.alert("Insufficient Investment Balance", "Please top-up your wallet or choose another investment")
+
+                            }
 
                         }
+
 
                         // navigation.navigate("InvestmentTermsPage")
                     }} filled
