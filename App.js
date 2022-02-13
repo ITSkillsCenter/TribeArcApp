@@ -194,7 +194,7 @@ const App = () => {
                 <MainStack.Screen name={"CompleteProfile2"} component={CompleteProfile2}/>
                 <MainStack.Screen name={"ProfileCompletedSuccessScreen"} component={ProfileCompletedSuccessScreen}/>
                 <MainStack.Screen name={"RegFeeSuccessScreen"} component={RegFeeSuccessScreen}/>
-                {/*<MainStack.Screen name={"DashBoard"} component={DashBoard}/>*/}
+                <MainStack.Screen name={"DashBoard"} component={DashBoard}/>
                 <MainStack.Screen name={"Savings"} component={Savings}/>
                 <MainStack.Screen name={"SavingsMainScreen"} component={SavingsMainScreen}/>
                 <MainStack.Screen name={"SavingsAccountPage"} component={SavingsAccountPage}/>

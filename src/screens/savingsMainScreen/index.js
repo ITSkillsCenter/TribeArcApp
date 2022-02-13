@@ -16,19 +16,54 @@ const SavingsMainScreen = ({navigation, route}) => {
     const [totalBalance, setTotalBalance] = useState("")
     const [autocharge, setAutocharge] = useState("")
 
-    useEffect(() => {
 
 
-    }, []);
+
+
+
+
+    const [paidRegFee, setPaidRegFee] = useState(false);
+
+
+
 
 
     useFocusEffect(
         useCallback(
             () => {
+                ChkRegFee()
+
                 CheckBalance()
 
             }, [])
     )
+
+
+
+
+    const ChkRegFee = async () => {
+
+        let qry = `query {
+                    users(where: { id: ${user.id} }) {
+                        paid_reg_fee
+                                    }
+                                }`
+
+
+        try {
+            const qryRes = await handleQuery(qry, user.token, false)
+            console.log(qryRes.data.users[0].paid_reg_fee)
+            await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
+
+
+        } catch (e) {
+            console.log(e, "ChkRegFeeErr")
+        }
+
+    }
+
+
+
 
 
     const CheckBalance = async () => {
@@ -83,7 +118,7 @@ const SavingsMainScreen = ({navigation, route}) => {
             </ImageBackground>
 
             <View style={styles.rootBox}>
-                <TouchableOpacity onPress={() => navigation.navigate("SavingsAccountPage", {savings, autocharge})}
+                <TouchableOpacity onPress={() => navigation.navigate(paidRegFee?"SavingsAccountPage":"RegistrationFee", {savings, autocharge})}
                                   activeOpacity={0.85}
                                   style={styles.box}>
                     <Image source={icons.savPig} style={{width: 60, height: 60}}/>
@@ -93,7 +128,7 @@ const SavingsMainScreen = ({navigation, route}) => {
                         <Text style={styles.amt}>₦ {savings?.toLocaleString()}</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate("VoluntaryAccountPage", voluntary)}
+                <TouchableOpacity onPress={() => navigation.navigate(paidRegFee?"VoluntaryAccountPage":"RegistrationFee", voluntary)}
                                   activeOpacity={0.85}
                                   style={styles.box}>
                     <Image source={icons.savHand} style={{width: 60, height: 60}}/>

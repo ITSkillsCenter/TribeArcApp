@@ -55,11 +55,21 @@ const SavingsAccountPage = ({navigation, route}) => {
     const [loading, setLoading] = useState(false);
 
 
+
+
     useEffect(() => {
 
         GetTransactionHistory()
 
+
+
     }, []);
+
+
+
+
+
+
 
 
     const GetTransactionHistory = async () => {
