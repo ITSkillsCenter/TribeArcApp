@@ -75,7 +75,7 @@ const App = () => {
         setTimeout(()=>{
             SplashScreen.hide()
 
-        },1000)
+        },2000)
         CheckWelcomePage()
         CheckSavingWlc()
         CheckInvestWlc()
