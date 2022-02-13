@@ -1,5 +1,5 @@
 // @flow
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import {
     ActivityIndicator,
     FlatList,
@@ -24,7 +24,7 @@ const InvestmentMainScreen = ({navigation}) => {
 
     const [investments, setInvestments] = useState([])
     const [myInvestments, setMyInvestments] = useState([])
-    const [myInvId, setMyInvId] = useState("")
+    const [invBal, setInvBal] = useState("")
     const [loading, setLoading] = useState(false)
 
 
@@ -35,14 +35,7 @@ const InvestmentMainScreen = ({navigation}) => {
     )
 
 
-    useEffect(() => {
-
-
-    }, [])
-
-
     const GetInvestments = async () => {
-
 
         let qry = `query {
   qry2: usersInvestments(where: { users_id: ${user.id}, community: 15 }) {
@@ -91,12 +84,19 @@ const InvestmentMainScreen = ({navigation}) => {
       id
     }
   }
-}`
+  
+  
+  qry3:  savingAccounts(where: { user_id: ${user.id} }) {
+                    amount_saved
+                                }
+  
+}
+`
 
 
         try {
 
-            console.log(qry)
+            // console.log(qry)
 
 
             setLoading(true)
@@ -110,8 +110,9 @@ const InvestmentMainScreen = ({navigation}) => {
             })
 
 
-            console.log(allMyInv, "alllll")
+            console.log(getAllInvRes.data.qry3[0].amount_saved, "alllll")
             await setMyInvestments(allMyInv)
+            await setInvBal(getAllInvRes.data.qry3[0].amount_saved)
 
             // setMyInvId(getAllInvRes.data.qry2.id)
 
@@ -143,13 +144,13 @@ const InvestmentMainScreen = ({navigation}) => {
                         ListHeaderComponent={
 
                             <>
-                                <ImageBackground source={icons.shortBalFrame} style={styles.balanceFrame}>
+                                <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
                                     <View style={{
                                         paddingHorizontal: 40,
                                     }}>
                                         <View>
                                             <Text style={styles.tsb}>Investment Balance</Text>
-                                            <Text style={styles.balance}>₦ 20,000,000 {}</Text>
+                                            <Text style={styles.balance}>₦ {invBal?.toLocaleString()}</Text>
                                         </View>
 
                                     </View>
@@ -185,7 +186,7 @@ const InvestmentMainScreen = ({navigation}) => {
                                                                 alignItems: 'center',
                                                                 // backgroundColor:"red"
                                                             }}>
-                                                                <View >
+                                                                <View>
                                                                     <Text
                                                                         style={styles.amtInv}>₦{item.price_per_slot.toLocaleString()}</Text>
                                                                     <Text style={styles.perSlot}>Per Slot</Text>
@@ -301,8 +302,8 @@ const styles = StyleSheet.create({
     },
     balanceFrame: {
         borderRadius: 15, // padding: 20,
-        height: 200,
-        width: SIZES.width,
+        height: 140,
+        width: "100%",
         alignSelf: "center",
         justifyContent: "center", // alignItems: 'center'
     },

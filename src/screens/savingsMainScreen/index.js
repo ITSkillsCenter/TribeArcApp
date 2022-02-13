@@ -58,7 +58,7 @@ const SavingsMainScreen = ({navigation, route}) => {
 
 
             <Text style={styles.inv}>Savings</Text>
-            <ImageBackground source={icons.shortBalFrame} style={styles.balanceFrame}>
+            <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
                 <View style={{
                     // flexDirection: "row",
                     // justifyContent: 'space-between',
@@ -119,10 +119,12 @@ const styles = StyleSheet.create({
     },
     balanceFrame: {
         borderRadius: 15, // padding: 20,
-        height: 200,
-        width: SIZES.width,
+        height: 140,
+        width: "100%",
         alignSelf: "center",
-        justifyContent: "center", // alignItems: 'center'
+        justifyContent: "center",
+        marginVertical:20
+
     },
     saveFrame: {
         backgroundColor: '#EFF2FF',

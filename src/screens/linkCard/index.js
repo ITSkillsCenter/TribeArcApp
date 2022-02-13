@@ -9,8 +9,14 @@ import ShortTextInput from "../../components/ShortTextInput";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import {Modalize} from "react-native-modalize";
+import {Paystack} from "react-native-paystack-webview/lib";
+import axios from "axios";
+import {BASE_URL} from "../../config";
 
 const LinkCard = ({navigation}) => {
+
+    const paystackWebViewRef = useRef();
+
 
     const user = useContext(UserContext)
 
@@ -203,6 +209,27 @@ const LinkCard = ({navigation}) => {
     );
 
 
+    const LinkCard = async (ref) => {
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`
+        }
+
+        await axios.post(`${BASE_URL}/verify/transaction`, {
+            community_id: 15,
+            user_id: user.id,
+            type: "isLinkedCard",
+            amount: 100,
+            reference: `${ref}`
+        }, {headers: headers}).then((response) => console.log(response.data))
+            .catch((err) => console.log(err, "Err"))
+
+        navigation.navigate("DebitCardSuccessScreen")
+
+
+    }
+
+
     return (
         <View style={styles.container}>
 
@@ -219,11 +246,31 @@ const LinkCard = ({navigation}) => {
             <Text style={styles.linkCard}>Link a Card</Text>
 
 
-            <TouchableOpacity style={styles.cardBox} activeOpacity={0.6} onPress={() => OpenModal()}>
+            <TouchableOpacity style={styles.cardBox} activeOpacity={0.6}
+                              onPress={() => paystackWebViewRef.current.startTransaction()}>
                 <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
                 <Text style={styles.linkCardText}>Debit Card</Text>
                 <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}} resizeMode={"contain"}/>
             </TouchableOpacity>
+
+
+            <Paystack
+                paystackKey="pk_test_52d14b2ac56f0420095618159b5dac28891bd754"
+                amount={100}
+                billingEmail={user.email}
+                activityIndicatorColor={COLORS.primary}
+                onCancel={async (e) => {
+                    console.log(e, "PaymentError")
+                }}
+                onSuccess={async (res) => {
+                    // await TransactionData(res)
+                    console.log(res.data.transactionRef.reference, "RESDSD")
+                    await LinkCard(res.data.transactionRef.reference)
+
+                }}
+                autoStart={false}
+                ref={paystackWebViewRef}
+            />
 
 
             <View style={styles.cancelButton}>

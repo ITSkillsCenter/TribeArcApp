@@ -408,7 +408,7 @@ const SavingsAccountPage = ({navigation, route}) => {
 
 
             <Text style={styles.savings}>Savings Account</Text>
-            <ImageBackground source={icons.shortBalFrame} style={styles.balanceFrame}>
+            <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
                 <View style={{paddingHorizontal: 40,}}>
                     <View>
                         <Text style={styles.tsb}>Savings Account Balance</Text>
@@ -476,10 +476,11 @@ const styles = StyleSheet.create({
     },
     balanceFrame: {
         borderRadius: 15, // padding: 20,
-        height: 200,
-        width: SIZES.width,
+        height: 140,
+        width: "100%",
         alignSelf: "center",
         justifyContent: "center",
+        marginVertical:20
     },
     saveFrame: {
         backgroundColor: '#EFF2FF',

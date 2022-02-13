@@ -1,36 +1,91 @@
 // @flow
-import React from 'react';
-import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import React, {useContext, useEffect, useState} from 'react';
+import {FlatList, ImageBackground, StyleSheet, Text, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
+import {UserContext} from "../../context/UserContext";
+import {handleQuery} from "../../graphql/requests";
 
 
 const CardSettings = ({navigation}) => {
+
+    const user = useContext(UserContext);
+
+    const [cards, setCards] = useState([]);
+
+
+    useEffect(() => {
+
+        GetAllCards()
+    }, []);
+
+
+    const GetAllCards = async () => {
+
+        let qry = `query {
+  users(where: { id: ${user.id} }) {
+    credit_cards{
+      authorization_payload
+    }
+  }
+}`
+
+        try {
+
+            const cardRes = await handleQuery(qry, user.token, false)
+            await setCards(cardRes.data.users[0].credit_cards)
+
+            // console.log(cardRes.data.users[0].credit_cards, "REZZ")
+
+
+        } catch (e) {
+            console.log(e, "GetAllCardsErr")
+        }
+
+    }
+
+
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
 
 
             <Text style={styles.inv}>Card Settings</Text>
-            <ImageBackground source={icons.shortBalFrame} style={styles.balanceFrame}>
-                <View style={{
-                    // flexDirection: "row",
-                    // justifyContent: 'space-between',
-                    paddingHorizontal: 40,
-                    // alignItems: 'center'
-                }}>
 
-                    <View>
-                        <Text style={styles.tsb}>**** **** **** 5675</Text>
-                        <Text style={styles.cardType}>MasterCard 12/24</Text>
-                    </View>
 
-                </View>
-            </ImageBackground>
+            <FlatList
+                data={cards}
+                key={item => item.id}
+                style={{width:"100%",height:"70%"}}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item}) => (
+
+
+                    <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
+                        <View style={{
+                            // flexDirection: "row",
+                            // justifyContent: 'space-between',
+                            paddingHorizontal: 40,
+                            // alignItems: 'center'
+                        }}>
+
+                            <View>
+                                <Text style={styles.tsb}>**** **** **** {item.authorization_payload.last4}</Text>
+                                <Text
+                                    style={styles.cardType}>{item.authorization_payload.card_type} {item.authorization_payload.exp_month}/{item.authorization_payload.exp_year}</Text>
+                            </View>
+
+                        </View>
+                    </ImageBackground>
+
+                )}
+
+            />
+
 
             <View style={{flex: 2, justifyContent: "flex-end"}}>
-                <CustomButton text={"Remove Card"}/>
+                <CustomButton filled text={"Remove Card"}/>
 
             </View>
 
@@ -55,8 +110,8 @@ const styles = StyleSheet.create({
     },
     balanceFrame: {
         borderRadius: 15, // padding: 20,
-        height: 200,
-        width: SIZES.width,
+        height: 140,
+        width: "100%",
         alignSelf: "center",
         justifyContent: "center", // alignItems: 'center'
     },
@@ -81,69 +136,7 @@ const styles = StyleSheet.create({
         fontFamily: "Nexa-Bold",
         fontSize: 18
     },
-    allInv: {
-        color: COLORS.black,
-        fontSize: 18,
-        fontFamily: "Nexa-Bold",
-        marginVertical: 10
-    },
-    box: {
-        marginVertical: 20,
-        flexDirection: "row",
-        justifyContent: "space-between"
-
-    },
-    status1: {
-        backgroundColor: "#85FCA647",
-        height: 25,
-        width: 75,
-        borderRadius: 10,
-        alignItems: "center",
-        justifyContent: "center"
-    },
-    status2: {
-        backgroundColor: "#FFB16947",
-        height: 25,
-        width: 75,
-        borderRadius: 10,
-        alignItems: "center",
-        justifyContent: "center"
-
-    },
-    active: {
-        color: "#00711F",
-        fontSize: 12,
-        fontFamily: "Nexa-Bold"
-    },
-    ended: {
-        color: "#EB996E",
-        fontSize: 12,
-        fontFamily: "Nexa-Bold"
-    },
-    title: {
-        fontSize: 20,
-        fontFamily: "Nexa-Book",
-        lineHeight: 24,
-        color: COLORS.black
-    },
-    duration: {
-        color: COLORS.black,
-        fontFamily: "Nexa-Book",
-        marginVertical: 10
-    },
-    perSlot: {
-        color: COLORS.black,
-        fontFamily: "Nexa-Book",
-        fontSize: 12,
-        opacity: 0.6
-
-    },
-    amtInv: {
-        color: COLORS.black,
-        fontFamily: "Nexa-Bold",
-        fontSize: 16
 
 
-    }
 
 })
