@@ -26,13 +26,45 @@ const InvestmentMainScreen = ({navigation}) => {
     const [myInvestments, setMyInvestments] = useState([])
     const [invBal, setInvBal] = useState("")
     const [loading, setLoading] = useState(false)
+    const [paidRegFee, setPaidRegFee] = useState(false);
 
 
     useFocusEffect(
         useCallback(() => {
+            ChkRegFee()
+
             GetInvestments()
         }, [])
     )
+
+
+
+
+    const ChkRegFee = async () => {
+
+        let qry = `query {
+                    users(where: { id: ${user.id} }) {
+                        paid_reg_fee
+                                    }
+                                }`
+
+
+        try {
+            const qryRes = await handleQuery(qry, user.token, false)
+            console.log(qryRes.data.users[0].paid_reg_fee)
+            await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
+                // console.log(qryRes.data.users[0].paid_reg_fee)
+
+
+        } catch (e) {
+            console.log(e, "ChkRegFeeErr")
+        }
+
+    }
+
+
+
+
 
 
     const GetInvestments = async () => {
@@ -110,7 +142,7 @@ const InvestmentMainScreen = ({navigation}) => {
             })
 
 
-            console.log(getAllInvRes.data.qry3[0].amount_saved, "alllll")
+            // console.log(getAllInvRes.data.qry3[0].amount_saved, "alllll")
             await setMyInvestments(allMyInv)
             await setInvBal(getAllInvRes.data.qry3[0].amount_saved)
 
@@ -167,7 +199,7 @@ const InvestmentMainScreen = ({navigation}) => {
 
                                                 loading ? <ActivityIndicator size={"large"} color={COLORS.primary}/> :
                                                     <TouchableOpacity
-                                                        onPress={() => navigation.navigate("MyInvestmentDetailsScreen", {
+                                                        onPress={() => navigation.navigate(paidRegFee?"MyInvestmentDetailsScreen":"RegistrationFee", {
                                                             ...item
 
                                                         })}
@@ -236,7 +268,7 @@ const InvestmentMainScreen = ({navigation}) => {
                         renderItem={({item}) => (
 
 
-                            <TouchableOpacity onPress={() => navigation.navigate("InvestmentDetailsScreen", {...item})}
+                            <TouchableOpacity onPress={() => navigation.navigate(paidRegFee?"InvestmentDetailsScreen":"RegistrationFee", {...item})}
                                               activeOpacity={0.8} style={styles.box}>
                                 <Image source={{uri: item.image}} style={{width: 110, height: 120, borderRadius: 10,}}/>
                                 <View style={{width: 180, paddingHorizontal: 5,}}>

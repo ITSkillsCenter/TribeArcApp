@@ -1,7 +1,17 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
 
-import {Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {
+    Alert,
+    Image,
+    ImageBackground,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
@@ -18,7 +28,6 @@ const DashBoard = ({navigation}) => {
     const [savings, setSavings] = useState("")
     const [voluntary, setVoluntary] = useState("")
     const [totalBalance, setTotalBalance] = useState("")
-
     const [firstname, setFirstname] = useState("")
     const [lastname, setLastname] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
@@ -181,7 +190,7 @@ const DashBoard = ({navigation}) => {
                     <Text style={styles.welcomeText}>Welcome Back!</Text>
                 </View>
                 <TouchableOpacity onPress={() => {
-                    navigation.navigate("RegistrationFee")
+                    // Alert.alert("Notification", "Notification feature coming soon")
                 }}>
                     <Image resizeMode={"contain"}
                            source={notification ? icons.notificationBell : icons.notificationDot}
@@ -332,7 +341,9 @@ const DashBoard = ({navigation}) => {
                         <Text style={styles.todo}>Recent Transactions</Text>
 
                         <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
-                            <Text onPress={() => navigation.navigate(regFeePaid ? "RecentTransactions" : "RegistrationFee")} style={styles.seeAll}>See
+                            <Text
+                                onPress={() => navigation.navigate(regFeePaid ? "RecentTransactions" : "RegistrationFee")}
+                                style={styles.seeAll}>See
                                 all</Text>
                             <Image resizeMode={"contain"}
                                    style={{width: 15, height: 15, alignSelf: "center", bottom: 2}}

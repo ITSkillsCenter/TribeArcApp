@@ -1,5 +1,5 @@
 // @flow
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
@@ -9,6 +9,7 @@ import CustomButton from "../../components/CustomButton";
 import {Modalize} from "react-native-modalize";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {handleQuery} from "../../graphql/requests";
+import {useFocusEffect} from "@react-navigation/native";
 
 
 const Profile = ({navigation, route}) => {
@@ -21,9 +22,16 @@ const Profile = ({navigation, route}) => {
     const [lastname, setLastname] = useState("")
 
 
+    const [paidRegFee, setPaidRegFee] = useState(false);
+
+
+
+
     useEffect(() => {
 
-        GetImg()
+        ChkRegFee()
+
+        // GetImg()
 
         const GetName = async () => {
 
@@ -31,6 +39,7 @@ const Profile = ({navigation, route}) => {
                 users(where:{id:${user.id}}){
                  firstname
                 lastname
+                avatar
                         }
                        }`
 
@@ -41,6 +50,7 @@ const Profile = ({navigation, route}) => {
                 console.log(name.data.users[0])
                 await setFirstname(name.data.users[0].firstname)
                 await setLastname(name.data.users[0].lastname)
+                await setAvatar(name.data.users[0].avatar)
 
 
             } catch (e) {
@@ -53,6 +63,32 @@ const Profile = ({navigation, route}) => {
         GetName()
 
     }, [])
+
+
+    const ChkRegFee = async () => {
+
+        let qry = `query {
+                    users(where: { id: ${user.id} }) {
+                        paid_reg_fee
+                                    }
+                                }`
+
+
+        try {
+            const qryRes = await handleQuery(qry, user.token, false)
+            console.log(qryRes.data.users[0].paid_reg_fee)
+            await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
+            // console.log(qryRes.data.users[0].paid_reg_fee)
+
+
+        } catch (e) {
+            console.log(e, "ChkRegFeeErr")
+        }
+
+    }
+
+
+
 
     // console.log(name)
 
@@ -69,22 +105,22 @@ const Profile = ({navigation, route}) => {
 
     const {logout} = useContext(AuthContext)
 
-
-    const GetImg = async () => {
-
-        const value = await AsyncStorage.getItem("ImageLocal")
-
-        try {
-
-            if (value !== null) {
-                setAvatar(value)
-            }
-
-        } catch (e) {
-            console.log(e, "")
-        }
-
-    }
+    //
+    // const GetImg = async () => {
+    //
+    //     const value = await AsyncStorage.getItem("ImageLocal")
+    //
+    //     try {
+    //
+    //         if (value !== null) {
+    //             setAvatar(value)
+    //         }
+    //
+    //     } catch (e) {
+    //         console.log(e, "")
+    //     }
+    //
+    // }
 
 
     const renderHeader = () => (
@@ -179,15 +215,15 @@ const Profile = ({navigation, route}) => {
 
 
                 <AccountOptions onPress={() => {
-                    navigation.navigate("AddBvn")
+                    navigation.navigate(paidRegFee?"AddBvn":"RegistrationFee")
                 }} image={icons.addBvn} text={"Add your BVN"}/>
 
                 <AccountOptions onPress={() => {
-                    navigation.navigate("AccountDetailsPage")
+                    navigation.navigate(paidRegFee?"AccountDetailsPage":"RegistrationFee")
                 }} image={icons.acctDet} text={"Account Details"}/>
 
                 <AccountOptions onPress={() => {
-                    navigation.navigate("CardSettings")
+                    navigation.navigate(paidRegFee?"CardSettings":"RegistrationFee")
 
                 }} image={icons.linkCard} text={"Card Settings"}/>
                 <AccountOptions onPress={() => {

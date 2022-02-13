@@ -69,13 +69,12 @@ const App = () => {
     const [paidRegFee, setPaidRegFee] = useState(false);
 
 
-
     useEffect(() => {
 
-        setTimeout(()=>{
+        setTimeout(() => {
             SplashScreen.hide()
 
-        },2000)
+        }, 2000)
         CheckWelcomePage()
         CheckSavingWlc()
         CheckInvestWlc()
@@ -169,8 +168,8 @@ const App = () => {
 
             try {
                 const qryRes = await handleQuery(qry, user.token, false)
-                console.log(qryRes.data.users[0].paid_reg_fee)
-               await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
+                // console.log(qryRes.data.users[0].paid_reg_fee)
+                await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
 
 
             } catch (e) {
@@ -183,7 +182,7 @@ const App = () => {
         return (// <View style={{flex:1, backgroundColor:"white"}}>
             <MainStack.Navigator
                 // initialRouteName={viewedWelcomePage ? "DashBoard" : "BottomTabs"}
-                initialRouteName={paidRegFee? "BottomTabs": "RegistrationFee"}
+                initialRouteName={paidRegFee ? "BottomTabs" : "RegistrationFee"}
                 screenOptions={{
                     headerShown: false, // backgroundColor:"white"
                 }}>
@@ -327,7 +326,6 @@ const App = () => {
             </TouchableOpacity>
         );
     };
-
 
     const BottomTabs = ({navigation}) => {
 

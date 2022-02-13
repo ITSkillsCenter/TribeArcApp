@@ -65,7 +65,6 @@ const SavingsMainScreen = ({navigation, route}) => {
 
 
 
-
     const CheckBalance = async () => {
 
 
@@ -135,7 +134,7 @@ const SavingsMainScreen = ({navigation, route}) => {
                     <View style={styles.textBox}>
                         <Text style={styles.savAcct}>Voluntary Account</Text>
                         <Text style={styles.savDesc}>Total voluntary saving that can be withdrawn anytime</Text>
-                        <Text style={styles.amt}>₦ {voluntary.toLocaleString()}</Text>
+                        <Text style={styles.amt}>₦ {voluntary?.toLocaleString()}</Text>
                     </View>
                 </TouchableOpacity>
 

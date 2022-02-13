@@ -1,5 +1,5 @@
 // @flow
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View} from "react-native";
 import {COLORS} from "../../constants";
 import BackButton from "../../components/BackButton";
@@ -9,6 +9,7 @@ import {Paystack} from "react-native-paystack-webview/lib";
 import {UserContext} from "../../context/UserContext";
 import axios from "axios";
 import {BASE_URL} from "../../config";
+import {handleQuery} from "../../graphql/requests";
 
 
 const TopUpScreen = ({navigation, route}) => {
@@ -20,6 +21,37 @@ const TopUpScreen = ({navigation, route}) => {
     const user = useContext(UserContext)
 
     const [topUp, setTopUp] = useState("");
+    const [paidRegFee, setPaidRegFee] = useState(false);
+
+
+    useEffect(() => {
+
+        ChkRegFee()
+
+    }, [])
+
+
+    const ChkRegFee = async () => {
+
+        let qry = `query {
+                    users(where: { id: ${user.id} }) {
+                        paid_reg_fee
+                                    }
+                                }`
+
+
+        try {
+            const qryRes = await handleQuery(qry, user.token, false)
+            console.log(qryRes.data.users[0].paid_reg_fee)
+            await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
+            // console.log(qryRes.data.users[0].paid_reg_fee)
+
+
+        } catch (e) {
+            console.log(e, "ChkRegFeeErr")
+        }
+
+    }
 
 
     const TopUp = async (ref, amount) => {
@@ -93,7 +125,13 @@ const TopUpScreen = ({navigation, route}) => {
 
 
                 <View style={{flex: 2, justifyContent: "flex-end"}}>
-                    <CustomButton onPress={() => paystackWebViewRef.current.startTransaction()} filled={topUp !== ""}
+                    <CustomButton onPress={() => {
+
+                        if (topUp !== "") {
+                            paidRegFee ? paystackWebViewRef.current.startTransaction() : navigation.navigate("RegistrationFee")
+                        }
+
+                    }} filled={topUp !== ""}
                                   text={"Proceed"}/>
                 </View>
 
