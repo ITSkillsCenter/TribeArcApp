@@ -29,12 +29,12 @@ const InvestmentTermsPage = ({navigation}) => {
     const date = new Date()
 
     return (
-        <View style={styles.container}>
-            <BackButton onPress={() => navigation.pop()}/>
-            <Text style={styles.title}>Tribe arc Terms & Condition </Text>
+        <View style={styles.container2}>
+            {/*<BackButton onPress={() => navigation.pop()}/>*/}
+            <Text style={styles.title2}>Tribe arc Terms & Condition </Text>
             <Text style={styles.updatedAt}>Last updated on {date.toJSON().slice(0, 10).replace(/-/g, '/')} </Text>
 
-            <ScrollView >
+            <ScrollView  showsVerticalScrollIndicator={false}>
                 {clause.map((item, index) => (
                     <View>
                         <Text style={styles.clause}>{index + 1}. Clause {index + 1}</Text>
@@ -57,19 +57,19 @@ const InvestmentTermsPage = ({navigation}) => {
 export default InvestmentTermsPage
 
 const styles = StyleSheet.create({
-    container: {
+    container2: {
         flex: 1,
         backgroundColor: COLORS.white,
         paddingHorizontal: 20
     },
-    title: {
+    title2: {
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
-        fontSize: 26,
+        fontSize: 24,
         marginVertical: 20
     },
     updatedAt: {
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: "Nexa-Bold",
         color: COLORS.black,
         opacity: 0.6,

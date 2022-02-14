@@ -1,17 +1,41 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {Alert, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Alert, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES,} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import Entypo from "react-native-vector-icons/Entypo";
+// import InvestmentTermsPage from "../investmentTermsPage";
+
+
+const clause = [
+
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in." +
+    " Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra " +
+    "in sit semper et. Amet quam placerat sem."
+    ,
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra in sit semper et. Amet quam placerat sem.\n" +
+    "\n" +
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra in sit semper et. Amet quam placerat sem.",
+
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra in sit semper et. Amet quam placerat sem.\n" +
+    "\n" +
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra in sit semper et. Amet quam placerat sem.",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra in sit semper et. Amet quam placerat sem.\n" +
+    "\n" +
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra in sit semper et. Amet quam placerat sem."
+]
 
 const InvestmentDetailsScreen = ({navigation, route}) => {
 
     const [counter, setCounter] = useState(0)
     const [loading, setLoading] = useState(false)
     const [slotBought, setSlotBought] = useState(0);
+
+    const [modalVisible, setModalVisible] = useState(false);
 
 
     const user = useContext(UserContext);
@@ -164,6 +188,35 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
     }
 
 
+    const InvestmentTermsPage = ({navigation}) => {
+
+
+        const date = new Date()
+
+        return (
+            <View style={styles.container2}>
+                {/*<BackButton onPress={() => navigation.pop()}/>*/}
+                <Text style={styles.title}>Tribe arc Terms & Condition </Text>
+                <Text style={styles.updatedAt}>Last updated on {date.toJSON().slice(0, 10).replace(/-/g, '/')} </Text>
+
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    {clause.map((item, index) => (
+                        <View>
+                            <Text style={styles.clause}>{index + 1}. Clause {index + 1}</Text>
+                            <Text style={styles.clauseDet}>{item}</Text>
+                        </View>
+                    ))}
+                    <View>
+                        <CustomButton filled text={"Accept & Continue"}/>
+                    </View>
+
+                </ScrollView>
+
+            </View>
+        );
+    };
+
+
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
@@ -227,6 +280,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
             </View>
 
+
             <View style={styles.invNowBox}>
                 <View
                     style={{width: "35%", justifyContent: "space-between", alignItems: "center", flexDirection: "row"}}>
@@ -255,35 +309,65 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                             justifyContent: "center"
                         }}>
                         <Image source={icons.addIcon} style={{width: 25, height: 25}}/>
-
                     </TouchableOpacity>
 
 
                 </View>
                 <View style={{width: "48%"}}>
-                    <CustomButton loading={loading} onPress={async () => {
+                    <CustomButton
+                        loading={loading}
+                        filled
+                        text={"Invest Now"}
+                        onPress={async () => {
+                            setModalVisible(true)
 
-                        if (counter > 0 && counter < investments?.total_slot - slotBought) {
-                            if (investments.invBal > (counter * investments.price_per_slot)) {
-
-                                await HandleInvest()
-
-                                // Alert.alert("can invest")
-
-                            } else {
-                                Alert.alert("Insufficient Investment Balance", "Please top-up your wallet or choose another investment")
-
-                            }
-
-                        }
-
-
-                        // navigation.navigate("InvestmentTermsPage")
-                    }} filled
-                                  text={"Invest Now"}/>
+                            // if (counter > 0 && counter < investments?.total_slot - slotBought) {
+                            //     if (investments.invBal > (counter * investments.price_per_slot)) {
+                            //         await HandleInvest()
+                            //     } else {
+                            //         Alert.alert("Insufficient Investment Balance", "Please top-up your wallet or choose another investment")
+                            //     }
+                            // }
+                        }}
+                    />
                 </View>
 
             </View>
+
+            <View style={styles.centeredView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setModalVisible(!modalVisible);
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            {/*<Pressable*/}
+                            {/*    style={[styles.button, styles.buttonClose]}*/}
+                            {/*    onPress={() => setModalVisible(!modalVisible)}>*/}
+                            {/*    <Text style={styles.textStyle}>Hide Modal</Text>*/}
+                            {/*</Pressable>*/}
+                            <Text
+                                onPress={() => setModalVisible(!modalVisible)}
+                                style={{
+                                    fontFamily: "Nexa-Bold",
+                                    marginTop: 20,
+                                    alignSelf: "flex-end",
+                                    marginRight: 30,
+                                    fontSize: 20
+                                }}>X</Text>
+                            <InvestmentTermsPage/>
+                        </View>
+
+
+                    </View>
+                </Modal>
+            </View>
+
+
         </View>
     );
 };
@@ -311,7 +395,7 @@ const styles = StyleSheet.create({
     },
     pdf: {
         height: 40,
-        width: "40%",
+        width: "45%",
         flexDirection: "row",
         borderRadius: 5,
         alignItems: "center",
@@ -378,6 +462,90 @@ const styles = StyleSheet.create({
             width: 0,
             height: 0
         }
+    },
+    centeredView: {
+        // flex: 1,
+        marginTop: 20,
+        justifyContent: "center",
+        alignItems: "center"
+
+    },
+    modalView: {
+        margin: 10,
+        width: "90%",
+        height: "90%",
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 5,
+        // alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+    },
+    buttonOpen: {
+        backgroundColor: "#F194FF",
+    },
+    buttonClose: {
+        backgroundColor: "#2196F3",
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    },
+    container2: {
+        flex: 1,
+        backgroundColor: COLORS.white,
+        paddingHorizontal: 20
+    },
+    title2: {
+        color: COLORS.primary,
+        fontFamily: "Nexa-Bold",
+        fontSize: 24,
+        marginVertical: 20
+    },
+    updatedAt: {
+        fontSize: 14,
+        fontFamily: "Nexa-Bold",
+        color: COLORS.black,
+        opacity: 0.6,
+        marginBottom: 10
+
+    },
+    clause: {
+        fontSize: 20,
+        fontFamily: "Nexa-Book",
+        color: COLORS.black,
+        // marginVertical:15,
+        marginTop: 25,
+        marginBottom: 10
+    },
+    clauseDet: {
+        color: COLORS.black,
+        fontFamily: "Nexa-Book",
+        lineHeight: 20
+    },
+    dots: {
+        color: COLORS.primary,
+        fontWeight: "Bold",
+        fontSize: 100,
+        height: 20,
+
+
     }
 
 

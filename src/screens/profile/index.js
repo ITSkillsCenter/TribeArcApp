@@ -23,7 +23,6 @@ const Profile = ({navigation, route}) => {
     const [firstname, setFirstname] = useState("")
     const [lastname, setLastname] = useState("")
 
-
     const [paidRegFee, setPaidRegFee] = useState(false);
 
 
