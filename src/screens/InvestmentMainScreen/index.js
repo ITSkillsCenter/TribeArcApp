@@ -14,9 +14,10 @@ import {COLORS, icons, SIZES} from "../../constants";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import {useFocusEffect} from "@react-navigation/native";
+import BackButton from "../../components/BackButton";
 
 
-const InvestmentMainScreen = ({navigation}) => {
+const InvestmentMainScreen = ({navigation, route}) => {
 
 
     const user = useContext(UserContext)
@@ -156,7 +157,7 @@ const InvestmentMainScreen = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            {/*<BackButton onPress={() => navigation.pop()}/>*/}
+            {route.params && <BackButton onPress={() => navigation.pop()}/>}
             <Text style={styles.inv}>My Investment</Text>
 
 

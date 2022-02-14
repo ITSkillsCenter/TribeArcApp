@@ -242,6 +242,9 @@ const Profile = ({navigation, route}) => {
 
                 />
             </View>
+
+            {/*<View style={{height: 20, marginBottom: 30,}}/>*/}
+
         </ScrollView>
     );
 };
@@ -261,7 +264,7 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
         fontSize: 30,
-        marginVertical: 25
+        marginVertical: 15
     },
     userDetails: {
         flexDirection: "row",
@@ -272,7 +275,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 15,
         paddingHorizontal: 20,
-        marginVertical: 20,
+        marginVertical: 10,
         elevation: 2,
         shadowColor: "black",
         shadowOpacity: 0.15,

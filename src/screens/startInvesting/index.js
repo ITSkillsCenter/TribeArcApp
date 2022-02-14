@@ -19,7 +19,7 @@ const StartInvesting = ({navigation}) => {
             <CustomButton onPress={async () => {
                 await AsyncStorage.setItem("@investWlc", "true");
 
-                navigation.navigate("InvestmentMainScreen")
+                navigation.navigate("InvestmentMainScreen","backButton")
             }} filled text={"Invest Now"}/>
 
 

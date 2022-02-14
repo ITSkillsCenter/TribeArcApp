@@ -18,7 +18,7 @@ const StartSaving = ({navigation}) => {
 
             <CustomButton onPress={async () => {
                 await AsyncStorage.setItem("@savingWlc", "true");
-                navigation.navigate("SavingsMainScreen")
+                navigation.navigate("SavingsMainScreen", "backButton")
             }} filled text={"Save Now"}/>
 
 

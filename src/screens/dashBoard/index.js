@@ -272,15 +272,19 @@ const DashBoard = ({navigation}) => {
                         <Image source={icons.pigIcon} resizeMode={"contain"} style={{width: 55, height: 55}}/>
                     </View>
 
-                    <View style={{justifyContent: "space-between", right: 25, height: 50}}>
-                        <Text style={{fontFamily: "Nexa-Bold", color: COLORS.black, letterSpacing: 0.8}}>SAVE FOR
+                    <View style={{justifyContent: "space-between", height: 50,width:"80%", alignSelf:"center"}}>
+                        <Text style={{fontFamily: "Nexa-Bold", color: COLORS.black, letterSpacing: 0.8, }}>SAVE FOR
                             THE
                             FUTURE</Text>
                         <Text style={{color: "#A19FCD", fontFamily: "Nexa-Book"}}>Tap to get started with
                             Tribearc</Text>
+
+
                     </View>
 
                     <Image source={icons.arrowRight} style={{width: 20, height: 20}} resizeMode={"contain"}/>
+
+
                 </TouchableOpacity>
 
 
@@ -386,7 +390,7 @@ const DashBoard = ({navigation}) => {
 
                     ))}
 
-                    <View style={{height: 20, marginBottom: 20,}}/>
+                    <View style={{height: 60, marginBottom: 60,}}/>
                 </View>
             </ScrollView>
 

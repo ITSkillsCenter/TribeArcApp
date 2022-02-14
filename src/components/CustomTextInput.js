@@ -70,7 +70,8 @@ const styles = StyleSheet.create({
         fontFamily: "Nexa-Book",
         // position: "absolute",
         // color:"red"
-        backgroundColor: "#f5f5ff"
+        backgroundColor: "#f5f5ff",
+        color: COLORS.black
 
     },
     eyesBox: {

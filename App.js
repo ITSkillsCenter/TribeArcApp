@@ -370,6 +370,7 @@ const App = () => {
                                                }}/>
 
                                         <Text style={{
+                                            fontSize:12,
                                             color: focused ? COLORS.primary : COLORS.tertiary,
                                             fontFamily: "Nexa-Bold"
                                         }}>Home</Text>
@@ -393,6 +394,7 @@ const App = () => {
                                        }}/>
 
                                 <Text style={{
+                                    fontSize:12,
                                     color: focused ? COLORS.primary : COLORS.tertiary,
                                     fontFamily: "Nexa-Bold"
                                 }}>Savings</Text>
@@ -424,7 +426,7 @@ const App = () => {
                                             height: 70,
                                             alignItems: "center",
                                             justifyContent: "center",
-                                            bottom: 20,
+                                            bottom: 30,
                                             borderRadius: 35,
 
                                         }}
@@ -468,6 +470,7 @@ const App = () => {
                                             tintColor: focused ? COLORS.primary : COLORS.tertiary
                                         }}/>
                                 <Text style={{
+                                    fontSize:12,
                                     color: focused ? COLORS.primary : COLORS.tertiary,
                                     fontFamily: "Nexa-Bold"
                                 }}>Investment</Text>
@@ -491,6 +494,7 @@ const App = () => {
                                                }}/>
                                         <Text
                                             style={{
+                                                fontSize:12,
                                                 color: focused ? COLORS.primary : COLORS.tertiary,
                                                 fontFamily: "Nexa-Bold"
                                             }}>Account</Text>
