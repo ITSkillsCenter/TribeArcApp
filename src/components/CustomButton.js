@@ -3,15 +3,15 @@ import React, {useState} from 'react';
 import {ActivityIndicator, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, SIZES} from "../constants";
 
-const CustomButton = ({filled, text, onPress, loading}) => {
+const CustomButton = ({filled, text, onPress, loading,containerStyle,textStyle }) => {
 
     return (
         <View style={styles.container}>
             <TouchableOpacity activeOpacity={0.6} onPress={onPress}
-                              style={[styles.button, {backgroundColor: filled ? COLORS.primary : COLORS.secondary}]}>
+                              style={[styles.button, {backgroundColor: filled ? COLORS.primary : COLORS.secondary, ...containerStyle}]}>
 
                 {loading ? <ActivityIndicator size={"small"} color={COLORS.white}/> :
-                    <Text style={styles.text}>{text}</Text>}
+                    <Text style={[styles.text, {...textStyle}]}>{text}</Text>}
             </TouchableOpacity>
 
         </View>

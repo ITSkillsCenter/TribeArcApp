@@ -58,6 +58,7 @@ import CardSettings from "./src/screens/cardSettings";
 import PdfPage from "./src/screens/pdfPage";
 import PaymentSuccessScreen from "./src/screens/paymentSuccessScreen";
 import {handleQuery} from "./src/graphql/requests";
+import OnBoarding from "./src/screens/onBoardng";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -134,6 +135,7 @@ const App = () => {
             <AuthStack.Navigator screenOptions={{
                 headerShown: false, // backgroundColor:"white"
             }}>
+                <AuthStack.Screen name={"OnBoarding"} component={OnBoarding}/>
                 <AuthStack.Screen name={"Login"} component={Login}/>
                 <AuthStack.Screen name={"SignUp"} component={SignUp}/>
                 <AuthStack.Screen name={"OtpScreen"} component={OtpScreen}/>
