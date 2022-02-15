@@ -22,48 +22,53 @@ const Profile = ({navigation, route}) => {
     const [avatar, setAvatar] = useState(null)
     const [firstname, setFirstname] = useState("")
     const [lastname, setLastname] = useState("")
+    const [bvn, setBvn] = useState(false)
 
     const [paidRegFee, setPaidRegFee] = useState(false);
 
 
+    useFocusEffect(
+        useCallback(() => {
 
+            ChkRegFee()
 
-    useEffect(() => {
+            GetName()
 
-        ChkRegFee()
+        }, []))
 
-        // GetImg()
+    const GetName = async () => {
 
-        const GetName = async () => {
-
-            let qry = `query{
-                users(where:{id:${user.id}}){
+        let qry = `query{
+              qry1:  users(where:{id:${user.id}}){
                  firstname
                 lastname
                 avatar
                         }
+               qry2: savingAccounts(where: { user_id: ${user.id} }) {
+                    id
+                     bvn_status
+                        }
+                        
+                        
                        }`
 
-            try {
+        try {
 
-                const name = await handleQuery(qry, user.token, false)
+            const name = await handleQuery(qry, user.token, false)
 
-                console.log(name.data.users[0])
-                await setFirstname(name.data.users[0].firstname)
-                await setLastname(name.data.users[0].lastname)
-                await setAvatar(name.data.users[0].avatar)
+            // console.log(name.data.qry2[0].bvn_status, "iiii")
+            await setFirstname(name.data.qry1[0].firstname)
+            await setLastname(name.data.qry1[0].lastname)
+            await setAvatar(name.data.qry1[0].avatar)
+            await setBvn(name.data.qry2[0].bvn_status)
 
 
-            } catch (e) {
+        } catch (e) {
 
-                console.log(e, "GetNameErr")
-            }
-
+            console.log(e, "GetNameErr")
         }
 
-        GetName()
-
-    }, [])
+    }
 
 
     const ChkRegFee = async () => {
@@ -77,7 +82,7 @@ const Profile = ({navigation, route}) => {
 
         try {
             const qryRes = await handleQuery(qry, user.token, false)
-            console.log(qryRes.data.users[0].paid_reg_fee)
+            // console.log(qryRes.data.users[0].paid_reg_fee)
             await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
             // console.log(qryRes.data.users[0].paid_reg_fee)
 
@@ -87,8 +92,6 @@ const Profile = ({navigation, route}) => {
         }
 
     }
-
-
 
 
     // console.log(name)
@@ -198,7 +201,10 @@ const Profile = ({navigation, route}) => {
                 }} style={styles.userDetails}>
                     <View style={styles.imgContainer}>
                         <FastImage style={styles.img} resizeMode={"cover"}
-                               source={avatar ? {uri: avatar,priority: FastImage.priority.normal} : require("../../assets/images/userImg.png")}/>
+                                   source={avatar ? {
+                                       uri: avatar,
+                                       priority: FastImage.priority.normal
+                                   } : require("../../assets/images/userImg.png")}/>
                     </View>
 
                     <View style={styles.fullNameContainer}>
@@ -215,16 +221,16 @@ const Profile = ({navigation, route}) => {
                 </TouchableOpacity>
 
 
-                <AccountOptions onPress={() => {
-                    navigation.navigate(paidRegFee?"AddBvn":"RegistrationFee")
-                }} image={icons.addBvn} text={"Add your BVN"}/>
+                {!bvn && <AccountOptions onPress={() => {
+                    navigation.navigate(paidRegFee ? "AddBvn" : "RegistrationFee")
+                }} image={icons.addBvn} text={"Add your BVN"}/>}
 
                 <AccountOptions onPress={() => {
-                    navigation.navigate(paidRegFee?"AccountDetailsPage":"RegistrationFee")
+                    navigation.navigate(paidRegFee ? "AccountDetailsPage" : "RegistrationFee")
                 }} image={icons.acctDet} text={"Account Details"}/>
 
                 <AccountOptions onPress={() => {
-                    navigation.navigate(paidRegFee?"CardSettings":"RegistrationFee")
+                    navigation.navigate(paidRegFee ? "CardSettings" : "RegistrationFee")
 
                 }} image={icons.linkCard} text={"Card Settings"}/>
                 <AccountOptions onPress={() => {

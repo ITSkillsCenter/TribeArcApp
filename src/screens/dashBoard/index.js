@@ -48,6 +48,7 @@ const DashBoard = ({navigation}) => {
         let qry = `query {
                 savingAccounts(where: { user_id: ${user.id} }) {
                     voluntary_funds
+                     bvn_status
                     amount_saved
                         user_id {
                             id
@@ -69,7 +70,7 @@ const DashBoard = ({navigation}) => {
             // console.log(qry)
 
             const bal = await handleQuery(qry, user.token, false)
-            // console.log(bal.data.savingAccounts[0].user_id)
+            console.log(bal.data.savingAccounts[0].bvn_status)
 
             await setSavings(bal.data.savingAccounts[0].amount_saved)
             await setVoluntary(bal.data.savingAccounts[0].voluntary_funds)
@@ -81,6 +82,8 @@ const DashBoard = ({navigation}) => {
             await setProfession(bal.data.savingAccounts[0].user_id.profession)
             await setRegFeePaid(bal.data.savingAccounts[0].user_id.paid_reg_fee)
             await setCreditCards(bal.data.savingAccounts[0].user_id.credit_cards)
+            await setBvn(bal.data.savingAccounts[0].bvn_status)
+
             // console.log(bal.data.savingAccounts[0].user_id.credit_cards)
 
 
@@ -272,8 +275,8 @@ const DashBoard = ({navigation}) => {
                         <Image source={icons.pigIcon} resizeMode={"contain"} style={{width: 55, height: 55}}/>
                     </View>
 
-                    <View style={{justifyContent: "space-between", height: 50,width:"80%", alignSelf:"center"}}>
-                        <Text style={{fontFamily: "Nexa-Bold", color: COLORS.black, letterSpacing: 0.8, }}>SAVE FOR
+                    <View style={{justifyContent: "space-between", height: 50, width: "80%", alignSelf: "center"}}>
+                        <Text style={{fontFamily: "Nexa-Bold", color: COLORS.black, letterSpacing: 0.8,}}>SAVE FOR
                             THE
                             FUTURE</Text>
                         <Text style={{color: "#A19FCD", fontFamily: "Nexa-Book"}}>Tap to get started with
@@ -289,20 +292,25 @@ const DashBoard = ({navigation}) => {
 
 
                 <View style={styles.cardContainer}>
-                    {creditCards.length > 0 && bvn !== null && questions.length < 0 && <View style={styles.TodoBox}>
+
+                    {creditCards.length < 0 || !bvn || questions.length > 0 ? (<View style={styles.TodoBox}>
                         <Text style={styles.todo}>To - Dos</Text>
-                    </View>}
+                    </View>) : null}
 
-                    {creditCards.length < 0 && <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                                                 onPress={() => navigation.navigate(regFeePaid ? "LinkCard" : "RegistrationFee")}>
-                        <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
-                        <Text style={styles.linkCardText}>Link a Card</Text>
-                        <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
-                               resizeMode={"contain"}/>
-                    </TouchableOpacity>}
+                    {creditCards.length < 0 &&
+                        <>
+                            <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
+                                              onPress={() => navigation.navigate(regFeePaid ? "LinkCard" : "RegistrationFee")}>
+                                <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
+                                <Text style={styles.linkCardText}>Link a Card</Text>
+                                <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
+                                       resizeMode={"contain"}/>
+                            </TouchableOpacity>
+                            <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+                        </>
+                    }
 
-                    {bvn === null && <>
-                        <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+                    {!bvn && <>
                         <TouchableOpacity onPress={() => {
                             navigation.navigate(regFeePaid ? "AddBvn" : "RegistrationFee")
                         }} style={styles.cardBox} activeOpacity={0.8}>
@@ -311,13 +319,14 @@ const DashBoard = ({navigation}) => {
                             <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
                                    resizeMode={"contain"}/>
                         </TouchableOpacity>
+                        <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+
                     </>
 
                     }
 
 
                     {questions.length > 0 && <>
-                        <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
                         <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
                                           onPress={() => navigation.navigate(regFeePaid ? "CommunityQuestions" : "RegistrationFee")}>
                             <Image source={icons.commQuestion} style={{width: 50, height: 50}}/>
@@ -325,6 +334,8 @@ const DashBoard = ({navigation}) => {
                             <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
                                    resizeMode={"contain"}/>
                         </TouchableOpacity>
+                        <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+
 
                     </>}
 
@@ -462,12 +473,12 @@ const styles = StyleSheet.create({
         fontSize: 24
     },
     TodoBox: {
-        marginVertical: 30
+        marginTop: 30
     },
     todo: {
         color: COLORS.black,
         fontFamily: "Nexa-Bold",
-        fontSize: 18
+        fontSize: 16
     },
     cardContainer: {
         height: "100%"

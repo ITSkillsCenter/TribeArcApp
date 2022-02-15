@@ -1,30 +1,93 @@
 // @flow
-import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import React, {useContext, useEffect, useState} from 'react';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS} from "../../constants";
 import BackButton from "../../components/BackButton";
+import {UserContext} from "../../context/UserContext";
+import {handleQuery} from "../../graphql/requests";
 
 export const AccountDetailsPage = ({navigation}) => {
+
+    const user = useContext(UserContext)
+
+    const [acct, setAcct] = useState()
+
+
+    useEffect(() => {
+
+        FetchAcct()
+
+    }, [])
+
+
+    const FetchAcct = async () => {
+
+
+        let qry = `query {
+                users(where: { id: ${user.id} }) {
+                bank_accounts {
+                    id
+                    bank_name
+                    account_name
+                    account_number
+                            }
+                        }
+                    }`
+
+        try {
+            const qryRes = await handleQuery(qry, user.token, false)
+
+            // console.log(qryRes.data.users[0].bank_accounts)
+            await setAcct(qryRes.data.users[0].bank_accounts)
+
+        } catch (e) {
+            console.log(e, "FetchAcctErr")
+        }
+
+
+    }
+
+
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
             <Text style={styles.acctDet}>Account Details</Text>
 
-            <View style={styles.addAcctBox}>
 
-                <View style={{justifyContent: "space-between", height: 50}}>
-                    <Text style={{color: COLORS.black, fontSize: 18, fontFamily: "Nexa-Bold"}}>Andron James</Text>
-                    <View style={{flexDirection: "row", width: "70%", justifyContent: "space-between"}}>
-                        <Text style={{color: COLORS.black, fontSize: 14, fontFamily: "Nexa-Book"}}>Access Bank</Text>
-                        <Text style={{color: COLORS.black, fontSize: 14, fontFamily: "Nexa-Book"}}>089675435</Text>
-                    </View>
-                </View>
+            <FlatList
+                data={acct}
+                renderItem={({item}) => (
+                    <>
+                        <View style={styles.addAcctBox}>
+                            <View style={{justifyContent: "space-between", height: 50}}>
+                                <Text style={{
+                                    color: COLORS.black,
+                                    fontSize: 18,
+                                    fontFamily: "Nexa-Bold"
+                                }}>{item.account_name}</Text>
+                                <View style={{flexDirection: "row", width: "70%", justifyContent: "space-between"}}>
+                                    <Text style={{
+                                        color: COLORS.black,
+                                        fontSize: 14,
+                                        fontFamily: "Nexa-Book"
+                                    }}>{item.bank_name}</Text>
+                                    <Text style={{
+                                        color: COLORS.black,
+                                        fontSize: 14,
+                                        fontFamily: "Nexa-Book"
+                                    }}>{item.account_number}</Text>
+                                </View>
+                            </View>
 
-            </View>
-            <TouchableOpacity onPress={()=>navigation.navigate("AddAccountDetailsScreen")} style={styles.addAcctButton}>
+                        </View>
+
+                    </>
+                )
+                }/>
+            <TouchableOpacity onPress={() => navigation.navigate("AddAccountDetailsScreen")}
+                              style={styles.addAcctButton}>
                 <Text style={styles.addAcctText}>Add New Account</Text>
             </TouchableOpacity>
-
 
         </View>
     );

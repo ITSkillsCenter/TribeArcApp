@@ -27,7 +27,9 @@ const CustomTextInput = ({
             <Text style={styles.title}>{title}</Text>
             <TextInput
                 {...props}
+                onBlur={onBlur}
                 value={initialValue}
+                onEndEditing={onEndEditing}
                 placeholder={placeholderText}
                 placeholderTextColor={"#777777"}
                 onChangeText={onChange}

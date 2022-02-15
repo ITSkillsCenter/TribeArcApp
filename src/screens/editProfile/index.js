@@ -442,7 +442,8 @@ const EditProfile = ({navigation}) => {
                     try {
                         await UpdateUserData()
                         await UploadFile()
-                        navigation.navigate("DashBoard")
+                        navigation.navigate("BottomTabs")
+                        setIsLoading(false)
 
 
                     } catch (e) {

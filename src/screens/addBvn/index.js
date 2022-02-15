@@ -14,6 +14,7 @@ import {BASE_URL} from "../../config";
 const AddBvn = ({navigation}) => {
 
     const user = useContext(UserContext)
+    // console.log(user)
 
     const [bvn, setBvn] = useState("")
     const [acctNumber, setAcctNumber] = useState("")
@@ -129,7 +130,6 @@ const AddBvn = ({navigation}) => {
             setIsLoading(false)
             navigation.navigate("BottomTabs")
 
-
         })
             .catch((err) => {
                 console.log(err, "Err")
@@ -232,7 +232,7 @@ const AddBvn = ({navigation}) => {
                     onChangeText={value => setBvn(value)}
                     style={styles.textInput}
                     keyboardType={"numeric"}
-                    maxLength={10}
+                    maxLength={13}
                 />
 
 

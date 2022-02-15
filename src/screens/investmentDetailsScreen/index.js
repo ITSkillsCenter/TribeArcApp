@@ -10,15 +10,14 @@ import {
     Text,
     TouchableOpacity,
     View,
-    Keyboard
+    Keyboard, Platform, PermissionsAndroid
 } from "react-native";
 import {COLORS, icons, SIZES,} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import Entypo from "react-native-vector-icons/Entypo";
+// import RNFetchBlob from "rn-fetch-blob";
 // import InvestmentTermsPage from "../investmentTermsPage";
 
 
@@ -229,6 +228,67 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
     };
 
 
+    // const DownloadPdf = () => {
+    //
+    //     const {config, fs} = RNFetchBlob;
+    //     let PictureDir = fs.dirs.PictureDir;
+    //     let date = new Date();
+    //     let options = {
+    //         fileCache: true,
+    //         addAndroidDownloads: {
+    //             //Related to the Android only
+    //             useDownloadManager: true,
+    //             notification: true,
+    //             path:
+    //                 PictureDir +
+    //                 '/Report_Download' +
+    //                 Math.floor(date.getTime() + date.getSeconds() / 2),
+    //             description: 'Risk Report Download',
+    //         },
+    //     };
+    //     config(options)
+    //         .fetch('GET', "url")
+    //         .then((res) => {
+    //             //Showing alert after successful downloading
+    //             console.log('res -> ', JSON.stringify(res));
+    //             alert('Report Downloaded Successfully.');
+    //         });
+    //
+    // }
+
+    // const PdFDownload = () => {
+    //     //Function to check the platform
+    //     //If iOS the start downloading
+    {/*    //If Android then ask for runtime permission*/}
+    //     if (Platform.OS === 'ios') {
+    //         DownloadPdf();
+    //     } else {
+    {/*        try {*/}
+    {/*            PermissionsAndroid.request(*/}
+    {/*                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,*/}
+    {/*                {*/}
+    //                     title: 'storage title',
+    //                     message: 'storage_permission',
+    //                 },
+    //             ).then(granted => {
+    //                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    //                     //Once user grant the permission start downloading
+    //                     console.log('Storage Permission Granted.');
+    //                     DownloadPdf();
+    {/*                } else {*/}
+    //                     //If permission denied then show alert 'Storage Permission
+    //                     // Not Granted'
+    //                     Alert.alert('storage_permission');
+    //                 }
+    //             });
+    //         } catch (err) {
+    //             //To handle permission related issue
+    //             console.log('error', err);
+    //         }
+    //     }
+    // }
+
+
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
@@ -294,8 +354,6 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                         style={styles.invBoxDet}>{`${investments?.total_slot - slotBought}`}</Text>
 
                 </View>
-
-
             </View>
 
 
@@ -335,7 +393,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                     <CustomButton
                         loading={loading}
                         filled
-                        text={"Invest Now"}
+                        text={"Book Now"}
                         onPress={async () => {
                             setModalVisible(true)
 
@@ -368,7 +426,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                                    style={styles.smallCenteredView2}>
                             <View style={styles.smallModalView}>
 
-                                <TouchableOpacity onPress={()=> {
+                                <TouchableOpacity onPress={() => {
                                     navigation.navigate("PdfPage", investments.business_plan)
                                     setSmallModalVisible(!smallModalVisible)
                                 }
@@ -581,7 +639,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-        top: 10
+        // top: 20
     },
     button: {
         borderRadius: 20,
