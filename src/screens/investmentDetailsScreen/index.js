@@ -1,6 +1,17 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {Alert, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {
+    Alert,
+    Image,
+    Modal,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    Keyboard
+} from "react-native";
 import {COLORS, icons, SIZES,} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
@@ -36,6 +47,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
     const [slotBought, setSlotBought] = useState(0);
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [smallModalVisible, setSmallModalVisible] = useState(false);
 
 
     const user = useContext(UserContext);
@@ -243,8 +255,14 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                         <Text style={{fontSize: 12, fontFamily: "Nexa-Book", color: COLORS.black, opacity: 0.7}}> Per
                             Slot</Text></Text>
                 </View>
-                <TouchableOpacity onPress={() => navigation.navigate("PdfPage", investments.business_plan)}
-                                  style={styles.pdf}>
+                <TouchableOpacity
+
+                    onPress={() => {
+                        // navigation.navigate("PdfPage", investments.business_plan)
+                        setSmallModalVisible(true)
+
+                    }}
+                    style={styles.pdf}>
                     <Image source={icons.pdficon} style={{width: 15, height: 20}}/>
                     <Text style={{fontSize: 16, fontFamily: 'Nexa-Bold'}}>Business Plan</Text>
                 </TouchableOpacity>
@@ -333,6 +351,48 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                 </View>
 
             </View>
+
+
+            <View style={styles.smallCenteredView}>
+
+                <View>
+                    <Modal
+                        animationType="none"
+                        transparent={true}
+                        visible={smallModalVisible}
+                        onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            setSmallModalVisible(!smallModalVisible);
+                        }}>
+                        <Pressable onPress={() => setSmallModalVisible(!smallModalVisible)}
+                                   style={styles.smallCenteredView2}>
+                            <View style={styles.smallModalView}>
+
+                                <TouchableOpacity onPress={()=> {
+                                    navigation.navigate("PdfPage", investments.business_plan)
+                                    setSmallModalVisible(!smallModalVisible)
+                                }
+
+
+                                } activeOpacity={0.7} style={styles.smallModalBox}>
+                                    <Image source={icons.eyeOpen} style={styles.modalIcons}/>
+                                    <Text style={styles.modalTextOpt}>View</Text>
+                                </TouchableOpacity>
+
+
+                                <TouchableOpacity activeOpacity={0.7} style={styles.smallModalBox}>
+                                    <Image source={icons.downloadArrow} style={styles.modalIcons}/>
+                                    <Text style={styles.modalTextOpt}>Download</Text>
+                                </TouchableOpacity>
+
+
+                            </View>
+                        </Pressable>
+                    </Modal>
+                </View>
+
+            </View>
+
 
             <View style={styles.centeredView}>
                 <Modal
@@ -470,6 +530,22 @@ const styles = StyleSheet.create({
         alignItems: "center"
 
     },
+    smallCenteredView: {
+        flex: 1,
+        marginTop: 20,
+        justifyContent: "center",
+        // alignItems: "center",
+        // backgroundColor: "cyan"
+
+    },
+    smallCenteredView2: {
+        flex: 1,
+        marginTop: 20,
+        justifyContent: "center",
+        // alignItems: "center",
+        backgroundColor: "rgba(61,59,59,0.37)"
+
+    },
     modalView: {
         margin: 10,
         width: "90%",
@@ -478,7 +554,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 5,
         // alignItems: "center",
-        shadowColor: "#000",
+        shadowColor: "rgba(0,0,0,0.48)",
         shadowOffset: {
             width: 0,
             height: 2
@@ -486,6 +562,26 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
+    },
+    smallModalView: {
+        margin: 20,
+        width: "40%",
+        height: "15%",
+        backgroundColor: "white",
+        borderRadius: 10,
+        padding: 20,
+        alignSelf: "flex-end",
+        justifyContent: "space-evenly",
+        // alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        top: 10
     },
     button: {
         borderRadius: 20,
@@ -544,9 +640,28 @@ const styles = StyleSheet.create({
         fontWeight: "Bold",
         fontSize: 100,
         height: 20,
+    },
+    smallModalBox: {
+        flexDirection: "row",
+        marginVertical: 15,
+        // width: "80%",
+        // backgroundColor: "cyan",
+        alignItems: "center",
+        // justifyContent: "space-between",
+        // margin:5
 
+    },
+    modalIcons: {
+        width: 25,
+        height: 25
+    },
+    modalTextOpt: {
+        fontSize: 16,
+        fontFamily: "Nexa-Bold",
+        color: COLORS.black,
+        paddingLeft: 10
 
-    }
+    },
 
 
 })

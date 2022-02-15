@@ -41,6 +41,7 @@ const withdraw = require("../assets/icons/withdraw.png");
 const plusIconWhite = require("../assets/icons/plusIconWhite.png");
 const smallCheck = require("../assets/icons/smallCheck.png");
 const acctDet = require("../assets/icons/acctDet.png");
+const downloadArrow = require("../assets/icons/downloadArrow.png");
 
 
 export default {
@@ -86,5 +87,6 @@ export default {
     withdraw,
     plusIconWhite,
     smallCheck,
-    acctDet
+    acctDet,
+    downloadArrow
 };
