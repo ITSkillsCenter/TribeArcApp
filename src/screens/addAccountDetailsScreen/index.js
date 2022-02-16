@@ -23,7 +23,8 @@ const AddAccountDetailsScreen = ({navigation}) => {
     const [acctNumber, setAcctNumber] = useState("")
     const [fullName, setFullName] = useState("")
     const [bankName, setBankName] = useState("")
-    const [isLoading, setIsLoading] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
 
 
     useEffect(() => {
@@ -98,23 +99,20 @@ const AddAccountDetailsScreen = ({navigation}) => {
       id
     }
   }
-}
-
-`
+}`
 
         try {
 
-            setIsLoading(true)
+            setLoading(true)
 
             const saveRes = await handleQuery(save, user.token, false)
-            console.log(saveRes)
-
-            setIsLoading(false)
+            await setLoading(false)
+            await navigation.navigate("AccountDetailsSavedSuccess")
 
 
         } catch (e) {
             console.log(e, "SaveAcctErr")
-            setIsLoading(false)
+            setLoading(false)
 
         }
 
@@ -157,8 +155,9 @@ const AddAccountDetailsScreen = ({navigation}) => {
                         defaultButtonText={"Select Bank"}
                         buttonTextStyle={{
                             color: COLORS.black,
-                            fontSize: 12,
-                            opacity: 0.6,
+                            textAlign: "left",
+                            fontSize: 16,
+                            opacity: 0.8,
                             fontFamily: "Nexa-Book",
                             justifyContent: "flex-start"
                         }}
@@ -169,10 +168,13 @@ const AddAccountDetailsScreen = ({navigation}) => {
                         }}
                     />
                     <CustomTextInput
-
+                        props={{
+                            keyboardType: "numeric"
+                        }}
                         onBlur={async () => await ValidateAcctNum()}
                         initialValue={acctNumber} onChange={setAcctNumber}
-                        placeholderText={"Enter Bank Account Number"} title={"Bank Account Number"}/>
+                        placeholderText={"Enter Bank Account Number"}
+                        title={"Bank Account Number"}/>
 
 
                     {
@@ -195,10 +197,13 @@ const AddAccountDetailsScreen = ({navigation}) => {
 
             <View style={{justifyContent: "flex-end", flex: 2}}>
                 <CustomButton
+                    loading={loading}
                     onPress={async () => {
-                        // await ValidateAcctNum()
 
-                        // navigation.navigate("AccountDetailsSavedSuccess")
+                        if (fullName !== "") {
+                            await SaveAcct()
+
+                        }
                     }} filled text={"Save"}/>
 
             </View>
