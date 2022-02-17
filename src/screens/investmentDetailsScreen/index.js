@@ -19,6 +19,7 @@ import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import moment from "moment";
 // import RNFetchBlob from "rn-fetch-blob";
 // import InvestmentTermsPage from "../investmentTermsPage";
 
@@ -373,7 +374,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
                 <Text style={{fontSize: 12, color: COLORS.black, opacity: 0.7, fontFamily: "Nexa-Book",}}>Time
                     left</Text>
-                <Text style={{fontSize: 16, color: COLORS.black, fontFamily: "Nexa-Bold",}}>3 Days left</Text>
+                <Text style={{fontSize: 16, color: COLORS.black, fontFamily: "Nexa-Bold",}}>{moment(investments.closing_date).diff(moment(),'days')} days left</Text>
 
             </View>
 

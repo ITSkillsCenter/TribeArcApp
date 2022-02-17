@@ -4,7 +4,7 @@ import {
     ActivityIndicator,
     FlatList,
     Image,
-    ImageBackground,
+    ImageBackground, ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -15,6 +15,25 @@ import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import {useFocusEffect} from "@react-navigation/native";
 import BackButton from "../../components/BackButton";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import CustomTextInput from "../../components/CustomTextInput";
+import moment from "moment";
+import LottieView from "lottie-react-native";
+
+
+const tabs = [
+    {
+        key: "1",
+        tabStatus: "Open",
+        isTab: "TabOne"
+    },
+    {
+        key: "2",
+        tabStatus: "Closed",
+        isTab: "TabTwo"
+
+    },
+];
 
 
 const InvestmentMainScreen = ({navigation, route}) => {
@@ -23,7 +42,11 @@ const InvestmentMainScreen = ({navigation, route}) => {
     const user = useContext(UserContext)
 
 
+    const [tabStatus, setTabStatus] = useState("Open");
+
+
     const [investments, setInvestments] = useState([])
+    const [closedInv, setClosedInv] = useState([])
     const [myInvestments, setMyInvestments] = useState([])
     const [invBal, setInvBal] = useState("")
     const [loading, setLoading] = useState(false)
@@ -61,14 +84,13 @@ const InvestmentMainScreen = ({navigation, route}) => {
 
     }
 
-
     const GetInvestments = async () => {
 
         let qry = `query {
   qry2: usersInvestments(where: { users_id: ${user.id}, community: 15 }) {
     slot_bought
     investment {
-    id
+      id
       name
       image
       roi
@@ -79,7 +101,7 @@ const InvestmentMainScreen = ({navigation, route}) => {
       total_slot
       status
       duration_in_months
-        users_investments {
+      users_investments {
         users_id {
           id
         }
@@ -90,7 +112,34 @@ const InvestmentMainScreen = ({navigation, route}) => {
     }
   }
 
-  qry1: investments {
+  qry1: investments (where: { status: "ACTIVE" }) {
+    id
+    name
+    image
+    roi
+    funds_raised
+    funds_required
+    business_plan
+    price_per_slot
+    total_slot
+    status
+    closing_date
+    duration_in_months
+    users_investments {
+      users_id {
+        id
+      }
+    }
+    users_id {
+      id
+    }
+  }
+
+  qry3: savingAccounts(where: { user_id: ${user.id} }) {
+    amount_saved
+  }
+
+  qry4: investments(where: { status: "ENDED" }) {
     id
     name
     image
@@ -102,7 +151,7 @@ const InvestmentMainScreen = ({navigation, route}) => {
     total_slot
     status
     duration_in_months
-      users_investments {
+    users_investments {
       users_id {
         id
       }
@@ -111,19 +160,14 @@ const InvestmentMainScreen = ({navigation, route}) => {
       id
     }
   }
-  
-  
-  qry3:  savingAccounts(where: { user_id: ${user.id} }) {
-                    amount_saved
-                                }
-  
 }
+
 `
 
 
         try {
 
-            console.log(qry)
+            // console.log(qry)
 
 
             setLoading(true)
@@ -137,16 +181,13 @@ const InvestmentMainScreen = ({navigation, route}) => {
             })
 
 
-            // console.log(getAllInvRes.data.qry3[0].amount_saved, "alllll")
+            // console.log(getAllInvRes.data.qry2, "alllll")
             await setMyInvestments(allMyInv)
+            await setClosedInv(getAllInvRes.data.qry4)
             await setInvBal(getAllInvRes.data.qry3[0].amount_saved)
-
             // setMyInvId(getAllInvRes.data.qry2.id)
 
-
             setLoading(false)
-
-
         } catch (e) {
 
             setLoading(false)
@@ -154,166 +195,286 @@ const InvestmentMainScreen = ({navigation, route}) => {
         }
     }
 
+    const TabOne = () => {
+
+        return (
+            <View style={styles.tabOneContainer}>
+                {/*{*/}
+                {/*    loading ? <ActivityIndicator size={"small"} color={COLORS.secondary}/> :*/}
+
+                        <FlatList
+                            data={investments}
+                            showsVerticalScrollIndicator={false}
+                            scrollEnabled={false}
+                            renderItem={({item}) => (
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate(paidRegFee ? "InvestmentDetailsScreen" : "RegistrationFee", {
+                                        ...item, invBal
+                                    })}
+                                    activeOpacity={0.8} style={styles.box}>
+                                    <Image source={{uri: item.image}}
+                                           style={{width: 110, height: 120, borderRadius: 10,}}/>
+                                    <View style={{width: 180, paddingHorizontal: 5,}}>
+                                        <Text style={styles.title}>{item.name}</Text>
+                                        <Text style={styles.duration}><Text
+                                            style={{color: COLORS.primary}}>{item.roi}%</Text> return
+                                            in {item.duration_in_months} months</Text>
+                                        <View style={{
+                                            flexDirection: "row",
+                                            width: 150,
+                                            justifyContent: "space-between",
+                                            alignItems: 'center',
+                                        }}>
+                                            <View>
+                                                <Text
+                                                    style={styles.amtInv}>₦{item.price_per_slot.toLocaleString()}</Text>
+                                                <Text style={styles.perSlot}>Per Slot</Text>
+                                            </View>
+                                            <View style={{alignItems: "center"}}>
+                                                <Text style={styles.amtInv}>{item.users_investments.length}</Text>
+                                                <Text style={styles.perSlot}>Investors</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                    <View>
+                                        {/*{item.status === "ACTIVE" ?*/}
+                                        {/*    <View style={styles.status1}>*/}
+                                        {/*        <Text style={styles.active}>Active</Text>*/}
+                                        {/*    </View>*/}
+                                        {/*    :*/}
+                                        {/*    <View style={styles.status2}>*/}
+                                        {/*        <Text style={styles.ended}>Ended</Text>*/}
+                                        {/*    </View>*/}
+                                        {/*}*/}
+
+                                        <View style={styles.status1}>
+
+                                            {/*<Text>{moment(item.closing_date).endOf('day').fromNow()}</Text>*/}
+                                            <Text style={styles.active}>{moment(item.closing_date).diff(moment(),'days')} days left</Text>
+
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+
+                            )}/>
+                {/*}*/}
+            </View>
+        )
+    }
+
+    const TabTwo = () => {
+
+        return (
+            <View style={styles.tabOneContainer}>
+
+
+
+                {/*{loading ? <ActivityIndicator size={"small"} color={COLORS.secondary}/> :*/}
+
+                        <FlatList
+                            data={closedInv}
+                            showsVerticalScrollIndicator={false}
+                            scrollEnabled={false}
+                            renderItem={({item}) => (
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate(paidRegFee ? "MyInvestmentDetailsScreen" : "RegistrationFee", {
+                                        ...item, invBal
+                                    })}
+                                    activeOpacity={0.8} style={styles.box}>
+                                    <Image source={{uri: item.image}}
+                                           style={{width: 110, height: 120, borderRadius: 10,}}/>
+                                    <View style={{width: 180, paddingHorizontal: 5,}}>
+                                        <Text style={styles.title}>{item.name}</Text>
+                                        <Text style={styles.duration}><Text
+                                            style={{color: COLORS.primary}}>{item.roi}%</Text> return
+                                            in {item.duration_in_months} months</Text>
+                                        <View style={{
+                                            flexDirection: "row",
+                                            width: 150,
+                                            justifyContent: "space-between",
+                                            alignItems: 'center',
+                                        }}>
+
+                                            <View>
+                                                <Text
+                                                    style={styles.amtInv}>₦{item.price_per_slot.toLocaleString()}</Text>
+                                                <Text style={styles.perSlot}>Per Slot</Text>
+                                            </View>
+                                            <View style={{alignItems: "center"}}>
+                                                <Text style={styles.amtInv}>{item.users_investments.length}</Text>
+                                                <Text style={styles.perSlot}>Investors</Text>
+                                            </View>
+
+
+                                        </View>
+                                    </View>
+                                    <View>
+                                        {item.status === "ACTIVE" ?
+                                            <View style={styles.status1}>
+                                                <Text style={styles.active}>Active</Text>
+                                            </View>
+                                            :
+                                            <View style={styles.status2}>
+                                                <Text style={styles.ended}>Ended</Text>
+                                            </View>
+                                        }
+                                    </View>
+                                </TouchableOpacity>
+
+                            )}/>
+                {/*}*/}
+            </View>
+        )
+    }
+
+    function TopTab() {
+        return (
+
+            <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+                {tabs.map((item, index) => (
+                    <TouchableOpacity
+                        activeOpacity={0.8}
+                        onPress={() => {
+                            setTabStatus(item.tabStatus)
+                        }}
+                        key={index}
+                        style={{
+                            width: "45%",
+                            height: 60,
+                            justifyContent: "center",
+                        }}>
+                        <View style={{width: "100%", alignItems: "center", marginVertical: 5}}>
+                            <Text style={styles.tabStatusText}>{item.tabStatus}</Text>
+                        </View>
+                        <View style={[styles.btnTab, tabStatus === item.tabStatus && styles.btnTabActive]}/>
+                    </TouchableOpacity>
+
+
+                ))}
+            </View>
+
+        );
+    }
+
 
     return (
-        <View style={styles.container}>
+
+
+        <ScrollView style={styles.container}>
+
+
             {route.params && <BackButton onPress={() => navigation.pop()}/>}
             <Text style={styles.inv}>My Investment</Text>
 
+            <>
+                <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame}
+                                 style={styles.balanceFrame}>
+                    <View style={{
+                        paddingHorizontal: 40,
+                    }}>
+                        <View>
+                            <Text style={styles.tsb}>Investment Balance</Text>
+                            <Text style={styles.balance}>₦ {invBal?.toLocaleString()}</Text>
+                        </View>
 
-            {
-                loading ? <ActivityIndicator size={"small"} color={COLORS.secondary}/> :
+                    </View>
+                </ImageBackground>
 
+                {
+                    <>
+                        {myInvestments.length > 0 && <Text style={styles.allInv}>My Investments</Text>}
 
-                    <FlatList
-                        data={investments}
-                        showsVerticalScrollIndicator={false}
-                        ListHeaderComponent={
-
-                            <>
-                                <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame}
-                                                 style={styles.balanceFrame}>
-                                    <View style={{
-                                        paddingHorizontal: 40,
-                                    }}>
-                                        <View>
-                                            <Text style={styles.tsb}>Investment Balance</Text>
-                                            <Text style={styles.balance}>₦ {invBal?.toLocaleString()}</Text>
-                                        </View>
-
-                                    </View>
-                                </ImageBackground>
-
-                                {
-                                    <>
-                                        {myInvestments.length > 0 && <Text style={styles.allInv}>My Investments</Text>}
-
-                                        <FlatList
-                                            data={myInvestments}
-                                            showsVerticalScrollIndicator={false}
-                                            renderItem={({item}) => (
-
-                                                loading ? <ActivityIndicator size={"large"} color={COLORS.primary}/> :
-                                                    <TouchableOpacity
-                                                        onPress={() => navigation.navigate(paidRegFee ? "MyInvestmentDetailsScreen" : "RegistrationFee", {
-                                                            ...item,
-
-                                                        })}
-                                                        activeOpacity={0.8} style={styles.box}>
-                                                        <Image source={{uri: item.image}}
-                                                               style={{width: 110, height: 120, borderRadius: 10,}}/>
-                                                        <View style={{width: 180, paddingHorizontal: 5,}}>
-                                                            <Text style={styles.title}>{item.name}</Text>
-                                                            <Text style={styles.duration}><Text
-                                                                style={{color: COLORS.primary}}>{item.roi}%</Text> return
-                                                                in {item?.duration_in_months} months</Text>
-                                                            <View style={{
-                                                                flexDirection: "row",
-                                                                width: "100%",
-                                                                justifyContent: "space-between",
-                                                                alignItems: 'center',
-                                                                // backgroundColor:"red"
-                                                            }}>
-                                                                <View>
-                                                                    <Text
-                                                                        style={styles.amtInv}>₦{item.price_per_slot.toLocaleString()}</Text>
-                                                                    <Text style={styles.perSlot}>Per Slot</Text>
-                                                                </View>
-
-                                                                <View style={{alignItems: "center"}}>
-                                                                    <Text
-                                                                        style={styles.amtInv}>{item.users_investments.length}</Text>
-                                                                    <Text style={styles.perSlot}>Investors</Text>
-                                                                </View>
+                        { loading ? <ActivityIndicator size={"large"} color={COLORS.primary}/> :
 
 
-                                                            </View>
-                                                        </View>
-                                                        <View>
-                                                            {item.status === "ACTIVE" ?
-                                                                <View style={styles.status1}>
-                                                                    <Text style={styles.active}>Active</Text>
+                        <FlatList
+                            data={myInvestments}
+                            showsVerticalScrollIndicator={false}
+                            scrollEnabled={false}
+                            ListEmptyComponent={
+                                <View style={{alignItems: "center", justifyContent: "center",}}>
 
-                                                                </View>
-                                                                :
-                                                                <View style={styles.status2}>
-
-                                                                    <Text style={styles.ended}>Ended</Text>
-
-                                                                </View>
-                                                            }
-
-
-                                                        </View>
-
-                                                    </TouchableOpacity>
-
-                                            )
-
-
-                                            }/>
-
-
-                                    </>
-                                }
-
-
-                                <Text style={styles.allInv}>All Investments</Text>
-                            </>
-                        }
-                        renderItem={({item}) => (
-
-
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate(paidRegFee ? "InvestmentDetailsScreen" : "RegistrationFee", {
-                                    ...item, invBal
-                                })}
-                                activeOpacity={0.8} style={styles.box}>
-                                <Image source={{uri: item.image}} style={{width: 110, height: 120, borderRadius: 10,}}/>
-                                <View style={{width: 180, paddingHorizontal: 5,}}>
-                                    <Text style={styles.title}>{item.name}</Text>
-                                    <Text style={styles.duration}><Text
-                                        style={{color: COLORS.primary}}>{item.roi}%</Text> return
-                                        in {item.duration_in_months} months</Text>
-                                    <View style={{
-                                        flexDirection: "row",
-                                        width: 150,
-                                        justifyContent: "space-between",
-                                        alignItems: 'center',
-                                    }}>
-
-                                        <View>
-                                            <Text style={styles.amtInv}>₦{item.price_per_slot.toLocaleString()}</Text>
-                                            <Text style={styles.perSlot}>Per Slot</Text>
-                                        </View>
-                                        <View style={{alignItems: "center"}}>
-                                            <Text style={styles.amtInv}>{item.users_investments.length}</Text>
-                                            <Text style={styles.perSlot}>Investors</Text>
-                                        </View>
-
-
-                                    </View>
+                                    <LottieView style={{width: 250, height: 250}}
+                                                source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
                                 </View>
-                                <View>
-                                    {item.status === "ACTIVE" ?
-                                        <View style={styles.status1}>
-                                            <Text style={styles.active}>Active</Text>
-                                        </View>
-                                        :
-                                        <View style={styles.status2}>
-                                            <Text style={styles.ended}>Ended</Text>
-                                        </View>
-                                    }
-                                </View>
-                            </TouchableOpacity>
+                            }
+                            renderItem={({item}) => (
+
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate(paidRegFee ? "MyInvestmentDetailsScreen" : "RegistrationFee", {
+                                            ...item,
+
+                                        })}
+                                        activeOpacity={0.8} style={styles.box}>
+                                        <Image source={{uri: item.image}}
+                                               style={{width: 110, height: 120, borderRadius: 10,}}/>
+                                        <View style={{width: 180, paddingHorizontal: 5,}}>
+                                            <Text style={styles.title}>{item.name}</Text>
+                                            <Text style={styles.duration}><Text
+                                                style={{color: COLORS.primary}}>{item.roi}%</Text> return
+                                                in {item?.duration_in_months} months</Text>
+                                            <View style={{
+                                                flexDirection: "row",
+                                                width: "100%",
+                                                justifyContent: "space-between",
+                                                alignItems: 'center',
+                                                // backgroundColor:"red"
+                                            }}>
+                                                <View>
+                                                    <Text
+                                                        style={styles.amtInv}>₦{item.price_per_slot.toLocaleString()}</Text>
+                                                    <Text style={styles.perSlot}>Per Slot</Text>
+                                                </View>
+
+                                                <View style={{alignItems: "center"}}>
+                                                    <Text
+                                                        style={styles.amtInv}>{item.users_investments.length}</Text>
+                                                    <Text style={styles.perSlot}>Investors</Text>
+                                                </View>
 
 
-                        )}/>}
+                                            </View>
+                                        </View>
+                                        <View>
+                                            {item.status === "ACTIVE" ?
+                                                <View style={styles.status1}>
+                                                    <Text style={styles.active}>Active</Text>
+
+                                                </View>
+                                                :
+                                                <View style={styles.status2}>
+
+                                                    <Text style={styles.ended}>Ended</Text>
+
+                                                </View>
+                                            }
+
+
+                                        </View>
+
+                                    </TouchableOpacity>
+
+                            )
+                            }/>}
+
+
+                    </>
+                }
+
+
+                <Text style={styles.allInv}>All Investments</Text>
+            </>
+
+            {TopTab()}
+
+            {tabStatus === "Open" ? TabOne() : TabTwo()}
+
 
             <View style={{marginBottom: "20%", backgroundColor: "transparent"}}/>
 
 
-        </View>
+
+        </ScrollView>
     );
 };
 
@@ -399,7 +560,7 @@ const styles = StyleSheet.create({
         fontFamily: "Nexa-Bold"
     },
     title: {
-        fontSize: 20,
+        fontSize: 18,
         fontFamily: "Nexa-Book",
         lineHeight: 24,
         color: COLORS.black
@@ -422,6 +583,23 @@ const styles = StyleSheet.create({
         fontSize: 16
 
 
+    },
+    tabOneContainer: {
+        flex: 1,
+        backgroundColor: COLORS.white,
+        // paddingTop: 10
+    },
+    btnTab: {
+        height: 3,
+        borderRadius: 5,
+    },
+    btnTabActive: {
+        backgroundColor: COLORS.primary,
+    },
+    tabStatusText: {
+        fontSize: 16,
+        fontFamily: "Nexa-Bold",
+        color: COLORS.black
     }
 
 })

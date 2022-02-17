@@ -67,18 +67,18 @@ const App = () => {
     const [viewedWelcomePage, setViewedWelcomePage] = useState(false)
     const [savingWlc, setSavingWlc] = useState(false)
     const [investWlc, setInvestWlc] = useState(false)
-    const [paidRegFee, setPaidRegFee] = useState(false);
+    // const [paidRegFee, setPaidRegFee] = useState(false);
 
 
     useEffect(() => {
 
-        setTimeout(() => {
-            SplashScreen.hide()
 
-        }, 2000)
+
         CheckWelcomePage()
         CheckSavingWlc()
         CheckInvestWlc()
+        SplashScreen.hide()
+
 
     }, [])
 
@@ -129,7 +129,6 @@ const App = () => {
         }
     };
 
-
     const AuthNavigation = () => {
         return (// <View style={{flex:1, backgroundColor:"white"}}>
             <AuthStack.Navigator screenOptions={{
@@ -145,48 +144,40 @@ const App = () => {
         );
     };
 
-
     const MainNavigation = () => {
 
         const user = useContext(UserContext);
 
-
         useEffect(() => {
 
-            ChkRegFee()
+
 
         }, []);
 
 
-        const ChkRegFee = async () => {
+        // const ChkRegFee = async () => {
+        //
+        //     let qry = `query {
+        //                     users(where: { id: ${user.id} }) {
+        //                     paid_reg_fee
+        //                             }
+        //                         }`
+        //     try {
+        //         const qryRes = await handleQuery(qry, user.token, false)
+        //         // console.log(qryRes.data.users[0].paid_reg_fee)
+        //         await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
+        //
+        //     } catch (e) {
+        //         console.log(e, "ChkRegFeeErr")
+        //     }
+        // }
 
 
-            let qry = `query {
-                    users(where: { id: ${user.id} }) {
-                        paid_reg_fee
-                                    }
-                                }`
-
-
-            try {
-                const qryRes = await handleQuery(qry, user.token, false)
-                // console.log(qryRes.data.users[0].paid_reg_fee)
-                await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
-
-
-            } catch (e) {
-                console.log(e, "ChkRegFeeErr")
-            }
-
-        }
-
-
-        return (// <View style={{flex:1, backgroundColor:"white"}}>
+        return (
             <MainStack.Navigator
-                // initialRouteName={viewedWelcomePage ? "DashBoard" : "BottomTabs"}
-                initialRouteName={paidRegFee ? "BottomTabs" : "RegistrationFee"}
+                initialRouteName={"BottomTabs"}
                 screenOptions={{
-                    headerShown: false, // backgroundColor:"white"
+                    headerShown: false,
                 }}>
                 <MainStack.Screen name={"WelcomePage"} component={WelcomePage}/>
                 <MainStack.Screen name={"BottomTabs"} component={BottomTabs}/>
@@ -229,26 +220,8 @@ const App = () => {
                 <MainStack.Screen name={"PaymentWebPage"} component={PaymentWebPage}/>
                 <MainStack.Screen name={"RecentTransactions"} component={RecentTransactions}/>
                 <MainStack.Screen name={"TopUpScreen"} component={TopUpScreen}/>
-
-
             </MainStack.Navigator>
 
-            // </View>
-
-        );
-    };
-
-    const InvestStack = () => {
-        return (// <View style={{flex:1, backgroundColor:"white"}}>
-            <MainStack.Navigator
-                // initialRouteName={viewedWelcomePage ? "DashBoard" : "WelcomePage"}
-                screenOptions={{
-                    headerShown: false, // backgroundColor:"white"
-                }}>
-                <MainStack.Screen name={"StartInvesting"} component={StartInvesting}/>
-            </MainStack.Navigator>
-
-            // </View>
 
         );
     };
@@ -256,23 +229,22 @@ const App = () => {
 
     function renderScreens() {
 
+
         if (state.loading) {
             return <RootStack.Screen name={"Splash"} component={Splash}/>;
-
         }
-
 
         // console.log(state.user, "State USERR ")
 
         return (state.user ? <RootStack.Screen name={"MainNavigation"}>
                     {() => (<UserContext.Provider value={state.user}>
+
+
                         <MainNavigation/>
                     </UserContext.Provider>)}
                 </RootStack.Screen> :
 
                 <RootStack.Screen name={"AuthNavigation"} component={AuthNavigation}/>
-
-
         )
     }
 
@@ -370,7 +342,7 @@ const App = () => {
                                                }}/>
 
                                         <Text style={{
-                                            fontSize:12,
+                                            fontSize: 12,
                                             color: focused ? COLORS.primary : COLORS.tertiary,
                                             fontFamily: "Nexa-Bold"
                                         }}>Home</Text>
@@ -394,7 +366,7 @@ const App = () => {
                                        }}/>
 
                                 <Text style={{
-                                    fontSize:12,
+                                    fontSize: 12,
                                     color: focused ? COLORS.primary : COLORS.tertiary,
                                     fontFamily: "Nexa-Bold"
                                 }}>Savings</Text>
@@ -470,7 +442,7 @@ const App = () => {
                                             tintColor: focused ? COLORS.primary : COLORS.tertiary
                                         }}/>
                                 <Text style={{
-                                    fontSize:12,
+                                    fontSize: 12,
                                     color: focused ? COLORS.primary : COLORS.tertiary,
                                     fontFamily: "Nexa-Bold"
                                 }}>Investment</Text>
@@ -494,7 +466,7 @@ const App = () => {
                                                }}/>
                                         <Text
                                             style={{
-                                                fontSize:12,
+                                                fontSize: 12,
                                                 color: focused ? COLORS.primary : COLORS.tertiary,
                                                 fontFamily: "Nexa-Bold"
                                             }}>Account</Text>
@@ -507,7 +479,6 @@ const App = () => {
         );
     };
 
-
     const theme = {
         ...DefaultTheme,
         roundness: 2,
@@ -519,11 +490,8 @@ const App = () => {
     };
 
     return (
-        // <GestureHandlerRootView>
-
 
         <AuthContext.Provider value={auth}>
-
             <PaperProvider theme={theme}>
                 <SafeAreaView style={styles.container}>
                     {/*<StatusBar translucent={false} backgroundColor={"transparent"} />*/}
@@ -537,8 +505,6 @@ const App = () => {
                             {renderScreens()}
 
                         </RootStack.Navigator>
-
-
                     </NavigationContainer>
 
                     <Toast config={toastConfig}/>

@@ -347,7 +347,6 @@ const EditProfile = ({navigation}) => {
         )
     }
 
-
     function TopTab() {
         return (
 
