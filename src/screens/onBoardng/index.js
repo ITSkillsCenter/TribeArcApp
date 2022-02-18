@@ -7,15 +7,15 @@ import CustomButton from "../../components/CustomButton";
 const slides = [
     {
         id: 1,
-        title: "Save your Money",
+        title: "Join the moving train",
         image: require("../../assets/icons/onBoarding1.png"),
-        desc: "Amet minim mollit non deserunt ullamco est sit aliqua veniam consequat sunt nostrud amet."
+        desc: "TribeArc is a business community pooling funds together with the goal of funding businesses we believe in, creating employment while guaranteeing return on investment"
     },
     {
         id: 2,
-        title: "Invest your Money",
+        title: "Save and Invest for the future",
         image: require("../../assets/icons/onBoarding2.png"),
-        desc: "Amet minim mollit non deserunt ullamco est sit aliqua veniam consequat sunt nostrud amet."
+        desc: "We save and invest together in businesses that potentially produce 10X return on investment. Join us now!"
 
     },
 ];

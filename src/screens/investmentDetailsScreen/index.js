@@ -24,12 +24,6 @@ import moment from "moment";
 // import InvestmentTermsPage from "../investmentTermsPage";
 
 
-const clause = [
-
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in." + " Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra " + "in sit semper et. Amet quam placerat sem.", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra in sit semper et. Amet quam placerat sem.\n" + "\n" + "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra in sit semper et. Amet quam placerat sem.",
-
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra in sit semper et. Amet quam placerat sem.\n" + "\n" + "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra in sit semper et. Amet quam placerat sem.", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra in sit semper et. Amet quam placerat sem.\n" + "\n" + "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet amet, in. Ipsum viverra pretium tellus neque. Ullamcorper suspendisse aenean leo pharetra in sit semper et. Amet quam placerat sem."]
-
 const InvestmentDetailsScreen = ({navigation, route}) => {
 
     const [counter, setCounter] = useState(0)
@@ -44,7 +38,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
 
     const investments = route.params
-    // console.log(investments.price_per_slot)
+    console.log(investments.price_per_slot)
 
 
     useEffect(() => {
@@ -82,111 +76,170 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
     }
 
 
+//     const HandleBooking = async () => {
+//
+//
+//         let slotBoughtQry = `query {
+//   usersInvestments(where: { users_id: ${user.id}, investment: ${investments.id} }) {
+//     id
+//     slot_bought
+    {/*  }*/
+    }
+    {/*}`*/
+    }
+
+
+    {/*        try {*/
+    }
+
+    {/*            const slotBoughtRes = await handleQuery(slotBoughtQry, user.token, false)*/
+    }
+
+
+    {/*            if (slotBoughtRes.data.usersInvestments.length > 0) {*/
+    }
+
+    {/*                // console.log(slotBoughtRes.data.usersInvestments[0].id)*/
+    }
+
+
+    {/*                let updInv = `mutation {*/
+    }
+    {/*                  mtn1:  updateUsersInvestment(input: { where: { id: ${slotBoughtRes.data.usersInvestments[0].id} },*/
+    }
+    {/*                    data: { slot_bought: ${slotBoughtRes.data.usersInvestments[0].slot_bought + counter} } }) {*/
+    }
+//                     usersInvestment {
+//                     slot_bought
+//                     }
+    {/*                    }*/
+    }
+//
+//                   mtn2: updateInvestment(
+    {/*                            input: { where: { id: ${investments.id} },*/
+    }
+    {/*                            data: { funds_raised: ${investments.funds_raised + counter * investments.price_per_slot} } }*/
+    }
+    {/*                                ) {*/
+    }
+//                                 investment {
+//                                     id
+//                                         }
+//                                     }
+//                                 }`
+//
+//                 // console.log(updInv)
+//                 setLoading(true)
+//
+//
+//                 const updInvRes = await handleQuery(updInv, user.token, false)
+//                 setLoading(false)
+//
+//                 navigation.navigate("BottomTabs")
+//
+//                 // console.log(updInvRes)
+//             }
+//
+    {/*            if (slotBoughtRes.data.usersInvestments.length < 1) {*/
+    }
+
+    {/*                // slotBoughtRes.data.usersInvestments[0].slot_bought*/
+    }
+
+    {/*                let mtn = `mutation {*/
+    }
+//                mtn1: createUsersInvestment(
+//                     input: {
+//                     data: {
+//                      users_id: ${user.id}
+//                         investment: ${investments.id}
+    {/*                         community: 15*/
+    }
+//                     slot_bought: ${counter}
+    {/*                 status: INVESTING*/
+    }
+//                     }
+//                         }
+//                         ) {
+//                     usersInvestment {
+//                  investment {
+//                      name
+//                         }
+//                 slot_bought
+//                 users_id {
+//                     id
+//                 }
+//                 }
+//                     }
+//
+//                      mtn2: updateInvestment(
+//     input: { where: { id: ${investments.id} }, data: { funds_raised: ${investments.funds_raised + counter * investments.price_per_slot} } }
+//   ) {
+//     investment {
+//       id
+//     }
+//   }
+//
+//                         }`
+//
+//
+//                 // console.log(mtn)
+//                 setLoading(true)
+//                 const crtInv = await handleQuery(mtn, user.token, false)
+//                 // console.log(crtInv)
+//                 setLoading(false)
+//
+//                 navigation.navigate("BottomTabs")
+//
+//             }
+//
+//
+//         } catch (e) {
+//             console.log(e, "HandleInvestErr")
+//             setLoading(false)
+//
+//         }
+//     }
+
+
     const HandleBooking = async () => {
 
-
-        let slotBoughtQry = `query {
-  usersInvestments(where: { users_id: ${user.id}, investment: ${investments.id} }) {
-    id
-    slot_bought
+        let bookMtn = `mutation {
+  createBookedInvestment(
+    input: {
+      data: {
+        roi: ${investments.roi}
+        users_id: ${user.id}
+        investment: ${investments.id}
+        unit_booked: ${counter}
+        unit_amount: ${investments.price_per_slot}
+        community: 15
+      }
+    }
+  ) {
+    bookedInvestment {
+      id
+      roi
+    }
   }
 }`
 
 
         try {
 
-            const slotBoughtRes = await handleQuery(slotBoughtQry, user.token, false)
+            setLoading(true)
 
+            const bookMtnRes = await handleQuery(bookMtn, user.token, false)
 
-            if (slotBoughtRes.data.usersInvestments.length > 0) {
-
-                // console.log(slotBoughtRes.data.usersInvestments[0].id)
-
-
-                let updInv = `mutation {
-                  mtn1:  updateUsersInvestment(input: { where: { id: ${slotBoughtRes.data.usersInvestments[0].id} },
-                    data: { slot_bought: ${slotBoughtRes.data.usersInvestments[0].slot_bought + counter} } }) {
-                    usersInvestment {
-                    slot_bought
-                    }
-                    }
-                    
-                  mtn2: updateInvestment(
-                            input: { where: { id: ${investments.id} },
-                            data: { funds_raised: ${investments.funds_raised + counter * investments.price_per_slot} } }
-                                ) {
-                                investment {
-                                    id
-                                        }
-                                    }
-                                }`
-
-                // console.log(updInv)
-                setLoading(true)
-
-
-                const updInvRes = await handleQuery(updInv, user.token, false)
-                setLoading(false)
-
-                navigation.navigate("BottomTabs")
-
-                // console.log(updInvRes)
-            }
-
-            if (slotBoughtRes.data.usersInvestments.length < 1) {
-
-                // slotBoughtRes.data.usersInvestments[0].slot_bought
-
-                let mtn = `mutation {
-               mtn1: createUsersInvestment(
-                    input: {
-                    data: {
-                     users_id: ${user.id}
-                        investment: ${investments.id}
-                         community: 15
-                    slot_bought: ${counter}
-                 status: INVESTING
-                    }
-                        }
-                        ) {
-                    usersInvestment {
-                 investment {
-                     name
-                        }
-                slot_bought
-                users_id {
-                    id
-                }
-                }
-                    }
-                    
-                     mtn2: updateInvestment(
-    input: { where: { id: ${investments.id} }, data: { funds_raised: ${investments.funds_raised + counter * investments.price_per_slot} } }
-  ) {
-    investment {
-      id
-    }
-  }
-                    
-                        }`
-
-
-                // console.log(mtn)
-                setLoading(true)
-                const crtInv = await handleQuery(mtn, user.token, false)
-                // console.log(crtInv)
-                setLoading(false)
-
-                navigation.navigate("BottomTabs")
-
-            }
-
+            setLoading(false)
+            navigation.navigate("BottomTabs")
 
         } catch (e) {
-            console.log(e, "HandleInvestErr")
+            console.log(e, "HandleBookingErr")
             setLoading(false)
 
         }
+
     }
 
 
@@ -198,15 +251,21 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
         return (<View style={styles.container2}>
             {/*<BackButton onPress={() => navigation.pop()}/>*/}
             <Text style={styles.title}>Tribe arc Terms & Condition </Text>
-            <Text style={styles.updatedAt}>Last updated on {date.toJSON().slice(0, 10).replace(/-/g, '/')} </Text>
+            {/*<Text style={styles.updatedAt}>Last updated on {date.toJSON().slice(0, 10).replace(/-/g, '/')} </Text>*/}
 
             <ScrollView showsVerticalScrollIndicator={false}>
-                {clause.map((item, index) => (<View>
-                    <Text style={styles.clause}>{index + 1}. Clause {index + 1}</Text>
-                    <Text style={styles.clauseDet}>{item}</Text>
-                </View>))}
+                {/*{clause.map((item, index) => (<View>*/}
+                {/*    <Text style={styles.clause}>{index + 1}. Clause {index + 1}</Text>*/}
+                {/*    <Text style={styles.clauseDet}>{item}</Text>*/}
+                {/*</View>))}*/}
+
+                <Text style={styles.clauseDet}>{investments.terms_condition}</Text>
                 <View>
-                    <CustomButton filled text={"Accept & Continue"}/>
+                    <CustomButton onPress={async () => {
+
+                        await HandleBooking()
+                    }}
+                                  loading={loading} filled text={"Accept & Continue"}/>
                 </View>
 
             </ScrollView>
@@ -374,7 +433,11 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
                 <Text style={{fontSize: 12, color: COLORS.black, opacity: 0.7, fontFamily: "Nexa-Book",}}>Time
                     left</Text>
-                <Text style={{fontSize: 16, color: COLORS.black, fontFamily: "Nexa-Bold",}}>{moment(investments.closing_date).diff(moment(),'days')} days left</Text>
+                <Text style={{
+                    fontSize: 16,
+                    color: COLORS.black,
+                    fontFamily: "Nexa-Bold",
+                }}>{moment(investments.closing_date).diff(moment(), 'days')} days left</Text>
 
             </View>
 
@@ -385,7 +448,11 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
             filled
             text={"Book Now"}
             onPress={async () => {
-                setModalVisible(true)
+
+                if (counter > 0) {
+                    setModalVisible(true)
+
+                }
 
                 // if (counter > 0 && counter < investments?.total_slot - slotBought) {
                 //     if (investments.invBal > (counter * investments.price_per_slot)) {

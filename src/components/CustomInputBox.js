@@ -82,10 +82,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     input: {
-        height: 50,
+        height: 53,
         // paddingVertical:2,
         // borderRadius: 5,
-        fontFamily: "Nexa-Book",
+        // fontFamily: "Nexa-Book",
         position: "absolute",
         // color:"red"
 

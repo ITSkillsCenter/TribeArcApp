@@ -148,7 +148,7 @@ const VoluntaryAccountPage = ({navigation, route}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={allTrx}
                           key={item => item.index}
-                          scrollEnabled={false}
+                          showsVerticalScrollIndicator={false}
                           ListEmptyComponent={
                               <View style={{alignItems:"center", justifyContent:"center",}}>
 

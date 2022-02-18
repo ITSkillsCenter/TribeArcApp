@@ -28,6 +28,7 @@ const CardSettings = ({navigation}) => {
   users(where: { id: ${user.id} }) {
     credit_cards{
       authorization_payload
+      id
     }
   }
 }`
@@ -36,17 +37,27 @@ const CardSettings = ({navigation}) => {
             setLoading(true)
 
             const cardRes = await handleQuery(qry, user.token, false)
-            await setCards(cardRes.data.users[0].credit_cards)
 
-            // console.log(cardRes.data.users[0].credit_cards, "REZZ")
+
+            // console.log(cardRes.data.users[0].credit_cards[0].id, "REZZ")
+
+            const arr = await cardRes.data.users[0].credit_cards.map((item) => {
+                return item.authorization_payload
+            })
+
+            function getUniqueListBy(arr, key) {
+                return [...new Map(arr.map(item => [item[key], item])).values()]
+            }
+
+            const singleCard = await getUniqueListBy(arr, 'bin')
+
+            await setCards(singleCard)
 
             setLoading(false)
-
 
         } catch (e) {
             console.log(e, "GetAllCardsErr")
             setLoading(false)
-
         }
 
     }
@@ -67,7 +78,6 @@ const CardSettings = ({navigation}) => {
                     showsVerticalScrollIndicator={false}
                     renderItem={({item}) => (
 
-
                         <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame}
                                          style={styles.balanceFrame}>
                             <View style={{
@@ -76,11 +86,10 @@ const CardSettings = ({navigation}) => {
                                 paddingHorizontal: 40,
                                 // alignItems: 'center'
                             }}>
-
                                 <View>
-                                    <Text style={styles.tsb}>**** **** **** {item.authorization_payload.last4}</Text>
+                                    <Text style={styles.tsb}>**** **** **** {item.last4}</Text>
                                     <Text
-                                        style={styles.cardType}>{item.authorization_payload.card_type} {item.authorization_payload.exp_month}/{item.authorization_payload.exp_year}</Text>
+                                        style={styles.cardType}>{item.card_type} {item.exp_month}/{item.exp_year}</Text>
                                 </View>
 
                             </View>

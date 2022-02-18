@@ -72,13 +72,10 @@ const App = () => {
 
     useEffect(() => {
 
-
-
         CheckWelcomePage()
         CheckSavingWlc()
         CheckInvestWlc()
         SplashScreen.hide()
-
 
     }, [])
 
@@ -151,7 +148,6 @@ const App = () => {
         useEffect(() => {
 
 
-
         }, []);
 
 
@@ -175,7 +171,7 @@ const App = () => {
 
         return (
             <MainStack.Navigator
-                initialRouteName={"BottomTabs"}
+                initialRouteName={viewedWelcomePage?"BottomTabs" :"WelcomePage"}
                 screenOptions={{
                     headerShown: false,
                 }}>
@@ -338,12 +334,12 @@ const App = () => {
                                                style={{
                                                    width: 22,
                                                    height: 22,
-                                                   tintColor: focused ? COLORS.primary : COLORS.tertiary
+                                                   tintColor: focused ? COLORS.primary : COLORS.secondary
                                                }}/>
 
                                         <Text style={{
                                             fontSize: 12,
-                                            color: focused ? COLORS.primary : COLORS.tertiary,
+                                            color: focused ? COLORS.primary : COLORS.secondary,
                                             fontFamily: "Nexa-Bold"
                                         }}>Home</Text>
                                     </View>
@@ -362,12 +358,12 @@ const App = () => {
                                        style={{
                                            width: 22,
                                            height: 22,
-                                           tintColor: focused ? COLORS.primary : COLORS.tertiary
+                                           tintColor: focused ? COLORS.primary : COLORS.secondary
                                        }}/>
 
                                 <Text style={{
                                     fontSize: 12,
-                                    color: focused ? COLORS.primary : COLORS.tertiary,
+                                    color: focused ? COLORS.primary : COLORS.secondary,
                                     fontFamily: "Nexa-Bold"
                                 }}>Savings</Text>
                             </View>
@@ -439,11 +435,11 @@ const App = () => {
                                         style={{
                                             width: 22,
                                             height: 22,
-                                            tintColor: focused ? COLORS.primary : COLORS.tertiary
+                                            tintColor: focused ? COLORS.primary : COLORS.secondary
                                         }}/>
                                 <Text style={{
                                     fontSize: 12,
-                                    color: focused ? COLORS.primary : COLORS.tertiary,
+                                    color: focused ? COLORS.primary : COLORS.secondary,
                                     fontFamily: "Nexa-Bold"
                                 }}>Investment</Text>
 
@@ -462,12 +458,12 @@ const App = () => {
                                                style={{
                                                    width: 22,
                                                    height: 22,
-                                                   tintColor: focused ? COLORS.primary : COLORS.tertiary
+                                                   tintColor: focused ? COLORS.primary : COLORS.secondary
                                                }}/>
                                         <Text
                                             style={{
                                                 fontSize: 12,
-                                                color: focused ? COLORS.primary : COLORS.tertiary,
+                                                color: focused ? COLORS.primary : COLORS.secondary,
                                                 fontFamily: "Nexa-Bold"
                                             }}>Account</Text>
 

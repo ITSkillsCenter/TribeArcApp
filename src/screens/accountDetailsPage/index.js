@@ -127,13 +127,16 @@ const styles = StyleSheet.create({
         marginVertical: 25
     },
     addAcctBox: {
+        alignSelf:"center",
         flexDirection: "row",
         alignItems: "center",
-        height: 100,
+        height: 130,
         backgroundColor: COLORS.white,
         borderRadius: 15,
         padding: 20,
         marginVertical: 5,
+        elevation:3,
+        width: "99%",
         justifyContent: "space-between",
         shadowOpacity: 0.08,
         shadowColor: "#000",

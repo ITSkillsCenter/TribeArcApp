@@ -132,6 +132,8 @@ export const useAuth = () => {
                                                   }
                                                }`
 
+
+                        console.log(createSavingAcct)
                         let createSavingAcctRes = await handleQuery(createSavingAcct, res.data.login.jwt, false)
                     }
 
@@ -141,8 +143,8 @@ export const useAuth = () => {
                         token: res.data.login.jwt,
                         id: res.data.login.user.id,
                         email: res.data.login.user.email,
-                        firstname:res.data.login.user.firstname,
-                        lastname:res.data.login.user.lastname
+                        firstname: res.data.login.user.firstname,
+                        lastname: res.data.login.user.lastname
                         // avatar: res.data.login.user.avatar
 
                     };
@@ -176,7 +178,7 @@ export const useAuth = () => {
                                     password: "${password}"
                                     referred_by: "${referredBy}"
                                     referral_code:"${rString}"
-                                    domain_url:"investment.triberarc.com"
+                                    domain_url:"investment.tribearc.com"
                                          }
                                      ) {
                                   jwt
@@ -198,6 +200,7 @@ export const useAuth = () => {
 
 
                 try {
+                    // console.log(qry)
 
                     // console.log(updateRefAndRefBY)
                     let codeVerificationRes = await handleQueryNoToken(codeVerification);
