@@ -181,6 +181,7 @@ const VoluntaryAccountPage = ({navigation, route}) => {
 
                                       </View>
 
+
                                       <View style={{alignItems: 'flex-end', height: 50, width: "25%"}}>
 
 
