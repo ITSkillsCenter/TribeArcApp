@@ -624,7 +624,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
-        fontSize: 20
+        fontSize: SIZES.width * 0.05
 
     }
 

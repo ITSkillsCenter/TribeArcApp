@@ -21,7 +21,7 @@ const SuccessScreen = ({navigation, route}) => {
                 <Text style={styles.ts}>Transaction Successful!</Text>
             </View>
             <View style={styles.tsBox}>
-                <Text style={styles.desc}>Dear User you have successfully saved fot this month.</Text>
+                <Text style={styles.desc}>Dear User you have successfully saved for this month.</Text>
             </View>
 
             <View style={{marginVertical: 20}}>

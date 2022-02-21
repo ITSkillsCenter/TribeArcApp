@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
         width: SIZES.width * 0.7,
     },
     savAcct: {
-        fontSize: 20,
+        fontSize: SIZES.width * 0.05,
         color: COLORS.black,
         fontFamily: "Nexa-Bold",
     },

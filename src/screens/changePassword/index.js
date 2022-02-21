@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
         fontSize: 30,
-        marginVertical: 25
+        // marginVertical: 25
     },
     textInput: {
         borderColor: "#cbc8c8",

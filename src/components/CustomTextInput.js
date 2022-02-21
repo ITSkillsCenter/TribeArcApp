@@ -1,7 +1,7 @@
 // @flow
 import React, {useState} from 'react';
 import {StyleSheet, Text, TextInput, View} from "react-native";
-import {COLORS} from "../constants";
+import {COLORS, SIZES} from "../constants";
 
 const CustomTextInput = ({
                              initialValue,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     container: {
         // alignItems: 'center',
         // justifyContent: 'center',
-        marginVertical: 10,
+        marginVertical: 5,
         backgroundColor: 'white',
         // marginTop:50
     },
@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
 
     },
     input: {
-        height: 50,
-        fontSize: 16,
+        height: SIZES.width * 0.12,
+        fontSize: 14,
         paddingHorizontal: 10,
         borderRadius: 5,
         // opacity:0.7,
@@ -76,16 +76,6 @@ const styles = StyleSheet.create({
         color: COLORS.black
 
     },
-    eyesBox: {
-        justifyContent: "center",
-        marginRight: 20,
-    },
-    eye: {
-        marginRight: 40,
-        width: 20,
-        height: 20,
-        alignSelf: 'flex-end',
-        position: "absolute",
-    }
+
 
 })

@@ -23,13 +23,13 @@ export default CustomButton
 
 const styles = StyleSheet.create({
     container: {
-        marginVertical: 30,
+        marginVertical: 15,
         // width:SIZES.width*0.9
         // alignItems: 'center',
         // justifyContent: 'center',
     },
     button: {
-        height: 60,
+        height: SIZES.width * 0.15,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 8

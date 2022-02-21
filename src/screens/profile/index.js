@@ -159,7 +159,7 @@ const Profile = ({navigation, route}) => {
             alignItems: "center",
         }}>
 
-            <Text style={{fontSize: 20, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Logout?</Text>
+            <Text style={{fontSize: SIZES.width * 0.05, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Logout?</Text>
             <Text style={{fontSize: 16, color: "#999999", fontFamily: "Nexa-Book", marginVertical: 30}}>Are you sure you
                 want to logout?</Text>
 
@@ -209,9 +209,7 @@ const Profile = ({navigation, route}) => {
 
                     <View style={styles.fullNameContainer}>
                         <Text style={styles.fullName}>{firstname} {lastname}</Text>
-
                         <Text style={styles.editProfile}>Edit Profile</Text>
-
                     </View>
 
                     <Image source={icons.arrowRight} style={{width: 20, height: 20}}
@@ -268,7 +266,7 @@ const styles = StyleSheet.create({
     myAccount: {
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
-        fontSize: 30,
+        fontSize: SIZES.width * 0.07,
         marginVertical: 15
     },
     userDetails: {
@@ -290,14 +288,16 @@ const styles = StyleSheet.create({
         }
     },
     img: {
-        width: 50,
-        height: 50,
+        width: SIZES.width * 0.15,
+        height: SIZES.width * 0.15,
         borderRadius: 50
     },
     fullNameContainer: {
-        width: SIZES.width * 0.6,
+        width: SIZES.width * 0.55,
         height: 50,
         justifyContent: "space-between",
+        // backgroundColor:"red",
+        paddingHorizontal:10
 
     },
     fullName: {

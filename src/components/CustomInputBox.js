@@ -35,10 +35,10 @@ const CustomInputBox = ({
                     secureTextEntry={passwordShown}
                     activeOutlineColor={COLORS.primary}
                     outlineColor={"#C4C4C4"}
-                    Style={{color: "red"}}
+                    // Style={{color: "red"}}
 
                     style={[styles.input, {
-                        fontSize:16,
+                        // fontSize: 16,
                         width: short ? SIZES.width * 0.3 : "100%",
                         ...inputContainerStyle,
                         backgroundColor: 'white',
@@ -56,7 +56,7 @@ const CustomInputBox = ({
                 </TouchableOpacity>}
                 {clipboard &&
 
-                    <TouchableOpacity style={[styles.eyesBox,{top:2}]} activeOpacity={0.8} onPress={clipboardOnPress}>
+                    <TouchableOpacity style={[styles.eyesBox, {top: 2}]} activeOpacity={0.8} onPress={clipboardOnPress}>
                         <Image style={[styles.eye, {
                             width: 45, height: 50
                         }]} source={icons.clipboard}/>
@@ -78,14 +78,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 40,
+        marginVertical: SIZES.width*0.1,
         backgroundColor: 'white',
     },
     input: {
-        height: 53,
+        fontSize: SIZES.width * 0.04,
+        height: SIZES.width*0.13,
         // paddingVertical:2,
         // borderRadius: 5,
-        // fontFamily: "Nexa-Book",
+        fontFamily: "Nexa-Book",
         position: "absolute",
         // color:"red"
 
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
     eyesBox: {
         justifyContent: "center",
         marginRight: 20,
+        zIndex:10
     },
     eye: {
         marginRight: 40,

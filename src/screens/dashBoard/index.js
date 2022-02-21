@@ -211,7 +211,7 @@ const DashBoard = ({navigation}) => {
                             <View style={{
                                 flexDirection: "row",
                                 justifyContent: 'space-between',
-                                paddingHorizontal: 40,
+                                paddingHorizontal: 20,
                                 alignItems: 'center'
                             }}>
                                 <View>
@@ -220,7 +220,7 @@ const DashBoard = ({navigation}) => {
                                 </View>
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate(regFeePaid ? "SavingsMainScreen" : "RegistrationFee", "backButton")}>
-                                    <Image resizeMode={"contain"} style={{width: 40, height: 40}}
+                                    <Image resizeMode={"contain"} style={{width: 30, height: 30}}
                                            source={icons.plusIcon}/>
                                 </TouchableOpacity>
                             </View>
@@ -229,7 +229,7 @@ const DashBoard = ({navigation}) => {
                             <View style={{
                                 flexDirection: "row",
                                 justifyContent: 'space-between',
-                                paddingHorizontal: 40,
+                                paddingHorizontal: 20,
                                 alignItems: 'center'
                             }}>
                                 <View>
@@ -238,7 +238,7 @@ const DashBoard = ({navigation}) => {
                                 </View>
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate(regFeePaid ? "Savings" : "RegistrationFee")}>
-                                    <Image resizeMode={"contain"} style={{width: 40, height: 40}}
+                                    <Image resizeMode={"contain"} style={{width: 30, height: 30}}
                                            source={icons.plusIcon}/>
                                 </TouchableOpacity>
                             </View>
@@ -248,7 +248,7 @@ const DashBoard = ({navigation}) => {
                             <View style={{
                                 flexDirection: "row",
                                 justifyContent: 'space-between',
-                                paddingHorizontal: 40,
+                                paddingHorizontal: 20,
                                 alignItems: 'center'
                             }}>
                                 <View>
@@ -257,7 +257,7 @@ const DashBoard = ({navigation}) => {
                                 </View>
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate(regFeePaid ? "TopUpScreen" : "RegistrationFee", "backButton")}>
-                                    <Image resizeMode={"contain"} style={{width: 40, height: 40}}
+                                    <Image resizeMode={"contain"} style={{width: 30, height: 30}}
                                            source={icons.plusIcon}/>
                                 </TouchableOpacity>
                             </View>
@@ -271,12 +271,12 @@ const DashBoard = ({navigation}) => {
 
                 <TouchableOpacity activeOpacity={0.8} style={styles.saveFrame}
                                   onPress={() => navigation.navigate(regFeePaid ? "SavingsMainScreen" : "RegistrationFee", "backButton")}>
-                    <View>
-                        <Image source={icons.pigIcon} resizeMode={"contain"} style={{width: 55, height: 55}}/>
-                    </View>
+                    {/*<View>*/}
+                    <Image source={icons.pigIcon} resizeMode={"contain"} style={{width: 50, height: 50}}/>
+                    {/*</View>*/}
 
-                    <View style={{justifyContent: "space-between", height: 50, width: "80%", alignSelf: "center"}}>
-                        <Text style={{fontFamily: "Nexa-Bold", color: COLORS.black, letterSpacing: 0.8,}}>SAVE FOR
+                    <View style={{justifyContent: "space-between", height: 50, width: "70%", alignSelf: "center"}}>
+                        <Text style={{fontFamily: "Nexa-Bold", color: COLORS.black, letterSpacing: 0.7,}}>SAVE FOR
                             THE
                             FUTURE</Text>
                         <Text style={{color: "#A19FCD", fontFamily: "Nexa-Book"}}>Tap to get started with
@@ -368,21 +368,20 @@ const DashBoard = ({navigation}) => {
 
 
                     {transactions.map((item, index) => (
-
                         <View key={index}>
                             <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
                                               onPress={() => {
                                               }}>
                                 <Image source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
-                                       style={{width: 50, height: 50}}/>
+                                       style={{width:  SIZES.width * 0.1, height:  SIZES.width * 0.1}}/>
                                 <Text style={styles.recentTransactionText}>Card Deposit</Text>
 
-                                <View style={{alignItems: 'center', justifyContent: "space-between", height: 40}}>
+                                <View style={{alignItems: 'center', justifyContent: "space-between", height:  SIZES.width * 0.1}}>
                                     <Text style={{
-                                        color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 20
+                                        color: COLORS.black, fontFamily: "Nexa-Bold", fontSize:  SIZES.width * 0.05
                                     }}>₦{item?.amount_paid.toLocaleString()}</Text>
                                     <Text style={{
-                                        color: COLORS.black, fontFamily: "Nexa-Book"
+                                        color: COLORS.black, fontFamily: "Nexa-Book",fontSize:  SIZES.width * 0.03
                                     }}>{moment(item?.created_at).format("MMM D, YYYY")}</Text>
                                 </View>
                             </TouchableOpacity>
@@ -416,25 +415,38 @@ export default DashBoard
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, backgroundColor: COLORS.white, // height:"100%"
-    }, container2: {
-        paddingHorizontal: 20, paddingVertical: 30, backgroundColor: COLORS.white
-    }, header: {
-        // width: SIZES.width,
-        flexDirection: "row", alignItems: 'center', justifyContent: "space-between"
+        flex: 1,
+        backgroundColor: COLORS.white, // height:"100%"
     },
-    imgContainer: {}, img: {
-        width: 50, height: 50, borderRadius: 50
-    }, nameContainer: {
+    container2: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        backgroundColor: COLORS.white
+    },
+    header: {
+        // width: SIZES.width,
+        flexDirection: "row",
+        alignItems: 'center',
+        justifyContent: "space-between"
+    },
+    imgContainer: {},
+    img: {
+        width: SIZES.width * 0.15, height: SIZES.width * 0.15, borderRadius: 50
+    },
+    nameContainer: {
         // backgroundColor:"cyan",
-        width: SIZES.width * 0.5, height: 50, justifyContent: "space-between", marginHorizontal: 15, right: 10
+        width: SIZES.width * 0.5,
+        height: 50,
+        justifyContent: "space-between",
+        marginHorizontal: 15, right: 10
 
-    }, username: {
+    },
+    username: {
         fontSize: 16, color: COLORS.black, fontFamily: "Nexa-Book"
     }, welcomeText: {
-        color: COLORS.primary, fontSize: 20, fontFamily: "Nexa-Bold"
+        color: COLORS.primary, fontSize: SIZES.width * 0.05, fontFamily: "Nexa-Bold"
     }, notification: {
-        width: 40, height: 40, // alignSelf:'flex-end'
+        width: SIZES.width * 0.08, height: SIZES.width * 0.08, // alignSelf:'flex-end'
     }, balanceFrameContainer: {
         // width: SIZES.width,
         borderRadius: 15,
@@ -444,22 +456,22 @@ const styles = StyleSheet.create({
         marginVertical: 50
 
     }, balanceFrame: {
-        marginTop: 5,
+        // marginTop: 5,
         borderRadius: 15, // padding: 20,
-        height: 200,
-        width: 350,
+        height: SIZES.height * 0.25,
+        width: SIZES.width * 0.8,
         marginRight: 10,
         justifyContent: "center",
     },
     saveFrame: {
         backgroundColor: '#EFF2FF',
-        height: 120,
-        width: SIZES.width * 0.9,
+        height: SIZES.height * 0.15,
+        width: "100%",
         borderRadius: 15,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: "space-between",
-        padding: 20
+        padding: 10
 
     },
     tsb: {

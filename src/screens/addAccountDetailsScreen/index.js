@@ -126,7 +126,7 @@ const AddAccountDetailsScreen = ({navigation}) => {
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
 
-                <Text style={styles.withdraw}>Account Details</Text>
+                <Text style={styles.acctDetails}>Account Details</Text>
 
                 <View style={{marginTop: 30}}>
 
@@ -156,7 +156,7 @@ const AddAccountDetailsScreen = ({navigation}) => {
                         buttonTextStyle={{
                             color: COLORS.black,
                             textAlign: "left",
-                            fontSize: 16,
+                            fontSize: SIZES.width * 0.04,
                             opacity: 0.8,
                             fontFamily: "Nexa-Book",
                             justifyContent: "flex-start"
@@ -165,6 +165,8 @@ const AddAccountDetailsScreen = ({navigation}) => {
                             width: "100%",
                             backgroundColor: "#f5f5ff",
                             borderRadius: 5,
+                            height: SIZES.width * 0.13,
+
                         }}
                     />
                     <CustomTextInput
@@ -223,11 +225,11 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         paddingHorizontal: 20
     },
-    withdraw: {
+    acctDetails: {
         fontSize: 26,
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
-        marginVertical: 20
+        // marginVertical: 20
     },
     withdrawDesc: {
         fontSize: 16,
@@ -243,7 +245,7 @@ const styles = StyleSheet.create({
 
     },
     modalAutoCharge: {
-        fontSize: 20,
+        fontSize: SIZES.width * 0.05,
         fontFamily: "Nexa-Bold",
         color: COLORS.black,
         marginVertical: 10

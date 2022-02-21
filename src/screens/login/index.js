@@ -69,7 +69,7 @@ const Login = ({navigation, route}) => {
                 </View>
 
 
-                {isError && <Text style={{color: "red"}}>Invalid email or password </Text>}
+                {isError && <Text style={{color: "red"}}>Something went wrong, Try again.</Text>}
 
                 <CustomButton
                     text={"Login"}
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     }, img: {
         width: SIZES.width, height: SIZES.height * 0.35,
     }, registerBox: {
-        marginVertical: 30
+        marginVertical: 10
     }, register: {
         fontSize: 28, color: COLORS.black, fontFamily: "Nexa-Bold", paddingVertical: 10
     }

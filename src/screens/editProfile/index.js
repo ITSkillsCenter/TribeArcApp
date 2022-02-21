@@ -398,8 +398,8 @@ const EditProfile = ({navigation}) => {
                         priority: FastImage.priority.normal
                     } : require("../../assets/images/userImg.png")}
                     style={{
-                        width: 120,
-                        height: 120,
+                        width: SIZES.width * 0.25,
+                        height: SIZES.width * 0.25,
                         borderRadius: 130,
                         alignSelf: "center",
                     }}>
@@ -411,8 +411,8 @@ const EditProfile = ({navigation}) => {
                     onPress={() => ChooseFile()}
                     style={{
                         backgroundColor: "#EFF2FF",
-                        width: 40,
-                        height: 40,
+                        width: SIZES.width * 0.08,
+                        height: SIZES.width * 0.08,
                         alignSelf: "center",
                         alignItems: "center",
                         justifyContent: "center",
@@ -477,11 +477,11 @@ const styles = StyleSheet.create({
     myProfile: {
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
-        fontSize: 30,
-        marginVertical: 20
+        fontSize: SIZES.width * 0.06,
+        marginVertical: 10
     },
     tabOneContainer: {
-        flex: 1,
+        // flex: 1,
         backgroundColor: COLORS.white,
         // paddingTop: 10
     },

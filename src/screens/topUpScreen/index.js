@@ -1,7 +1,7 @@
 // @flow
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View} from "react-native";
-import {COLORS} from "../../constants";
+import {COLORS, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomTextInput from "../../components/CustomTextInput";
 import CustomButton from "../../components/CustomButton";
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
 
     },
     modalAutoCharge: {
-        fontSize: 20,
+        fontSize: SIZES.width * 0.05,
         fontFamily: "Nexa-Bold",
         color: COLORS.black,
         marginVertical: 10

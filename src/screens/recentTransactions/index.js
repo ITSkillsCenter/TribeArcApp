@@ -69,7 +69,7 @@ const RecentTransactions = ({navigation}) => {
                         <Text style={{
                             color: COLORS.black,
                             fontFamily: "Nexa-Bold",
-                            fontSize: 20
+                            fontSize: SIZES.width * 0.05
                         }}>₦{item?.amount_paid.toLocaleString()}</Text>
                         <Text style={{
                             color: COLORS.black,

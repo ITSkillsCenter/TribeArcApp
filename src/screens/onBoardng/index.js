@@ -109,12 +109,13 @@ const OnBoarding = ({navigation}) => {
                     ref={slidesRef}
                 />
 
-                <Paginator data={slides} scrollX={scrollX}/>
 
             </View>
 
 
             <View style={{flex: 2, justifyContent: "flex-end",}}>
+
+                <Paginator data={slides} scrollX={scrollX}/>
 
 
                 <CustomButton onPress={() => navigation.navigate("SignUp")} filled text={"Register"}/>
@@ -127,7 +128,7 @@ const OnBoarding = ({navigation}) => {
                         backgroundColor: "white",
                         borderColor: COLORS.primary,
                         borderWidth: 1,
-                        bottom: 40
+                        bottom: 15
                     }} text={"Login"}/>
             </View>
 
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     },
     box: {
         alignItems: "center",
-        justifyContent: "center",
+        // justifyContent: "center",
         // backgroundColor:"yellow"
     },
     root: {
@@ -164,12 +165,12 @@ const styles = StyleSheet.create({
 
         textAlign: 'center',
         width: '70%',
-        bottom: 60,
-        marginVertical: 20,
+        // bottom: 60,
+        // marginVertical: 20,
     },
     buttonContainer: {
         // width: SIZES.width,
-        bottom: 40,
+        // bottom: 40,
     },
     dot: {
         height: 4,
@@ -179,7 +180,8 @@ const styles = StyleSheet.create({
     },
     pagination: {
         flexDirection: 'row',
-        height: 64,
+        height: 10,
+        alignSelf: "center"
     },
 
     headerContainer: {
@@ -197,18 +199,19 @@ const styles = StyleSheet.create({
     wrapper: {
         width: SIZES.width * 0.9,
         alignItems: "center",
+        // height:SIZES.height*0.8
 
         // justifyContent: "center",
     },
     img2: {
-        width: 300,
-        height: 350,
+        width: SIZES.width * 0.9,
+        height: SIZES.width * 0.7,
         // marginVertical: 20,
         // top: 25,
         // backgroundColor: "cyan"
     },
     title: {
-        fontSize: 24,
+        fontSize: SIZES.width * 0.07,
         fontFamily: "Nexa-Bold",
         color: COLORS.black,
         width: SIZES.width * 0.85,
@@ -216,15 +219,16 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     descs: {
-        fontSize: 18,
+        fontSize: SIZES.width * 0.04,
         textAlign: "center",
         width: "100%",
-        lineHeight: 28,
+        lineHeight: 32,
         color: COLORS.black,
         opacity: 0.7,
         fontFamily: "Nexa-Book",
-        marginVertical: 20,
-        marginBottom: 40
+        padding: 10
+        // marginVertical: 20,
+        // marginBottom: 40
 
     }
 

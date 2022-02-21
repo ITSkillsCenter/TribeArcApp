@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     },
     textAutocharge: {
         color: COLORS.black,
-        fontSize: 20,
+        fontSize: SIZES.width * 0.05,
         fontFamily: "Nexa-Book"
 
     },
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
         opacity: 0.6
     },
     modalAutoCharge: {
-        fontSize: 20,
+        fontSize: SIZES.width * 0.05,
         fontFamily: "Nexa-Bold",
         color: COLORS.black,
         marginVertical: 10

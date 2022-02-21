@@ -209,8 +209,8 @@ const CommunityQuestions = ({navigation}) => {
                             // hasBeenVoted={voted}
                             // style={{backgroundColor: "cyan", marginTop:0, paddingTop:0, top:0}}
                             fillBackgroundColor={"#F5F5FF"}
-                            percentageTextStyle={{fontFamily: "Nexa-Book", fontSize: 20}}
-                            choiceTextStyle={{fontFamily: "Nexa-Book", fontSize: 20}}
+                            percentageTextStyle={{fontFamily: "Nexa-Book", fontSize: SIZES.width * 0.05}}
+                            choiceTextStyle={{fontFamily: "Nexa-Book", fontSize: SIZES.width * 0.05}}
                             // pollContainerStyle={{ backgroundColor: "red"}}
                             checkMarkImageStyle={{right: 180, tintColor: COLORS.primary, width: 25, height: 25}}
                             checkMarkIconImageSource={require("../../assets/icons/blueCheck.png")}

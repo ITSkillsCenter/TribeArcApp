@@ -139,9 +139,10 @@ const styles = StyleSheet.create({
     }, container2: {
         height: SIZES.height, paddingHorizontal: 20, backgroundColor: COLORS.white,
     }, img: {
-        width: SIZES.width, height: SIZES.height * 0.35,
+        width: SIZES.width, height: SIZES.height * 0.4,
     }, registerBox: {
-        marginVertical: 30, // backgroundColor:"cyan"
+        // marginVertical: 10,
+        // backgroundColor:"cyan"
     }, register: {
         fontSize: 28, color: COLORS.black, fontFamily: "Nexa-Bold", paddingVertical: 10
 

@@ -79,7 +79,7 @@ const LinkCard = ({navigation}) => {
             paddingHorizontal: 20,
         }}>
             <View style={{marginHorizontal: 5}}>
-                <Text style={{fontSize: 20, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Add Card</Text>
+                <Text style={{fontSize: SIZES.width * 0.05, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Add Card</Text>
                 <Text style={{fontSize: 14, color: "#999999", fontFamily: "Nexa-Book", marginVertical: 10}}>Fill the
                     card
                     details below to be able to save</Text>

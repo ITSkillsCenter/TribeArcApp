@@ -528,7 +528,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                                 marginTop: 20,
                                 alignSelf: "flex-end",
                                 marginRight: 30,
-                                fontSize: 20
+                                fontSize: SIZES.width * 0.05
                             }}>X</Text>
                         <InvestmentTermsPage/>
                     </View>
@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
         // flex: 2,
         flexDirection: "row", justifyContent: "space-between", width: "100%", alignItems: "center", marginTop: 30
     }, counter: {
-        fontSize: 20,
+        fontSize: SIZES.width * 0.05,
         fontFamily: "Nexa-Bold",
         backgroundColor: COLORS.white,
         justifyContent: "center",
@@ -664,7 +664,7 @@ const styles = StyleSheet.create({
         fontSize: 14, fontFamily: "Nexa-Bold", color: COLORS.black, opacity: 0.6, marginBottom: 10
 
     }, clause: {
-        fontSize: 20, fontFamily: "Nexa-Book", color: COLORS.black, // marginVertical:15,
+        fontSize: SIZES.width * 0.05, fontFamily: "Nexa-Book", color: COLORS.black, // marginVertical:15,
         marginTop: 25, marginBottom: 10
     }, clauseDet: {
         color: COLORS.black, fontFamily: "Nexa-Book", lineHeight: 20

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from "react-native";
-import {COLORS} from "../../constants";
+import {COLORS, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
 
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 
     },
     clause: {
-        fontSize: 20,
+        fontSize: SIZES.width * 0.05,
         fontFamily: "Nexa-Book",
         color: COLORS.black,
         // marginVertical:15,

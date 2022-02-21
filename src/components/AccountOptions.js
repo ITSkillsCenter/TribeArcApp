@@ -22,20 +22,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: "100%",
         // height: 60,
-        height:SIZES.height*0.07,
+        height: SIZES.height * 0.08,
         borderWidth: 0.5,
         borderRadius: 10,
         borderColor: "#dcdcdc",
         alignItems: "center",
         paddingHorizontal: 20,
-        marginVertical:15
+        marginVertical: SIZES.width * 0.03
     },
     image: {
-        width: 40,
-        height: 40
+        width: SIZES.width * 0.1,
+        height: SIZES.width * 0.1
     },
     text: {
-        fontSize: 16,
+        fontSize: SIZES.width * 0.04,
         fontFamily: "Nexa-Book",
         color: COLORS.black,
         // backgroundColor:"cyan",

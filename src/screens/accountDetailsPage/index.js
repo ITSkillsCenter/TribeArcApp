@@ -1,7 +1,7 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {COLORS} from "../../constants";
+import {COLORS, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
@@ -67,7 +67,7 @@ export const AccountDetailsPage = ({navigation}) => {
                     ListEmptyComponent={
                         <View style={{alignItems: "center", justifyContent: "center",}}>
 
-                            <LottieView style={{width: 250, height: 250}}
+                            <LottieView style={{width: SIZES.width * 0.6, height: SIZES.width * 0.6}}
                                         source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
 
                             <Text style={{color:COLORS.primary, fontSize:18, fontFamily:"Nexa-Bold"}}>Your have not added any account</Text>
@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
     acctDet: {
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
-        fontSize: 30,
-        marginVertical: 25
+        fontSize: SIZES.width * 0.07,
+        // marginVertical: 25
     },
     addAcctBox: {
         alignSelf:"center",
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     addAcctButton: {
         alignItems: "center",
         justifyContent: "center",
-        height: 70,
+        height: SIZES.width * 0.15,
         borderWidth: 1,
         borderRadius: 10,
         borderColor: "#C4C4C4",

@@ -115,14 +115,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.white,
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        height: SIZES.height,
+
 
     }, img: {
-        width: SIZES.width * 0.8,
-        height: SIZES.width * 0.8,
+        width: SIZES.width * 0.7,
+        height: SIZES.width * 0.7,
         alignSelf: "center",
         // backgroundColor: "red",
-        marginVertical: SIZES.height * 0.08
+        marginVertical: SIZES.height * 0.05
     },
     refer: {
         fontSize: 26,
@@ -138,6 +140,7 @@ const styles = StyleSheet.create({
         marginVertical: 15
     },
     box:{
+
         padding:20,
         borderWidth:0.5,
         borderColor:COLORS.primary,

@@ -561,7 +561,7 @@ const styles = StyleSheet.create({
     autosaveAmt: {
         color: COLORS.black,
         fontFamily: "Nexa-Bold",
-        fontSize: 20,
+        fontSize: SIZES.width * 0.05,
         marginTop: 10
 
 

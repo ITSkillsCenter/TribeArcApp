@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
 
     },
     modalAutoCharge: {
-        fontSize: 20,
+        fontSize: SIZES.width * 0.05,
         fontFamily: "Nexa-Bold",
         color: COLORS.black,
         marginVertical: 10

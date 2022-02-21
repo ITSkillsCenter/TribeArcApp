@@ -169,7 +169,7 @@ const Savings = ({navigation, route}) => {
             height: 510,
         }}>
             <View style={{marginHorizontal: 5}}>
-                <Text style={{fontSize: 20, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Add Card</Text>
+                <Text style={{fontSize: SIZES.width * 0.05, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Add Card</Text>
                 <Text style={{fontSize: 14, color: "#999999", fontFamily: "Nexa-Book", marginVertical: 10}}>Fill the
                     card
                     details below to be able to save</Text>
@@ -261,7 +261,7 @@ const Savings = ({navigation, route}) => {
         }}>
 
             <View style={{marginHorizontal: 5}}>
-                <Text style={{fontSize: 20, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Select Payment Method</Text>
+                <Text style={{fontSize: SIZES.width * 0.05, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Select Payment Method</Text>
                 <Text style={{fontSize: 14, color: "#999999", fontFamily: "Nexa-Book", marginVertical: 10}}>Tap the
                     button below to add a Card</Text>
             </View>
@@ -528,7 +528,7 @@ const styles = StyleSheet.create({
         color: COLORS.black
     },
     startQuery: {
-        fontSize: 20,
+        fontSize: SIZES.width * 0.05,
         color: COLORS.black,
         fontFamily: "Nexa-Bold",
         marginTop: 20

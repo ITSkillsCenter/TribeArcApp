@@ -171,7 +171,7 @@ const App = () => {
 
         return (
             <MainStack.Navigator
-                initialRouteName={viewedWelcomePage?"BottomTabs" :"WelcomePage"}
+                initialRouteName={viewedWelcomePage ? "BottomTabs" : "WelcomePage"}
                 screenOptions={{
                     headerShown: false,
                 }}>
@@ -319,7 +319,7 @@ const App = () => {
                         },
                         // backgroundColor: "cyan",
                         borderTopColor: "rgba(175,174,174,0.7)",
-                        height: Platform.OS === "android" ? 85 : 50,
+                        height: Platform.OS === "android" ? 80 : 50,
                     },
 
 
@@ -338,7 +338,7 @@ const App = () => {
                                                }}/>
 
                                         <Text style={{
-                                            fontSize: 12,
+                                            fontSize: 11,
                                             color: focused ? COLORS.primary : COLORS.secondary,
                                             fontFamily: "Nexa-Bold"
                                         }}>Home</Text>
@@ -362,7 +362,7 @@ const App = () => {
                                        }}/>
 
                                 <Text style={{
-                                    fontSize: 12,
+                                    fontSize: 11,
                                     color: focused ? COLORS.primary : COLORS.secondary,
                                     fontFamily: "Nexa-Bold"
                                 }}>Savings</Text>
@@ -438,7 +438,7 @@ const App = () => {
                                             tintColor: focused ? COLORS.primary : COLORS.secondary
                                         }}/>
                                 <Text style={{
-                                    fontSize: 12,
+                                    fontSize: 11,
                                     color: focused ? COLORS.primary : COLORS.secondary,
                                     fontFamily: "Nexa-Bold"
                                 }}>Investment</Text>
@@ -462,7 +462,7 @@ const App = () => {
                                                }}/>
                                         <Text
                                             style={{
-                                                fontSize: 12,
+                                                fontSize: 11,
                                                 color: focused ? COLORS.primary : COLORS.secondary,
                                                 fontFamily: "Nexa-Bold"
                                             }}>Account</Text>

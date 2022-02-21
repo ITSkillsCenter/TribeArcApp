@@ -1,7 +1,7 @@
 // @flow
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Keyboard, StyleSheet, Text, TextInput, View} from "react-native";
-import {COLORS} from "../../constants";
+import {COLORS, SIZES} from "../../constants";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
 import TextButtonComponent from "../../components/TextButtonComponent";
 import {handleQueryNoToken} from "../../graphql/requests";
@@ -136,19 +136,19 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: COLORS.white,
         paddingHorizontal: 20,
-        paddingTop: 20
+        paddingTop: 10
     },
     enterOtp: {
         color: COLORS.black,
         fontFamily: "Nexa-Bold",
-        fontSize: 30,
-        marginVertical: 20,
+        fontSize: SIZES.width*0.09,
+        marginVertical: 10,
 
     },
     desc: {
         color: COLORS.black,
         fontFamily: "Nexa-Book",
-        fontSize: 16,
+        fontSize: SIZES.width*0.04,
         letterSpacing: 0.5,
         lineHeight: 29
 
@@ -170,15 +170,15 @@ const styles = StyleSheet.create({
         borderColor: COLORS.secondary,
     },
     inputBox: {
-        marginVertical: 30
+        marginVertical: 20
     },
 
     textInput: {
         borderRadius: 5,
         fontFamily: "Nexa-Bold",
-        height: 60,
+        height: SIZES.width*0.15,
         letterSpacing: 15,
-        fontSize: 20,
+        fontSize: SIZES.width * 0.05,
         color: COLORS.black
     },
     saveButton: {

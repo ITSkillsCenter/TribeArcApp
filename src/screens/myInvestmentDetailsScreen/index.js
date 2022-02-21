@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     counter: {
-        fontSize: 20,
+        fontSize: SIZES.width * 0.05,
         fontFamily: "Nexa-Bold",
         backgroundColor: COLORS.white,
         justifyContent: "center",
