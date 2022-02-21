@@ -10,7 +10,7 @@ const StartInvesting = ({navigation}) => {
         <View style={styles.container}>
             <Text style={styles.savings}>Investment</Text>
 
-            <Image style={{width: SIZES.width * 0.8, height: SIZES.width * 0.7, alignSelf: "center", marginTop: 30}}
+            <Image style={{width: SIZES.width * 0.8, height: SIZES.width * 0.7, alignSelf: "center", marginTop: 10}}
                    source={require("../../assets/images/invstImg.png")}/>
 
             <Text style={styles.startSavings}>Start Investing!</Text>
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
         fontSize: 24,
-        marginTop: 50
+        marginTop: 40
     },
     startSavingText: {
         alignSelf: "center",

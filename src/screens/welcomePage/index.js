@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
 
     },
     container2: {
-        height: SIZES.height * 0.9,
+        height: SIZES.height * 0.8,
         // backgroundColor: 'cyan',
         // paddingHorizontal: 20,
     },
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
         height: SIZES.height * 0.13,
         alignItems: "center",
         justifyContent: "space-between",
-        marginVertical: 70, // padding:0,
+        marginVertical: 30, // padding:0,
         // backgroundColor: "cyan"
 
     }, text: {

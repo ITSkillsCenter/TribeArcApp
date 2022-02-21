@@ -520,7 +520,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
-        marginVertical: 10
+        // marginVertical: 10
     },
     savingsText: {
         fontSize: 14,
@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
         color: COLORS.black
     },
     inputBox: {
-        marginVertical: 30
+        marginVertical: 10
     },
     amountBox: {
         flexDirection: 'row',
@@ -564,7 +564,7 @@ const styles = StyleSheet.create({
     },
     amount: {
         fontFamily: "Nexa-Book",
-        fontSize: 16,
+        fontSize: 14,
         color: COLORS.secondary,
         marginVertical: 10,
         alignSelf: "center"
@@ -576,7 +576,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         // elevation: 0.3,
         alignSelf: "center",
-        width: "30%",
+        width: "28%",
         marginBottom: 10
 
 
@@ -627,6 +627,7 @@ const styles = StyleSheet.create({
         position: "absolute"
     },
     datePickerStyle: {
+        top:20,
         width: "100%"
 
     }

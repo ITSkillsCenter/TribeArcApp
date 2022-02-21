@@ -150,9 +150,10 @@ const VoluntaryAccountPage = ({navigation, route}) => {
                           key={item => item.index}
                           showsVerticalScrollIndicator={false}
                           ListEmptyComponent={
-                              <View style={{alignItems:"center", justifyContent:"center",}}>
+                              <View style={{alignItems: "center", justifyContent: "center",}}>
 
-                                  <LottieView style={{width:250,height:250}} source={require("../../assets/images/emptyAnim.json")}  autoPlay={true}/>
+                                  <LottieView style={{width: 250, height: 250}}
+                                              source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
                               </View>
                           }
                           renderItem={({item, index}) => (
@@ -161,11 +162,11 @@ const VoluntaryAccountPage = ({navigation, route}) => {
                                                     onPress={() => {
                                                     }}>
                                       <Image source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
-                                             style={{width: 50, height: 50}}/>
+                                             style={{width: SIZES.width * 0.13, height: SIZES.width * 0.13}}/>
 
                                       <View style={{
                                           justifyContent: "space-between",
-                                          height: 50,
+                                          height: SIZES.width * 0.13,
                                           paddingLeft: 10,
                                           width: "55%"
                                       }}>
@@ -211,12 +212,13 @@ const VoluntaryAccountPage = ({navigation, route}) => {
         return (
             <View style={styles.tabOneContainer}>
                 <FlatList data={topUps}
-                          scrollEnabled={false}
+                          showsVerticalScrollIndicator={false}
                           key={item => item.index}
                           ListEmptyComponent={
-                              <View style={{alignItems:"center", justifyContent:"center",}}>
+                              <View style={{alignItems: "center", justifyContent: "center",}}>
 
-                                  <LottieView style={{width:250,height:250}} source={require("../../assets/images/emptyAnim.json")}  autoPlay={true}/>
+                                  <LottieView style={{width: 250, height: 250}}
+                                              source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
                               </View>
                           }
                           renderItem={({item, index}) => (
@@ -225,9 +227,9 @@ const VoluntaryAccountPage = ({navigation, route}) => {
                                                     onPress={() => {
                                                     }}>
                                       <Image source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
-                                             style={{width: 50, height: 50}}/>
+                                             style={{width: SIZES.width * 0.13, height: SIZES.width * 0.13}}/>
 
-                                      <View style={{justifyContent: "space-between", height: 50}}>
+                                      <View style={{justifyContent: "space-between", height: SIZES.width * 0.13}}>
                                           {item.status === "SUCCESS" ?
                                               <Text style={styles.recentTransactionText}>Card Deposit
                                                   Successful</Text> :
@@ -287,10 +289,12 @@ const VoluntaryAccountPage = ({navigation, route}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={data3}
                           key={item => item.index}
+                          showsVerticalScrollIndicator={false}
                           ListEmptyComponent={
-                              <View style={{alignItems:"center", justifyContent:"center",}}>
+                              <View style={{alignItems: "center", justifyContent: "center",}}>
 
-                                  <LottieView style={{width:250,height:250}} source={require("../../assets/images/emptyAnim.json")}  autoPlay={true}/>
+                                  <LottieView style={{width: 250, height: 250}}
+                                              source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
                               </View>
                           }
                           renderItem={({item, index}) => (
@@ -299,9 +303,9 @@ const VoluntaryAccountPage = ({navigation, route}) => {
                                                     onPress={() => {
                                                     }}>
                                       <Image source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
-                                             style={{width: 50, height: 50}}/>
+                                             style={{width: SIZES.width * 0.13, height: SIZES.width * 0.13}}/>
 
-                                      <View style={{justifyContent: "space-between", height: 50}}>
+                                      <View style={{justifyContent: "space-between", height:SIZES.width * 0.13 }}>
                                           {item.status === "SUCCESS" ?
                                               <Text style={styles.recentTransactionText}>Card Deposit
                                                   Successful</Text> :
@@ -421,7 +425,7 @@ const VoluntaryAccountPage = ({navigation, route}) => {
 
             <Text style={styles.savings}>Voluntary Account</Text>
             <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
-                <View style={{paddingHorizontal: 40,}}>
+                <View style={{paddingHorizontal: 20,}}>
                     <View>
                         <Text style={styles.tsb}>Voluntary Account Balance</Text>
                         <Text style={styles.balance}>₦ {voluntary_bal?.toLocaleString()}</Text>
@@ -503,14 +507,14 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     savings: {
-        fontSize: 26,
+        fontSize: SIZES.width * 0.06,
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
-        marginVertical: 10
+        // marginVertical: 10
     },
     balanceFrame: {
         borderRadius: 15, // padding: 20,
-        height: 140,
+        height: SIZES.height * 0.2,
         width: "100%",
         alignSelf: "center",
         justifyContent: "center",
@@ -574,7 +578,8 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
     recentTransaction: {
-        flexDirection: "row", justifyContent: "space-between", marginVertical: 30
+        flexDirection: "row", justifyContent: "space-between",
+        marginVertical: 10
 
     }, seeAll: {
         color: COLORS.primary, fontFamily: "Nexa-Book", fontSize: 18, alignSelf: "center"

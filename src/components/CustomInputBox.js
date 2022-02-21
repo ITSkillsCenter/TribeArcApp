@@ -99,8 +99,8 @@ const styles = StyleSheet.create({
     },
     eye: {
         marginRight: 40,
-        width: 20,
-        height: 20,
+        width: 25,
+        height: 25,
         alignSelf: 'flex-end',
         position: "absolute",
     }

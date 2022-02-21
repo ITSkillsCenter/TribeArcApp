@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
         fontSize: 24,
-        marginTop: 50
+        marginTop: 40
     },
     startSavingText: {
         alignSelf: "center",

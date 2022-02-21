@@ -143,8 +143,8 @@ const SavingsAccountPage = ({navigation, route}) => {
         return (
             <View style={styles.tabOneContainer}>
                 <FlatList data={allTrx}
+                          showsVerticalScrollIndicator={false}
                           key={item => item.index}
-                          scrollEnabled={false}
                           ListEmptyComponent={
                               <View style={{alignItems: "center", justifyContent: "center",}}>
 
@@ -158,7 +158,7 @@ const SavingsAccountPage = ({navigation, route}) => {
                                                     onPress={() => {
                                                     }}>
                                       <Image source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
-                                             style={{width: 50, height: 50}}/>
+                                             style={{width: SIZES.width*0.12, height: SIZES.width*0.12}}/>
 
                                       <View style={{justifyContent: "space-between", height: 50}}>
                                           {item.status === "SUCCESS" ?
@@ -219,7 +219,7 @@ const SavingsAccountPage = ({navigation, route}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={pending}
                           key={item => item.index}
-                          scrollEnabled={false}
+                          showsVerticalScrollIndicator={false}
                           ListEmptyComponent={
                               <View style={{alignItems: "center", justifyContent: "center",}}>
 
@@ -295,7 +295,7 @@ const SavingsAccountPage = ({navigation, route}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={saved}
                           key={item => item.index}
-                          scrollEnabled={false}
+                          showsVerticalScrollIndicator={false}
                           ListEmptyComponent={
                               <View style={{alignItems: "center", justifyContent: "center",}}>
 
@@ -426,13 +426,12 @@ const SavingsAccountPage = ({navigation, route}) => {
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()} ifSettings
                         settingPress={() => navigation.navigate("AutosaveSettingsPage")}
-                        settingStyle={styles.settingsBox
-                        }/>
+                        settingStyle={styles.settingsBox}/>
 
 
             <Text style={styles.savings}>Savings Account</Text>
             <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
-                <View style={{paddingHorizontal: 40, flexDirection:"row", justifyContent:"space-between"}}>
+                <View style={{paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between"}}>
                     <View>
                         <Text style={styles.tsb}>Savings Account Balance</Text>
                         <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
@@ -464,7 +463,7 @@ const SavingsAccountPage = ({navigation, route}) => {
 
 
             <View style={styles.recentTransaction}>
-                <Text style={styles.todo}>Savings Transactions</Text>
+                <Text style={styles.todos}>Savings Transactions</Text>
 
                 <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
                     <Text onPress={() => {
@@ -494,8 +493,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     settingsBox: {
-        width: 30,
-        height: 30,
+        width: SIZES.width * 0.07,
+        height: SIZES.width * 0.07,
         alignSelf: "flex-end",
         // marginTop: 20
     },
@@ -511,7 +510,7 @@ const styles = StyleSheet.create({
         width: "100%",
         alignSelf: "center",
         justifyContent: "center",
-        marginVertical: 20
+        marginVertical: 5
     },
     saveFrame: {
         backgroundColor: '#EFF2FF',
@@ -536,13 +535,14 @@ const styles = StyleSheet.create({
     },
     autosaveBox: {
         flexDirection: "row",
+        // alignItems:"center",
         justifyContent: "space-between",
-        paddingHorizontal: 20,
-        marginBottom: 10
+        // paddingHorizontal: 20,
+        // marginBottom: 10
     },
     autosaveText: {
         color: COLORS.primary,
-        fontSize: 16,
+        fontSize: SIZES.width * 0.04,
         // marginBottom: 10,
         fontFamily: "Nexa-Book"
 
@@ -574,7 +574,7 @@ const styles = StyleSheet.create({
         fontFamily: "Nexa-Book", // right: 100,
         color: COLORS.black, // backgroundColor:"cyan"
     },
-    todo: {
+    todos: {
         color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 18
     },
     tabOneContainer: {

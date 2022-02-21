@@ -17,15 +17,7 @@ const SavingsMainScreen = ({navigation, route}) => {
     const [autocharge, setAutocharge] = useState("")
 
 
-
-
-
-
-
     const [paidRegFee, setPaidRegFee] = useState(false);
-
-
-
 
 
     useFocusEffect(
@@ -37,8 +29,6 @@ const SavingsMainScreen = ({navigation, route}) => {
 
             }, [])
     )
-
-
 
 
     const ChkRegFee = async () => {
@@ -61,8 +51,6 @@ const SavingsMainScreen = ({navigation, route}) => {
         }
 
     }
-
-
 
 
     const CheckBalance = async () => {
@@ -100,12 +88,12 @@ const SavingsMainScreen = ({navigation, route}) => {
             {route.params && <BackButton onPress={() => navigation.pop()}/>}
 
 
-            <Text style={styles.inv}>Savings</Text>
+            <Text style={styles.sav}>Savings</Text>
             <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
                 <View style={{
                     // flexDirection: "row",
                     // justifyContent: 'space-between',
-                    paddingHorizontal: 40,
+                    paddingHorizontal: 20,
                     // alignItems: 'center'
                 }}>
                     <View>
@@ -117,20 +105,25 @@ const SavingsMainScreen = ({navigation, route}) => {
             </ImageBackground>
 
             <View style={styles.rootBox}>
-                <TouchableOpacity onPress={() => navigation.navigate(paidRegFee?"SavingsAccountPage":"RegistrationFee", {savings, autocharge})}
-                                  activeOpacity={0.85}
-                                  style={styles.box}>
-                    <Image source={icons.savPig} style={{width: 60, height: 60}}/>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate(paidRegFee ? "SavingsAccountPage" : "RegistrationFee", {
+                        savings,
+                        autocharge
+                    })}
+                    activeOpacity={0.85}
+                    style={styles.box}>
+                    <Image source={icons.savPig} style={{width: SIZES.width * 0.15, height: SIZES.width * 0.15}}/>
                     <View style={styles.textBox}>
                         <Text style={styles.savAcct}>Savings Account</Text>
                         <Text style={styles.savDesc}>Total monthly saving automatically debited</Text>
                         <Text style={styles.amt}>₦ {savings?.toLocaleString()}</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate(paidRegFee?"VoluntaryAccountPage":"RegistrationFee", voluntary)}
-                                  activeOpacity={0.85}
-                                  style={styles.box}>
-                    <Image source={icons.savHand} style={{width: 60, height: 60}}/>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate(paidRegFee ? "VoluntaryAccountPage" : "RegistrationFee", voluntary)}
+                    activeOpacity={0.85}
+                    style={styles.box}>
+                    <Image source={icons.savHand} style={{width: SIZES.width * 0.15, height: SIZES.width * 0.15}}/>
                     <View style={styles.textBox}>
                         <Text style={styles.savAcct}>Voluntary Account</Text>
                         <Text style={styles.savDesc}>Total voluntary saving that can be withdrawn anytime</Text>
@@ -154,19 +147,19 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         paddingHorizontal: 20
     },
-    inv: {
+    sav: {
         color: COLORS.primary,
         fontSize: 24,
-        marginVertical: 10,
+        // marginVertical: 10,
         fontFamily: "Nexa-Bold"
     },
     balanceFrame: {
         borderRadius: 15, // padding: 20,
-        height: 140,
+        height: SIZES.height * 0.2,
         width: "100%",
         alignSelf: "center",
         justifyContent: "center",
-        marginVertical: 20
+        // marginVertical: 20
 
     },
     saveFrame: {
@@ -194,7 +187,8 @@ const styles = StyleSheet.create({
     box: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginVertical: 40
+        marginVertical: 20,
+        marginTop: 30
 
     },
     textBox: {

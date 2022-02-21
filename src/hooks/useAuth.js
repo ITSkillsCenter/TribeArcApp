@@ -170,7 +170,7 @@ export const useAuth = () => {
                                                     }
                                                   }`
 
-                let qry = `mutation {
+                let mtn = `mutation {
                                 register(
                                     input: {
                                     email: "${email}"
@@ -210,7 +210,7 @@ export const useAuth = () => {
 
                     if (codeVerificationRes.data.referralCheck.ok) {
 
-                        let res = await handleQueryNoToken(qry);
+                        let res = await handleQueryNoToken(mtn);
                         let otpQryRes = await handleQueryNoToken(otpQuery);
                     }
 

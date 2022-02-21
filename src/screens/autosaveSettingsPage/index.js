@@ -136,11 +136,11 @@ const AutosaveSettingsPage = ({navigation}) => {
 
     const renderHeader = () => (
         <View style={{
-            padding: 20,
+            padding: 10,
             // backgroundColor: "#fff",
             borderTopRightRadius: 25,
             borderTopLeftRadius: 25,
-            width: SIZES.width,
+            // width: SIZES.width,
 
         }}>
 
@@ -163,7 +163,7 @@ const AutosaveSettingsPage = ({navigation}) => {
 
 
             <Modalize
-                modalHeight={SIZES.height * 0.45}
+                modalHeight={SIZES.height * 0.5}
                 handleStyle={{backgroundColor: 'transparent'}}
                 childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
                 ref={modalizeRef}>
