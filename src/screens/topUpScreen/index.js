@@ -85,9 +85,9 @@ const TopUpScreen = ({navigation, route}) => {
                 <BackButton onPress={() => navigation.pop()}/>
 
 
-                <Text style={styles.withdraw}>Top-Up</Text>
+                <Text style={styles.topUp}>Top-Up</Text>
                 <Text style={styles.withdrawDesc}>Enter Amount to save</Text>
-                <View style={{marginTop: 30}}>
+                <View style={{marginTop: 10}}>
 
 
                     <CustomTextInput
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         paddingHorizontal: 20
     },
-    withdraw: {
+    topUp: {
         fontSize: 26,
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",

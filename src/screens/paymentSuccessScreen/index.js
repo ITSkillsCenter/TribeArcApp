@@ -16,7 +16,7 @@ const PaymentSuccessScreen = ({navigation, route}) => {
             <View style={styles.checkMark}>
                 <LottieView source={require("../../assets/images/checkMark.json")}
                             autoPlay loop={false}
-                            style={{width: 268, height: 263}}/>
+                            style={{width: SIZES.width*0.6, height: SIZES.width*0.6}}/>
             </View>
 
             <View style={styles.tsBox}>

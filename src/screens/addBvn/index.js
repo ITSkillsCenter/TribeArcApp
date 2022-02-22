@@ -108,11 +108,9 @@ const AddBvn = ({navigation}) => {
 
     const ValidateBVN = async () => {
 
-
-
         console.log(`${bvn}`)
-            console.log(`${acctNumber}`)
-            console.log(`${bankCode}`)
+        console.log(`${acctNumber}`)
+        console.log(`${bankCode}`)
         setIsLoading(true)
 
 
@@ -175,7 +173,6 @@ const AddBvn = ({navigation}) => {
 
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
-
                 <View style={styles.addBVNContainer}>
                     <Image source={icons.addBvn} style={styles.image}/>
                     <Text style={styles.text}>Your BVN is safe with us</Text>
@@ -203,14 +200,20 @@ const AddBvn = ({navigation}) => {
                     rowStyle={{width: "100%"}}
                     dropdownStyle={{width: "90%"}}
                     defaultButtonText={"Select Bank"}
-                    buttonTextStyle={{color: COLORS.black, fontFamily: "Nexa-Book"}}
+                    buttonTextStyle={{
+                        color: COLORS.black,
+                        fontFamily: "Nexa-Book",
+                        textAlign: "left",
+                        fontSize: 15,
+                        opacity: 0.7
+                    }}
                     buttonStyle={{
                         width: "100%",
                         backgroundColor: COLORS.white,
                         borderWidth: 0.5,
                         borderColor: COLORS.secondary,
                         borderRadius: 5,
-                        height: 55
+                        height: SIZES.width * 0.14,
                     }}
                 />
 
@@ -236,7 +239,7 @@ const AddBvn = ({navigation}) => {
                 />
 
 
-                <Text style={styles.dontKnow}>Don't know your BVN? <Text onPress={() => Linking.openURL("tel:*565*0#")}
+                <Text style={styles.dontKnow}>Don't know your BVN? <Text onPress={() => Linking.openURL(`tel:*565*0%23`)}
                                                                          style={styles.dial}> Dial *565*0#</Text></Text>
 
 
@@ -282,7 +285,8 @@ const styles = StyleSheet.create({
         borderColor: COLORS.secondary,
         alignItems: "center",
         paddingHorizontal: 20,
-        marginVertical: 15
+        marginVertical: 15,
+        justifyContent: "space-between"
     },
     image: {
         width: 40, height: 40
@@ -291,7 +295,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: "Nexa-Book",
         color: COLORS.black, // backgroundColor:"cyan",
-        width: '70%',
+        width: '60%',
         paddingHorizontal: 10
     },
     link: {
@@ -307,7 +311,9 @@ const styles = StyleSheet.create({
         // marginVertical: 20,
         marginTop: 15,
         paddingHorizontal: 20,
-        color: COLORS.black
+        color: COLORS.black,
+        fontFamily: "Nexa-Book",
+
 
     },
     dial: {

@@ -175,10 +175,10 @@ const styles = StyleSheet.create({
 
     textInput: {
         borderRadius: 5,
-        fontFamily: "Nexa-Bold",
+        fontFamily: "Nexa-Book",
         height: SIZES.width*0.15,
         letterSpacing: 15,
-        fontSize: SIZES.width * 0.05,
+        fontSize: SIZES.width * 0.035,
         color: COLORS.black
     },
     saveButton: {

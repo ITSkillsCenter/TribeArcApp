@@ -3,6 +3,7 @@ import {sleep} from "../utils/sleep";
 import {createAction} from "../utils/createAction";
 import {handleQuery, handleQueryNoToken} from "../graphql/requests";
 import SecureStorage from "react-native-secure-storage";
+import {resolve} from "@babel/core/lib/vendor/import-meta-resolve";
 
 
 export const useAuth = () => {
@@ -48,7 +49,7 @@ export const useAuth = () => {
     const auth = useMemo(() => ({
 
 
-            login: async (email, password, reject) => {
+            login: async (email, password, reject,) => {
 
                 let qry = `mutation {
                 login(input: { identifier: "${email}", password: "${password}" }) {
@@ -160,7 +161,7 @@ export const useAuth = () => {
             },
 
 
-            register: async (email, password, referredBy, reject) => {
+            register: async (email, password, referredBy,) => {
                 const rString = randomString(5, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
 
@@ -200,27 +201,42 @@ export const useAuth = () => {
 
 
                 try {
-                    // console.log(qry)
 
-                    // console.log(updateRefAndRefBY)
-                    let codeVerificationRes = await handleQueryNoToken(codeVerification);
+                    // console.log(mtn)
 
-                    // console.log(codeVerificationRes.data.referralCheck.ok)
+                    return new Promise(async (resolve, reject) => {
+
+                        let codeVerificationRes = await handleQueryNoToken(codeVerification);
+
+                        // console.log(codeVerificationRes)
+                        if (!codeVerificationRes.data.referralCheck) {
+
+                            return reject("Invalid referral code")
+                        }
 
 
-                    if (codeVerificationRes.data.referralCheck.ok) {
+                        if (codeVerificationRes.data.referralCheck.ok) {
 
-                        let res = await handleQueryNoToken(mtn);
-                        let otpQryRes = await handleQueryNoToken(otpQuery);
-                    }
+                            let res = await handleQueryNoToken(mtn);
+
+                            // console.log(res.data)
+                            if (res.data) {
+                                let otpQryRes = await handleQueryNoToken(otpQuery);
+                                return resolve(res.data)
+                            }
+
+                            if (res.errors) {
+                                return reject(res.errors)
+                            }
+                        }
+
+                    })
 
 
                 } catch (e) {
                     console.log(e, "error @register")
-                    return reject(e)
 
                 }
-
 
             },
 

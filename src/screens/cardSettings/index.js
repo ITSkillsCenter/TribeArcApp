@@ -6,6 +6,7 @@ import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
+import LottieView from "lottie-react-native";
 
 
 const CardSettings = ({navigation}) => {
@@ -76,6 +77,18 @@ const CardSettings = ({navigation}) => {
                     key={item => item.id}
                     style={{width: "100%", height: "70%"}}
                     showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={
+                        <>
+                            <View style={{alignItems: "center", justifyContent: "center",}}>
+
+                                <LottieView style={{width: 250, height: 250}}
+                                            source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
+                            </View>
+
+                            <Text style={styles.emptyDesc}> No investment available</Text>
+
+                        </>
+                    }
                     renderItem={({item}) => (
 
                         <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame}
@@ -100,7 +113,7 @@ const CardSettings = ({navigation}) => {
                 />}
 
 
-            <View style={{flex: 2, justifyContent: "flex-end"}}>
+            <View style={{ justifyContent: "flex-end"}}>
                 <CustomButton filled text={"Remove Card"}/>
 
             </View>

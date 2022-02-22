@@ -69,10 +69,11 @@ const RecentTransactions = ({navigation}) => {
                         <Text style={{
                             color: COLORS.black,
                             fontFamily: "Nexa-Bold",
-                            fontSize: SIZES.width * 0.05
+                            fontSize: SIZES.width * 0.04
                         }}>₦{item?.amount_paid.toLocaleString()}</Text>
                         <Text style={{
                             color: COLORS.black,
+                            fontSize: SIZES.width * 0.025,
                             fontFamily: "Nexa-Book"
                         }}>{moment(item?.created_at).format("MMM Do, YYYY")}</Text>
                     </View>
@@ -123,11 +124,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.white,
-        paddingHorizontal: 20
+        paddingHorizontal: SIZES.width*0.04,
 
     },
     recentTran: {
-        fontSize: 30,
+        fontSize: SIZES.width * 0.06,
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
         marginVertical: 20
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
 
     },
     recentTransactionText: {
-        fontSize: 18,
+        fontSize: SIZES.width * 0.04,
         width: SIZES.width * 0.4,
         fontFamily: "Nexa-Bold",
         // right: 100,

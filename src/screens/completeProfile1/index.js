@@ -1,7 +1,7 @@
 // @flow
 import React, {useContext, useState} from 'react';
 import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {COLORS, icons} from "../../constants";
+import {COLORS, icons, SIZES} from "../../constants";
 import {launchImageLibrary} from "react-native-image-picker";
 import CustomButton from "../../components/CustomButton";
 import {BASE_URL} from "../../config";
@@ -156,7 +156,7 @@ const CompleteProfile1 = ({navigation}) => {
             {/*<BackButton onPress={() => navigation.pop()}/>*/}
 
             <View style={styles.box}>
-                <Image style={{height: 80, width: 80, right: 15}} source={icons.circular1}/>
+                <Image style={{height: SIZES.width*0.2, width: SIZES.width*0.2, right: 15}} source={icons.circular1}/>
                 <View style={styles.box2}>
                     <Text style={styles.text1}>Complete your Profile</Text>
                     <Text style={styles.text2}>please complete the fields below</Text>
@@ -167,19 +167,20 @@ const CompleteProfile1 = ({navigation}) => {
 
             <ImageBackground
                 resizeMode={"contain"}
+                mag
                 source={filePath ? {uri: filePath} : avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}
-                style={{width: 110, height: 110, borderRadius: 10, aspectRatio: 1, marginBottom: 10}}>
+                style={{width: SIZES.width*0.25, height: SIZES.width*0.25, borderRadius: 10, aspectRatio: 1, marginBottom: 10}}>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => ChooseFile()}
                     style={{
                         backgroundColor: "#EFF2FF",
-                        width: 40,
-                        height: 40,
+                        width:  SIZES.width*0.08,
+                        height:  SIZES.width*0.08,
                         alignSelf: "flex-end",
                         alignItems: "center",
                         justifyContent: "center",
-                        top: 80,
+                        top: 60,
                         borderRadius: 40
                         // flex:1
                     }}>
@@ -213,7 +214,8 @@ const CompleteProfile1 = ({navigation}) => {
                     placeholderText={"Enter Phone Number"}
                     title={"Phone Number"}
                     props={{
-                        keyboardType: "numeric"
+                        keyboardType: "numeric",
+                        maxLength:11
                     }}
                 />
                 <CustomTextInput
@@ -229,7 +231,9 @@ const CompleteProfile1 = ({navigation}) => {
                     placeholderText={"Enter Next of Kin's Number"}
                     title={"Next of Kin's Phone Number"}
                     props={{
-                        keyboardType: "numeric"
+                        keyboardType: "numeric",
+                        maxLength:11
+
                     }}
                 />
             </KeyboardAwareScrollView>
@@ -273,8 +277,8 @@ const styles = StyleSheet.create({
     },
     box: {
         flexDirection: "row",
-        height: 80,
-        marginVertical: 10
+        height:  SIZES.width*0.2,
+        // marginVertical: 10
         // backgroundColor: "red"
 
     },
@@ -296,13 +300,13 @@ const styles = StyleSheet.create({
     perInfo: {
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
-        fontSize: 18,
+        fontSize:  SIZES.width*0.045,
         marginBottom: 10
 
     },
     saveButton: {
         justifyContent: "flex-end",
-        flex: 2,
+        // flex: 2,
 
     },
 

@@ -6,6 +6,7 @@ import CustomButton from "../../components/CustomButton";
 import TextButtonComponent from "../../components/TextButtonComponent";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {AuthContext} from "../../context/AuthContext";
+import {resolve} from "@babel/core/lib/vendor/import-meta-resolve";
 
 
 const SignUp = ({navigation}) => {
@@ -15,6 +16,8 @@ const SignUp = ({navigation}) => {
     const [referredBy, setReferredBy] = useState("");
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
+    const [errMsg, setErrMsg] = useState(false)
+
 
     const {register} = useContext(AuthContext)
 
@@ -78,7 +81,7 @@ const SignUp = ({navigation}) => {
 
                 </View>
 
-                {isError && <Text style={{color: "red"}}>Invalid referral code!</Text>}
+                {isError && <Text style={{color: "red"}}>{errMsg}</Text>}
 
                 <CustomButton
                     text={"Register"}
@@ -92,8 +95,16 @@ const SignUp = ({navigation}) => {
 
                             if (emailOrNumber && password && referredBy !== "") {
                                 setIsLoading(true)
-                                await register(emailOrNumber, password, referredBy)
-                                navigation.navigate("OtpScreen", emailOrNumber)
+                                const reg = await register(emailOrNumber, password, referredBy)
+
+                                // console.log(reg, "REGGG")
+                                if (reg) {
+
+                                    navigation.navigate("OtpScreen", emailOrNumber)
+
+                                }
+
+                                // navigation.navigate("OtpScreen", emailOrNumber)
 
                                 setIsLoading(false)
 
@@ -106,6 +117,13 @@ const SignUp = ({navigation}) => {
                             {
                                 e &&
                                 setIsError(true)
+                            }
+                            {
+                                e&& setErrMsg(e)
+                            }
+
+                            {
+                                e[0].extensions.exception.data.data[0].messages[0].message && setErrMsg((e[0].extensions.exception.data.data[0].messages[0].message).replace("for this domain", ""))
                             }
                         }
                     }}

@@ -1,6 +1,6 @@
 // @flow
 import React, {useState} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
+import {Image, Platform, StyleSheet, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../constants";
 import {TextInput} from "react-native-paper";
 
@@ -29,14 +29,16 @@ const CustomInputBox = ({
                     {...props}
                     mode={"outlined"}
                     label={placeholderText}
+                    // selectionColor={"red"}
                     value={initialValue}
+                    caretHidden={false}
                     onChangeText={onChange}
+                    autoComplete={Platform.OS === 'web' ? 'none' : 'off'}
                     // placeholderTextColor={"#999999"}
                     secureTextEntry={passwordShown}
                     activeOutlineColor={COLORS.primary}
                     outlineColor={"#C4C4C4"}
                     // Style={{color: "red"}}
-
                     style={[styles.input, {
                         // fontSize: 16,
                         width: short ? SIZES.width * 0.3 : "100%",
@@ -55,7 +57,6 @@ const CustomInputBox = ({
 
                 </TouchableOpacity>}
                 {clipboard &&
-
                     <TouchableOpacity style={[styles.eyesBox, {top: 2}]} activeOpacity={0.8} onPress={clipboardOnPress}>
                         <Image style={[styles.eye, {
                             width: 45, height: 50
@@ -63,7 +64,6 @@ const CustomInputBox = ({
                     </TouchableOpacity>
 
                 }
-
 
             </View>
         </View>
@@ -78,16 +78,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: SIZES.width*0.1,
+        marginVertical: SIZES.width * 0.1,
         backgroundColor: 'white',
     },
     input: {
         fontSize: SIZES.width * 0.04,
-        height: SIZES.width*0.13,
+        height: SIZES.width * 0.13,
         // paddingVertical:2,
         // borderRadius: 5,
         fontFamily: "Nexa-Book",
         position: "absolute",
+        lineHeight:30
         // color:"red"
 
 
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     eyesBox: {
         justifyContent: "center",
         marginRight: 20,
-        zIndex:10
+        zIndex: 10
     },
     eye: {
         marginRight: 40,

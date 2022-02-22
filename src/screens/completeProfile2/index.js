@@ -1,7 +1,7 @@
 // @flow
 import React, {useContext, useState} from 'react';
 import {Image, StyleSheet, Text, View} from "react-native";
-import {COLORS, icons} from "../../constants";
+import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
 import {handleQuery} from "../../graphql/requests";
@@ -64,7 +64,7 @@ const CompleteProfile2 = ({navigation}) => {
             <BackButton onPress={() => navigation.pop()}/>
 
             <View style={styles.box}>
-                <Image style={{height: 80, width: 80, right: 15}} source={icons.circular2}/>
+                <Image style={{height: SIZES.width*0.2, width: SIZES.width*0.2, right: 15}} source={icons.circular2}/>
                 <View style={styles.box2}>
                     <Text style={styles.text1}>Complete your Profile</Text>
                     <Text style={styles.text2}>please complete the fields below</Text>
@@ -94,6 +94,9 @@ const CompleteProfile2 = ({navigation}) => {
                     onChange={value => setRemuneration(value)}
                     placeholderText={"Enter Remuneration"}
                     title={"Remuneration"}
+                    props={{
+                        keyboardType:"numeric"
+                }}
                 />
 
             </KeyboardAwareScrollView>
@@ -129,13 +132,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.white,
-        paddingHorizontal: 20
+        paddingHorizontal: SIZES.width*0.04,
 
     },
     box: {
         flexDirection: "row",
-        height: 80,
-        marginVertical: 20
+        height: SIZES.width*0.2,
+        // marginVertical: 20
         // backgroundColor: "red"
 
     },
@@ -158,12 +161,12 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
         fontSize: 18,
-        marginVertical: 20
+        marginVertical: SIZES.width*0.03,
 
     },
     saveButton: {
         justifyContent: "flex-end",
-        flex: 2,
+        // flex: 2,
 
     },
 

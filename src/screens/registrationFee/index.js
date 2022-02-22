@@ -118,7 +118,10 @@ const styles = StyleSheet.create({
     }, skip: {
         color: COLORS.white, fontFamily: "Nexa-Bold"
     }, regFee: {
-        color: COLORS.black, fontSize: 28, fontFamily: "Nexa-Bold", marginVertical: 20
+        color: COLORS.black,
+        fontSize: 28,
+        fontFamily: "Nexa-Bold",
+        // marginVertical: 20
     }, regFeeInfo: {
         color: COLORS.black, fontSize: 16, fontFamily: "Nexa-Book", marginVertical: 20, lineHeight: 28, opacity: 0.7
     },

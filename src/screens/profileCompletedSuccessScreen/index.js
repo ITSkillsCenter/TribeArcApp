@@ -16,7 +16,7 @@ const ProfileCompletedSuccessScreen = ({navigation, route}) => {
             <View style={styles.checkMark}>
                 <LottieView source={require("../../assets/images/checkMark.json")}
                             autoPlay loop={false}
-                            style={{width: 268, height: 263}}/>
+                            style={{width: SIZES.width*0.6, height: SIZES.width*0.6}}/>
             </View>
 
             <View style={styles.tsBox}>
@@ -26,7 +26,7 @@ const ProfileCompletedSuccessScreen = ({navigation, route}) => {
                 <Text style={styles.desc}>Dear User your profile has been successfully completed.</Text>
             </View>
 
-            <View style={{marginVertical: 20}}>
+            <View style={{marginVertical: 10}}>
                 <CustomButton filled onPress={() => navigation.navigate("BottomTabs")} text={"Ok"}/>
             </View>
 

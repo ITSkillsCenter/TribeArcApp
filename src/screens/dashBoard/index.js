@@ -274,22 +274,17 @@ const DashBoard = ({navigation}) => {
                     {/*<View>*/}
                     <Image source={icons.pigIcon} resizeMode={"contain"} style={{width: 50, height: 50}}/>
                     {/*</View>*/}
-
                     <View style={{justifyContent: "space-between", height: 50, width: "70%", alignSelf: "center"}}>
-                        <Text style={{fontFamily: "Nexa-Bold", color: COLORS.black, letterSpacing: 0.7,}}>SAVE FOR
+                        <Text style={{fontFamily: "Nexa-Book", color: COLORS.black, letterSpacing: 0.7,}}>SAVE FOR
                             THE
                             FUTURE</Text>
                         <Text style={{color: "#A19FCD", fontFamily: "Nexa-Book"}}>Tap to get started with
                             Tribearc</Text>
-
-
                     </View>
 
                     <Image source={icons.arrowRight} style={{width: 20, height: 20}} resizeMode={"contain"}/>
 
-
                 </TouchableOpacity>
-
 
                 <View style={styles.cardContainer}>
 
@@ -373,15 +368,19 @@ const DashBoard = ({navigation}) => {
                                               onPress={() => {
                                               }}>
                                 <Image source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
-                                       style={{width:  SIZES.width * 0.1, height:  SIZES.width * 0.1}}/>
+                                       style={{width: SIZES.width * 0.1, height: SIZES.width * 0.1}}/>
                                 <Text style={styles.recentTransactionText}>Card Deposit</Text>
 
-                                <View style={{alignItems: 'center', justifyContent: "space-between", height:  SIZES.width * 0.1}}>
+                                <View style={{
+                                    alignItems: 'center',
+                                    justifyContent: "space-between",
+                                    height: SIZES.width * 0.1
+                                }}>
                                     <Text style={{
-                                        color: COLORS.black, fontFamily: "Nexa-Bold", fontSize:  SIZES.width * 0.05
+                                        color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: SIZES.width * 0.04
                                     }}>₦{item?.amount_paid.toLocaleString()}</Text>
                                     <Text style={{
-                                        color: COLORS.black, fontFamily: "Nexa-Book",fontSize:  SIZES.width * 0.03
+                                        color: COLORS.black, fontFamily: "Nexa-Book", fontSize: SIZES.width * 0.025
                                     }}>{moment(item?.created_at).format("MMM D, YYYY")}</Text>
                                 </View>
                             </TouchableOpacity>
@@ -392,7 +391,6 @@ const DashBoard = ({navigation}) => {
                                     height: 0.5,
                                     width: SIZES.width * 0.9,
                                     alignSelf: "center",
-
                                 }}
                             />
 
@@ -431,20 +429,22 @@ const styles = StyleSheet.create({
     },
     imgContainer: {},
     img: {
-        width: SIZES.width * 0.15, height: SIZES.width * 0.15, borderRadius: 50
+        width: SIZES.width * 0.1,
+        height: SIZES.width * 0.1,
+        borderRadius: 50
     },
     nameContainer: {
         // backgroundColor:"cyan",
         width: SIZES.width * 0.5,
-        height: 50,
+        height: SIZES.width * 0.1,
         justifyContent: "space-between",
         marginHorizontal: 15, right: 10
 
     },
     username: {
-        fontSize: 16, color: COLORS.black, fontFamily: "Nexa-Book"
+        fontSize: SIZES.width * 0.04, color: COLORS.black, fontFamily: "Nexa-Book"
     }, welcomeText: {
-        color: COLORS.primary, fontSize: SIZES.width * 0.05, fontFamily: "Nexa-Bold"
+        color: COLORS.primary, fontSize: SIZES.width * 0.04, fontFamily: "Nexa-Bold"
     }, notification: {
         width: SIZES.width * 0.08, height: SIZES.width * 0.08, // alignSelf:'flex-end'
     }, balanceFrameContainer: {
@@ -520,7 +520,8 @@ const styles = StyleSheet.create({
         alignSelf: "center",
     },
     recentTransactionText: {
-        fontSize: 18, width: SIZES.width * 0.4,
+        fontSize: SIZES.width * 0.04,
+        width: SIZES.width * 0.4,
         fontFamily: "Nexa-Bold", // right: 100,
         color: COLORS.black, // backgroundColor:"cyan"
     },
