@@ -31,16 +31,18 @@ const CustomInputBox = ({
                     label={placeholderText}
                     // selectionColor={"red"}
                     value={initialValue}
-                    caretHidden={false}
+                    // caretHidden={false}
                     onChangeText={onChange}
                     autoComplete={Platform.OS === 'web' ? 'none' : 'off'}
                     // placeholderTextColor={"#999999"}
                     secureTextEntry={passwordShown}
+
                     activeOutlineColor={COLORS.primary}
                     outlineColor={"#C4C4C4"}
                     // Style={{color: "red"}}
                     style={[styles.input, {
-                        // fontSize: 16,
+                        fontSize: 16,
+                        fontFamily: "Nexa-Bold",
                         width: short ? SIZES.width * 0.3 : "100%",
                         ...inputContainerStyle,
                         backgroundColor: 'white',
@@ -88,8 +90,7 @@ const styles = StyleSheet.create({
         // borderRadius: 5,
         fontFamily: "Nexa-Book",
         position: "absolute",
-        lineHeight:30
-        // color:"red"
+        lineHeight: 28,
 
 
     },

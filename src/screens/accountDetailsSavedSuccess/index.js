@@ -14,7 +14,7 @@ const AccountDetailsSavedSuccess = ({navigation, route}) => {
             <View style={styles.checkMark}>
                 <LottieView source={require("../../assets/images/checkMark.json")}
                             autoPlay loop={false}
-                            style={{width: SIZES.width*0.6, height: SIZES.width*0.6}}/>
+                            style={{width: SIZES.width * 0.6, height: SIZES.width * 0.6}}/>
             </View>
             <View style={styles.tsBox}>
                 <Text style={styles.ts}>Account Details Saved!</Text>
@@ -23,14 +23,13 @@ const AccountDetailsSavedSuccess = ({navigation, route}) => {
                 <Text style={styles.desc}>Dear User your account details has been saved.</Text>
             </View>
             <View style={{marginVertical: 20}}>
-                <CustomButton filled onPress={() => navigation.navigate("AccountDetailsPage")} text={"Ok"}/>
+                <CustomButton filled onPress={() => navigation.navigate("BottomTabs")} text={"Ok"}/>
             </View>
         </View>
     );
 };
 
 export default AccountDetailsSavedSuccess
-
 
 
 const styles = StyleSheet.create({

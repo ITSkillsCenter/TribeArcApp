@@ -249,7 +249,8 @@ const EditProfile = ({navigation}) => {
 
 
                     <CustomTextInput
-                        initialValue={firstName}
+                        initialValue={!"null" ? firstName : ""}
+                        onFocus={() => setFirstName("")}
                         onChange={value => setFirstName(value)}
                         placeholderText={"First Name"}
                         // onFocus={() => setFirstName(firstName)}
@@ -258,7 +259,8 @@ const EditProfile = ({navigation}) => {
 
                     <CustomTextInput
                         title={"Last Name"}
-                        initialValue={lastName}
+                        onFocus={() => setLastName("")}
+                        initialValue={!"null" ? lastName : ""}
                         onChange={value => setLastName(value)}
                         placeholderText={"Last Name"}
 
@@ -277,7 +279,8 @@ const EditProfile = ({navigation}) => {
 
                     <CustomTextInput
                         title={"Phone Number"}
-                        initialValue={phoneNum}
+                        initialValue={!"null" ? phoneNum : ""}
+                        onFocus={() => setPhoneNum("")}
                         onChange={value => setPhoneNum(value)}
                         placeholderText={"Phone Number"}
                         props={{
@@ -288,7 +291,8 @@ const EditProfile = ({navigation}) => {
 
                     <CustomTextInput
                         title={"Next of kin's Name"}
-                        initialValue={nextOfKin}
+                        initialValue={!"null" ? nextOfKin : ""}
+                        onFocus={() => setNextOfKin("")}
                         onChange={value => setNextOfKin(value)}
                         placeholderText={"Next of kin's Name"}
 
@@ -297,7 +301,8 @@ const EditProfile = ({navigation}) => {
 
                     <CustomTextInput
                         title={"Next of kin's Phone Number"}
-                        initialValue={nextOfKinPhoneNum}
+                        initialValue={!"null" ? nextOfKinPhoneNum : ""}
+                        onFocus={() => setNextOfKinPhoneNum("")}
                         onChange={value => setNextOfKinPhoneNum(value)}
                         placeholderText={"Next of kin's Phone Number"}
                         props={{
@@ -321,20 +326,23 @@ const EditProfile = ({navigation}) => {
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
                     <CustomTextInput
-                        initialValue={profession}
+                        initialValue={!"null" ? profession : ""}
                         onChange={value => setProfession(value)}
+                        onFocus={() => setProfession("")}
                         placeholderText={"Profession"}
                         title={"Profession"}/>
 
                     <CustomTextInput
                         title={"Designation"}
-                        initialValue={designation}
+                        initialValue={!"null" ? designation : ""}
+                        onFocus={() => setDesignation("")}
                         onChange={value => setDesignation(value)}
                         placeholderText={"Designation"}/>
 
                     <CustomTextInput
                         title={"Monthly Remuneration"}
-                        initialValue={remuneration}
+                        initialValue={!"null" ? remuneration : ""}
+                        onFocus={() => setRemuneration("")}
                         onChange={value => setRemuneration(value)}
                         placeholderText={"Enter Monthly Remuneration"}
                         props={{
@@ -387,7 +395,7 @@ const EditProfile = ({navigation}) => {
 
             {/*<View>*/}
             <View style={{
-                flexDirection: "row", marginBottom: 20, alignItems:"center", justifyContent:"center"
+                flexDirection: "row", marginBottom: 20, alignItems: "center", justifyContent: "center"
             }}>
 
                 <FastImage
@@ -416,7 +424,7 @@ const EditProfile = ({navigation}) => {
                         alignSelf: "center",
                         alignItems: "center",
                         justifyContent: "center",
-                        right:40,
+                        right: 40,
                         top: 40,
                         borderRadius: 40,
                         // flex:1

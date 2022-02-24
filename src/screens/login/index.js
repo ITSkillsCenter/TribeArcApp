@@ -18,6 +18,7 @@ const Login = ({navigation, route}) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
+    const [errMsg, setErrMsg] = useState("")
 
 
     const {login} = useContext(AuthContext)
@@ -69,7 +70,7 @@ const Login = ({navigation, route}) => {
                 </View>
 
 
-                {isError && <Text style={{color: "red"}}>Something went wrong, Try again.</Text>}
+                {isError && <Text style={{color: "red"}}>{errMsg}</Text>}
 
                 <CustomButton
                     text={"Login"}
@@ -85,11 +86,17 @@ const Login = ({navigation, route}) => {
                             }
 
                         } catch (e) {
-                            console.log("login error:", e.message)
+                            console.log("login error:", e[0].extensions.exception.data.data[0].messages[0].message)
                             await setIsLoading(false)
                             {
                                 e && setIsError(true)
                             }
+
+
+                            {
+                                e[0].extensions.exception.data.data[0].messages[0].message && setErrMsg((e[0].extensions.exception.data.data[0].messages[0].message).replace("Identifier or password invalid.", "Invalid Email or password "))
+                            }
+
                         }
                     }}
                 />

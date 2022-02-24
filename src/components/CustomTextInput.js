@@ -28,6 +28,7 @@ const CustomTextInput = ({
             <TextInput
                 {...props}
                 onBlur={onBlur}
+                onFocus={onFocus}
                 value={initialValue}
                 onEndEditing={onEndEditing}
                 placeholder={placeholderText}

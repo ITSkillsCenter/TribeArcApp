@@ -24,17 +24,18 @@ const AddAccountDetailsScreen = ({navigation}) => {
     const [fullName, setFullName] = useState("")
     const [bankName, setBankName] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+    const [isError, setIsError] = useState(false)
     const [loading, setLoading] = useState(false)
 
 
     useEffect(() => {
 
 
-        BVNTransaction()
+        GetBanks()
 
     }, [])
 
-    const BVNTransaction = async () => {
+    const GetBanks = async () => {
         try {
             const bankCode = await axios.get(`https://api.tribearc.com/banks/get_banks`)
             // console.log(bankCode.data.data, "CODEEEE")
@@ -42,7 +43,7 @@ const AddAccountDetailsScreen = ({navigation}) => {
             await setBanks(bankCode.data.data)
 
         } catch (e) {
-            console.log(e, "ERRor for code")
+            console.log(e, "GetBanks ERRor for code")
 
         }
 
@@ -73,7 +74,11 @@ const AddAccountDetailsScreen = ({navigation}) => {
             // navigation.navigate("BottomTabs")
 
         }).catch((err) => {
-            console.log(err, "Err")
+            console.log(err.message, "Err")
+            {
+                err.message === "Request failed with status code 400" &&
+                setIsError(true)
+            }
             setIsLoading(false)
 
         })
@@ -112,6 +117,7 @@ const AddAccountDetailsScreen = ({navigation}) => {
 
         } catch (e) {
             console.log(e, "SaveAcctErr")
+
             setLoading(false)
 
         }
@@ -171,12 +177,20 @@ const AddAccountDetailsScreen = ({navigation}) => {
                     />
                     <CustomTextInput
                         props={{
-                            keyboardType: "numeric"
+                            keyboardType: "numeric",
+                            maxLength: 10
                         }}
                         onBlur={async () => await ValidateAcctNum()}
-                        initialValue={acctNumber} onChange={setAcctNumber}
+                        initialValue={acctNumber}
+                        onChange={acctNumber => {
+                            setAcctNumber(acctNumber)
+                            setFullName("")
+                            setIsError(false)
+                        }}
                         placeholderText={"Enter Bank Account Number"}
                         title={"Bank Account Number"}/>
+
+                    {isError ? <Text style={{color: "red"}}>Invalid account number</Text> : null}
 
 
                     {
@@ -185,6 +199,7 @@ const AddAccountDetailsScreen = ({navigation}) => {
                                                        color={COLORS.primary}/> : null
 
                     }
+
 
                     <CustomTextInput props={{
 
@@ -206,7 +221,7 @@ const AddAccountDetailsScreen = ({navigation}) => {
                             await SaveAcct()
 
                         }
-                    }} filled text={"Save"}/>
+                    }} filled={fullName !== ""} text={"Save"}/>
 
             </View>
 

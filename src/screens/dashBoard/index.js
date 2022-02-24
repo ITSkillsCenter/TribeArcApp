@@ -398,7 +398,7 @@ const DashBoard = ({navigation}) => {
 
                     ))}
 
-                    <View style={{height: 60, marginBottom: 60,}}/>
+                    <View style={{height: 60, marginBottom: 80,}}/>
                 </View>
             </ScrollView>
 
@@ -429,8 +429,8 @@ const styles = StyleSheet.create({
     },
     imgContainer: {},
     img: {
-        width: SIZES.width * 0.1,
-        height: SIZES.width * 0.1,
+        width: SIZES.width * 0.13,
+        height: SIZES.width * 0.13,
         borderRadius: 50
     },
     nameContainer: {
@@ -442,9 +442,9 @@ const styles = StyleSheet.create({
 
     },
     username: {
-        fontSize: SIZES.width * 0.04, color: COLORS.black, fontFamily: "Nexa-Book"
+        fontSize: SIZES.width * 0.045, color: COLORS.black, fontFamily: "Nexa-Book"
     }, welcomeText: {
-        color: COLORS.primary, fontSize: SIZES.width * 0.04, fontFamily: "Nexa-Bold"
+        color: COLORS.primary, fontSize: SIZES.width * 0.05, fontFamily: "Nexa-Bold"
     }, notification: {
         width: SIZES.width * 0.08, height: SIZES.width * 0.08, // alignSelf:'flex-end'
     }, balanceFrameContainer: {
@@ -458,9 +458,10 @@ const styles = StyleSheet.create({
     }, balanceFrame: {
         // marginTop: 5,
         borderRadius: 15, // padding: 20,
-        height: SIZES.height * 0.25,
+        height: SIZES.height * 0.2,
         width: SIZES.width * 0.8,
         marginRight: 10,
+        marginTop:10,
         justifyContent: "center",
     },
     saveFrame: {
@@ -485,7 +486,7 @@ const styles = StyleSheet.create({
         fontSize: 24
     },
     TodoBox: {
-        marginTop: 30
+        marginTop: 10
     },
     todo: {
         color: COLORS.black,

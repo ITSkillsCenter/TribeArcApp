@@ -69,46 +69,20 @@ export const useAuth = () => {
 
 
                 try {
-                    let res = await handleQueryNoToken(qry);
-                    // console.log(res.data, "QQQQQQ")
 
 
-                    // let queryCommunityId = `query{
-                    //     users(where:{id:${res.data.login.user.id}}){
-                    //                 id
-                    //                 communities{
-                    //                 id
-                    //                     }
-                    //                    }
-                    //                   }`
+                    return new Promise(async (resolve, reject) => {
 
 
-                    // let qryRes = await handleQuery(queryCommunityId, res.data.login.jwt, false)
-                    // console.log(qryRes.data.users[0].communities, "DAtATATTATA")
+                        let res = await handleQueryNoToken(qry);
 
-                    // const arr = qryRes.data.users[0].communities.map((item) => {
-                    //     return Number(item.id)
-                    // })
-
-                    // arr.push(15)
-                    // let updateCommunities = `mutation {
-                    //     updateUser(
-                    //     input: { where: { id: ${res.data.login.user.id} },
-                    //     data: { communities: [${arr}] }}
-                    //     ) {
-                    //     user {
-                    //     id
-                    //     communities {
-                    //     id
-                    //         }
-                    //            }
-                    //               }
-                    //                  }`
-
-                    // let newComm = await handleQuery(updateCommunities, res.data.login.jwt, false)
+                        if (res.errors) {
+                            // console.log(res.errors)
+                            return reject(res.errors)
+                        }
 
 
-                    let qrySavingsAcc = `query {
+                        let qrySavingsAcc = `query {
                             users(where: { id: ${res.data.login.user.id} }) {
                             id
                             email
@@ -118,13 +92,13 @@ export const useAuth = () => {
                                  }
                                }`
 
-                    let qrySavingsRes = await handleQuery(qrySavingsAcc, res.data.login.jwt, false)
+                        let qrySavingsRes = await handleQuery(qrySavingsAcc, res.data.login.jwt, false)
 
-                    const savingAcctCheck = await qrySavingsRes.data.users[0].saving_account
+                        const savingAcctCheck = await qrySavingsRes.data.users[0].saving_account
 
-                    if (!savingAcctCheck) {
+                        if (!savingAcctCheck) {
 
-                        let createSavingAcct = `mutation {
+                            let createSavingAcct = `mutation {
                                                 createSavingAccount(input: {
                                                 data: { amount_saved: 0.0, user_id: ${res.data.login.user.id}, community_id: 15 } }) {
                                                 savingAccount {
@@ -133,25 +107,28 @@ export const useAuth = () => {
                                                   }
                                                }`
 
+                            console.log(createSavingAcct)
+                            let createSavingAcctRes = await handleQuery(createSavingAcct, res.data.login.jwt, false)
+                        }
 
-                        console.log(createSavingAcct)
-                        let createSavingAcctRes = await handleQuery(createSavingAcct, res.data.login.jwt, false)
-                    }
+                        // console.log(qrySavingsRes.data.users[0].saving_account, "REZXXX")
 
-                    // console.log(qrySavingsRes.data.users[0].saving_account, "REZXXX")
+                        const user = {
+                            token: res.data.login.jwt,
+                            id: res.data.login.user.id,
+                            email: res.data.login.user.email,
+                            firstname: res.data.login.user.firstname,
+                            lastname: res.data.login.user.lastname
+                            // avatar: res.data.login.user.avatar
 
-                    const user = {
-                        token: res.data.login.jwt,
-                        id: res.data.login.user.id,
-                        email: res.data.login.user.email,
-                        firstname: res.data.login.user.firstname,
-                        lastname: res.data.login.user.lastname
-                        // avatar: res.data.login.user.avatar
+                        };
 
-                    };
+                        await SecureStorage.setItem("user", JSON.stringify(user));
+                        dispatch(createAction("SET_USER", user));
 
-                    await SecureStorage.setItem("user", JSON.stringify(user));
-                    dispatch(createAction("SET_USER", user));
+
+                    })
+
 
                 } catch (e) {
                     console.log(e, "error @login")

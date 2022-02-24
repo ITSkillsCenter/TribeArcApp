@@ -16,7 +16,7 @@ const SignUp = ({navigation}) => {
     const [referredBy, setReferredBy] = useState("");
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
-    const [errMsg, setErrMsg] = useState(false)
+    const [errMsg, setErrMsg] = useState("")
 
 
     const {register} = useContext(AuthContext)

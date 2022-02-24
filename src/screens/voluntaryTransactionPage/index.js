@@ -40,6 +40,8 @@ const VoluntaryTransactionPage = ({navigation}) => {
     const [topUps, setTopUps] = useState([]);
     const [allTrx, setAllTrx] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [withdrawalTRx, setWithdrawalTRx] = useState([]);
+
 
 
     const TopTabs = createMaterialTopTabNavigator();
@@ -70,6 +72,16 @@ const VoluntaryTransactionPage = ({navigation}) => {
     created_at
     status
   }
+  
+   qry3: withdrawalRequests(
+    where: { users_id: ${user.id} }
+    sort: "created_at:desc"
+  ) {
+    id
+    status
+    amount
+    created_at
+  }
 }`
 
 
@@ -83,6 +95,8 @@ const VoluntaryTransactionPage = ({navigation}) => {
 
             await setTopUps(volTrxRes.data.qry1)
             await setAllTrx(volTrxRes.data.qry1.concat(volTrxRes.data.qry2))
+            await setWithdrawalTRx(volTrxRes.data.qry3)
+
 
 
             setLoading(false)
@@ -268,7 +282,7 @@ const VoluntaryTransactionPage = ({navigation}) => {
 
         return (
             <View style={styles.tabOneContainer}>
-                <FlatList data={data3}
+                <FlatList data={withdrawalTRx}
                           key={item => item.index}
                           showsVerticalScrollIndicator={false}
                           ListEmptyComponent={
@@ -283,36 +297,49 @@ const VoluntaryTransactionPage = ({navigation}) => {
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
                                                     onPress={() => {
                                                     }}>
-                                      <Image source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
-                                             style={{width: 50, height: 50}}/>
+                                      <Image source={item.status === "DECLINED" ? icons.transFailed : icons.tranSucc}
+                                             style={{width: SIZES.width * 0.13, height: SIZES.width * 0.13}}/>
 
-                                      <View style={{justifyContent: "space-between", height: 50}}>
-                                          {item.status === "SUCCESS" ?
-                                              <Text style={styles.recentTransactionText}>Card Deposit
-                                                  Successful</Text> :
-                                              <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
+                                      <View style={{justifyContent: "space-between", height: SIZES.width * 0.13}}>
+
+
+
+                                          {item.status === "APPROVED" ? <Text style={styles.recentTransactionText}>Withdrawal Successful</Text>:item.status==="PENDING"?<Text style={styles.recentTransactionText}>Withdrawal pending</Text> : <Text style={styles.recentTransactionText}>Withdrawal Failed</Text>}
+
+
+
+
+
+
                                           <Text style={{
                                               color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
-                                          }}>₦{item?.amount_paid.toLocaleString()}</Text>
+                                          }}>₦{item?.amount?.toLocaleString()}</Text>
                                       </View>
 
                                       <View style={{alignItems: 'center', justifyContent: "space-between", height: 50}}>
 
-                                          {item.status === "SUCCESS" ? <View style={styles.saved}>
+                                          {item.status === "APPROVED" ?
+                                              <View style={styles.approved}>
                                                   <Text style={{
                                                       color: COLORS.white,
                                                       fontSize: 11,
                                                       fontFamily: "Nexa-Bold"
-                                                  }}>Saved</Text>
+                                                  }}>Approved</Text>
                                               </View>
-                                              : <View style={styles.retryBox}>
-                                                  <Text style={{
-                                                      color: COLORS.white,
-                                                      fontSize: 11,
-                                                      fontFamily: "Nexa-Bold"
-                                                  }}>Try
-                                                      Again</Text>
-                                              </View>
+                                              : item.status==="DECLINED"? <View style={styles.declined}>
+                                                      <Text style={{
+                                                          color: COLORS.white,
+                                                          fontSize: 11,
+                                                          fontFamily: "Nexa-Bold"
+                                                      }}>Declined</Text>
+                                                  </View>:
+                                                  <View style={styles.pendingBox}>
+                                                      <Text style={{
+                                                          color: COLORS.white,
+                                                          fontSize: 11,
+                                                          fontFamily: "Nexa-Bold"
+                                                      }}>Pending</Text>
+                                                  </View>
                                           }
 
                                           <Text style={{
@@ -333,6 +360,7 @@ const VoluntaryTransactionPage = ({navigation}) => {
                                   />
 
                               </View>
+
 
                           )}/>
             </View>
@@ -450,22 +478,30 @@ const styles = StyleSheet.create({
         width: SIZES.width * 0.6,
         fontFamily: "Nexa-Bold", // right: 100,
         color: COLORS.black, // backgroundColor:"cyan"
-    }, retryBox: {
-
+    }, declined: {
         width: 80,
         height: 30,
-        backgroundColor: COLORS.primary,
+        backgroundColor: "#ff6969",
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 5
     },
-    saved: {
+    pendingBox:{
+        width: 80,
+        height: 30,
+        backgroundColor: "#ffd069",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 5
+    },
+    approved: {
         width: 80,
         height: 30,
         backgroundColor: "#05C78D",
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 5
+
     },
     btnTab: {
         height: 3,

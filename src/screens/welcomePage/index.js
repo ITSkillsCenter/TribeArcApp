@@ -99,8 +99,9 @@ const WelcomePage = ({navigation}) => {
                     videoHeight={900}
                     autoplay
                     disableFullscreen
-                    customStyles={styles.backgroundVideo}
-                    // thumbnail={require("../../assets/images/imgPlcholder.png")}
+                    style={styles.backgroundVideo}
+                    // customStyles={styles.backgroundVideo}
+                    thumbnail={require("../../assets/images/imgPlcholder.png")}
                 />
 
 
@@ -155,8 +156,10 @@ const styles = StyleSheet.create({
         width: 159, height: 30,
     }, backgroundVideo: {
         borderRadius: 15, // width:SIZES.width,
-        height: SIZES.height * 0.3,
-        justifyContent: "center", alignItems: "center", backgroundColor: "rgb(243,240,240)", // top: 0,
+        height: SIZES.height * 0.28,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(160,155,155,0.42)", // top: 0,
 
     }, buttonContainer: {
         flex: 2,
