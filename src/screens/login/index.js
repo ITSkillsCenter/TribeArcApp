@@ -92,7 +92,6 @@ const Login = ({navigation, route}) => {
                                 e && setIsError(true)
                             }
 
-
                             {
                                 e[0].extensions.exception.data.data[0].messages[0].message && setErrMsg((e[0].extensions.exception.data.data[0].messages[0].message).replace("Identifier or password invalid.", "Invalid Email or password "))
                             }

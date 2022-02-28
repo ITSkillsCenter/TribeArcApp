@@ -13,6 +13,7 @@
     "@freakycoder/react-native-bounceable": "^0.2.5",
     "@react-native-async-storage/async-storage": "^1.15.15",
     "@react-native-clipboard/clipboard": "^1.8.5",
+    "@react-native-community/checkbox": "^0.5.11",
     "@react-native-community/datetimepicker": "^5.1.0",
     "@react-native-masked-view/masked-view": "^0.2.6",
     "@react-navigation/bottom-tabs": "^6.2.0",
@@ -59,8 +60,7 @@
     "react-native-video": "^5.2.0",
     "react-native-video-player": "^0.12.0",
     "react-native-webview": "^11.17.1",
-    "reanimated-bottom-sheet": "^1.0.0-alpha.22",
-    "rn-fetch-blob": "^0.12.0"
+    "reanimated-bottom-sheet": "^1.0.0-alpha.22"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",

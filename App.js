@@ -59,6 +59,7 @@ import PdfPage from "./src/screens/pdfPage";
 import PaymentSuccessScreen from "./src/screens/paymentSuccessScreen";
 import {handleQuery} from "./src/graphql/requests";
 import OnBoarding from "./src/screens/onBoardng";
+import TermsCondition from "./src/screens/termsCondition";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -176,13 +177,14 @@ const App = () => {
                     headerShown: false,
                 }}>
                 <MainStack.Screen name={"WelcomePage"} component={WelcomePage}/>
+                <MainStack.Screen name={"TermsCondition"} component={TermsCondition}/>
                 <MainStack.Screen name={"BottomTabs"} component={BottomTabs}/>
+                <MainStack.Screen name={"DashBoard"} component={DashBoard}/>
                 <MainStack.Screen name={"RegistrationFee"} component={RegistrationFee}/>
                 <MainStack.Screen name={"CompleteProfile1"} component={CompleteProfile1}/>
                 <MainStack.Screen name={"CompleteProfile2"} component={CompleteProfile2}/>
                 <MainStack.Screen name={"ProfileCompletedSuccessScreen"} component={ProfileCompletedSuccessScreen}/>
                 <MainStack.Screen name={"RegFeeSuccessScreen"} component={RegFeeSuccessScreen}/>
-                <MainStack.Screen name={"DashBoard"} component={DashBoard}/>
                 <MainStack.Screen name={"Savings"} component={Savings}/>
                 <MainStack.Screen name={"SavingsMainScreen"} component={SavingsMainScreen}/>
                 <MainStack.Screen name={"SavingsAccountPage"} component={SavingsAccountPage}/>
@@ -237,6 +239,8 @@ const App = () => {
 
 
                         <MainNavigation/>
+
+
                     </UserContext.Provider>)}
                 </RootStack.Screen> :
 
@@ -324,7 +328,7 @@ const App = () => {
 
 
                 }}>
-                <Tab.Screen name="DashBoard" component={DashBoard}
+                <Tab.Screen name="DashBoard" component={TermsCondition}
                             options={{
                                 tabBarIcon: ({focused}) => (
                                     <View style={{alignItems: "center"}}>

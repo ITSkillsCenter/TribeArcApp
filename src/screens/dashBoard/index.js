@@ -8,6 +8,7 @@ import {handleQuery} from "../../graphql/requests";
 import {useIsFocused} from "@react-navigation/native";
 import FastImage from 'react-native-fast-image'
 import moment from "moment";
+import axios from "axios";
 
 
 const DashBoard = ({navigation}) => {
@@ -37,10 +38,12 @@ const DashBoard = ({navigation}) => {
         CheckBalance()
         FetchTransactions()
         GetQuestion()
+
         // CheckLinkedCard()
     }, [isFocused])
 
     const user = useContext(UserContext)
+
 
     const CheckBalance = async () => {
 
@@ -175,7 +178,8 @@ const DashBoard = ({navigation}) => {
     }
 
 
-    return (<SafeAreaView style={styles.container}>
+    return (
+        <SafeAreaView style={styles.container}>
 
         <View style={styles.container2}>
 
@@ -461,7 +465,7 @@ const styles = StyleSheet.create({
         height: SIZES.height * 0.2,
         width: SIZES.width * 0.8,
         marginRight: 10,
-        marginTop:10,
+        marginTop: 10,
         justifyContent: "center",
     },
     saveFrame: {

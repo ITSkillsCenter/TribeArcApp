@@ -100,7 +100,8 @@ export const useAuth = () => {
 
                             let createSavingAcct = `mutation {
                                                 createSavingAccount(input: {
-                                                data: { amount_saved: 0.0, user_id: ${res.data.login.user.id}, community_id: 15 } }) {
+                                                data: { amount_saved: 0.0, user_id: ${res.data.login.user.id},
+                                                 community_id: 15 } }) {
                                                 savingAccount {
                                                 id
                                                     }
