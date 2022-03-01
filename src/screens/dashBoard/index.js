@@ -100,7 +100,7 @@ const DashBoard = ({navigation}) => {
     const FetchTransactions = async () => {
 
         let qry = `query {
-                savingsTransactions(where: { user_id: ${user.id} }, sort: "created_at:desc", limit:4) {
+                savingsTransactions(where: { user_id: ${user.id} }, sort: "created_at:desc", limit:5) {
                 amount_paid
                 created_at
                 status
@@ -273,22 +273,20 @@ const DashBoard = ({navigation}) => {
                 </View>
 
 
-                <TouchableOpacity activeOpacity={0.8} style={styles.saveFrame}
-                                  onPress={() => navigation.navigate(regFeePaid ? "SavingsMainScreen" : "RegistrationFee", "backButton")}>
-                    {/*<View>*/}
-                    <Image source={icons.pigIcon} resizeMode={"contain"} style={{width: 50, height: 50}}/>
-                    {/*</View>*/}
-                    <View style={{justifyContent: "space-between", height: 50, width: "70%", alignSelf: "center"}}>
-                        <Text style={{fontFamily: "Nexa-Book", color: COLORS.black, letterSpacing: 0.7,}}>SAVE FOR
-                            THE
-                            FUTURE</Text>
-                        <Text style={{color: "#A19FCD", fontFamily: "Nexa-Book"}}>Tap to get started with
-                            Tribearc</Text>
-                    </View>
-
-                    <Image source={icons.arrowRight} style={{width: 20, height: 20}} resizeMode={"contain"}/>
-
-                </TouchableOpacity>
+                {/*<TouchableOpacity activeOpacity={0.8} style={styles.saveFrame}*/}
+                {/*                  onPress={() => navigation.navigate(regFeePaid ? "SavingsMainScreen" : "RegistrationFee", "backButton")}>*/}
+                {/*    /!*<View>*!/*/}
+                {/*    <Image source={icons.pigIcon} resizeMode={"contain"} style={{width: 50, height: 50}}/>*/}
+                {/*    /!*</View>*!/*/}
+                {/*    <View style={{justifyContent: "space-between", height: 50, width: "70%", alignSelf: "center"}}>*/}
+                {/*        <Text style={{fontFamily: "Nexa-Book", color: COLORS.black, letterSpacing: 0.7,}}>SAVE FOR*/}
+                {/*            THE*/}
+                {/*            FUTURE</Text>*/}
+                {/*        <Text style={{color: "#A19FCD", fontFamily: "Nexa-Book"}}>Tap to get started with*/}
+                {/*            Tribearc</Text>*/}
+                {/*    </View>*/}
+                {/*    <Image source={icons.arrowRight} style={{width: 20, height: 20}} resizeMode={"contain"}/>*/}
+                {/*</TouchableOpacity>*/}
 
                 <View style={styles.cardContainer}>
 

@@ -74,7 +74,7 @@ const VoluntaryAccountPage = ({navigation, route}) => {
   qry1: savingsTransactions(
     where: { user_id: ${user.id}, destination: "Voluntary Wallet" }
     sort: "created_at:desc"
-    limit: 4
+    limit: 5
   ) {
     amount_paid
     created_at
@@ -83,7 +83,7 @@ const VoluntaryAccountPage = ({navigation, route}) => {
   qry2: savingsTransactions(
     where: { user_id: ${user.id}, status: "FAILED" }
     sort: "created_at:desc"
-    limit: 4
+    limit: 5
   ) {
     amount_paid
     created_at
@@ -92,7 +92,7 @@ const VoluntaryAccountPage = ({navigation, route}) => {
   qry3: withdrawalRequests(
     where: { users_id: ${user.id} }
     sort: "created_at:desc"
-    limit: 4
+    limit: 5
   ) {
     id
     status

@@ -22,6 +22,7 @@ const AddBvn = ({navigation}) => {
     const [savingId, setSavingId] = useState(null)
     const [banks, setBanks] = useState([])
     const [bankCode, setBankCode] = useState("")
+    const [error, setError] = useState(false)
 
 
     useEffect(() => {
@@ -108,9 +109,9 @@ const AddBvn = ({navigation}) => {
 
     const ValidateBVN = async () => {
 
-        console.log(`${bvn}`)
-        console.log(`${acctNumber}`)
-        console.log(`${bankCode}`)
+        // console.log(`${bvn}`)
+        // console.log(`${acctNumber}`)
+        // console.log(`${bankCode}`)
         setIsLoading(true)
 
 
@@ -130,37 +131,14 @@ const AddBvn = ({navigation}) => {
 
         })
             .catch((err) => {
-                console.log(err, "Err")
+                console.log(err.message, "Err")
                 setIsLoading(false)
+                {
+                    err.message === "Request failed with status code 400" &&
+                    setError(true)
+                }
 
             })
-
-
-        // try {
-        //     setIsLoading(true)
-        //
-        //     let res = await axios.post(`https://api.tribearc.com/verify/bvn`, {
-        //         bvn: `${bvn}`,
-        //         account_number: `${acctNumber}`,
-        //         bank_code: `${bankCode}`
-        //
-        //
-        //     })
-        //
-        //     console.log(res, "VALIDATERESS")
-        //
-        //
-        //     console.log(`${bvn}`)
-        //     console.log(`${acctNumber}`)
-        //     console.log(`${bankCode}`)
-        //     setIsLoading(false)
-        //     navigation.navigate("BottomTabs")
-        //
-        //
-        // } catch (e) {
-        //     console.log(e, "ValidateError")
-        //     setIsLoading(false)
-        // }
 
 
     }
@@ -222,7 +200,10 @@ const AddBvn = ({navigation}) => {
                     placeholder={"Enter Account Number"}
                     value={acctNumber}
                     placeholderTextColor={"#999999"}
-                    onChangeText={value => setAcctNumber(value)}
+                    onChangeText={value => {
+                        setAcctNumber(value)
+                        setError(false)
+                    }}
                     style={styles.textInput}
                     keyboardType={"numeric"}
                     maxLength={10}
@@ -232,16 +213,21 @@ const AddBvn = ({navigation}) => {
                     placeholder={"Enter BVN"}
                     value={bvn}
                     placeholderTextColor={"#999999"}
-                    onChangeText={value => setBvn(value)}
+                    onChangeText={value => {
+                        setBvn(value)
+                        setError(false)
+
+                    }}
                     style={styles.textInput}
                     keyboardType={"numeric"}
                     maxLength={13}
                 />
 
+                {error && <Text style={{color: "red", marginVertical: 10}}>Invalid Details</Text>}
 
-                <Text style={styles.dontKnow}>Don't know your BVN? <Text onPress={() => Linking.openURL(`tel:*565*0%23`)}
-                                                                         style={styles.dial}> Dial *565*0#</Text></Text>
-
+                <Text style={styles.dontKnow}>Don't know your BVN? <Text
+                    onPress={() => Linking.openURL(`tel:*565*0%23`)}
+                    style={styles.dial}> Dial *565*0#</Text></Text>
 
             </KeyboardAwareScrollView>
 

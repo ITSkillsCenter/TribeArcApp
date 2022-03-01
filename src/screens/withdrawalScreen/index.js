@@ -9,6 +9,8 @@ import CustomButton from "../../components/CustomButton";
 import {Modalize} from "react-native-modalize";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
+import axios from "axios";
+import {BASE_URL} from "../../config";
 
 const WithdrawalScreen = ({navigation}) => {
 
@@ -18,7 +20,9 @@ const WithdrawalScreen = ({navigation}) => {
     const [accountBalance, setAccountBalance] = useState(0)
     const [withdrawalAmount, setWithdrawalAmount] = useState("")
     const [otpLoading, setOtpLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [otpSent, setOtpSent] = useState(false)
+    const [error, setError] = useState(false)
     const [otpCode, setOtpCode] = useState("")
 
 
@@ -64,37 +68,94 @@ const WithdrawalScreen = ({navigation}) => {
 
     const SendWithdrawalOtp = async () => {
 
+        // console.log(`${BASE_URL}/withdrawal/send_otp`)
+
+        setOtpLoading(true)
+
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`
+        }
+
 
         try {
 
-            await setOtpLoading(true)
+            const response = await axios.post(`${BASE_URL}/withdrawal/send_otp`, {
+                email: `${user.email}`,
+            }, {headers: headers})
 
-            setTimeout(async () => {
-                await console.log("OTP sent")
-                await setOtpSent(true)
+            console.log(response.data, "OTP SEnt succ")
+
+            if (response.data.ok) {
                 await setOtpLoading(false)
-
-            }, 5000)
-
+                await setOtpSent(true)
+            }
 
         } catch (e) {
-            console.log(e, "SendWithdrawalOtp Err")
-            setOtpLoading(true)
+            console.log(e, "errr")
+
 
         }
+
 
     }
 
 
     const SubmitWithdrawal = async () => {
+        setLoading(true)
 
+
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`
+        }
 
         try {
 
+            const response = await axios.post(`${BASE_URL}/withdrawal/confirm_otp`, {
+                code: otpCode,
+            }, {headers: headers})
+
+            console.log(response.data, "OTP confirmed succ")
+
+
+            if (response.data.ok) {
+
+
+                let mtn = `mutation {
+                        createWithdrawalRequest(
+                        input: {
+                        data: { amount: ${withdrawalAmount}, 
+                        status: PENDING, 
+                        community: 15, 
+                        users_id: ${user.id} }
+                                }
+                                ) {
+                        withdrawalRequest {
+                        users_id {
+                                id
+                                }
+                                }
+                                }
+                                    }
+
+                                        `
+
+
+                await handleQuery(mtn, user.token, false)
+                await navigation.navigate("BottomTabs")
+                await setLoading(false)
+
+
+            }
+
 
         } catch (e) {
-            console.log(e, "SubmitWithdrawal Err")
-            setOtpLoading(true)
+            console.log(e, "errr")
+            {
+                e.message === "Request failed with status code 400" && setError(true)
+            }
+            setLoading(false)
 
         }
 
@@ -202,7 +263,7 @@ const WithdrawalScreen = ({navigation}) => {
             <SelectDropdown
                 data={myAccts}
                 onSelect={(selectedItem, index) => {
-                    console.log(selectedItem, index)
+                    // console.log(selectedItem, index)
 
                     if (withdrawalAmount !== "") {
                         SendWithdrawalOtp()
@@ -249,7 +310,10 @@ const WithdrawalScreen = ({navigation}) => {
 
             <CustomTextInput
                 initialValue={otpCode}
-                onChange={setOtpCode}
+                onChange={value => {
+                    setOtpCode(value)
+                    setError(false)
+                }}
                 placeholderText={"Enter OTP"}
                 title={"Withdrawal OTP code"}
                 props={{
@@ -257,11 +321,17 @@ const WithdrawalScreen = ({navigation}) => {
                 }}
 
             />
+
+            {error && <Text style={{color: "red"}}>Invalid Otp code</Text>}
         </View>
 
+
         <View style={{flex: 2, justifyContent: "flex-end"}}>
-            <CustomButton onPress={() => {
-            }} filled={withdrawalAmount !== "" && otpCode !== ""} text={"Submit"}/>
+            <CustomButton onPress={async () => {
+                await SubmitWithdrawal()
+
+
+            }} loading={loading} filled={withdrawalAmount !== "" && otpCode !== ""} text={"Submit"}/>
 
         </View>
 

@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ActivityIndicator, Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import SplashScreen from "react-native-splash-screen";
-import {COLORS, icons} from "./src/constants";
+import {COLORS, icons, SIZES} from "./src/constants";
 import SignUp from "./src/screens/signUp";
 import Login from "./src/screens/login";
 import {NavigationContainer} from "@react-navigation/native";
@@ -144,31 +144,6 @@ const App = () => {
 
     const MainNavigation = () => {
 
-        const user = useContext(UserContext);
-
-        useEffect(() => {
-
-
-        }, []);
-
-
-        // const ChkRegFee = async () => {
-        //
-        //     let qry = `query {
-        //                     users(where: { id: ${user.id} }) {
-        //                     paid_reg_fee
-        //                             }
-        //                         }`
-        //     try {
-        //         const qryRes = await handleQuery(qry, user.token, false)
-        //         // console.log(qryRes.data.users[0].paid_reg_fee)
-        //         await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
-        //
-        //     } catch (e) {
-        //         console.log(e, "ChkRegFeeErr")
-        //     }
-        // }
-
 
         return (
             <MainStack.Navigator
@@ -237,7 +212,6 @@ const App = () => {
         return (state.user ? <RootStack.Screen name={"MainNavigation"}>
                     {() => (<UserContext.Provider value={state.user}>
 
-
                         <MainNavigation/>
 
 
@@ -303,36 +277,104 @@ const App = () => {
 
     const BottomTabs = ({navigation}) => {
 
+
+        const user = useContext(UserContext);
+
+
+        const [loading, setLoading] = useState(false)
+        const [agreed, setAgreed] = useState(false)
+
+        useEffect(() => {
+
+            CheckTerms()
+        }, []);
+
+
+        const CheckTerms = async () => {
+
+            let qry = `query {
+  users(where: {id: ${user.id} }) {
+    user_investment_agreement{
+      agreed
+    }
+  }
+}
+
+`
+            try {
+                setLoading(true)
+                const qryRes = await handleQuery(qry, user.token, false)
+                // console.log(qryRes.data.users[0].user_investment_agreement.agreed, "ageeeed")
+                await setAgreed(qryRes.data.users[0].user_investment_agreement.agreed)
+                await setLoading(false)
+
+
+            } catch (e) {
+                console.log(e, "CheckTermsErr")
+            }
+        }
+
+
         return (
-            <Tab.Navigator
-                detachInactiveScreens
-                screenOptions={{
-                    headerShown: false,
-                    tabBarShowLabel: false,
-                    tabBarStyle: {
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        paddingHorizontal: 15,
-                        right: 0,
-                        elevation: 5,
-                        shadowOpacity: 0.1,
-                        shadowOffset: {
-                            width: 5,
-                            height: -3,
-                        },
-                        // backgroundColor: "cyan",
-                        borderTopColor: "rgba(175,174,174,0.7)",
-                        height: Platform.OS === "android" ? 80 : 50,
-                    },
+
+            loading ? <ActivityIndicator
+                    style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
+                    color={COLORS.primary}/> :
+
+                !agreed ? <TermsCondition/> :
+                    <Tab.Navigator
+                        detachInactiveScreens
+                        screenOptions={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                            tabBarStyle: {
+                                position: "absolute",
+                                bottom: 0,
+                                left: 0,
+                                paddingHorizontal: 15,
+                                right: 0,
+                                elevation: 5,
+                                shadowOpacity: 0.1,
+                                shadowOffset: {
+                                    width: 5,
+                                    height: -3,
+                                },
+                                // backgroundColor: "cyan",
+                                borderTopColor: "rgba(175,174,174,0.7)",
+                                height: Platform.OS === "android" ? 80 : 50,
+                            },
 
 
-                }}>
-                <Tab.Screen name="DashBoard" component={TermsCondition}
+                        }}>
+                        <Tab.Screen name="DashBoard" component={DashBoard}
+                                    options={{
+                                        tabBarIcon: ({focused}) => (
+                                            <View style={{alignItems: "center"}}>
+                                                <Image source={icons.homeIcon}
+                                                       resizeMode={"center"}
+
+                                                       style={{
+                                                           width: 22,
+                                                           height: 22,
+                                                           tintColor: focused ? COLORS.primary : COLORS.secondary
+                                                       }}/>
+
+                                                <Text style={{
+                                                    fontSize: 11,
+                                                    color: focused ? COLORS.primary : COLORS.secondary,
+                                                    fontFamily: "Nexa-Bold"
+                                                }}>Home</Text>
+                                            </View>
+                                        ),
+                                    }}
+                        />
+                        <Tab.Screen
+                            name="StartSaving"
+                            component={savingWlc ? SavingsMainScreen : StartSaving}
                             options={{
                                 tabBarIcon: ({focused}) => (
                                     <View style={{alignItems: "center"}}>
-                                        <Image source={icons.homeIcon}
+                                        <Image source={icons.savingsIcon}
                                                resizeMode={"center"}
 
                                                style={{
@@ -345,137 +387,113 @@ const App = () => {
                                             fontSize: 11,
                                             color: focused ? COLORS.primary : COLORS.secondary,
                                             fontFamily: "Nexa-Bold"
-                                        }}>Home</Text>
+                                        }}>Savings</Text>
                                     </View>
                                 ),
-                            }}
-                />
-                <Tab.Screen
-                    name="StartSaving"
-                    component={savingWlc ? SavingsMainScreen : StartSaving}
-                    options={{
-                        tabBarIcon: ({focused}) => (
-                            <View style={{alignItems: "center"}}>
-                                <Image source={icons.savingsIcon}
-                                       resizeMode={"center"}
+                            }}/>
+                        <Tab.Screen
+                            name="TopUpScreenDummy"
+                            component={TopUpScreen}
 
-                                       style={{
-                                           width: 22,
-                                           height: 22,
-                                           tintColor: focused ? COLORS.primary : COLORS.secondary
-                                       }}/>
-
-                                <Text style={{
-                                    fontSize: 11,
-                                    color: focused ? COLORS.primary : COLORS.secondary,
-                                    fontFamily: "Nexa-Bold"
-                                }}>Savings</Text>
-                            </View>
-                        ),
-                    }}/>
-                <Tab.Screen
-                    name="TopUpScreenDummy"
-                    component={TopUpScreen}
-
-                    options={{
-                        tabBarIcon: ({focused}) => {
-                            return (
-                                <View
-                                    style={{
-                                        alignItems: "center",
-                                        height: 50,
-                                        justifyContent: "space-around",
-                                        elevation: 7,
-                                        shadowOpacity: 0.1,
-                                        shadowOffset: {
-                                            width: 4,
-                                            height: 5,
-                                        },
-                                    }}>
-                                    <View
-                                        style={{
-                                            width: 70,
-                                            height: 70,
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            bottom: 30,
-                                            borderRadius: 35,
-
-                                        }}
-                                    >
-                                        <Image
-                                            source={icons.addIcon}
-                                            resizeMode={"center"}
-
+                            options={{
+                                tabBarIcon: ({focused}) => {
+                                    return (
+                                        <View
                                             style={{
-                                                width: 53,
-                                                height: 53,
-                                            }}
-                                        />
-                                    </View>
-                                </View>
-                            );
-                        },
+                                                alignItems: "center",
+                                                height: 50,
+                                                justifyContent: "space-around",
+                                                elevation: 7,
+                                                shadowOpacity: 0.1,
+                                                shadowOffset: {
+                                                    width: 4,
+                                                    height: 5,
+                                                },
+                                            }}>
+                                            <View
+                                                style={{
+                                                    width: 70,
+                                                    height: 70,
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    bottom: 30,
+                                                    borderRadius: 35,
 
-                        tabBarButton: (props) => (
-                            <TabBarCustomButton
-                                {...props}
-                                onPress={() => navigation.navigate("TopUpScreen")}
-                            />
-                        ),
+                                                }}
+                                            >
+                                                <Image
+                                                    source={icons.addIcon}
+                                                    resizeMode={"center"}
 
-                    }}
+                                                    style={{
+                                                        width: 53,
+                                                        height: 53,
+                                                    }}
+                                                />
+                                            </View>
+                                        </View>
+                                    );
+                                },
 
-                />
-                <Tab.Screen
-                    name="StartInvesting"
-                    component={investWlc ? InvestmentMainScreen : StartInvesting}
-                    options={{
-                        tabBarIcon: ({focused}) => (
+                                tabBarButton: (props) => (
+                                    <TabBarCustomButton
+                                        {...props}
+                                        onPress={() => navigation.navigate("TopUpScreen")}
+                                    />
+                                ),
 
-                            <View style={{alignItems: "center"}}>
-                                < Image source={icons.invIcon}
-                                        resizeMode={"center"}
-                                        style={{
-                                            width: 22,
-                                            height: 22,
-                                            tintColor: focused ? COLORS.primary : COLORS.secondary
-                                        }}/>
-                                <Text style={{
-                                    fontSize: 11,
-                                    color: focused ? COLORS.primary : COLORS.secondary,
-                                    fontFamily: "Nexa-Bold"
-                                }}>Investment</Text>
+                            }}
 
-                            </View>
-                        ),
-                    }}
-                />
-                <Tab.Screen name="Profile" component={Profile}
+                        />
+                        <Tab.Screen
+                            name="StartInvesting"
+                            component={investWlc ? InvestmentMainScreen : StartInvesting}
                             options={{
                                 tabBarIcon: ({focused}) => (
 
                                     <View style={{alignItems: "center"}}>
-
-                                        <Image source={icons.acctIcon}
-                                               resizeMode={"center"}
-                                               style={{
-                                                   width: 22,
-                                                   height: 22,
-                                                   tintColor: focused ? COLORS.primary : COLORS.secondary
-                                               }}/>
-                                        <Text
-                                            style={{
-                                                fontSize: 11,
-                                                color: focused ? COLORS.primary : COLORS.secondary,
-                                                fontFamily: "Nexa-Bold"
-                                            }}>Account</Text>
+                                        < Image source={icons.invIcon}
+                                                resizeMode={"center"}
+                                                style={{
+                                                    width: 22,
+                                                    height: 22,
+                                                    tintColor: focused ? COLORS.primary : COLORS.secondary
+                                                }}/>
+                                        <Text style={{
+                                            fontSize: 11,
+                                            color: focused ? COLORS.primary : COLORS.secondary,
+                                            fontFamily: "Nexa-Bold"
+                                        }}>Investment</Text>
 
                                     </View>
-
                                 ),
-                            }}/>
-            </Tab.Navigator>
+                            }}
+                        />
+                        <Tab.Screen name="Profile" component={Profile}
+                                    options={{
+                                        tabBarIcon: ({focused}) => (
+
+                                            <View style={{alignItems: "center"}}>
+
+                                                <Image source={icons.acctIcon}
+                                                       resizeMode={"center"}
+                                                       style={{
+                                                           width: 22,
+                                                           height: 22,
+                                                           tintColor: focused ? COLORS.primary : COLORS.secondary
+                                                       }}/>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 11,
+                                                        color: focused ? COLORS.primary : COLORS.secondary,
+                                                        fontFamily: "Nexa-Bold"
+                                                    }}>Account</Text>
+
+                                            </View>
+
+                                        ),
+                                    }}/>
+                    </Tab.Navigator>
         );
     };
 
