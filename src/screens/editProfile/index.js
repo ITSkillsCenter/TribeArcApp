@@ -243,7 +243,7 @@ const EditProfile = ({navigation}) => {
     const TabOne = () => {
 
         return (
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.tabOneContainer}>
+            <View showsVerticalScrollIndicator={false} style={styles.tabOneContainer}>
 
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
@@ -316,7 +316,7 @@ const EditProfile = ({navigation}) => {
 
                 </KeyboardAwareScrollView>
 
-            </ScrollView>
+            </View>
 
 
         )
@@ -392,7 +392,7 @@ const EditProfile = ({navigation}) => {
 
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
             <Text style={styles.myProfile}>My Profile</Text>
 
@@ -468,7 +468,7 @@ const EditProfile = ({navigation}) => {
             {/*</View>*/}
 
 
-        </View>
+        </ScrollView>
 
 
     );

@@ -161,9 +161,9 @@ const SignUp = ({navigation}) => {
                                 e &&
                                 setIsError(true)
                             }
-                            {
-                                e && setErrMsg(e)
-                            }
+                            // {
+                            //     e && setErrMsg(e)
+                            // }
 
                             {
                                 e[0].extensions.exception.data.data[0].messages[0].message && setErrMsg((e[0].extensions.exception.data.data[0].messages[0].message).replace("for this domain", ""))

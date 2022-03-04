@@ -461,8 +461,8 @@ const styles = StyleSheet.create({
     },
     imgContainer: {},
     img: {
-        width: SIZES.width * 0.13,
-        height: SIZES.width * 0.13,
+        width: SIZES.width * 0.12,
+        height: SIZES.width * 0.12,
         borderRadius: 50
     },
     nameContainer: {
@@ -470,15 +470,15 @@ const styles = StyleSheet.create({
         width: SIZES.width * 0.5,
         height: SIZES.width * 0.1,
         justifyContent: "space-between",
-        marginHorizontal: 15, right: 10
+        marginHorizontal: 15, right: SIZES.width*0.03
 
     },
     username: {
-        fontSize: SIZES.width * 0.045, color: COLORS.black, fontFamily: "Nexa-Book"
+        fontSize: SIZES.width * 0.04, color: COLORS.black, fontFamily: "Nexa-Book"
     }, welcomeText: {
         color: COLORS.primary, fontSize: SIZES.width * 0.05, fontFamily: "Nexa-Bold"
     }, notification: {
-        width: SIZES.width * 0.08, height: SIZES.width * 0.08, // alignSelf:'flex-end'
+        width: SIZES.width * 0.07, height: SIZES.width * 0.07, // alignSelf:'flex-end'
     }, balanceFrameContainer: {
         // width: SIZES.width,
         borderRadius: 15,
@@ -493,7 +493,7 @@ const styles = StyleSheet.create({
         height: SIZES.height * 0.2,
         width: SIZES.width * 0.8,
         marginRight: 10,
-        marginTop: 10,
+        marginTop: SIZES.width*0.04,
         justifyContent: "center",
     },
     saveFrame: {

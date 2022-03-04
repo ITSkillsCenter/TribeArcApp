@@ -22,7 +22,7 @@ const WelcomePage = ({navigation}) => {
 
     useEffect(() => {
 
-        WelcomeTextAndVid()
+        // WelcomeTextAndVid()
 
     }, [])
 
@@ -31,7 +31,7 @@ const WelcomePage = ({navigation}) => {
 
         try {
             await AsyncStorage.setItem('@ViewedWelcome', "true")
-            navigation.navigate("BottomTabs")
+            navigation.navigate("OnBoarding")
 
 
         } catch (e) {
@@ -116,7 +116,7 @@ const WelcomePage = ({navigation}) => {
                         // CheckWelcomeViewed
                     }}
                     filled
-                    text={"Start Saving"}
+                    text={"Continue"}
                 />
             </View>
 

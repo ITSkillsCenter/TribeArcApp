@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES,} from "../../constants";
 import BackButton from "../../components/BackButton";
 import {handleQuery} from "../../graphql/requests";
@@ -14,8 +14,6 @@ const MyInvestmentDetailsScreen = ({navigation, route}) => {
     const [slotBought, setSlotBought] = useState(0)
 
     const investments = route.params
-
-
 
 
     useEffect(() => {
@@ -38,7 +36,7 @@ const MyInvestmentDetailsScreen = ({navigation, route}) => {
             let qryRes = await handleQuery(qry, user.token, false)
 
             console.log(qryRes.data.usersInvestments[0].slot_bought)
-           await setSlotBought(qryRes.data.usersInvestments[0].slot_bought)
+            await setSlotBought(qryRes.data.usersInvestments[0].slot_bought)
 
 
         } catch (e) {
@@ -49,7 +47,7 @@ const MyInvestmentDetailsScreen = ({navigation, route}) => {
 
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
             <Text style={styles.title}>{investments.name}</Text>
 
@@ -110,7 +108,7 @@ const MyInvestmentDetailsScreen = ({navigation, route}) => {
             </View>
 
 
-        </View>
+        </ScrollView>
     );
 };
 

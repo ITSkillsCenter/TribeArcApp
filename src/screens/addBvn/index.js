@@ -144,6 +144,9 @@ const AddBvn = ({navigation}) => {
     }
 
 
+
+
+
     return (
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>

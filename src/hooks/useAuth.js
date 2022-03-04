@@ -204,6 +204,7 @@ export const useAuth = () => {
                             }
 
                             if (res.errors) {
+                                // console.log(res.errors)
                                 return reject(res.errors)
                             }
                         }

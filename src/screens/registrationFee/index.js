@@ -1,7 +1,7 @@
 // @flow
 import React, {useContext, useRef, useState} from 'react';
-import {ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {COLORS, icons} from "../../constants";
+import {ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {COLORS, icons, SIZES} from "../../constants";
 import CustomButton from "../../components/CustomButton";
 import {Paystack} from "react-native-paystack-webview/lib";
 import {UserContext} from "../../context/UserContext";
@@ -41,63 +41,68 @@ export const RegistrationFee = ({navigation}) => {
             .catch((err) => console.log(err, "Err"))
 
 
-
     }
 
 
-    return (<View style={styles.container}>
-        <TouchableOpacity activeOpacity={0.7} style={styles.skipBackground}
-                          onPress={() => navigation.navigate("BottomTabs")}>
-            <Text style={styles.skip}>Skip</Text>
-        </TouchableOpacity>
+    return (
 
-        <Text style={styles.regFee}>Registration Fee</Text>
-        <Text style={styles.regFeeInfo}>You're required to pay a registration fee to start saving and investing on
-            tribe arc</Text>
+        isLoading ? <ActivityIndicator
+                style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
+                color={COLORS.primary}/> :
+            <View style={styles.container}>
+                <TouchableOpacity activeOpacity={0.7} style={styles.skipBackground}
+                                  onPress={() => navigation.navigate("BottomTabs")}>
+                    <Text style={styles.skip}>Skip</Text>
+                </TouchableOpacity>
 
-        <ImageBackground resizeMode={"contain"} source={icons.balFrame} style={styles.balanceFrame}>
-            <View style={{
-                justifyContent: 'space-between', paddingHorizontal: 40, alignItems: 'center'
-            }}>
-                <Text style={styles.regFeeText}>Registration Fee</Text>
-                <Text style={styles.balance}>₦ 20,000</Text>
-            </View>
-        </ImageBackground>
+                <Text style={styles.regFee}>Registration Fee</Text>
+                <Text style={styles.regFeeInfo}>You're required to pay a registration fee to start saving and investing
+                    on
+                    tribe arc</Text>
 
-        <View style={{
-            justifyContent: "flex-end",
-            flex: 2,
-        }}>
-            <CustomButton
-                filled
-                loading={isLoading}
-                text={"Pay Now"}
-                onPress={() => {
-                    paystackWebViewRef.current.startTransaction()
-                }}
-            />
-        </View>
+                <ImageBackground resizeMode={"contain"} source={icons.balFrame} style={styles.balanceFrame}>
+                    <View style={{
+                        justifyContent: 'space-between', paddingHorizontal: 40, alignItems: 'center'
+                    }}>
+                        <Text style={styles.regFeeText}>Registration Fee</Text>
+                        <Text style={styles.balance}>₦ 20,000</Text>
+                    </View>
+                </ImageBackground>
 
-        <Paystack
-            paystackKey="pk_test_52d14b2ac56f0420095618159b5dac28891bd754"
-            amount={20000}
-            billingEmail={user.email}
-            activityIndicatorColor={COLORS.primary}
-            onCancel={async (e) => {
-                console.log(e, "PaymentError")
-            }}
-            onSuccess={async (res) => {
-                // await TransactionData(res)
-                // await navigation.navigate("RegFeeSuccessScreen")
-                console.log(res.data.transactionRef.reference, "RESDSD")
-                await PayRegFee(res.data.transactionRef.reference)
-            }}
-            autoStart={false}
-            ref={paystackWebViewRef}
-        />
+                <View style={{
+                    justifyContent: "flex-end",
+                    flex: 2,
+                }}>
+                    <CustomButton
+                        filled
+                        text={"Pay Now"}
+                        onPress={() => {
+                            paystackWebViewRef.current.startTransaction()
+                        }}
+                    />
+                </View>
+
+                <Paystack
+                    paystackKey="pk_test_52d14b2ac56f0420095618159b5dac28891bd754"
+                    amount={20000}
+                    billingEmail={user.email}
+                    activityIndicatorColor={COLORS.primary}
+                    onCancel={async (e) => {
+                        console.log(e, "PaymentError")
+                    }}
+                    onSuccess={async (res) => {
+                        // await TransactionData(res)
+                        // await navigation.navigate("RegFeeSuccessScreen")
+                        console.log(res.data.transactionRef.reference, "RESDSD")
+                        setIsLoading(true)
+                        await PayRegFee(res.data.transactionRef.reference)
+                    }}
+                    autoStart={false}
+                    ref={paystackWebViewRef}
+                />
 
 
-    </View>);
+            </View>);
 };
 
 export default RegistrationFee

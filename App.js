@@ -129,9 +129,13 @@ const App = () => {
 
     const AuthNavigation = () => {
         return (// <View style={{flex:1, backgroundColor:"white"}}>
-            <AuthStack.Navigator screenOptions={{
-                headerShown: false, // backgroundColor:"white"
-            }}>
+            <AuthStack.Navigator
+                initialRouteName={viewedWelcomePage ? "OnBoarding" : "WelcomePage"}
+
+                screenOptions={{
+                    headerShown: false, // backgroundColor:"white"
+                }}>
+                <MainStack.Screen name={"WelcomePage"} component={WelcomePage}/>
                 <AuthStack.Screen name={"OnBoarding"} component={OnBoarding}/>
                 <AuthStack.Screen name={"Login"} component={Login}/>
                 <AuthStack.Screen name={"SignUp"} component={SignUp}/>
@@ -206,56 +210,56 @@ const App = () => {
                     style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
                     color={COLORS.primary}/> :
 
-            //     !agreed ? <TermsCondition/> :
-                    <MainStack.Navigator
-                        initialRouteName={ !agreed ? "TermsCondition" : viewedWelcomePage ? "BottomTabs" : "WelcomePage"}
-                        screenOptions={{
-                            headerShown: false,
-                        }}>
-                        <MainStack.Screen name={"WelcomePage"} component={WelcomePage}/>
-                        <MainStack.Screen name={"BottomTabs"} component={BottomTabs}/>
-                        <MainStack.Screen name={"TermsCondition"} component={TermsCondition}/>
-                        <MainStack.Screen name={"DashBoard"} component={DashBoard}/>
-                        <MainStack.Screen name={"RegistrationFee"} component={RegistrationFee}/>
-                        <MainStack.Screen name={"CompleteProfile1"} component={CompleteProfile1}/>
-                        <MainStack.Screen name={"CompleteProfile2"} component={CompleteProfile2}/>
-                        <MainStack.Screen name={"ProfileCompletedSuccessScreen"}
-                                          component={ProfileCompletedSuccessScreen}/>
-                        <MainStack.Screen name={"RegFeeSuccessScreen"} component={RegFeeSuccessScreen}/>
-                        <MainStack.Screen name={"Savings"} component={Savings}/>
-                        <MainStack.Screen name={"SavingsMainScreen"} component={SavingsMainScreen}/>
-                        <MainStack.Screen name={"SavingsAccountPage"} component={SavingsAccountPage}/>
-                        <MainStack.Screen name={"SavingsTransactionPage"} component={SavingsTransactionPage}/>
-                        <MainStack.Screen name={"AutosaveSettingsPage"} component={AutosaveSettingsPage}/>
-                        <MainStack.Screen name={"VoluntaryAccountPage"} component={VoluntaryAccountPage}/>
-                        <MainStack.Screen name={"VoluntaryTransactionPage"} component={VoluntaryTransactionPage}/>
-                        <MainStack.Screen name={"WithdrawalScreen"} component={WithdrawalScreen}/>
-                        <MainStack.Screen name={"WithdrawalSuccessScreen"} component={WithdrawalSuccessScreen}/>
-                        <MainStack.Screen name={"AccountDetailsPage"} component={AccountDetailsPage}/>
-                        <MainStack.Screen name={"LinkCard"} component={LinkCard}/>
-                        <MainStack.Screen name={"SuccessScreen"} component={SuccessScreen}/>
-                        <MainStack.Screen name={"DebitCardSuccessScreen"} component={DebitCardSuccessScreen}/>
-                        <MainStack.Screen name={"PdfPage"} component={PdfPage}/>
-                        <MainStack.Screen name={"AddAccountDetailsScreen"} component={AddAccountDetailsScreen}/>
-                        <MainStack.Screen name={"CardSettings"} component={CardSettings}/>
-                        <MainStack.Screen name={"AccountDetailsSavedSuccess"} component={AccountDetailsSavedSuccess}/>
-                        <MainStack.Screen name={"SettingsPage"} component={SettingsPage}/>
-                        <MainStack.Screen name={"CommunityQuestions"} component={CommunityQuestions}/>
-                        <MainStack.Screen name={"Profile"} component={Profile}/>
-                        <MainStack.Screen name={"EditProfile"} component={EditProfile}/>
-                        <MainStack.Screen name={"AddBvn"} component={AddBvn}/>
-                        <MainStack.Screen name={"ChangePassword"} component={ChangePassword}/>
-                        <MainStack.Screen name={"PasswordSuccessScreen"} component={PasswordSuccessScreen}/>
-                        <MainStack.Screen name={"InvestmentMainScreen"} component={InvestmentMainScreen}/>
-                        <MainStack.Screen name={"InvestmentDetailsScreen"} component={InvestmentDetailsScreen}/>
-                        <MainStack.Screen name={"MyInvestmentDetailsScreen"} component={MyInvestmentDetailsScreen}/>
-                        <MainStack.Screen name={"PaymentSuccessScreen"} component={PaymentSuccessScreen}/>
-                        <MainStack.Screen name={"InvestmentTermsPage"} component={InvestmentTermsPage}/>
-                        <MainStack.Screen name={"ReferralPage"} component={ReferralPage}/>
-                        <MainStack.Screen name={"PaymentWebPage"} component={PaymentWebPage}/>
-                        <MainStack.Screen name={"RecentTransactions"} component={RecentTransactions}/>
-                        <MainStack.Screen name={"TopUpScreen"} component={TopUpScreen}/>
-                    </MainStack.Navigator>
+                //     !agreed ? <TermsCondition/> :
+                <MainStack.Navigator
+                    initialRouteName={!agreed ? "TermsCondition" : "BottomTabs"}
+                    screenOptions={{
+                        headerShown: false,
+                    }}>
+                    {/*<MainStack.Screen name={"WelcomePage"} component={WelcomePage}/>*/}
+                    <MainStack.Screen name={"BottomTabs"} component={BottomTabs}/>
+                    <MainStack.Screen name={"TermsCondition"} component={TermsCondition}/>
+                    <MainStack.Screen name={"DashBoard"} component={DashBoard}/>
+                    <MainStack.Screen name={"RegistrationFee"} component={RegistrationFee}/>
+                    <MainStack.Screen name={"CompleteProfile1"} component={CompleteProfile1}/>
+                    <MainStack.Screen name={"CompleteProfile2"} component={CompleteProfile2}/>
+                    <MainStack.Screen name={"ProfileCompletedSuccessScreen"}
+                                      component={ProfileCompletedSuccessScreen}/>
+                    <MainStack.Screen name={"RegFeeSuccessScreen"} component={RegFeeSuccessScreen}/>
+                    <MainStack.Screen name={"Savings"} component={Savings}/>
+                    <MainStack.Screen name={"SavingsMainScreen"} component={SavingsMainScreen}/>
+                    <MainStack.Screen name={"SavingsAccountPage"} component={SavingsAccountPage}/>
+                    <MainStack.Screen name={"SavingsTransactionPage"} component={SavingsTransactionPage}/>
+                    <MainStack.Screen name={"AutosaveSettingsPage"} component={AutosaveSettingsPage}/>
+                    <MainStack.Screen name={"VoluntaryAccountPage"} component={VoluntaryAccountPage}/>
+                    <MainStack.Screen name={"VoluntaryTransactionPage"} component={VoluntaryTransactionPage}/>
+                    <MainStack.Screen name={"WithdrawalScreen"} component={WithdrawalScreen}/>
+                    <MainStack.Screen name={"WithdrawalSuccessScreen"} component={WithdrawalSuccessScreen}/>
+                    <MainStack.Screen name={"AccountDetailsPage"} component={AccountDetailsPage}/>
+                    <MainStack.Screen name={"LinkCard"} component={LinkCard}/>
+                    <MainStack.Screen name={"SuccessScreen"} component={SuccessScreen}/>
+                    <MainStack.Screen name={"DebitCardSuccessScreen"} component={DebitCardSuccessScreen}/>
+                    <MainStack.Screen name={"PdfPage"} component={PdfPage}/>
+                    <MainStack.Screen name={"AddAccountDetailsScreen"} component={AddAccountDetailsScreen}/>
+                    <MainStack.Screen name={"CardSettings"} component={CardSettings}/>
+                    <MainStack.Screen name={"AccountDetailsSavedSuccess"} component={AccountDetailsSavedSuccess}/>
+                    <MainStack.Screen name={"SettingsPage"} component={SettingsPage}/>
+                    <MainStack.Screen name={"CommunityQuestions"} component={CommunityQuestions}/>
+                    <MainStack.Screen name={"Profile"} component={Profile}/>
+                    <MainStack.Screen name={"EditProfile"} component={EditProfile}/>
+                    <MainStack.Screen name={"AddBvn"} component={AddBvn}/>
+                    <MainStack.Screen name={"ChangePassword"} component={ChangePassword}/>
+                    <MainStack.Screen name={"PasswordSuccessScreen"} component={PasswordSuccessScreen}/>
+                    <MainStack.Screen name={"InvestmentMainScreen"} component={InvestmentMainScreen}/>
+                    <MainStack.Screen name={"InvestmentDetailsScreen"} component={InvestmentDetailsScreen}/>
+                    <MainStack.Screen name={"MyInvestmentDetailsScreen"} component={MyInvestmentDetailsScreen}/>
+                    <MainStack.Screen name={"PaymentSuccessScreen"} component={PaymentSuccessScreen}/>
+                    <MainStack.Screen name={"InvestmentTermsPage"} component={InvestmentTermsPage}/>
+                    <MainStack.Screen name={"ReferralPage"} component={ReferralPage}/>
+                    <MainStack.Screen name={"PaymentWebPage"} component={PaymentWebPage}/>
+                    <MainStack.Screen name={"RecentTransactions"} component={RecentTransactions}/>
+                    <MainStack.Screen name={"TopUpScreen"} component={TopUpScreen}/>
+                </MainStack.Navigator>
 
 
         );

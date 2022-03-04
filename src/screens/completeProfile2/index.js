@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useState} from 'react';
-import {Image, StyleSheet, Text, View} from "react-native";
+import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
@@ -60,7 +60,7 @@ const CompleteProfile2 = ({navigation}) => {
 
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
 
             <View style={styles.box}>
@@ -121,7 +121,7 @@ const CompleteProfile2 = ({navigation}) => {
                     }}/>
             </View>
 
-        </View>
+        </ScrollView>
     );
 };
 

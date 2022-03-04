@@ -1,19 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {
-    Alert,
-    Image,
-    Modal,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    Keyboard,
-    Platform,
-    PermissionsAndroid
-} from "react-native";
+import {Alert, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES,} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
@@ -341,205 +328,207 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
     // }
 
 
-    return (<View style={styles.container}>
-        <BackButton onPress={() => navigation.pop()}/>
-        <Text style={styles.title}>{investments.name}</Text>
+    return (
+        <ScrollView style={styles.container}>
+            <BackButton onPress={() => navigation.pop()}/>
+            <Text style={styles.title}>{investments.name}</Text>
 
 
-        <Image
-            resizeMode={"cover"}
-            source={{uri: investments?.image}}
-            style={{width: "100%", height: SIZES.height * 0.25}}
-        />
+            <Image
+                resizeMode={"cover"}
+                source={{uri: investments?.image}}
+                style={{width: "100%", height: SIZES.height * 0.25}}
+            />
 
-        <View style={styles.box}>
-            <View style={{justifyContent: "space-between", height: 30}}>
-                <Text
-                    style={{
-                        fontSize: 16, fontFamily: "Nexa-Book", color: COLORS.black, marginVertical: 5
-                    }}>{investments.name}</Text>
-                <Text
-                    style={{fontSize: 14, fontFamily: "Nexa-Bold"}}>₦{investments?.price_per_slot.toLocaleString()}
-                    <Text style={{fontSize: 12, fontFamily: "Nexa-Book", color: COLORS.black, opacity: 0.7}}> Per
-                        Slot</Text></Text>
-            </View>
-            <TouchableOpacity
-
-                onPress={() => {
-                    // navigation.navigate("PdfPage", investments.business_plan)
-                    setSmallModalVisible(true)
-
-                }}
-                style={styles.pdf}>
-                <Image source={icons.pdficon} style={{width: 15, height: 20}}/>
-                <Text style={{fontSize: 16, fontFamily: 'Nexa-Bold'}}>Business Plan</Text>
-            </TouchableOpacity>
-        </View>
-        <Text style={styles.invDet}>Investment Details</Text>
-
-        <View style={styles.invContainer}>
-            <View style={styles.invBox}>
-                <Text style={styles.invTitle}>Total Funding Required</Text>
-                <Text style={styles.invBoxDet}>₦ {investments?.funds_required.toLocaleString()} </Text>
-
-            </View>
-            <View style={styles.invBox}>
-                <Text style={styles.invTitle}>Funds Raised</Text>
-
-                <Text style={styles.invBoxDet}>₦ {investments?.funds_raised.toLocaleString()} </Text>
-
-
-            </View>
-            <View style={styles.invBox}>
-                <Text style={styles.invTitle}>Investor(s)</Text>
-                <Text style={styles.invBoxDet}>{investments?.users_investments.length}</Text>
-
-
-            </View>
-            <View style={styles.invBox}>
-                <Text style={styles.invTitle}>Slots Left</Text>
-                <Text
-                    style={styles.invBoxDet}>{`${investments?.total_slot - slotBought}`}</Text>
-
-            </View>
-        </View>
-
-
-        <View style={styles.invNowBox}>
-            <View
-                style={{width: "35%", justifyContent: "space-between", alignItems: "center", flexDirection: "row"}}>
+            <View style={styles.box}>
+                <View style={{justifyContent: "space-between", height: 30}}>
+                    <Text
+                        style={{
+                            fontSize: 16, fontFamily: "Nexa-Book", color: COLORS.black, marginVertical: 5
+                        }}>{investments.name}</Text>
+                    <Text
+                        style={{fontSize: 14, fontFamily: "Nexa-Bold"}}>₦{investments?.price_per_slot.toLocaleString()}
+                        <Text style={{fontSize: 12, fontFamily: "Nexa-Book", color: COLORS.black, opacity: 0.7}}> Per
+                            Slot</Text></Text>
+                </View>
                 <TouchableOpacity
-                    onPress={() => setCounter(Math.max(1, counter - 1))}
-                    style={{
-                        width: 25, height: 25, alignItems: "center", justifyContent: "center",
-                    }}>
-                    <Image source={icons.minusButton} style={{width: 70, height: 70}}/>
 
+                    onPress={() => {
+                        // navigation.navigate("PdfPage", investments.business_plan)
+                        setSmallModalVisible(true)
+
+                    }}
+                    style={styles.pdf}>
+                    <Image source={icons.pdficon} style={{width: 15, height: 20}}/>
+                    <Text style={{fontSize: 16, fontFamily: 'Nexa-Bold'}}>Business Plan</Text>
                 </TouchableOpacity>
-
-                <Text style={styles.counter}>{counter}</Text>
-
-                <TouchableOpacity
-                    onPress={() => setCounter(counter + 1)}
-                    style={{
-                        width: 25, height: 25, alignItems: "center", justifyContent: "center"
-                    }}>
-                    <Image source={icons.addIcon} style={{width: 25, height: 25}}/>
-                </TouchableOpacity>
-
-
             </View>
-            <View style={{width: "43%", justifyContent: "space-between", height: 40}}>
+            <Text style={styles.invDet}>Investment Details</Text>
 
-                <Text style={{fontSize: 12, color: COLORS.black, opacity: 0.7, fontFamily: "Nexa-Book",}}>Time
-                    left</Text>
-                <Text style={{
-                    fontSize: 16,
-                    color: COLORS.black,
-                    fontFamily: "Nexa-Bold",
-                }}>{moment(investments.closing_date).diff(moment(), 'days')} days left</Text>
+            <View style={styles.invContainer}>
+                <View style={styles.invBox}>
+                    <Text style={styles.invTitle}>Total Funding Required</Text>
+                    <Text style={styles.invBoxDet}>₦ {investments?.funds_required.toLocaleString()} </Text>
 
-            </View>
+                </View>
+                <View style={styles.invBox}>
+                    <Text style={styles.invTitle}>Funds Raised</Text>
 
-        </View>
-
-        <CustomButton
-            loading={loading}
-            filled
-            text={"Book Now"}
-            onPress={async () => {
-
-                if (counter > 0) {
-                    setModalVisible(true)
-
-                }
-
-                // if (counter > 0 && counter < investments?.total_slot - slotBought) {
-                //     if (investments.invBal > (counter * investments.price_per_slot)) {
-                //         await HandleInvest()
-                //     } else {
-                //         Alert.alert("Insufficient Investment Balance", "Please top-up your wallet or choose another investment")
-                //     }
-                // }
-            }}
-        />
-
-
-        <View style={styles.smallCenteredView}>
-
-            <View>
-                <Modal
-                    animationType="none"
-                    transparent={true}
-                    visible={smallModalVisible}
-                    onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        setSmallModalVisible(!smallModalVisible);
-                    }}>
-                    <Pressable onPress={() => setSmallModalVisible(!smallModalVisible)}
-                               style={styles.smallCenteredView2}>
-                        <View style={styles.smallModalView}>
-
-                            <TouchableOpacity onPress={() => {
-                                navigation.navigate("PdfPage", investments.business_plan)
-                                setSmallModalVisible(!smallModalVisible)
-                            }
-
-                            } activeOpacity={0.7} style={styles.smallModalBox}>
-                                <Image source={icons.eyeOpen} style={styles.modalIcons}/>
-                                <Text style={styles.modalTextOpt}>View</Text>
-                            </TouchableOpacity>
-
-
-                            <TouchableOpacity activeOpacity={0.7} style={styles.smallModalBox}>
-                                <Image source={icons.downloadArrow} style={styles.modalIcons}/>
-                                <Text style={styles.modalTextOpt}>Download</Text>
-                            </TouchableOpacity>
-
-
-                        </View>
-                    </Pressable>
-                </Modal>
-            </View>
-
-        </View>
-
-
-        <View style={styles.centeredView}>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    setModalVisible(!modalVisible);
-                }}>
-                <View style={styles.centeredView2}>
-                    <View style={styles.modalView}>
-                        {/*<Pressable*/}
-                        {/*    style={[styles.button, styles.buttonClose]}*/}
-                        {/*    onPress={() => setModalVisible(!modalVisible)}>*/}
-                        {/*    <Text style={styles.textStyle}>Hide Modal</Text>*/}
-                        {/*</Pressable>*/}
-                        <Text
-                            onPress={() => setModalVisible(!modalVisible)}
-                            style={{
-                                fontFamily: "Nexa-Bold",
-                                marginTop: 20,
-                                alignSelf: "flex-end",
-                                marginRight: 30,
-                                fontSize: SIZES.width * 0.05
-                            }}>X</Text>
-                        <InvestmentTermsPage/>
-                    </View>
+                    <Text style={styles.invBoxDet}>₦ {investments?.funds_raised.toLocaleString()} </Text>
 
 
                 </View>
-            </Modal>
-        </View>
+                <View style={styles.invBox}>
+                    <Text style={styles.invTitle}>Investor(s)</Text>
+                    <Text style={styles.invBoxDet}>{investments?.users_investments.length}</Text>
 
 
-    </View>);
+                </View>
+                <View style={styles.invBox}>
+                    <Text style={styles.invTitle}>Slots Left</Text>
+                    <Text
+                        style={styles.invBoxDet}>{`${investments?.total_slot - slotBought}`}</Text>
+
+                </View>
+            </View>
+
+
+            <View style={styles.invNowBox}>
+                <View
+                    style={{width: "35%", justifyContent: "space-between", alignItems: "center", flexDirection: "row"}}>
+                    <TouchableOpacity
+                        onPress={() => setCounter(Math.max(1, counter - 1))}
+                        style={{
+                            width: 25, height: 25, alignItems: "center", justifyContent: "center",
+                        }}>
+                        <Image source={icons.minusButton} style={{width: 70, height: 70}}/>
+
+                    </TouchableOpacity>
+
+                    <Text style={styles.counter}>{counter}</Text>
+
+                    <TouchableOpacity
+                        onPress={() => setCounter(counter + 1)}
+                        style={{
+                            width: 25, height: 25, alignItems: "center", justifyContent: "center"
+                        }}>
+                        <Image source={icons.addIcon} style={{width: 25, height: 25}}/>
+                    </TouchableOpacity>
+
+
+                </View>
+                <View style={{width: "43%", justifyContent: "space-between", height: 40}}>
+
+                    <Text style={{fontSize: 12, color: COLORS.black, opacity: 0.7, fontFamily: "Nexa-Book",}}>Time
+                        left</Text>
+                    <Text style={{
+                        fontSize: 16,
+                        color: COLORS.black,
+                        fontFamily: "Nexa-Bold",
+                    }}>{moment(investments.closing_date).diff(moment(), 'days')} days left</Text>
+
+                </View>
+
+            </View>
+
+            <CustomButton
+                loading={loading}
+                containerStyle={{marginVertical:30}}
+                filled
+                text={"Book Now"}
+                onPress={async () => {
+
+                    if (counter > 0) {
+                        setModalVisible(true)
+
+                    }
+
+                    // if (counter > 0 && counter < investments?.total_slot - slotBought) {
+                    //     if (investments.invBal > (counter * investments.price_per_slot)) {
+                    //         await HandleInvest()
+                    //     } else {
+                    //         Alert.alert("Insufficient Investment Balance", "Please top-up your wallet or choose another investment")
+                    //     }
+                    // }
+                }}
+            />
+
+
+            <View style={styles.smallCenteredView}>
+
+                <View>
+                    <Modal
+                        animationType="none"
+                        transparent={true}
+                        visible={smallModalVisible}
+                        onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            setSmallModalVisible(!smallModalVisible);
+                        }}>
+                        <Pressable onPress={() => setSmallModalVisible(!smallModalVisible)}
+                                   style={styles.smallCenteredView2}>
+                            <View style={styles.smallModalView}>
+
+                                <TouchableOpacity onPress={() => {
+                                    navigation.navigate("PdfPage", investments.business_plan)
+                                    setSmallModalVisible(!smallModalVisible)
+                                }
+
+                                } activeOpacity={0.7} style={styles.smallModalBox}>
+                                    <Image source={icons.eyeOpen} style={styles.modalIcons}/>
+                                    <Text style={styles.modalTextOpt}>View</Text>
+                                </TouchableOpacity>
+
+
+                                <TouchableOpacity activeOpacity={0.7} style={styles.smallModalBox}>
+                                    <Image source={icons.downloadArrow} style={styles.modalIcons}/>
+                                    <Text style={styles.modalTextOpt}>Download</Text>
+                                </TouchableOpacity>
+
+
+                            </View>
+                        </Pressable>
+                    </Modal>
+                </View>
+
+            </View>
+
+
+            <View style={styles.centeredView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setModalVisible(!modalVisible);
+                    }}>
+                    <View style={styles.centeredView2}>
+                        <View style={styles.modalView}>
+                            {/*<Pressable*/}
+                            {/*    style={[styles.button, styles.buttonClose]}*/}
+                            {/*    onPress={() => setModalVisible(!modalVisible)}>*/}
+                            {/*    <Text style={styles.textStyle}>Hide Modal</Text>*/}
+                            {/*</Pressable>*/}
+                            <Text
+                                onPress={() => setModalVisible(!modalVisible)}
+                                style={{
+                                    fontFamily: "Nexa-Bold",
+                                    marginTop: 20,
+                                    alignSelf: "flex-end",
+                                    marginRight: 30,
+                                    fontSize: SIZES.width * 0.05
+                                }}>X</Text>
+                            <InvestmentTermsPage/>
+                        </View>
+
+
+                    </View>
+                </Modal>
+            </View>
+
+
+        </ScrollView>);
 };
 
 
