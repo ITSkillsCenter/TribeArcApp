@@ -145,55 +145,117 @@ const App = () => {
     const MainNavigation = () => {
 
 
+        const user = useContext(UserContext);
+
+
+        const [loading, setLoading] = useState(false)
+        const [agreed, setAgreed] = useState(false)
+
+        useEffect(() => {
+
+            CheckTerms()
+        }, []);
+
+
+        const CheckTerms = async () => {
+
+            let qry = `query {
+  users(where: {id: ${user.id} }) {
+    user_investment_agreement{
+      agreed
+    }
+  }
+}
+
+`
+            try {
+                setLoading(true)
+                const qryRes = await handleQuery(qry, user.token, false)
+
+                // if (qryRes) {
+                console.log(qryRes.data.users[0].user_investment_agreement.agreed, "ageeeed")
+                await setAgreed(qryRes.data.users[0].user_investment_agreement.agreed)
+                // }
+
+                // await setLoading(false)
+
+
+            } catch (e) {
+                console.log(e, "CheckTermsErr")
+
+            } finally {
+                await setLoading(false)
+
+            }
+        }
+
+
+        // const LoadingIcon = () => {
+        //
+        //     return (
+        //         <ActivityIndicator
+        //             style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}}
+        //             size={"large"}
+        //             color={COLORS.primary}/>
+        //     )
+        // }
+
         return (
-            <MainStack.Navigator
-                initialRouteName={viewedWelcomePage ? "BottomTabs" : "WelcomePage"}
-                screenOptions={{
-                    headerShown: false,
-                }}>
-                <MainStack.Screen name={"WelcomePage"} component={WelcomePage}/>
-                <MainStack.Screen name={"TermsCondition"} component={TermsCondition}/>
-                <MainStack.Screen name={"BottomTabs"} component={BottomTabs}/>
-                <MainStack.Screen name={"DashBoard"} component={DashBoard}/>
-                <MainStack.Screen name={"RegistrationFee"} component={RegistrationFee}/>
-                <MainStack.Screen name={"CompleteProfile1"} component={CompleteProfile1}/>
-                <MainStack.Screen name={"CompleteProfile2"} component={CompleteProfile2}/>
-                <MainStack.Screen name={"ProfileCompletedSuccessScreen"} component={ProfileCompletedSuccessScreen}/>
-                <MainStack.Screen name={"RegFeeSuccessScreen"} component={RegFeeSuccessScreen}/>
-                <MainStack.Screen name={"Savings"} component={Savings}/>
-                <MainStack.Screen name={"SavingsMainScreen"} component={SavingsMainScreen}/>
-                <MainStack.Screen name={"SavingsAccountPage"} component={SavingsAccountPage}/>
-                <MainStack.Screen name={"SavingsTransactionPage"} component={SavingsTransactionPage}/>
-                <MainStack.Screen name={"AutosaveSettingsPage"} component={AutosaveSettingsPage}/>
-                <MainStack.Screen name={"VoluntaryAccountPage"} component={VoluntaryAccountPage}/>
-                <MainStack.Screen name={"VoluntaryTransactionPage"} component={VoluntaryTransactionPage}/>
-                <MainStack.Screen name={"WithdrawalScreen"} component={WithdrawalScreen}/>
-                <MainStack.Screen name={"WithdrawalSuccessScreen"} component={WithdrawalSuccessScreen}/>
-                <MainStack.Screen name={"AccountDetailsPage"} component={AccountDetailsPage}/>
-                <MainStack.Screen name={"LinkCard"} component={LinkCard}/>
-                <MainStack.Screen name={"SuccessScreen"} component={SuccessScreen}/>
-                <MainStack.Screen name={"DebitCardSuccessScreen"} component={DebitCardSuccessScreen}/>
-                <MainStack.Screen name={"PdfPage"} component={PdfPage}/>
-                <MainStack.Screen name={"AddAccountDetailsScreen"} component={AddAccountDetailsScreen}/>
-                <MainStack.Screen name={"CardSettings"} component={CardSettings}/>
-                <MainStack.Screen name={"AccountDetailsSavedSuccess"} component={AccountDetailsSavedSuccess}/>
-                <MainStack.Screen name={"SettingsPage"} component={SettingsPage}/>
-                <MainStack.Screen name={"CommunityQuestions"} component={CommunityQuestions}/>
-                <MainStack.Screen name={"Profile"} component={Profile}/>
-                <MainStack.Screen name={"EditProfile"} component={EditProfile}/>
-                <MainStack.Screen name={"AddBvn"} component={AddBvn}/>
-                <MainStack.Screen name={"ChangePassword"} component={ChangePassword}/>
-                <MainStack.Screen name={"PasswordSuccessScreen"} component={PasswordSuccessScreen}/>
-                <MainStack.Screen name={"InvestmentMainScreen"} component={InvestmentMainScreen}/>
-                <MainStack.Screen name={"InvestmentDetailsScreen"} component={InvestmentDetailsScreen}/>
-                <MainStack.Screen name={"MyInvestmentDetailsScreen"} component={MyInvestmentDetailsScreen}/>
-                <MainStack.Screen name={"PaymentSuccessScreen"} component={PaymentSuccessScreen}/>
-                <MainStack.Screen name={"InvestmentTermsPage"} component={InvestmentTermsPage}/>
-                <MainStack.Screen name={"ReferralPage"} component={ReferralPage}/>
-                <MainStack.Screen name={"PaymentWebPage"} component={PaymentWebPage}/>
-                <MainStack.Screen name={"RecentTransactions"} component={RecentTransactions}/>
-                <MainStack.Screen name={"TopUpScreen"} component={TopUpScreen}/>
-            </MainStack.Navigator>
+
+            loading ? <ActivityIndicator
+                    style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
+                    color={COLORS.primary}/> :
+
+            //     !agreed ? <TermsCondition/> :
+                    <MainStack.Navigator
+                        initialRouteName={ !agreed ? "TermsCondition" : viewedWelcomePage ? "BottomTabs" : "WelcomePage"}
+                        screenOptions={{
+                            headerShown: false,
+                        }}>
+                        <MainStack.Screen name={"WelcomePage"} component={WelcomePage}/>
+                        <MainStack.Screen name={"BottomTabs"} component={BottomTabs}/>
+                        <MainStack.Screen name={"TermsCondition"} component={TermsCondition}/>
+                        <MainStack.Screen name={"DashBoard"} component={DashBoard}/>
+                        <MainStack.Screen name={"RegistrationFee"} component={RegistrationFee}/>
+                        <MainStack.Screen name={"CompleteProfile1"} component={CompleteProfile1}/>
+                        <MainStack.Screen name={"CompleteProfile2"} component={CompleteProfile2}/>
+                        <MainStack.Screen name={"ProfileCompletedSuccessScreen"}
+                                          component={ProfileCompletedSuccessScreen}/>
+                        <MainStack.Screen name={"RegFeeSuccessScreen"} component={RegFeeSuccessScreen}/>
+                        <MainStack.Screen name={"Savings"} component={Savings}/>
+                        <MainStack.Screen name={"SavingsMainScreen"} component={SavingsMainScreen}/>
+                        <MainStack.Screen name={"SavingsAccountPage"} component={SavingsAccountPage}/>
+                        <MainStack.Screen name={"SavingsTransactionPage"} component={SavingsTransactionPage}/>
+                        <MainStack.Screen name={"AutosaveSettingsPage"} component={AutosaveSettingsPage}/>
+                        <MainStack.Screen name={"VoluntaryAccountPage"} component={VoluntaryAccountPage}/>
+                        <MainStack.Screen name={"VoluntaryTransactionPage"} component={VoluntaryTransactionPage}/>
+                        <MainStack.Screen name={"WithdrawalScreen"} component={WithdrawalScreen}/>
+                        <MainStack.Screen name={"WithdrawalSuccessScreen"} component={WithdrawalSuccessScreen}/>
+                        <MainStack.Screen name={"AccountDetailsPage"} component={AccountDetailsPage}/>
+                        <MainStack.Screen name={"LinkCard"} component={LinkCard}/>
+                        <MainStack.Screen name={"SuccessScreen"} component={SuccessScreen}/>
+                        <MainStack.Screen name={"DebitCardSuccessScreen"} component={DebitCardSuccessScreen}/>
+                        <MainStack.Screen name={"PdfPage"} component={PdfPage}/>
+                        <MainStack.Screen name={"AddAccountDetailsScreen"} component={AddAccountDetailsScreen}/>
+                        <MainStack.Screen name={"CardSettings"} component={CardSettings}/>
+                        <MainStack.Screen name={"AccountDetailsSavedSuccess"} component={AccountDetailsSavedSuccess}/>
+                        <MainStack.Screen name={"SettingsPage"} component={SettingsPage}/>
+                        <MainStack.Screen name={"CommunityQuestions"} component={CommunityQuestions}/>
+                        <MainStack.Screen name={"Profile"} component={Profile}/>
+                        <MainStack.Screen name={"EditProfile"} component={EditProfile}/>
+                        <MainStack.Screen name={"AddBvn"} component={AddBvn}/>
+                        <MainStack.Screen name={"ChangePassword"} component={ChangePassword}/>
+                        <MainStack.Screen name={"PasswordSuccessScreen"} component={PasswordSuccessScreen}/>
+                        <MainStack.Screen name={"InvestmentMainScreen"} component={InvestmentMainScreen}/>
+                        <MainStack.Screen name={"InvestmentDetailsScreen"} component={InvestmentDetailsScreen}/>
+                        <MainStack.Screen name={"MyInvestmentDetailsScreen"} component={MyInvestmentDetailsScreen}/>
+                        <MainStack.Screen name={"PaymentSuccessScreen"} component={PaymentSuccessScreen}/>
+                        <MainStack.Screen name={"InvestmentTermsPage"} component={InvestmentTermsPage}/>
+                        <MainStack.Screen name={"ReferralPage"} component={ReferralPage}/>
+                        <MainStack.Screen name={"PaymentWebPage"} component={PaymentWebPage}/>
+                        <MainStack.Screen name={"RecentTransactions"} component={RecentTransactions}/>
+                        <MainStack.Screen name={"TopUpScreen"} component={TopUpScreen}/>
+                    </MainStack.Navigator>
 
 
         );
@@ -276,105 +338,87 @@ const App = () => {
     };
 
     const BottomTabs = ({navigation}) => {
-
-
-        const user = useContext(UserContext);
-
-
-        const [loading, setLoading] = useState(false)
-        const [agreed, setAgreed] = useState(false)
-
-        useEffect(() => {
-
-            CheckTerms()
-        }, []);
-
-
-        const CheckTerms = async () => {
-
-            let qry = `query {
-  users(where: {id: ${user.id} }) {
-    user_investment_agreement{
-      agreed
-    }
-  }
-}
-
-`
-            try {
-                setLoading(true)
-                const qryRes = await handleQuery(qry, user.token, false)
-                // console.log(qryRes.data.users[0].user_investment_agreement.agreed, "ageeeed")
-                await setAgreed(qryRes.data.users[0].user_investment_agreement.agreed)
-                await setLoading(false)
-
-
-            } catch (e) {
-                console.log(e, "CheckTermsErr")
-            }
-        }
+//         const user = useContext(UserContext);
+//
+//
+//         const [loading, setLoading] = useState(false)
+//         const [agreed, setAgreed] = useState(false)
+//
+//         useEffect(() => {
+//
+//             CheckTerms()
+//         }, []);
+//
+//
+//         const CheckTerms = async () => {
+//
+//             let qry = `query {
+//   users(where: {id: ${user.id} }) {
+//     user_investment_agreement{
+//       agreed
+//     }
+//   }
+// }
+//
+// `
+//             try {
+//                 setLoading(true)
+//                 const qryRes = await handleQuery(qry, user.token, false)
+//
+//                 // if (qryRes) {
+//                 console.log(qryRes.data.users[0].user_investment_agreement.agreed, "ageeeed")
+//                 await setAgreed(qryRes.data.users[0].user_investment_agreement.agreed)
+//                 // }
+//
+//                 // await setLoading(false)
+//
+//
+//             } catch (e) {
+//                 console.log(e, "CheckTermsErr")
+//
+//             } finally {
+//                 await setLoading(false)
+//
+//             }
+//         }
 
 
         return (
 
-            loading ? <ActivityIndicator
-                    style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
-                    color={COLORS.primary}/> :
+            // loading ? <ActivityIndicator
+            //         style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
+            //         color={COLORS.primary}/> :
+            //
+            //     !agreed ? <TermsCondition/> :
+            <Tab.Navigator
+                detachInactiveScreens
+                screenOptions={{
+                    headerShown: false,
+                    tabBarShowLabel: false,
+                    tabBarStyle: {
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        paddingHorizontal: 15,
+                        right: 0,
+                        elevation: 5,
+                        shadowOpacity: 0.1,
+                        shadowOffset: {
+                            width: 5,
+                            height: -3,
+                        },
+                        // backgroundColor: "cyan",
+                        borderTopColor: "rgba(175,174,174,0.7)",
+                        height: Platform.OS === "android" ? 80 : 50,
+                    },
 
-                !agreed ? <TermsCondition/> :
-                    <Tab.Navigator
-                        detachInactiveScreens
-                        screenOptions={{
-                            headerShown: false,
-                            tabBarShowLabel: false,
-                            tabBarStyle: {
-                                position: "absolute",
-                                bottom: 0,
-                                left: 0,
-                                paddingHorizontal: 15,
-                                right: 0,
-                                elevation: 5,
-                                shadowOpacity: 0.1,
-                                shadowOffset: {
-                                    width: 5,
-                                    height: -3,
-                                },
-                                // backgroundColor: "cyan",
-                                borderTopColor: "rgba(175,174,174,0.7)",
-                                height: Platform.OS === "android" ? 80 : 50,
-                            },
 
-
-                        }}>
-                        <Tab.Screen name="DashBoard" component={DashBoard}
-                                    options={{
-                                        tabBarIcon: ({focused}) => (
-                                            <View style={{alignItems: "center"}}>
-                                                <Image source={icons.homeIcon}
-                                                       resizeMode={"center"}
-
-                                                       style={{
-                                                           width: 22,
-                                                           height: 22,
-                                                           tintColor: focused ? COLORS.primary : COLORS.secondary
-                                                       }}/>
-
-                                                <Text style={{
-                                                    fontSize: 11,
-                                                    color: focused ? COLORS.primary : COLORS.secondary,
-                                                    fontFamily: "Nexa-Bold"
-                                                }}>Home</Text>
-                                            </View>
-                                        ),
-                                    }}
-                        />
-                        <Tab.Screen
-                            name="StartSaving"
-                            component={savingWlc ? SavingsMainScreen : StartSaving}
+                }}>
+                <Tab.Screen name="DashBoard" component={DashBoard}
                             options={{
                                 tabBarIcon: ({focused}) => (
                                     <View style={{alignItems: "center"}}>
-                                        <Image source={icons.savingsIcon}
+                                        <Image source={icons.homeIcon}
                                                resizeMode={"center"}
 
                                                style={{
@@ -387,113 +431,137 @@ const App = () => {
                                             fontSize: 11,
                                             color: focused ? COLORS.primary : COLORS.secondary,
                                             fontFamily: "Nexa-Bold"
-                                        }}>Savings</Text>
+                                        }}>Home</Text>
                                     </View>
                                 ),
-                            }}/>
-                        <Tab.Screen
-                            name="TopUpScreenDummy"
-                            component={TopUpScreen}
-
-                            options={{
-                                tabBarIcon: ({focused}) => {
-                                    return (
-                                        <View
-                                            style={{
-                                                alignItems: "center",
-                                                height: 50,
-                                                justifyContent: "space-around",
-                                                elevation: 7,
-                                                shadowOpacity: 0.1,
-                                                shadowOffset: {
-                                                    width: 4,
-                                                    height: 5,
-                                                },
-                                            }}>
-                                            <View
-                                                style={{
-                                                    width: 70,
-                                                    height: 70,
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                    bottom: 30,
-                                                    borderRadius: 35,
-
-                                                }}
-                                            >
-                                                <Image
-                                                    source={icons.addIcon}
-                                                    resizeMode={"center"}
-
-                                                    style={{
-                                                        width: 53,
-                                                        height: 53,
-                                                    }}
-                                                />
-                                            </View>
-                                        </View>
-                                    );
-                                },
-
-                                tabBarButton: (props) => (
-                                    <TabBarCustomButton
-                                        {...props}
-                                        onPress={() => navigation.navigate("TopUpScreen")}
-                                    />
-                                ),
-
                             }}
+                />
+                <Tab.Screen
+                    name="StartSaving"
+                    component={savingWlc ? SavingsMainScreen : StartSaving}
+                    options={{
+                        tabBarIcon: ({focused}) => (
+                            <View style={{alignItems: "center"}}>
+                                <Image source={icons.savingsIcon}
+                                       resizeMode={"center"}
 
-                        />
-                        <Tab.Screen
-                            name="StartInvesting"
-                            component={investWlc ? InvestmentMainScreen : StartInvesting}
+                                       style={{
+                                           width: 22,
+                                           height: 22,
+                                           tintColor: focused ? COLORS.primary : COLORS.secondary
+                                       }}/>
+
+                                <Text style={{
+                                    fontSize: 11,
+                                    color: focused ? COLORS.primary : COLORS.secondary,
+                                    fontFamily: "Nexa-Bold"
+                                }}>Savings</Text>
+                            </View>
+                        ),
+                    }}/>
+                <Tab.Screen
+                    name="TopUpScreenDummy"
+                    component={TopUpScreen}
+
+                    options={{
+                        tabBarIcon: ({focused}) => {
+                            return (
+                                <View
+                                    style={{
+                                        alignItems: "center",
+                                        height: 50,
+                                        justifyContent: "space-around",
+                                        elevation: 7,
+                                        shadowOpacity: 0.1,
+                                        shadowOffset: {
+                                            width: 4,
+                                            height: 5,
+                                        },
+                                    }}>
+                                    <View
+                                        style={{
+                                            width: 70,
+                                            height: 70,
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            bottom: 30,
+                                            borderRadius: 35,
+
+                                        }}
+                                    >
+                                        <Image
+                                            source={icons.addIcon}
+                                            resizeMode={"center"}
+
+                                            style={{
+                                                width: 53,
+                                                height: 53,
+                                            }}
+                                        />
+                                    </View>
+                                </View>
+                            );
+                        },
+
+                        tabBarButton: (props) => (
+                            <TabBarCustomButton
+                                {...props}
+                                onPress={() => navigation.navigate("TopUpScreen")}
+                            />
+                        ),
+
+                    }}
+
+                />
+                <Tab.Screen
+                    name="StartInvesting"
+                    component={investWlc ? InvestmentMainScreen : StartInvesting}
+                    options={{
+                        tabBarIcon: ({focused}) => (
+
+                            <View style={{alignItems: "center"}}>
+                                < Image source={icons.invIcon}
+                                        resizeMode={"center"}
+                                        style={{
+                                            width: 22,
+                                            height: 22,
+                                            tintColor: focused ? COLORS.primary : COLORS.secondary
+                                        }}/>
+                                <Text style={{
+                                    fontSize: 11,
+                                    color: focused ? COLORS.primary : COLORS.secondary,
+                                    fontFamily: "Nexa-Bold"
+                                }}>Investment</Text>
+
+                            </View>
+                        ),
+                    }}
+                />
+                <Tab.Screen name="Profile" component={Profile}
                             options={{
                                 tabBarIcon: ({focused}) => (
 
                                     <View style={{alignItems: "center"}}>
-                                        < Image source={icons.invIcon}
-                                                resizeMode={"center"}
-                                                style={{
-                                                    width: 22,
-                                                    height: 22,
-                                                    tintColor: focused ? COLORS.primary : COLORS.secondary
-                                                }}/>
-                                        <Text style={{
-                                            fontSize: 11,
-                                            color: focused ? COLORS.primary : COLORS.secondary,
-                                            fontFamily: "Nexa-Bold"
-                                        }}>Investment</Text>
+
+                                        <Image source={icons.acctIcon}
+                                               resizeMode={"center"}
+                                               style={{
+                                                   width: 22,
+                                                   height: 22,
+                                                   tintColor: focused ? COLORS.primary : COLORS.secondary
+                                               }}/>
+                                        <Text
+                                            style={{
+                                                fontSize: 11,
+                                                color: focused ? COLORS.primary : COLORS.secondary,
+                                                fontFamily: "Nexa-Bold"
+                                            }}>Account</Text>
 
                                     </View>
+
                                 ),
-                            }}
-                        />
-                        <Tab.Screen name="Profile" component={Profile}
-                                    options={{
-                                        tabBarIcon: ({focused}) => (
-
-                                            <View style={{alignItems: "center"}}>
-
-                                                <Image source={icons.acctIcon}
-                                                       resizeMode={"center"}
-                                                       style={{
-                                                           width: 22,
-                                                           height: 22,
-                                                           tintColor: focused ? COLORS.primary : COLORS.secondary
-                                                       }}/>
-                                                <Text
-                                                    style={{
-                                                        fontSize: 11,
-                                                        color: focused ? COLORS.primary : COLORS.secondary,
-                                                        fontFamily: "Nexa-Bold"
-                                                    }}>Account</Text>
-
-                                            </View>
-
-                                        ),
-                                    }}/>
-                    </Tab.Navigator>
+                            }}/>
+            </Tab.Navigator>
         );
     };
 

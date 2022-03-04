@@ -249,7 +249,7 @@ const EditProfile = ({navigation}) => {
 
 
                     <CustomTextInput
-                        initialValue={!"null" ? firstName : ""}
+                        initialValue={firstName}
                         onFocus={() => setFirstName("")}
                         onChange={value => setFirstName(value)}
                         placeholderText={"First Name"}
@@ -260,7 +260,7 @@ const EditProfile = ({navigation}) => {
                     <CustomTextInput
                         title={"Last Name"}
                         onFocus={() => setLastName("")}
-                        initialValue={!"null" ? lastName : ""}
+                        initialValue={lastName}
                         onChange={value => setLastName(value)}
                         placeholderText={"Last Name"}
 
@@ -279,19 +279,21 @@ const EditProfile = ({navigation}) => {
 
                     <CustomTextInput
                         title={"Phone Number"}
-                        initialValue={!"null" ? phoneNum : ""}
+                        initialValue={phoneNum}
                         onFocus={() => setPhoneNum("")}
                         onChange={value => setPhoneNum(value)}
                         placeholderText={"Phone Number"}
                         props={{
-                            keyboardType: "numeric"
+                            keyboardType: "numeric",
+                            maxLength: 11
+
                         }}
                     />
 
 
                     <CustomTextInput
                         title={"Next of kin's Name"}
-                        initialValue={!"null" ? nextOfKin : ""}
+                        initialValue={nextOfKin}
                         onFocus={() => setNextOfKin("")}
                         onChange={value => setNextOfKin(value)}
                         placeholderText={"Next of kin's Name"}
@@ -301,12 +303,13 @@ const EditProfile = ({navigation}) => {
 
                     <CustomTextInput
                         title={"Next of kin's Phone Number"}
-                        initialValue={!"null" ? nextOfKinPhoneNum : ""}
+                        initialValue={nextOfKin}
                         onFocus={() => setNextOfKinPhoneNum("")}
                         onChange={value => setNextOfKinPhoneNum(value)}
                         placeholderText={"Next of kin's Phone Number"}
                         props={{
-                            keyboardType: "numeric"
+                            keyboardType: "numeric",
+                            maxLength: 11
                         }}
                     />
 
@@ -326,7 +329,7 @@ const EditProfile = ({navigation}) => {
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
                     <CustomTextInput
-                        initialValue={!"null" ? profession : ""}
+                        initialValue={profession}
                         onChange={value => setProfession(value)}
                         onFocus={() => setProfession("")}
                         placeholderText={"Profession"}
@@ -334,14 +337,14 @@ const EditProfile = ({navigation}) => {
 
                     <CustomTextInput
                         title={"Designation"}
-                        initialValue={!"null" ? designation : ""}
+                        initialValue={designation}
                         onFocus={() => setDesignation("")}
                         onChange={value => setDesignation(value)}
                         placeholderText={"Designation"}/>
 
                     <CustomTextInput
                         title={"Monthly Remuneration"}
-                        initialValue={!"null" ? remuneration : ""}
+                        initialValue={remuneration}
                         onFocus={() => setRemuneration("")}
                         onChange={value => setRemuneration(value)}
                         placeholderText={"Enter Monthly Remuneration"}

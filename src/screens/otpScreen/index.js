@@ -7,6 +7,7 @@ import TextButtonComponent from "../../components/TextButtonComponent";
 import {handleQueryNoToken} from "../../graphql/requests";
 import CustomInputBox from "../../components/CustomInputBox";
 import CustomButton from "../../components/CustomButton";
+import CustomTextInput from "../../components/CustomTextInput";
 
 
 const OtpScreen = ({navigation, route}) => {
@@ -76,7 +77,8 @@ const OtpScreen = ({navigation, route}) => {
 
 
             <View style={styles.inputBox}>
-                <CustomInputBox
+                <CustomTextInput
+                    title={"Enter OTP"}
                     inputContainerStyle={styles.textInput}
                     placeholderTextColor={"#999999"}
                     placeholderText={"Enter one time password"}
@@ -177,7 +179,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         fontFamily: "Nexa-Book",
         height: SIZES.width*0.15,
-        letterSpacing: 15,
+        // letterSpacing: 15,
         fontSize: SIZES.width * 0.035,
         color: COLORS.black
     },

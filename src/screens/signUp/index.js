@@ -1,5 +1,5 @@
 import React, {useContext, useState} from "react"
-import {Image, SafeAreaView, StyleSheet, Text, View} from "react-native";
+import {Alert, Image, SafeAreaView, StyleSheet, Text, View} from "react-native";
 import {COLORS, SIZES} from "../../constants";
 import CustomInputBox from "../../components/CustomInputBox";
 import CustomButton from "../../components/CustomButton";
@@ -7,6 +7,7 @@ import TextButtonComponent from "../../components/TextButtonComponent";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {AuthContext} from "../../context/AuthContext";
 import {resolve} from "@babel/core/lib/vendor/import-meta-resolve";
+import CustomTextInput from "../../components/CustomTextInput";
 
 
 const SignUp = ({navigation}) => {
@@ -17,6 +18,9 @@ const SignUp = ({navigation}) => {
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
     const [errMsg, setErrMsg] = useState("")
+    const [focused, setFocused] = useState(false)
+    const [focused2, setFocused2] = useState(false)
+    const [focused3, setFocused3] = useState(false)
 
 
     const {register} = useContext(AuthContext)
@@ -37,19 +41,34 @@ const SignUp = ({navigation}) => {
                 </View>
 
                 <View>
-                    <CustomInputBox
+                    <CustomTextInput
+                        title={"Email Address"}
                         placeholderText={"Enter Email Address"}
                         isPassword={false}
                         initialValue={emailOrNumber}
+                        onFocus={() => setFocused(true)}
+                        onBlur={() => setFocused(false)}
                         onChange={emailOrNumber => {
                             setEmailOrNumber(emailOrNumber);
                             setIsError(false)
                             setIsLoading(false)
 
                         }}
+                        inputContainerStyle={{
+                            backgroundColor: "#FFF",
+                            borderColor: focused ? COLORS.primary : "grey",
+                            fontSize: 16,
+                            borderRadius: 0,
+                            borderWidth: focused ? 1 : 0.5,
+                            height: SIZES.width * 0.13,
+
+                        }}
 
                     />
-                    <CustomInputBox
+                    <CustomTextInput
+                        title={"Create Password"}
+                        onFocus={() => setFocused2(true)}
+                        onBlur={() => setFocused2(false)}
                         placeholderText={"Create a Password"}
                         isPassword={true}
                         initialValue={password}
@@ -57,15 +76,25 @@ const SignUp = ({navigation}) => {
                             setPassword(password);
                             setIsError(false)
                             setIsLoading(false)
-
+                        }}
+                        inputContainerStyle={{
+                            backgroundColor: "#FFF",
+                            borderColor: focused2 ? COLORS.primary : "grey",
+                            fontSize: 16,
+                            borderRadius: 0,
+                            borderWidth: focused2 ? 1 : 0.5,
+                            height: SIZES.width * 0.13,
 
                         }}
 
                     />
 
-                    <CustomInputBox
-                        placeholderText={"Referral code"}
+                    <CustomTextInput
+                        title={"Referral code"}
+                        placeholderText={"Enter referral code"}
                         initialValue={referredBy}
+                        onFocus={() => setFocused3(true)}
+                        onBlur={() => setFocused3(false)}
                         props={{
                             maxLength: 5
                         }}
@@ -74,6 +103,15 @@ const SignUp = ({navigation}) => {
                             setIsError(false)
                             setIsLoading(false)
 
+
+                        }}
+                        inputContainerStyle={{
+                            backgroundColor: "#FFF",
+                            borderColor: focused3 ? COLORS.primary : "grey",
+                            fontSize: 16,
+                            borderRadius: 0,
+                            borderWidth: focused3 ? 1 : 0.5,
+                            height: SIZES.width * 0.13,
 
                         }}
 
@@ -92,24 +130,29 @@ const SignUp = ({navigation}) => {
                     // }}
                     onPress={async () => {
                         try {
+                            if (emailOrNumber.includes("@")) {
+                                if (emailOrNumber && password && referredBy !== "") {
+                                    setIsLoading(true)
+                                    const reg = await register(emailOrNumber, password, referredBy)
 
-                            if (emailOrNumber && password && referredBy !== "") {
-                                setIsLoading(true)
-                                const reg = await register(emailOrNumber, password, referredBy)
+                                    console.log(reg, "REGGG")
+                                    if (reg) {
 
-                                // console.log(reg, "REGGG")
-                                if (reg) {
+                                        navigation.navigate("OtpScreen", emailOrNumber)
 
-                                    navigation.navigate("OtpScreen", emailOrNumber)
+                                    }
+
+                                    // navigation.navigate("OtpScreen", emailOrNumber)
+
+                                    setIsLoading(false)
+
 
                                 }
-
-                                // navigation.navigate("OtpScreen", emailOrNumber)
-
-                                setIsLoading(false)
-
+                            } else {
+                                Alert.alert("Invalid Email", "Enter a valid email address")
 
                             }
+
 
                         } catch (e) {
                             console.log("Reg error", e)
@@ -119,7 +162,7 @@ const SignUp = ({navigation}) => {
                                 setIsError(true)
                             }
                             {
-                                e&& setErrMsg(e)
+                                e && setErrMsg(e)
                             }
 
                             {

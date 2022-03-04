@@ -7,9 +7,12 @@ import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import CheckBox from '@react-native-community/checkbox';
 import moment from "moment";
+import {useNavigation} from "@react-navigation/native";
 
 
-const TermsCondition = ({navigation}) => {
+const TermsCondition = () => {
+
+    const navigation = useNavigation()
 
     const user = useContext(UserContext)
 
@@ -81,12 +84,10 @@ const TermsCondition = ({navigation}) => {
 
             if (toggleCheckBox) {
                 await handleQuery(mtn, user.token, false)
+                await setLoading(false)
                 navigation.navigate("BottomTabs")
 
             }
-
-
-            await setLoading(false)
 
 
         } catch (e) {
@@ -142,6 +143,8 @@ const TermsCondition = ({navigation}) => {
                         disabled={false}
                         value={toggleCheckBox}
                         boxType={"square"}
+                        tintColors={true ? COLORS.primary : "black"}
+                        style={{borderColor: "black"}}
                         onValueChange={(newValue) => {
 
                             setToggleCheckBox(newValue)
@@ -156,6 +159,9 @@ const TermsCondition = ({navigation}) => {
                 </View>
 
                 <CustomButton onPress={async () => {
+                    // console.log("move")
+                    // navigation.navigate("BottomTabs")
+
                     try {
                         if (toggleCheckBox) {
                             await AcceptTerms()
@@ -166,8 +172,7 @@ const TermsCondition = ({navigation}) => {
                         console.log(e, "ERR")
                     }
 
-                }
-                } loading={loading} filled text={"Continue"}/>
+                }} loading={loading} filled={fullname !== "" && address !== ""} text={"Continue"}/>
 
                 <View style={{marginVertical: 50}}/>
             </ScrollView>

@@ -1,7 +1,7 @@
 // @flow
 import React, {useState} from 'react';
-import {StyleSheet, Text, TextInput, View} from "react-native";
-import {COLORS, SIZES} from "../constants";
+import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {COLORS, icons, SIZES} from "../constants";
 
 const CustomTextInput = ({
                              initialValue,
@@ -12,7 +12,7 @@ const CustomTextInput = ({
                              title,
                              onEndEditing,
                              onFocus,
-                             onBlur
+                             onBlur,isPassword
 
                          }) => {
 
@@ -25,6 +25,8 @@ const CustomTextInput = ({
         <View style={styles.container}>
 
             <Text style={styles.title}>{title}</Text>
+
+
             <TextInput
                 {...props}
                 onBlur={onBlur}
@@ -40,7 +42,14 @@ const CustomTextInput = ({
                 }]}
             />
 
+            {isPassword && <TouchableOpacity style={styles.eyesBox}
+                                             onPress={() => !passwordShown ? setPasswordShown(true) : setPasswordShown(false)}>
 
+                {passwordShown ? <Image style={styles.eye} source={icons.eyeClosed}/> :
+                    <Image style={styles.eye} source={icons.eyeOpen}/>}
+
+
+            </TouchableOpacity>}
         </View>
 
     );
@@ -77,6 +86,23 @@ const styles = StyleSheet.create({
         color: COLORS.black
 
     },
+    eyesBox: {
+        justifyContent: "center",
+        marginRight: 20,
+        zIndex: 10,
+        backgroundColor:"red",
+    },
+    eye: {
+        marginRight: 40,
+        width: 30,
+        height: 30,
+        alignSelf: 'flex-end',
+        position: "absolute",
+        // backgroundColor:"red",
+        bottom:SIZES.width*0.03
+
+
+    }
 
 
 })

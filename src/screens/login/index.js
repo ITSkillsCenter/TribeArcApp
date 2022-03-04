@@ -1,11 +1,12 @@
 import React, {useContext, useState} from "react"
-import {Image, SafeAreaView, StyleSheet, Text, View} from "react-native";
+import {Alert, Image, SafeAreaView, StyleSheet, Text, View} from "react-native";
 import {COLORS, SIZES} from "../../constants";
 import CustomInputBox from "../../components/CustomInputBox";
 import CustomButton from "../../components/CustomButton";
 import TextButtonComponent from "../../components/TextButtonComponent";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {AuthContext} from "../../context/AuthContext";
+import CustomTextInput from "../../components/CustomTextInput";
 
 
 const Login = ({navigation, route}) => {
@@ -18,6 +19,9 @@ const Login = ({navigation, route}) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
+    const [focused, setFocused] = useState(false)
+    const [focused2, setFocused2] = useState(false)
+    const [blur, setBlur] = useState(false)
     const [errMsg, setErrMsg] = useState("")
 
 
@@ -44,26 +48,51 @@ const Login = ({navigation, route}) => {
 
                 <View>
                     {otpSuccess && <Text style={{color: "green"}}>OTP verified, login with your data</Text>}
-                    <CustomInputBox
+                    <CustomTextInput
                         // label={"Email or Phone Number"}
+                        title={"Email Address"}
                         placeholderText={"Enter Email Address"}
                         isPassword={false}
+                        onFocus={() => setFocused(true)}
+                        onBlur={() => setFocused(false)}
                         initialValue={emailOrNumber}
                         onChange={emailOrNumber => {
                             setEmailOrNumber(emailOrNumber);
                             setIsError(false)
                         }}
+                        inputContainerStyle={{
+                            backgroundColor: "#FFF",
+                            borderColor: focused ? COLORS.primary : "grey",
+                            fontSize: 16,
+                            borderWidth: focused ? 1 : 0.5,
+                            height: SIZES.width * 0.13,
+                            borderRadius: 0,
+
+
+                        }}
                     />
 
 
-                    <CustomInputBox
+                    <CustomTextInput
                         // label={"Create Password"}
-                        placeholderText={"Create a Password"}
+                        title={"Enter Password"}
+                        placeholderText={"Enter your Password"}
                         isPassword={true}
                         initialValue={password}
+                        onFocus={() => setFocused2(true)}
+                        onBlur={() => setFocused2(false)}
                         onChange={password => {
                             setPassword(password);
                             setIsError(false)
+                        }}
+                        inputContainerStyle={{
+                            backgroundColor: "#FFF",
+                            fontSize: 16,
+                            borderRadius: 0,
+                            borderColor: focused2 ? COLORS.primary : "grey",
+                            borderWidth: focused2 ? 1 : 0.5,
+                            height: SIZES.width * 0.13,
+
                         }}
 
                     />
@@ -79,11 +108,16 @@ const Login = ({navigation, route}) => {
                     onPress={async () => {
 
                         try {
-                            if (emailOrNumber && password !== "") {
-                                setIsLoading(true)
-                                await login(emailOrNumber, password);
-                                // navigation.navigate("MainNavigation")
+                            if (emailOrNumber.includes("@")) {
+                                if (emailOrNumber && password !== "") {
+                                    setIsLoading(true)
+                                    await login(emailOrNumber, password);
+                                    // navigation.navigate("MainNavigation")
+                                }
+                            } else {
+                                Alert.alert("Invalid Email", "Enter a valid email address")
                             }
+
 
                         } catch (e) {
                             console.log("login error:", e[0].extensions.exception.data.data[0].messages[0].message)
