@@ -31,9 +31,6 @@ const SavingsMainScreen = ({navigation, route}) => {
     )
 
 
-
-
-
     const ChkRegFee = async () => {
 
         let qry = `query {
@@ -151,6 +148,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     sav: {
+        marginTop: 10,
         color: COLORS.primary,
         fontSize: 24,
         // marginVertical: 10,

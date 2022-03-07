@@ -226,16 +226,16 @@ const InvestmentMainScreen = ({navigation, route}) => {
                             })}
                             activeOpacity={0.8} style={styles.box}>
                             <Image source={{uri: item.image}}
-                                   style={{width: SIZES.width*0.25, height: SIZES.height*0.14, borderRadius: 10,}}/>
+                                   style={{width: SIZES.width * 0.25, height: SIZES.height * 0.14, borderRadius: 10,}}/>
 
-                            <View style={{width: SIZES.width*0.4, paddingHorizontal: 5,}}>
+                            <View style={{width: SIZES.width * 0.4, paddingHorizontal: 5,}}>
                                 <Text style={styles.title}>{item.name}</Text>
                                 <Text style={styles.duration}><Text
                                     style={{color: COLORS.primary}}>{item.roi}%</Text> return
                                     in {item.duration_in_months} months</Text>
                                 <View style={{
                                     flexDirection: "row",
-                                    width: SIZES.width*0.3,
+                                    width: SIZES.width * 0.3,
                                     justifyContent: "space-between",
                                     alignItems: 'center',
                                 }}>
@@ -310,15 +310,15 @@ const InvestmentMainScreen = ({navigation, route}) => {
                             })}
                             activeOpacity={0.8} style={styles.box}>
                             <Image source={{uri: item.image}}
-                                   style={{width: SIZES.width*0.25, height: SIZES.height*0.14, borderRadius: 10,}}/>
-                            <View style={{width: SIZES.width*0.4, paddingHorizontal: 5,}}>
+                                   style={{width: SIZES.width * 0.25, height: SIZES.height * 0.14, borderRadius: 10,}}/>
+                            <View style={{width: SIZES.width * 0.4, paddingHorizontal: 5,}}>
                                 <Text style={styles.title}>{item.name}</Text>
                                 <Text style={styles.duration}><Text
                                     style={{color: COLORS.primary}}>{item.roi}%</Text> return
                                     in {item.duration_in_months} months</Text>
                                 <View style={{
                                     flexDirection: "row",
-                                    width: SIZES.width*0.3,
+                                    width: SIZES.width * 0.3,
                                     justifyContent: "space-between",
                                     alignItems: 'center',
                                 }}>
@@ -554,16 +554,16 @@ const styles = StyleSheet.create({
     },
     status1: {
         backgroundColor: "#85FCA647",
-        height: SIZES.height*0.03,
-        width: SIZES.width*0.2,
+        height: SIZES.height * 0.03,
+        width: SIZES.width * 0.2,
         borderRadius: 10,
         alignItems: "center",
         justifyContent: "center"
     },
     status2: {
         backgroundColor: "#FFB16947",
-        height: SIZES.height*0.03,
-        width: SIZES.width*0.2,
+        height: SIZES.height * 0.03,
+        width: SIZES.width * 0.2,
 
         borderRadius: 10,
         alignItems: "center",

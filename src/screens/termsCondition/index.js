@@ -15,7 +15,6 @@ const TermsCondition = () => {
     const navigation = useNavigation()
 
     const user = useContext(UserContext)
-
     const [terms, setTerms] = useState("")
     const [fullname, setFullname] = useState("")
     const [address, setAddress] = useState("")
@@ -23,23 +22,21 @@ const TermsCondition = () => {
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [loading, setLoading] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    // const [disabled, setDisabled] = useState(false)
 
 
     useEffect(() => {
-
         GetTerms()
     }, [])
 
 
+    //GET TERMS AND CONDITION
     const GetTerms = async () => {
-
         let qry = `query {
-  communities(where: { id: 15 }) {
-    terms_condition
-    updated_at
-  }
-}`
+                    communities(where: { id: 15 }) {
+                        terms_condition
+                        updated_at
+                            }
+                        }`
         try {
             setIsLoading(true)
             const termsRes = await handleQuery(qry, user.token, false)
@@ -47,53 +44,45 @@ const TermsCondition = () => {
             await setTerms(termsRes.data.communities[0].terms_condition)
             await setUpdated(termsRes.data.communities[0].updated_at)
             await setIsLoading(false)
-
-
         } catch (e) {
             console.log(e, "GetTermsErr")
             await setIsLoading(false)
-
         }
     }
 
 
+    //ACCEPT TERMS AND CONDITION
     const AcceptTerms = async () => {
-
         let mtn = `mutation {
-  createUserInvestmentAgreement(
-    input: {
-      data: {
-        address: "${address}"
-        users_id: ${user.id}
-        fullname: "${fullname}"
-        community: 15
-        agreed: ${toggleCheckBox}
-      }
-    }
-  ) {
-    userInvestmentAgreement {
-      users_id {
-        id
-      }
-    }
-  }
-}`
+                createUserInvestmentAgreement(
+                    input: {
+                    data: {
+                        address: "${address}"
+                        users_id: ${user.id}
+                        fullname: "${fullname}"
+                        community: 15
+                        agreed: ${toggleCheckBox}
+                                        }
+                                      }
+                                  ) {
+                            userInvestmentAgreement {
+                            users_id {
+                                    id
+                                   }
+                                }
+                            }
+                        }`
 
         try {
             setLoading(true)
-
             if (toggleCheckBox) {
                 await handleQuery(mtn, user.token, false)
                 await setLoading(false)
                 navigation.navigate("BottomTabs")
-
             }
-
-
         } catch (e) {
             console.log(e, "error")
             setLoading(false)
-
         }
     }
 
@@ -110,6 +99,8 @@ const TermsCondition = () => {
                 <Text style={styles.dateUpdated}>Last updated on {moment(updated).format("dddd, MMMM Do YYYY")}</Text>
 
                 <View style={{marginVertical: 20,}}>
+
+                    {/*ENTER NAME*/}
                     <CustomTextInput
                         title={"Full Name"}
                         initialValue={fullname}
@@ -121,6 +112,7 @@ const TermsCondition = () => {
                         }}
                         placeholderText={"Enter full Name"}/>
 
+                    {/*ENTER ADDRESS*/}
                     <CustomTextInput
                         title={"Address"}
                         initialValue={address}
@@ -130,6 +122,8 @@ const TermsCondition = () => {
 
                 </View>
 
+
+                {/*TERMS AND CONDITION BODY*/}
                 {isLoading ? <ActivityIndicator size={"small"} color={COLORS.primary}/> :
                     <Text style={styles.body}>{terms}
                         {"\n"}
@@ -146,37 +140,28 @@ const TermsCondition = () => {
                         tintColors={true ? COLORS.primary : "black"}
                         style={{borderColor: "black"}}
                         onValueChange={(newValue) => {
-
                             setToggleCheckBox(newValue)
-
-                        }
-
-                        }/>
-
+                        }}
+                    />
                     <Text style={{paddingHorizontal: 5, color: COLORS.black, fontFamily: "Nexa-Book"}}> I agree to the
                         terms and conditions</Text>
-
                 </View>
 
-                <CustomButton onPress={async () => {
-                    // console.log("move")
-                    // navigation.navigate("BottomTabs")
-
-                    try {
-                        if (toggleCheckBox) {
-                            await AcceptTerms()
-
+                <CustomButton
+                    loading={loading}
+                    filled={fullname !== "" && address !== ""}
+                    text={"Continue"}
+                    onPress={async () => {
+                        try {
+                            if (toggleCheckBox) {
+                                await AcceptTerms()
+                            }
+                        } catch (e) {
+                            console.log(e, "ERR")
                         }
-
-                    } catch (e) {
-                        console.log(e, "ERR")
-                    }
-
-                }} loading={loading} filled={fullname !== "" && address !== ""} text={"Continue"}/>
-
+                    }}/>
                 <View style={{marginVertical: 50}}/>
             </ScrollView>
-
         </SafeAreaView>
     );
 };
@@ -203,7 +188,6 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         fontFamily: "Nexa-Book",
         opacity: 0.7
-
     },
     body: {
         color: COLORS.black,
@@ -212,6 +196,4 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         fontFamily: "Nexa-book"
     }
-
-
 })

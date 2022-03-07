@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View} from "react-native";
+import {ActivityIndicator, Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View} from "react-native";
 import {COLORS, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomTextInput from "../../components/CustomTextInput";
@@ -22,6 +22,8 @@ const TopUpScreen = ({navigation, route}) => {
 
     const [topUp, setTopUp] = useState("");
     const [paidRegFee, setPaidRegFee] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
+
 
 
     useEffect(() => {
@@ -76,6 +78,9 @@ const TopUpScreen = ({navigation, route}) => {
 
 
     return (
+        isLoading ? <ActivityIndicator
+                style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
+                color={COLORS.primary}/> :
 
         // <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -116,6 +121,7 @@ const TopUpScreen = ({navigation, route}) => {
                     }}
                     onSuccess={async (res) => {
                         // console.log(res, "RESDSD")
+                        setIsLoading(true)
                         await TopUp(res.data.transactionRef.reference, topUp)
 
                     }}

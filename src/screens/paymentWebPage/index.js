@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useRef, useState} from 'react';
-import {StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, StyleSheet, Text, View} from "react-native";
 import {Paystack} from "react-native-paystack-webview/lib";
 import {COLORS, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
@@ -20,6 +20,7 @@ const PaymentWebPage = ({navigation, route}) => {
     // console.log(amount, " amount")
 
     const [cancelled, setCancelled] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
 
     const paystackWebViewRef = useRef();
@@ -84,53 +85,59 @@ const PaymentWebPage = ({navigation, route}) => {
 
 
     return (
-        <View style={styles.container}>
-            <BackButton onPress={() => navigation.pop()}/>
 
-            <Paystack
-                paystackKey="pk_test_52d14b2ac56f0420095618159b5dac28891bd754"
-                amount={amount}
-                billingEmail={user.email}
-                activityIndicatorColor={COLORS.primary}
-                onCancel={async (e) => {
-                    // handle response here
-                    await Cancelled()
-                    console.log(e, "PaymentError")
-                    await setCancelled(true)
-                }}
-                // channels={JSON.stringify(["card","ussd"])}
-                onSuccess={async (res) => {
-                    await TransactionData(res.data.transactionRef.reference, amount)
-                    console.log(res, "RESDSD")
-                    // handle response here
-                }}
-                autoStart={true}
-                ref={paystackWebViewRef}
-            />
+        isLoading ? <ActivityIndicator
+                style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
+                color={COLORS.primary}/> :
+            <View style={styles.container}>
+                <BackButton onPress={() => navigation.pop()}/>
 
-            {cancelled && <View>
+                <Paystack
+                    paystackKey="pk_test_52d14b2ac56f0420095618159b5dac28891bd754"
+                    amount={amount}
+                    billingEmail={user.email}
+                    activityIndicatorColor={COLORS.primary}
+                    onCancel={async (e) => {
+                        // handle response here
+                        await Cancelled()
+                        console.log(e, "PaymentError")
+                        await setCancelled(true)
+                    }}
+                    // channels={JSON.stringify(["card","ussd"])}
+                    onSuccess={async (res) => {
+                        setIsLoading(true)
 
-                <View style={styles.checkMark}>
-                    <LottieView
-                        source={require("../../assets/images/cancelMark.json")}
-                        autoPlay
-                        loop={false}
-                        style={{width: 268, height: 263}}/>
-                </View>
+                        await TransactionData(res.data.transactionRef.reference, amount)
+                        console.log(res, "RESDSD")
+                        // handle response here
+                    }}
+                    autoStart={true}
+                    ref={paystackWebViewRef}
+                />
 
-                <View style={styles.tsBox}>
-                    <Text style={styles.ts}>Transaction failed!</Text>
-                </View>
+                {cancelled && <View>
 
-                <View style={{marginVertical: 20}}>
-                    <CustomButton filled onPress={() => {
-                        paystackWebViewRef.current.startTransaction()
-                        setCancelled(false)
-                    }} text={"Retry"}/>
-                </View>
-            </View>}
+                    <View style={styles.checkMark}>
+                        <LottieView
+                            source={require("../../assets/images/cancelMark.json")}
+                            autoPlay
+                            loop={false}
+                            style={{width: 268, height: 263}}/>
+                    </View>
 
-        </View>
+                    <View style={styles.tsBox}>
+                        <Text style={styles.ts}>Transaction failed!</Text>
+                    </View>
+
+                    <View style={{marginVertical: 20}}>
+                        <CustomButton filled onPress={() => {
+                            paystackWebViewRef.current.startTransaction()
+                            setCancelled(false)
+                        }} text={"Retry"}/>
+                    </View>
+                </View>}
+
+            </View>
     );
 };
 export default PaymentWebPage

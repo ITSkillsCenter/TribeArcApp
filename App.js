@@ -424,7 +424,6 @@ const App = () => {
                                     <View style={{alignItems: "center"}}>
                                         <Image source={icons.homeIcon}
                                                resizeMode={"center"}
-
                                                style={{
                                                    width: 22,
                                                    height: 22,

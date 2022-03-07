@@ -74,7 +74,7 @@ const CompleteProfile2 = ({navigation}) => {
             <Text style={styles.perInfo}>Work Info</Text>
 
 
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+            {/*<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>*/}
 
                 <CustomTextInput
                     initialValue={profession}
@@ -99,7 +99,7 @@ const CompleteProfile2 = ({navigation}) => {
                 }}
                 />
 
-            </KeyboardAwareScrollView>
+            {/*</KeyboardAwareScrollView>*/}
 
 
             <View style={styles.saveButton}>

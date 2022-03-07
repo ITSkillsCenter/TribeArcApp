@@ -12,8 +12,7 @@ import {UserContext} from "../../context/UserContext";
 
 const WelcomePage = ({navigation}) => {
 
-    const videoPlayer = useRef();
-    // const [viewedWelcome, setViewedWelcome] = useState(false)
+    // const videoPlayer = useRef();
     const user = useContext(UserContext)
 
     const [video, setVideo] = useState("")
@@ -27,19 +26,19 @@ const WelcomePage = ({navigation}) => {
     }, [])
 
 
+    //CHECK IF WELCOME SCREEN HAS BEEN VIEWED
     const WelcomeViewed = async () => {
 
         try {
             await AsyncStorage.setItem('@ViewedWelcome', "true")
             navigation.navigate("OnBoarding")
-
-
         } catch (e) {
             console.log(e, " setItem Error : @ViewedWelcome")
         }
     }
 
 
+    //WELCOME TEXT FUNCTION
     const WelcomeTextAndVid = async () => {
 
         let qry = `query {
@@ -48,19 +47,14 @@ const WelcomePage = ({navigation}) => {
      welcome_video
   }
 }`
-
-
         try {
 
             const qryRes = await handleQuery(qry, user.token, false)
-
             // console.log(qryRes.data.communities[0])
             await setVideo(qryRes.data.communities[0].welcome_video)
-
             if (qryRes.data.communities[0].welcome_text) {
                 await setText(qryRes.data.communities[0].welcome_text)
             }
-
 
         } catch (e) {
             console.log(e, "WelcomeTextERR")
@@ -73,26 +67,14 @@ const WelcomePage = ({navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
 
+            {/*WELCOME TEXT*/}
             <View style={styles.container2}>
-
                 <View style={styles.textBox}>
                     <Text style={styles.text}>Welcome to</Text>
                     <Image style={styles.img} resizeMode={"contain"} source={require("../../assets/images/logo.png")}/>
                 </View>
 
-
-                {/*<Video*/}
-                {/*    ref={ref => (videoPlayer.current = ref)}*/}
-                {/*    playInBackground={false}*/}
-                {/*    // allowsExternalPlayback*/}
-                {/*    source={{uri: "https://youtu.be/jFGa2BBQXu0"}}*/}
-                {/*    resizeMode={"stretch"}// the video file*/}
-                {/*    paused={true}                  // make it start*/}
-                {/*    style={styles.backgroundVideo}  // any style you want*/}
-                {/*    // repeat={true}*/}
-                {/*    controls={true}// make it a loop*/}
-                {/*/>*/}
-
+                {/*VIDEO PLAYER*/}
                 <VideoPlayer
                     video={{uri: video}}
                     videoWidth={1600}
@@ -100,33 +82,25 @@ const WelcomePage = ({navigation}) => {
                     autoplay
                     disableFullscreen
                     style={styles.backgroundVideo}
-                    // customStyles={styles.backgroundVideo}
-                    thumbnail={require("../../assets/images/imgPlcholder.png")}
                 />
-
-
                 <Text style={styles.textWlc}>{text}</Text>
-
-
             </View>
+
+            {/*CONTINUE BUTTON*/}
             <View style={styles.buttonContainer}>
                 <CustomButton
-                    onPress={async () => {
-                        await WelcomeViewed()
-                        // CheckWelcomeViewed
-                    }}
                     filled
                     text={"Continue"}
+                    onPress={async () => {
+                        await WelcomeViewed()
+                    }}
                 />
             </View>
-
-
-        </SafeAreaView>);
+        </SafeAreaView>
+    );
 };
 
-
 export default WelcomePage
-
 
 const styles = StyleSheet.create({
     container: {
@@ -134,34 +108,34 @@ const styles = StyleSheet.create({
         height: SIZES.height,
         backgroundColor: 'white',
         paddingHorizontal: 20
-
     },
     container2: {
         height: SIZES.height * 0.8,
-        // backgroundColor: 'cyan',
-        // paddingHorizontal: 20,
     },
     textBox: {
         height: SIZES.height * 0.13,
         alignItems: "center",
         justifyContent: "space-between",
-        marginVertical: 30, // padding:0,
-        // backgroundColor: "cyan"
+        marginVertical: 30,
 
-    }, text: {
+    },
+    text: {
         color: COLORS.black,
         fontSize: 18,
-        fontFamily: "Nexa-Book", // fontWeight:"400"
-    }, img: {
-        width: 159, height: 30,
-    }, backgroundVideo: {
-        borderRadius: 15, // width:SIZES.width,
+        fontFamily: "Nexa-Book",
+    },
+    img: {
+        width: 159,
+        height: 30,
+    },
+    backgroundVideo: {
+        borderRadius: 15,
         height: SIZES.height * 0.28,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "rgba(160,155,155,0.42)", // top: 0,
-
-    }, buttonContainer: {
+        backgroundColor: "rgba(160,155,155,0.42)",
+    },
+    buttonContainer: {
         flex: 2,
         justifyContent: 'flex-end'
     },
@@ -171,7 +145,6 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         fontSize: 22,
         fontFamily: "Nexa-Bold"
-
     }
 
 

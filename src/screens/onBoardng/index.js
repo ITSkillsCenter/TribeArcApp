@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
         fontSize: SIZES.width * 0.04,
         textAlign: "center",
         width: "100%",
-        lineHeight: 32,
+        lineHeight: 28,
         color: COLORS.black,
         opacity: 0.7,
         fontFamily: "Nexa-Book",
