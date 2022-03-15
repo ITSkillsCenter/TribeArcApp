@@ -1,5 +1,5 @@
 // @flow
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import CustomButton from "../../components/CustomButton";
@@ -7,6 +7,7 @@ import {Paystack} from "react-native-paystack-webview/lib";
 import {UserContext} from "../../context/UserContext";
 import {BASE_URL} from "../../config";
 import axios from "axios";
+import {handleQuery} from "../../graphql/requests";
 
 
 export const RegistrationFee = ({navigation}) => {
@@ -19,6 +20,46 @@ export const RegistrationFee = ({navigation}) => {
 
 
     const [isLoading, setIsLoading] = useState(false)
+
+
+    const [liveKey, setLiveKey] = useState("")
+    const [testKey, setTestKey] = useState("")
+
+
+    useEffect(() => {
+
+        GetPaymentKey()
+
+
+    }, [])
+
+
+    const GetPaymentKey = async () => {
+
+
+        const getKey = `query {
+            communities(where: { id: 15 }) {
+                settings
+                     }
+                   }`
+        try {
+
+            const gottenKey = await handleQuery(getKey, user.token, false)
+            // console.log(gottenKey.data.communities[0].settings.paystack.status)
+            // console.log(gottenKey.data.communities[0].settings.paystack.live.public_key)
+            // console.log(gottenKey.data.communities[0].settings.paystack.test.public_key)
+            //
+            if (gottenKey?.data?.communities[0]?.settings?.paystack?.status) {
+                await setLiveKey(gottenKey.data.communities[0].settings.paystack.live.public_key)
+            }
+            if (!gottenKey?.data?.communities[0]?.settings?.paystack?.status) {
+                await setTestKey(gottenKey.data.communities[0].settings.paystack.test.public_key)
+            }
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
 
     const PayRegFee = async (ref) => {
@@ -83,7 +124,7 @@ export const RegistrationFee = ({navigation}) => {
                 </View>
 
                 <Paystack
-                    paystackKey="pk_test_52d14b2ac56f0420095618159b5dac28891bd754"
+                    paystackKey={testKey || liveKey}
                     amount={20000}
                     billingEmail={user.email}
                     activityIndicatorColor={COLORS.primary}

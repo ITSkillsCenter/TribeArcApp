@@ -24,13 +24,45 @@ const TopUpScreen = ({navigation, route}) => {
     const [paidRegFee, setPaidRegFee] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
 
+    const [liveKey, setLiveKey] = useState("")
+    const [testKey, setTestKey] = useState("")
 
 
     useEffect(() => {
 
         ChkRegFee()
+        GetPaymentKey()
+
 
     }, [])
+
+
+    const GetPaymentKey = async () => {
+
+
+        const getKey = `query {
+            communities(where: { id: 15 }) {
+                settings
+                     }
+                   }`
+        try {
+
+            const gottenKey = await handleQuery(getKey, user.token, false)
+            // console.log(gottenKey.data.communities[0].settings.paystack.status)
+            // console.log(gottenKey.data.communities[0].settings.paystack.live.public_key)
+            // console.log(gottenKey.data.communities[0].settings.paystack.test.public_key)
+            //
+            if (gottenKey?.data?.communities[0]?.settings?.paystack?.status) {
+                await setLiveKey(gottenKey.data.communities[0].settings.paystack.live.public_key)
+            }
+            if (!gottenKey?.data?.communities[0]?.settings?.paystack?.status) {
+                await setTestKey(gottenKey.data.communities[0].settings.paystack.test.public_key)
+            }
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
 
     const ChkRegFee = async () => {
@@ -44,7 +76,7 @@ const TopUpScreen = ({navigation, route}) => {
 
         try {
             const qryRes = await handleQuery(qry, user.token, false)
-            console.log(qryRes.data.users[0].paid_reg_fee)
+            // console.log(qryRes.data.users[0].paid_reg_fee)
             await setPaidRegFee(qryRes.data.users[0].paid_reg_fee)
             // console.log(qryRes.data.users[0].paid_reg_fee)
 
@@ -82,68 +114,68 @@ const TopUpScreen = ({navigation, route}) => {
                 style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
                 color={COLORS.primary}/> :
 
-        // <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            // <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 
-            <View style={styles.container}>
+                <View style={styles.container}>
 
-                <BackButton onPress={() => navigation.pop()}/>
-
-
-                <Text style={styles.topUp}>Top-Up</Text>
-                <Text style={styles.withdrawDesc}>Enter Amount to save</Text>
-                <View style={{marginTop: 10}}>
+                    <BackButton onPress={() => navigation.pop()}/>
 
 
-                    <CustomTextInput
-                        initialValue={topUp}
-                        onChange={setTopUp}
-                        placeholderText={"e.g 20,000"}
-                        props={{
-                            keyboardType: "numeric"
+                    <Text style={styles.topUp}>Top-Up</Text>
+                    <Text style={styles.withdrawDesc}>Enter Amount to save</Text>
+                    <View style={{marginTop: 10}}>
+
+
+                        <CustomTextInput
+                            initialValue={topUp}
+                            onChange={setTopUp}
+                            placeholderText={"e.g 20,000"}
+                            props={{
+                                keyboardType: "numeric"
+                            }}
+                            title={"Amount to Top-Up"}/>
+
+
+                        <CustomTextInput props={{
+                            editable: false
+                        }} placeholderText={"Voluntary Account"} title={"Destination"}/>
+                    </View>
+
+
+                    <Paystack
+                        paystackKey={liveKey || testKey}
+                        amount={topUp}
+                        billingEmail={user.email}
+                        activityIndicatorColor={COLORS.primary}
+                        onCancel={async (e) => {
+                            console.log(e, "PaymentError")
                         }}
-                        title={"Amount to Top-Up"}/>
+                        onSuccess={async (res) => {
+                            // console.log(res, "RESDSD")
+                            setIsLoading(true)
+                            await TopUp(res.data.transactionRef.reference, topUp)
+
+                        }}
+                        autoStart={false}
+                        ref={paystackWebViewRef}
+                    />
 
 
-                    <CustomTextInput props={{
-                        editable: false
-                    }} placeholderText={"Voluntary Account"} title={"Destination"}/>
+                    <View style={{flex: 2, justifyContent: "flex-end"}}>
+                        <CustomButton onPress={() => {
+
+                            if (topUp !== "") {
+                                paidRegFee ? paystackWebViewRef.current.startTransaction() : navigation.navigate("RegistrationFee")
+                            }
+
+                        }} filled={topUp !== ""}
+                                      text={"Proceed"}/>
+                    </View>
+
                 </View>
 
-
-                <Paystack
-                    paystackKey="pk_test_52d14b2ac56f0420095618159b5dac28891bd754"
-                    amount={topUp}
-                    billingEmail={user.email}
-                    activityIndicatorColor={COLORS.primary}
-                    onCancel={async (e) => {
-                        console.log(e, "PaymentError")
-                    }}
-                    onSuccess={async (res) => {
-                        // console.log(res, "RESDSD")
-                        setIsLoading(true)
-                        await TopUp(res.data.transactionRef.reference, topUp)
-
-                    }}
-                    autoStart={false}
-                    ref={paystackWebViewRef}
-                />
-
-
-                <View style={{flex: 2, justifyContent: "flex-end"}}>
-                    <CustomButton onPress={() => {
-
-                        if (topUp !== "") {
-                            paidRegFee ? paystackWebViewRef.current.startTransaction() : navigation.navigate("RegistrationFee")
-                        }
-
-                    }} filled={topUp !== ""}
-                                  text={"Proceed"}/>
-                </View>
-
-            </View>
-
-        </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
 
         // </KeyboardAwareScrollView>
 

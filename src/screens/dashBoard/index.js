@@ -385,7 +385,7 @@ const DashBoard = ({navigation}) => {
                                                 color: COLORS.black,
                                                 fontFamily: "Nexa-Bold",
                                                 fontSize: SIZES.width * 0.04
-                                            }}>₦{item?.amount_paid.toLocaleString()}</Text>
+                                            }}>₦{item?.amount_paid?.toLocaleString()}</Text>
                                             <Text style={{
                                                 color: COLORS.black,
                                                 fontFamily: "Nexa-Book",

@@ -55,8 +55,6 @@ const SignUp = ({navigation}) => {
                         inputContainerStyle={{
                             backgroundColor: "#FFF",
                             borderColor: focused ? COLORS.primary : "grey",
-                            fontSize: 16,
-                            borderRadius: 0,
                             borderWidth: focused ? 1 : 0.5,
                             height: SIZES.width * 0.13,
 
@@ -80,8 +78,6 @@ const SignUp = ({navigation}) => {
                         inputContainerStyle={{
                             backgroundColor: "#FFF",
                             borderColor: focused2 ? COLORS.primary : "grey",
-                            fontSize: 16,
-                            borderRadius: 0,
                             borderWidth: focused2 ? 1 : 0.5,
                             height: SIZES.width * 0.13,
 
@@ -110,8 +106,6 @@ const SignUp = ({navigation}) => {
                         inputContainerStyle={{
                             backgroundColor: "#FFF",
                             borderColor: focused3 ? COLORS.primary : "grey",
-                            fontSize: 16,
-                            borderRadius: 0,
                             borderWidth: focused3 ? 1 : 0.5,
                             height: SIZES.width * 0.13,
 

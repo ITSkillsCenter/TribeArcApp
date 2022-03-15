@@ -109,7 +109,7 @@ export const useAuth = () => {
                                                }`
 
                             console.log(createSavingAcct)
-                            let createSavingAcctRes = await handleQuery(createSavingAcct, res.data.login.jwt, false)
+                            let createSavingAcctRes = await handleQuery(createSavingAcct, res.data.login.jwt)
                         }
 
                         // console.log(qrySavingsRes.data.users[0].saving_account, "REZXXX")

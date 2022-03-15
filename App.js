@@ -172,13 +172,15 @@ const App = () => {
 }
 
 `
+            // console.log(qry)
+
             try {
                 setLoading(true)
                 const qryRes = await handleQuery(qry, user.token, false)
 
                 // if (qryRes) {
-                console.log(qryRes.data.users[0].user_investment_agreement.agreed, "ageeeed")
-                await setAgreed(qryRes.data.users[0].user_investment_agreement.agreed)
+                // console.log(qryRes?.data?.users[0]?.user_investment_agreement?.agreed, "ageeeed")
+                await setAgreed(qryRes?.data?.users[0]?.user_investment_agreement?.agreed)
                 // }
 
                 // await setLoading(false)

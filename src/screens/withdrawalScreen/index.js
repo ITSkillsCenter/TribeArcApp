@@ -24,6 +24,7 @@ const WithdrawalScreen = ({navigation}) => {
     const [otpSent, setOtpSent] = useState(false)
     const [error, setError] = useState(false)
     const [otpCode, setOtpCode] = useState("")
+    const [bankAcctId, setBankAcctID] = useState("")
 
 
     const modalizeRef = useRef<Modalize>(null);
@@ -39,6 +40,7 @@ const WithdrawalScreen = ({navigation}) => {
 
         let qry = `query {
   qry1: bankAccounts(where: { users_id: ${user.id} }) {
+    id
     bank_name
     account_name
     account_number
@@ -54,7 +56,7 @@ const WithdrawalScreen = ({navigation}) => {
         try {
 
             const qryRes = await handleQuery(qry, user.token, false)
-            // console.log(qryRes.data.qry2[0].saving_account.voluntary_funds)
+            // console.log(qryRes.data.qry1)
             await setMyAccts(qryRes.data.qry1)
             await setAccountBalance(qryRes.data.qry2[0].saving_account.voluntary_funds)
 
@@ -128,6 +130,7 @@ const WithdrawalScreen = ({navigation}) => {
                         data: { amount: ${withdrawalAmount}, 
                         status: PENDING, 
                         community: 15, 
+                        bank_account_id: ${bankAcctId}
                         users_id: ${user.id} }
                                 }
                                 ) {
@@ -135,20 +138,19 @@ const WithdrawalScreen = ({navigation}) => {
                         users_id {
                                 id
                                 }
-                                }
-                                }
-                                    }
+                              }
+                            }
+                          }`
 
-                                        `
+                // console.log(mtn)
+                // console.log(myAccts)
 
 
                 await handleQuery(mtn, user.token, false)
                 await navigation.navigate("BottomTabs")
                 await setLoading(false)
 
-
             }
-
 
         } catch (e) {
             console.log(e, "errr")
@@ -263,13 +265,14 @@ const WithdrawalScreen = ({navigation}) => {
             <SelectDropdown
                 data={myAccts}
                 onSelect={(selectedItem, index) => {
-                    // console.log(selectedItem, index)
+                    // console.log(selectedItem.id)
 
                     if (withdrawalAmount !== "") {
                         SendWithdrawalOtp()
+                        setBankAcctID(selectedItem.id)
                     }
-                    // setBankCode(selectedItem.code)
 
+                    // setBankCode(selectedItem.code)
                 }}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     // text represented after item is selected
@@ -329,9 +332,9 @@ const WithdrawalScreen = ({navigation}) => {
         <View style={{flex: 2, justifyContent: "flex-end"}}>
             <CustomButton onPress={async () => {
                 await SubmitWithdrawal()
-
-
-            }} loading={loading} filled={withdrawalAmount !== "" && otpCode !== ""} text={"Submit"}/>
+            }}
+                          loading={loading}
+                          filled={withdrawalAmount !== "" && otpCode !== ""} text={"Submit"}/>
 
         </View>
 

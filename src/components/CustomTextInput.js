@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: COLORS.primary,
-        fontSize: 14,
+        fontSize: 12,
         marginBottom: 5,
         opacity: 0.6,
         fontFamily: "Nexa-Book"

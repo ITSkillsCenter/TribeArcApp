@@ -1,5 +1,5 @@
 // @flow
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
@@ -36,6 +36,46 @@ const LinkCard = ({navigation}) => {
     const [expiry, setExpiry] = useState("")
     const [cvv, setCvv] = useState("")
     const [pin, setPin] = useState("")
+
+
+    const [liveKey, setLiveKey] = useState("")
+    const [testKey, setTestKey] = useState("")
+
+
+    useEffect(() => {
+
+        GetPaymentKey()
+
+
+    }, [])
+
+
+    const GetPaymentKey = async () => {
+
+
+        const getKey = `query {
+            communities(where: { id: 15 }) {
+                settings
+                     }
+                   }`
+        try {
+
+            const gottenKey = await handleQuery(getKey, user.token, false)
+            // console.log(gottenKey.data.communities[0].settings.paystack.status)
+            // console.log(gottenKey.data.communities[0].settings.paystack.live.public_key)
+            // console.log(gottenKey.data.communities[0].settings.paystack.test.public_key)
+            //
+            if (gottenKey?.data?.communities[0]?.settings?.paystack?.status) {
+                await setLiveKey(gottenKey.data.communities[0].settings.paystack.live.public_key)
+            }
+            if (!gottenKey?.data?.communities[0]?.settings?.paystack?.status) {
+                await setTestKey(gottenKey.data.communities[0].settings.paystack.test.public_key)
+            }
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
 
     const AddCardNow = async () => {
@@ -79,7 +119,8 @@ const LinkCard = ({navigation}) => {
             paddingHorizontal: 20,
         }}>
             <View style={{marginHorizontal: 5}}>
-                <Text style={{fontSize: SIZES.width * 0.05, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Add Card</Text>
+                <Text style={{fontSize: SIZES.width * 0.05, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Add
+                    Card</Text>
                 <Text style={{fontSize: 14, color: "#999999", fontFamily: "Nexa-Book", marginVertical: 10}}>Fill the
                     card
                     details below to be able to save</Text>
@@ -255,7 +296,7 @@ const LinkCard = ({navigation}) => {
 
 
             <Paystack
-                paystackKey="pk_test_52d14b2ac56f0420095618159b5dac28891bd754"
+                paystackKey={liveKey || testKey}
                 amount={100}
                 billingEmail={user.email}
                 activityIndicatorColor={COLORS.primary}

@@ -1,5 +1,5 @@
 // @flow
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from "react-native";
 import {Paystack} from "react-native-paystack-webview/lib";
 import {COLORS, SIZES} from "../../constants";
@@ -26,6 +26,46 @@ const PaymentWebPage = ({navigation, route}) => {
     const paystackWebViewRef = useRef();
 
 
+    const [liveKey, setLiveKey] = useState("")
+    const [testKey, setTestKey] = useState("")
+
+
+    useEffect(() => {
+
+        GetPaymentKey()
+
+
+    }, [])
+
+
+    const GetPaymentKey = async () => {
+
+
+        const getKey = `query {
+            communities(where: { id: 15 }) {
+                settings
+                     }
+                   }`
+        try {
+
+            const gottenKey = await handleQuery(getKey, user.token, false)
+            // console.log(gottenKey.data.communities[0].settings.paystack.status)
+            // console.log(gottenKey.data.communities[0].settings.paystack.live.public_key)
+            // console.log(gottenKey.data.communities[0].settings.paystack.test.public_key)
+            //
+            if (gottenKey?.data?.communities[0]?.settings?.paystack?.status) {
+                await setLiveKey(gottenKey.data.communities[0].settings.paystack.live.public_key)
+            }
+            if (!gottenKey?.data?.communities[0]?.settings?.paystack?.status) {
+                await setTestKey(gottenKey.data.communities[0].settings.paystack.test.public_key)
+            }
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+
     const TransactionData = async (ref, amount) => {
         const headers = {
             'Content-Type': 'application/json',
@@ -44,7 +84,6 @@ const PaymentWebPage = ({navigation, route}) => {
         navigation.navigate("SuccessScreen")
 
     }
-
 
     const Cancelled = async (e) => {
 
@@ -93,7 +132,7 @@ const PaymentWebPage = ({navigation, route}) => {
                 <BackButton onPress={() => navigation.pop()}/>
 
                 <Paystack
-                    paystackKey="pk_test_52d14b2ac56f0420095618159b5dac28891bd754"
+                    paystackKey={liveKey || testKey}
                     amount={amount}
                     billingEmail={user.email}
                     activityIndicatorColor={COLORS.primary}

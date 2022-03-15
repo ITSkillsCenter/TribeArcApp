@@ -64,7 +64,7 @@ const CompleteProfile2 = ({navigation}) => {
             <BackButton onPress={() => navigation.pop()}/>
 
             <View style={styles.box}>
-                <Image style={{height: SIZES.width*0.2, width: SIZES.width*0.2, right: 15}} source={icons.circular2}/>
+                <Image style={{height: SIZES.width*0.2, width: SIZES.width*0.2,}} source={icons.circular2}/>
                 <View style={styles.box2}>
                     <Text style={styles.text1}>Complete your Profile</Text>
                     <Text style={styles.text2}>please complete the fields below</Text>

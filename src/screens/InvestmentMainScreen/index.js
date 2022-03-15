@@ -387,7 +387,6 @@ const InvestmentMainScreen = ({navigation, route}) => {
 
     return (
 
-
         <ScrollView style={styles.container}>
 
 
@@ -424,12 +423,15 @@ const InvestmentMainScreen = ({navigation, route}) => {
                                     <TouchableOpacity
                                         onPress={() => navigation.navigate(paidRegFee ? "MyInvestmentDetailsScreen" : "RegistrationFee", {
                                             ...item,
-
                                         })}
                                         activeOpacity={0.8} style={styles.box}>
                                         <Image source={{uri: item?.image}}
-                                               style={{width: 110, height: 120, borderRadius: 10,}}/>
-                                        <View style={{width: 180, paddingHorizontal: 5,}}>
+                                               style={{
+                                                   width: SIZES.width * 0.25,
+                                                   height: SIZES.height * 0.14,
+                                                   borderRadius: 10,
+                                               }}/>
+                                        <View style={{width: SIZES.width * 0.4, paddingHorizontal: 5,}}>
                                             <Text style={styles.title}>{item?.name}</Text>
                                             <Text style={styles.duration}><Text
                                                 style={{color: COLORS.primary}}>{item?.roi}%</Text> return
@@ -443,17 +445,15 @@ const InvestmentMainScreen = ({navigation, route}) => {
                                             }}>
                                                 <View>
                                                     <Text
-                                                        style={styles.amtInv}>₦{item?.price_per_slot.toLocaleString()}</Text>
+                                                        style={styles.amtInv}>₦{item?.price_per_slot?.toLocaleString()}</Text>
                                                     <Text style={styles.perSlot}>Per Slot</Text>
                                                 </View>
 
                                                 <View style={{alignItems: "center"}}>
                                                     <Text
-                                                        style={styles.amtInv}>{item?.users_investments.length}</Text>
+                                                        style={styles.amtInv}>{item?.users_investments?.length}</Text>
                                                     <Text style={styles.perSlot}>Investors</Text>
                                                 </View>
-
-
                                             </View>
                                         </View>
                                         <View>
@@ -464,25 +464,16 @@ const InvestmentMainScreen = ({navigation, route}) => {
                                                 </View>
                                                 :
                                                 <View style={styles.status2}>
-
                                                     <Text style={styles.ended}>Ended</Text>
-
                                                 </View>
                                             }
-
-
                                         </View>
 
                                     </TouchableOpacity>
-
                                 )
                                 }/>}
-
-
                     </>
                 }
-
-
                 <Text style={styles.allInv}>All Investments</Text>
             </>
 
@@ -555,7 +546,7 @@ const styles = StyleSheet.create({
     status1: {
         backgroundColor: "#85FCA647",
         height: SIZES.height * 0.03,
-        width: SIZES.width * 0.2,
+        width: SIZES.width * 0.25,
         borderRadius: 10,
         alignItems: "center",
         justifyContent: "center"
@@ -564,7 +555,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFB16947",
         height: SIZES.height * 0.03,
         width: SIZES.width * 0.2,
-
         borderRadius: 10,
         alignItems: "center",
         justifyContent: "center"

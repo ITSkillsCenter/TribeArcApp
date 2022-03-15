@@ -6,14 +6,13 @@ import vid from "../../assets/images/vid.mp4"
 import CustomButton from "../../components/CustomButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import VideoPlayer from "react-native-video-player";
-import {handleQuery} from "../../graphql/requests";
+import {handleQuery, handleQueryNoToken} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 
 
 const WelcomePage = ({navigation}) => {
 
     // const videoPlayer = useRef();
-    const user = useContext(UserContext)
 
     const [video, setVideo] = useState("")
     const [text, setText] = useState("")
@@ -21,7 +20,7 @@ const WelcomePage = ({navigation}) => {
 
     useEffect(() => {
 
-        // WelcomeTextAndVid()
+        WelcomeTextAndVid()
 
     }, [])
 
@@ -42,25 +41,24 @@ const WelcomePage = ({navigation}) => {
     const WelcomeTextAndVid = async () => {
 
         let qry = `query {
-  communities(where: { id: 15 }) {
+  welcomeMesssages {
     welcome_text
-     welcome_video
+    welcome_video
   }
-}`
-        try {
+}
 
-            const qryRes = await handleQuery(qry, user.token, false)
-            // console.log(qryRes.data.communities[0])
-            await setVideo(qryRes.data.communities[0].welcome_video)
-            if (qryRes.data.communities[0].welcome_text) {
-                await setText(qryRes.data.communities[0].welcome_text)
+`
+        try {
+            const qryRes = await handleQueryNoToken(qry)
+            // console.log(qryRes.data.welcomeMesssages[0].welcome_text)
+            await setVideo(qryRes.data.welcomeMesssages[0].welcome_video)
+            if (qryRes.data.welcomeMesssages[0].welcome_text) {
+                await setText(qryRes.data.welcomeMesssages[0].welcome_text)
             }
 
         } catch (e) {
             console.log(e, "WelcomeTextERR")
         }
-
-
     }
 
 
@@ -141,10 +139,11 @@ const styles = StyleSheet.create({
     },
     textWlc: {
         alignSelf: "center",
-        marginTop: 80,
+        marginTop: 60,
+        textAlign:"center",
         color: COLORS.primary,
-        fontSize: 22,
-        fontFamily: "Nexa-Bold"
+        fontSize: 18,
+        fontFamily: "Nexa-Book"
     }
 
 

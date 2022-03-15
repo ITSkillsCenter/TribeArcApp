@@ -303,7 +303,7 @@ const EditProfile = ({navigation}) => {
 
                     <CustomTextInput
                         title={"Next of kin's Phone Number"}
-                        initialValue={nextOfKin}
+                        initialValue={nextOfKinPhoneNum}
                         onFocus={() => setNextOfKinPhoneNum("")}
                         onChange={value => setNextOfKinPhoneNum(value)}
                         placeholderText={"Next of kin's Phone Number"}

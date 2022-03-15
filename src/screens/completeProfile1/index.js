@@ -156,7 +156,9 @@ const CompleteProfile1 = ({navigation}) => {
             {/*<BackButton onPress={() => navigation.pop()}/>*/}
 
             <View style={styles.box}>
-                <Image style={{height: SIZES.width * 0.2, width: SIZES.width * 0.2, right: 15}}
+                <Image
+                    resizeMode={"cover"}
+                    style={{height: SIZES.width * 0.2, width: SIZES.width * 0.2, alignSelf:"flex-start" }}
                        source={icons.circular1}/>
                 <View style={styles.box2}>
                     <Text style={styles.text1}>Complete your Profile</Text>
@@ -167,8 +169,13 @@ const CompleteProfile1 = ({navigation}) => {
             <Text style={styles.perInfo}>Personal info</Text>
 
             <ImageBackground
-                resizeMode={"contain"}
-                mag
+                resizeMode={"cover"}
+                imageStyle={{
+                    borderRadius: SIZES.width * 0.25,
+                    width: SIZES.width * 0.25,
+                    height: SIZES.width * 0.25,
+
+                }}
                 source={filePath ? {uri: filePath} : avatar ? {uri: avatar} : require("../../assets/images/userImg.png")}
                 style={{
                     width: SIZES.width * 0.25,
@@ -258,6 +265,7 @@ const CompleteProfile1 = ({navigation}) => {
                             await UpdateUserData()
                             await UploadFile()
                             navigation.navigate("CompleteProfile2")
+
 
 
                         } catch (e) {

@@ -55,10 +55,8 @@ const Login = ({navigation, route}) => {
                         inputContainerStyle={{
                             backgroundColor: "#FFF",
                             borderColor: focused ? COLORS.primary : "grey",
-                            fontSize: 16,
                             borderWidth: focused ? 1 : 0.5,
                             height: SIZES.width * 0.13,
-                            borderRadius: 0,
                         }}
                     />
 
@@ -77,8 +75,6 @@ const Login = ({navigation, route}) => {
                         }}
                         inputContainerStyle={{
                             backgroundColor: "#FFF",
-                            fontSize: 16,
-                            borderRadius: 0,
                             borderColor: focused2 ? COLORS.primary : "grey",
                             borderWidth: focused2 ? 1 : 0.5,
                             height: SIZES.width * 0.13,
