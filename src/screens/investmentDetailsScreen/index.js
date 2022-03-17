@@ -25,7 +25,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
 
     const investments = route.params
-    console.log(investments.price_per_slot)
+    // console.log(investments.price_per_slot)
 
 
     useEffect(() => {
@@ -201,6 +201,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
         unit_booked: ${counter}
         unit_amount: ${investments.price_per_slot}
         community: 15
+        status: "PENDING"
       }
     }
   ) {
@@ -214,10 +215,10 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
         try {
 
+            // console.log(bookMtn)
+
             setLoading(true)
-
             const bookMtnRes = await handleQuery(bookMtn, user.token, false)
-
             setLoading(false)
             navigation.navigate("BottomTabs")
 
@@ -433,7 +434,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
             <CustomButton
                 loading={loading}
-                containerStyle={{marginVertical:30}}
+                containerStyle={{marginVertical: 30}}
                 filled
                 text={"Book Now"}
                 onPress={async () => {
