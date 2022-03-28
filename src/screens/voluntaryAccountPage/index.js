@@ -135,22 +135,14 @@ const VoluntaryAccountPage = ({navigation, route}) => {
         return (
             <View
                 style={{
-
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    // marginVertical:
-                    // paddingHorizontal: 10,
                     height: 40,
                     marginBottom: 10
-                    // backgroundColor:"cyan"
-
                 }}
                 onPress={onPress}>
-
-
                 {children}
-
             </View>
         );
 
@@ -324,12 +316,10 @@ const VoluntaryAccountPage = ({navigation, route}) => {
                                       <View style={{justifyContent: "space-between", height: SIZES.width * 0.13}}>
 
 
-
-                                          {item.status === "APPROVED" ? <Text style={styles.recentTransactionText}>Withdrawal Successful</Text>:item.status==="PENDING"?<Text style={styles.recentTransactionText}>Withdrawal pending</Text> : <Text style={styles.recentTransactionText}>Withdrawal Failed</Text>}
-
-
-
-
+                                          {item.status === "APPROVED" ? <Text style={styles.recentTransactionText}>Withdrawal
+                                              Successful</Text> : item.status === "PENDING" ?
+                                              <Text style={styles.recentTransactionText}>Withdrawal pending</Text> :
+                                              <Text style={styles.recentTransactionText}>Withdrawal Failed</Text>}
 
 
                                           <Text style={{
@@ -347,13 +337,13 @@ const VoluntaryAccountPage = ({navigation, route}) => {
                                                       fontFamily: "Nexa-Bold"
                                                   }}>Approved</Text>
                                               </View>
-                                              : item.status==="DECLINED"? <View style={styles.declined}>
-                                                  <Text style={{
-                                                      color: COLORS.white,
-                                                      fontSize: 11,
-                                                      fontFamily: "Nexa-Bold"
-                                                  }}>Declined</Text>
-                                              </View>:
+                                              : item.status === "DECLINED" ? <View style={styles.declined}>
+                                                      <Text style={{
+                                                          color: COLORS.white,
+                                                          fontSize: 11,
+                                                          fontFamily: "Nexa-Bold"
+                                                      }}>Declined</Text>
+                                                  </View> :
                                                   <View style={styles.pendingBox}>
                                                       <Text style={{
                                                           color: COLORS.white,
@@ -648,7 +638,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         borderRadius: 5
     },
-    pendingBox:{
+    pendingBox: {
         width: 80,
         height: 30,
         backgroundColor: "#ffd069",

@@ -28,17 +28,21 @@ const TopUpScreen = ({navigation, route}) => {
     const [testKey, setTestKey] = useState("")
 
 
+    const [feeBridge, setFeeBridge] = useState("")
+    const [extraFee, setExtraFee] = useState("")
+    const [percentageBelow, setPercentageBelow] = useState("")
+
+
     useEffect(() => {
 
         ChkRegFee()
-        GetPaymentKey()
+        GetPaymentKeyAndFeePercent()
 
 
     }, [])
 
 
-    const GetPaymentKey = async () => {
-
+    const GetPaymentKeyAndFeePercent = async () => {
 
         const getKey = `query {
             communities(where: { id: 15 }) {
@@ -48,10 +52,15 @@ const TopUpScreen = ({navigation, route}) => {
         try {
 
             const gottenKey = await handleQuery(getKey, user.token, false)
-            // console.log(gottenKey.data.communities[0].settings.paystack.status)
-            // console.log(gottenKey.data.communities[0].settings.paystack.live.public_key)
-            // console.log(gottenKey.data.communities[0].settings.paystack.test.public_key)
-            //
+
+            // console.log(gottenKey.data.communities[0].settings.paystack.fee.extra_fee)
+
+
+            await setFeeBridge(parseFloat(gottenKey.data.communities[0].settings.paystack.fee.amount))
+            await setExtraFee(parseFloat(gottenKey.data.communities[0].settings.paystack.fee.extra_fee))
+            await setPercentageBelow(parseFloat(gottenKey.data.communities[0].settings.paystack.fee.percentage_below))
+
+
             if (gottenKey?.data?.communities[0]?.settings?.paystack?.status) {
                 await setLiveKey(gottenKey.data.communities[0].settings.paystack.live.public_key)
             }
@@ -60,7 +69,7 @@ const TopUpScreen = ({navigation, route}) => {
             }
 
         } catch (e) {
-            console.log(e)
+            console.log(e.response.data)
         }
     }
 
@@ -129,7 +138,7 @@ const TopUpScreen = ({navigation, route}) => {
 
                         <CustomTextInput
                             initialValue={topUp}
-                            onChange={setTopUp}
+                            onChange={value => parseFloat(setTopUp(value))}
                             placeholderText={"e.g 20,000"}
                             props={{
                                 keyboardType: "numeric"
@@ -145,7 +154,7 @@ const TopUpScreen = ({navigation, route}) => {
 
                     <Paystack
                         paystackKey={liveKey || testKey}
-                        amount={topUp}
+                        amount={topUp < feeBridge ? (topUp * percentageBelow) + parseFloat(topUp) : (topUp * percentageBelow) + parseFloat(topUp) + parseFloat(extraFee)}
                         billingEmail={user.email}
                         activityIndicatorColor={COLORS.primary}
                         onCancel={async (e) => {
@@ -163,14 +172,15 @@ const TopUpScreen = ({navigation, route}) => {
 
 
                     <View style={{flex: 2, justifyContent: "flex-end"}}>
-                        <CustomButton onPress={() => {
-
-                            if (topUp !== "") {
-                                paidRegFee ? paystackWebViewRef.current.startTransaction() : navigation.navigate("RegistrationFee")
-                            }
-
-                        }} filled={topUp !== ""}
-                                      text={"Proceed"}/>
+                        <CustomButton
+                            onPress={() => {
+                                if (topUp !== "") {
+                                    paidRegFee ? paystackWebViewRef.current.startTransaction() : navigation.navigate("RegistrationFee")
+                                }
+                            }}
+                            filled={topUp !== ""}
+                            text={"Proceed"}
+                        />
                     </View>
 
                 </View>

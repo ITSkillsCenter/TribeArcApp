@@ -7,6 +7,7 @@ import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs
 import moment from "moment";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import LottieView from "lottie-react-native";
 
 
 const data = [
@@ -227,6 +228,15 @@ const SavingsTransactionPage = ({navigation}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={allTrx}
                           key={item => item.index}
+                          ListEmptyComponent={
+                              <View style={{alignItems: "center", justifyContent: "center",}}>
+
+                                  <LottieView style={{width: 250, height: 250}}
+                                              source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
+                                  <Text style={{color: COLORS.primary, alignSelf:"center"}}>No Transaction available</Text>
+
+                              </View>
+                          }
                           renderItem={({item, index}) => (
                               <View>
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
@@ -294,6 +304,15 @@ const SavingsTransactionPage = ({navigation}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={pending}
                           key={item => item.index}
+                          ListEmptyComponent={
+                              <View style={{alignItems: "center", justifyContent: "center",}}>
+
+                                  <LottieView style={{width: 250, height: 250}}
+                                              source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
+                                  <Text style={{color: COLORS.primary, alignSelf:"center"}}>No Transaction available</Text>
+
+                              </View>
+                          }
                           renderItem={({item, index}) => (
                               <View>
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
@@ -362,6 +381,15 @@ const SavingsTransactionPage = ({navigation}) => {
             <View style={styles.tabOneContainer}>
                 <FlatList data={saved}
                           key={item => item.index}
+                          ListEmptyComponent={
+                              <View style={{alignItems: "center", justifyContent: "center",}}>
+
+                                  <LottieView style={{width: 250, height: 250}}
+                                              source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
+
+                                  <Text style={{color: COLORS.primary, alignSelf:"center"}}>No Transaction available</Text>
+                              </View>
+                          }
                           renderItem={({item, index}) => (
                               <View>
                                   <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}

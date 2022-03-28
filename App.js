@@ -344,58 +344,9 @@ const App = () => {
     };
 
     const BottomTabs = ({navigation}) => {
-//         const user = useContext(UserContext);
-//
-//
-//         const [loading, setLoading] = useState(false)
-//         const [agreed, setAgreed] = useState(false)
-//
-//         useEffect(() => {
-//
-//             CheckTerms()
-//         }, []);
-//
-//
-//         const CheckTerms = async () => {
-//
-//             let qry = `query {
-//   users(where: {id: ${user.id} }) {
-//     user_investment_agreement{
-//       agreed
-//     }
-//   }
-// }
-//
-// `
-//             try {
-//                 setLoading(true)
-//                 const qryRes = await handleQuery(qry, user.token, false)
-//
-//                 // if (qryRes) {
-//                 console.log(qryRes.data.users[0].user_investment_agreement.agreed, "ageeeed")
-//                 await setAgreed(qryRes.data.users[0].user_investment_agreement.agreed)
-//                 // }
-//
-//                 // await setLoading(false)
-//
-//
-//             } catch (e) {
-//                 console.log(e, "CheckTermsErr")
-//
-//             } finally {
-//                 await setLoading(false)
-//
-//             }
-//         }
-
 
         return (
 
-            // loading ? <ActivityIndicator
-            //         style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
-            //         color={COLORS.primary}/> :
-            //
-            //     !agreed ? <TermsCondition/> :
             <Tab.Navigator
                 detachInactiveScreens
                 screenOptions={{

@@ -150,6 +150,8 @@ const SavingsAccountPage = ({navigation, route}) => {
 
                                   <LottieView style={{width: 250, height: 250}}
                                               source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
+                                  <Text style={{color: COLORS.primary, alignSelf:"center"}}>No Transaction available</Text>
+
                               </View>
                           }
                           renderItem={({item, index}) => (
@@ -225,6 +227,8 @@ const SavingsAccountPage = ({navigation, route}) => {
 
                                   <LottieView style={{width: 250, height: 250}}
                                               source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
+                                  <Text style={{color: COLORS.primary, alignSelf:"center"}}>No Transaction available</Text>
+
                               </View>
                           }
                           renderItem={({item, index}) => (
@@ -301,6 +305,8 @@ const SavingsAccountPage = ({navigation, route}) => {
 
                                   <LottieView style={{width: 250, height: 250}}
                                               source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
+                                  <Text style={{color: COLORS.primary, alignSelf:"center"}}>No Transaction available</Text>
+
                               </View>
                           }
                           renderItem={({item, index}) => (

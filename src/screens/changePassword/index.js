@@ -1,12 +1,14 @@
 // @flow
 import React, {useContext, useState} from 'react';
-import {View, TouchableOpacity, StyleSheet, Image, Text, Linking, TextInput} from "react-native";
+import {View, TouchableOpacity, StyleSheet, Image, Text, Linking, TextInput, ActivityIndicator} from "react-native";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import BackButton from "../../components/BackButton";
 import {COLORS, icons, SIZES} from "../../constants";
 import CustomButton from "../../components/CustomButton";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
+import axios from "axios";
+import {BASE_URL} from "../../config";
 
 
 const ChangePassword = ({navigation}) => {
@@ -16,8 +18,44 @@ const ChangePassword = ({navigation}) => {
 
     // const [oldPassword, setOldPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
+    const [oldPassword, setOldPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isLoading, setIsLoading] = useState("")
+    const [editable, setEditable] = useState(false)
+    const [passwordErr, setPasswordErr] = useState("")
+    const [passwordLoading, setPasswordLoading] = useState(false)
+    const [success, setSuccess] = useState(false)
+
+
+    const ConfirmOldPassword = async () => {
+
+
+        try {
+            setPasswordLoading(true)
+
+            const {data} = await axios.post(`${BASE_URL}/auth/local`, {
+                identifier: user.email,
+                password: oldPassword,
+            });
+            // console.log(data)
+
+            if (data) {
+                await setSuccess(true)
+                await setEditable(true)
+            }
+            await setPasswordLoading(false)
+
+
+        } catch (e) {
+            console.log(e.response.data.data[0].messages[0].message, "")
+            {
+                e.response.data.data[0].messages[0].message === "Identifier or password invalid." ? setPasswordErr("Invalid password") : setPasswordErr("An Error Occurred")
+            }
+            await setPasswordLoading(false)
+
+        }
+
+    }
 
 
     const UpdatePassword = async () => {
@@ -35,10 +73,8 @@ const ChangePassword = ({navigation}) => {
 
 
         try {
-
             let res = await handleQuery(qry, user.token, false);
             await setIsLoading(false)
-
 
         } catch (e) {
 
@@ -60,20 +96,28 @@ const ChangePassword = ({navigation}) => {
                 <View style={styles.box}>
 
 
-                    {/*<TextInput*/}
-                    {/*    placeholder={"Enter Old Password"}*/}
-                    {/*    value={oldPassword}*/}
-                    {/*    onChangeText={value => {*/}
-                    {/*        setOldPassword(value)*/}
-                    {/*        console.log(value, "old")*/}
-                    {/*    }}*/}
-                    {/*    style={styles.textInput}*/}
-                    {/*/>*/}
+                    <TextInput
+                        placeholder={"Enter Old Password"}
+                        value={oldPassword}
+                        onBlur={() => ConfirmOldPassword()}
+                        onChangeText={value => {
+                            setOldPassword(value)
+                            setPasswordLoading(false)
+                            setPasswordErr("")
+                            // console.log(value, "old")
+                        }}
+                        style={styles.textInput}
+                    />
+                    {passwordErr !== "" && <Text style={{color: "red",}}>{passwordErr}</Text>}
+                    {success && <Text style={{color:"green"}}>Enter new password</Text>}
+                    {passwordLoading &&
+                        <ActivityIndicator style={{alignSelf: "flex-start"}} color={COLORS.primary} size={"small"}/>}
 
                     <TextInput
                         placeholder={"Enter New Password"}
                         value={newPassword}
                         placeholderTextColor={"#999999"}
+                        editable={editable}
                         onChangeText={value => {
                             setNewPassword(value)
                             // console.log(value,"new")
@@ -85,7 +129,7 @@ const ChangePassword = ({navigation}) => {
                     <TextInput
                         placeholder={"Confirm New Password"}
                         placeholderTextColor={"#999999"}
-
+                        editable={editable}
                         value={confirmPassword}
                         onChangeText={value => {
                             setConfirmPassword(value)
@@ -101,7 +145,6 @@ const ChangePassword = ({navigation}) => {
 
 
                 </View>
-
 
 
             </KeyboardAwareScrollView>

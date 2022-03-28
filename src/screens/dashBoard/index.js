@@ -4,7 +4,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {
     ActivityIndicator,
     Image,
-    ImageBackground,
+    ImageBackground, Pressable,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -191,28 +191,29 @@ const DashBoard = ({navigation}) => {
                 <View style={styles.container2}>
                     {/*WELCOME BACK SECTION*/}
                     <View style={styles.header}>
-                        <View style={styles.imgContainer}>
+                        <Pressable onPress={() => navigation.navigate("Profile")} style={styles.imgContainer}>
                             <FastImage style={styles.img}
                                        source={avatar ? {
                                            uri: avatar,
                                            priority: FastImage.priority.normal
                                        } : require("../../assets/images/userImg.png")}/>
-                        </View>
+                        </Pressable>
                         <View style={styles.nameContainer}>
                             <Text style={styles.username}>Hello {firstname},</Text>
                             <Text style={styles.welcomeText}>Welcome Back!</Text>
                         </View>
-                        <TouchableOpacity activeOpacity={0.9} onPress={() => {
+                        <Pressable activeOpacity={0.9} onPress={() => {
                             // Alert.alert("Notification", "Notification feature coming soon")
                         }}>
                             <Image resizeMode={"contain"}
                                    source={notification ? icons.notificationBell : icons.notificationDot}
                                    style={styles.notification}/>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
 
                     {/*BALANCE CARD SECTION*/}
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollView snapToAlignment={"center"} decelerationRate={"fast"}
+                                showsVerticalScrollIndicator={false}>
                         <View style={{width: "100%", marginBottom: 15}}>
                             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
 

@@ -9,6 +9,7 @@ import ShortTextInput from "../../components/ShortTextInput";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import {Modalize} from "react-native-modalize";
+import DropDownPicker from 'react-native-dropdown-picker';
 import DatePicker from "react-native-datepicker";
 
 
@@ -32,6 +33,15 @@ const Savings = ({navigation, route}) => {
     const [date, setDate] = useState("");
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+
+
+
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [items, setItems] = useState([
+        {label: 'Apple', value: 'apple'},
+        {label: 'Banana', value: 'banana'}
+    ]);
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -169,7 +179,8 @@ const Savings = ({navigation, route}) => {
             height: 510,
         }}>
             <View style={{marginHorizontal: 5}}>
-                <Text style={{fontSize: SIZES.width * 0.05, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Add Card</Text>
+                <Text style={{fontSize: SIZES.width * 0.05, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Add
+                    Card</Text>
                 <Text style={{fontSize: 14, color: "#999999", fontFamily: "Nexa-Book", marginVertical: 10}}>Fill the
                     card
                     details below to be able to save</Text>
@@ -261,7 +272,8 @@ const Savings = ({navigation, route}) => {
         }}>
 
             <View style={{marginHorizontal: 5}}>
-                <Text style={{fontSize: SIZES.width * 0.05, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Select Payment Method</Text>
+                <Text style={{fontSize: SIZES.width * 0.05, color: COLORS.black, fontFamily: "Nexa-Bold"}}>Select
+                    Payment Method</Text>
                 <Text style={{fontSize: 14, color: "#999999", fontFamily: "Nexa-Book", marginVertical: 10}}>Tap the
                     button below to add a Card</Text>
             </View>
@@ -438,55 +450,17 @@ const Savings = ({navigation, route}) => {
                 </View>
 
 
-                <DatePicker
-                    style={styles.datePickerStyle}
-                    date={date}
-                    mode="date"
-                    placeholder="Pick your monthly savings date"
-                    format="DD/MM/YYYY"
-                    minDate="01-01-2009"
-                    maxDate="01-01-2030"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    iconSource={icons.dateImg}
-                    customStyles={{
-                        dateIcon: {
-                            position: 'absolute',
-                            right: -2,
-                            top: 4,
-                            marginLeft: 0,
-                        },
-                        dateInput: {
-                            borderColor: "#C4C4C4",
-                            alignItems: "flex-start",
-                            borderWidth: 0.5,
-                            borderRadius: 5,
-                            paddingHorizontal: 10,
-                            height: 50,
-                            fontFamily: "Nexa-Book"
-                        },
-                        placeholderText: {
-                            fontSize: 14,
-                            opacity: 0.7,
-                            color: "gray",
-                            fontFamily: "Nexa-Book"
-
-                        },
-                        dateText: {
-                            fontSize: 17,
-                        }
-                    }}
-                    onDateChange={(date) => {
-                        setDate(date);
-                        // console.log(date)
-                    }}
+                <DropDownPicker
+                    open={open}
+                    value={value}
+                    items={items}
+                    setOpen={setOpen}
+                    setValue={setValue}
+                    setItems={setItems}
                 />
 
 
                 <View style={styles.saveButton}>
-
-
-                    <Text> {route.params}</Text>
                     <CustomButton
                         loading={isLoading}
                         filled={amountToSave !== ""}
@@ -627,7 +601,7 @@ const styles = StyleSheet.create({
         position: "absolute"
     },
     datePickerStyle: {
-        top:20,
+        top: 20,
         width: "100%"
 
     }

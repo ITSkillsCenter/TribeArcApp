@@ -42,6 +42,11 @@ const LinkCard = ({navigation}) => {
     const [testKey, setTestKey] = useState("")
 
 
+    const [feeBridge, setFeeBridge] = useState("")
+    const [extraFee, setExtraFee] = useState("")
+    const [percentageBelow, setPercentageBelow] = useState("")
+
+
     useEffect(() => {
 
         GetPaymentKey()
@@ -61,10 +66,13 @@ const LinkCard = ({navigation}) => {
         try {
 
             const gottenKey = await handleQuery(getKey, user.token, false)
-            // console.log(gottenKey.data.communities[0].settings.paystack.status)
-            // console.log(gottenKey.data.communities[0].settings.paystack.live.public_key)
-            // console.log(gottenKey.data.communities[0].settings.paystack.test.public_key)
-            //
+
+
+            await setFeeBridge(parseFloat(gottenKey.data.communities[0].settings.paystack.fee.amount))
+            await setExtraFee(parseFloat(gottenKey.data.communities[0].settings.paystack.fee.extra_fee))
+            await setPercentageBelow(parseFloat(gottenKey.data.communities[0].settings.paystack.fee.percentage_below))
+
+
             if (gottenKey?.data?.communities[0]?.settings?.paystack?.status) {
                 await setLiveKey(gottenKey.data.communities[0].settings.paystack.live.public_key)
             }
@@ -297,7 +305,7 @@ const LinkCard = ({navigation}) => {
 
             <Paystack
                 paystackKey={liveKey || testKey}
-                amount={100}
+                amount={(100 * percentageBelow) + parseFloat(100)}
                 billingEmail={user.email}
                 activityIndicatorColor={COLORS.primary}
                 onCancel={async (e) => {

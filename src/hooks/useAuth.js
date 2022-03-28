@@ -3,7 +3,6 @@ import {sleep} from "../utils/sleep";
 import {createAction} from "../utils/createAction";
 import {handleQuery, handleQueryNoToken} from "../graphql/requests";
 import SecureStorage from "react-native-secure-storage";
-import {resolve} from "@babel/core/lib/vendor/import-meta-resolve";
 
 
 export const useAuth = () => {
@@ -70,10 +69,7 @@ export const useAuth = () => {
 
                 try {
 
-
                     return new Promise(async (resolve, reject) => {
-
-
                         let res = await handleQueryNoToken(qry);
 
                         if (res.errors) {
@@ -127,21 +123,18 @@ export const useAuth = () => {
                         await SecureStorage.setItem("user", JSON.stringify(user));
                         dispatch(createAction("SET_USER", user));
 
-
                     })
 
 
                 } catch (e) {
                     console.log(e, "error @login")
                     return reject(e)
-
                 }
             },
 
 
             register: async (email, password, referredBy,) => {
                 const rString = randomString(5, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-
 
                 let codeVerification = `mutation {
                                         referralCheck(referral_code: "${referredBy}") {

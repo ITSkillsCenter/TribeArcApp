@@ -113,10 +113,10 @@ const CardSettings = ({navigation}) => {
                 />}
 
 
-            <View style={{ justifyContent: "flex-end"}}>
-                <CustomButton filled text={"Remove Card"}/>
+            {/*<View style={{ justifyContent: "flex-end"}}>*/}
+            {/*    <CustomButton filled text={"Remove Card"}/>*/}
 
-            </View>
+            {/*</View>*/}
 
 
         </View>

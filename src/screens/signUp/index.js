@@ -100,8 +100,6 @@ const SignUp = ({navigation}) => {
                             setReferredBy(referredBy);
                             setIsError(false)
                             setIsLoading(false)
-
-
                         }}
                         inputContainerStyle={{
                             backgroundColor: "#FFF",
