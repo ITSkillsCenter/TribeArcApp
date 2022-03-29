@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import VideoPlayer from "react-native-video-player";
 import {handleQuery, handleQueryNoToken} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const WelcomePage = ({navigation}) => {
@@ -63,38 +64,43 @@ const WelcomePage = ({navigation}) => {
 
 
     return (
-        <SafeAreaView style={styles.container}>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
 
-            {/*WELCOME TEXT*/}
-            <View style={styles.container2}>
-                <View style={styles.textBox}>
-                    <Text style={styles.text}>Welcome to</Text>
-                    <Image style={styles.img} resizeMode={"contain"} source={require("../../assets/images/logo.png")}/>
+                {/*WELCOME TEXT*/}
+                <View style={styles.container2}>
+                    <View style={styles.textBox}>
+                        <Text style={styles.text}>Welcome to</Text>
+                        <Image style={styles.img} resizeMode={"contain"}
+                               source={require("../../assets/images/logo.png")}/>
+                    </View>
+
+                    {/*VIDEO PLAYER*/}
+                    <VideoPlayer
+                        video={{uri: video}}
+                        videoWidth={1600}
+                        videoHeight={900}
+                        autoplay
+                        disableFullscreen
+                        style={styles.backgroundVideo}
+                    />
+                    <Text style={styles.textWlc}>{text}</Text>
                 </View>
 
-                {/*VIDEO PLAYER*/}
-                <VideoPlayer
-                    video={{uri: video}}
-                    videoWidth={1600}
-                    videoHeight={900}
-                    autoplay
-                    disableFullscreen
-                    style={styles.backgroundVideo}
-                />
-                <Text style={styles.textWlc}>{text}</Text>
+                {/*CONTINUE BUTTON*/}
+                <View style={styles.buttonContainer}>
+                    <CustomButton
+                        filled
+                        text={"Continue"}
+                        onPress={async () => {
+                            await WelcomeViewed()
+                        }}
+                    />
+                </View>
             </View>
 
-            {/*CONTINUE BUTTON*/}
-            <View style={styles.buttonContainer}>
-                <CustomButton
-                    filled
-                    text={"Continue"}
-                    onPress={async () => {
-                        await WelcomeViewed()
-                    }}
-                />
-            </View>
-        </SafeAreaView>
+        </>
     );
 };
 
@@ -140,7 +146,7 @@ const styles = StyleSheet.create({
     textWlc: {
         alignSelf: "center",
         marginTop: 60,
-        textAlign:"center",
+        textAlign: "center",
         color: COLORS.primary,
         fontSize: 18,
         fontFamily: "Nexa-Book"

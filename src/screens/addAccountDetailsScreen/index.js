@@ -11,6 +11,7 @@ import {UserContext} from "../../context/UserContext";
 import {BASE_URL} from "../../config";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {handleQuery} from "../../graphql/requests";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const AddAccountDetailsScreen = ({navigation}) => {
@@ -126,108 +127,110 @@ const AddAccountDetailsScreen = ({navigation}) => {
 
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
 
-        <View style={styles.container}>
-            <BackButton onPress={() => navigation.pop()}/>
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-
-
-                <Text style={styles.acctDetails}>Account Details</Text>
-
-                <View style={{marginTop: 30}}>
-
-                    <Text style={styles.title}>Bank Name</Text>
-
-                    <SelectDropdown
-                        data={banks}
-                        onSelect={async (selectedItem, index) => {
-                            console.log(selectedItem.name, index)
-                            await setBankCode(selectedItem.code)
-                            await setBankName(selectedItem.name)
-
-                        }}
-                        buttonTextAfterSelection={(selectedItem, index) => {
-                            // text represented after item is selected
-                            // if data array is an array of objects then return selectedItem.property to render after item is selected
-                            return selectedItem.name
-                        }}
-                        rowTextForSelection={(item, index) => {
-                            // text represented for each item in dropdown
-                            // if data array is an array of objects then return item.property to represent item in dropdown
-                            return item.name
-                        }}
-                        rowStyle={{width: "100%"}}
-                        dropdownStyle={{width: "90%"}}
-                        defaultButtonText={"Select Bank"}
-                        buttonTextStyle={{
-                            color: COLORS.black,
-                            textAlign: "left",
-                            fontSize: SIZES.width * 0.04,
-                            opacity: 0.8,
-                            fontFamily: "Nexa-Book",
-                            justifyContent: "flex-start"
-                        }}
-                        buttonStyle={{
-                            width: "100%",
-                            backgroundColor: "#f5f5ff",
-                            borderRadius: 5,
-                            height: SIZES.width * 0.13,
-
-                        }}
-                    />
-                    <CustomTextInput
-                        props={{
-                            keyboardType: "numeric",
-                            maxLength: 10
-                        }}
-                        onBlur={async () => await ValidateAcctNum()}
-                        initialValue={acctNumber}
-                        onChange={acctNumber => {
-                            setAcctNumber(acctNumber)
-                            setFullName("")
-                            setIsError(false)
-                        }}
-                        placeholderText={"Enter Bank Account Number"}
-                        title={"Bank Account Number"}/>
-
-                    {isError ? <Text style={{color: "red"}}>Invalid account number</Text> : null}
+            <View style={styles.container}>
+                <BackButton onPress={() => navigation.pop()}/>
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
 
-                    {
+                    <Text style={styles.acctDetails}>Account Details</Text>
 
-                        isLoading ? <ActivityIndicator style={{alignSelf: "flex-start"}} size={"small"}
-                                                       color={COLORS.primary}/> : null
+                    <View style={{marginTop: 30}}>
 
-                    }
+                        <Text style={styles.title}>Bank Name</Text>
+
+                        <SelectDropdown
+                            data={banks}
+                            onSelect={async (selectedItem, index) => {
+                                console.log(selectedItem.name, index)
+                                await setBankCode(selectedItem.code)
+                                await setBankName(selectedItem.name)
+
+                            }}
+                            buttonTextAfterSelection={(selectedItem, index) => {
+                                // text represented after item is selected
+                                // if data array is an array of objects then return selectedItem.property to render after item is selected
+                                return selectedItem.name
+                            }}
+                            rowTextForSelection={(item, index) => {
+                                // text represented for each item in dropdown
+                                // if data array is an array of objects then return item.property to represent item in dropdown
+                                return item.name
+                            }}
+                            rowStyle={{width: "100%"}}
+                            dropdownStyle={{width: "90%"}}
+                            defaultButtonText={"Select Bank"}
+                            buttonTextStyle={{
+                                color: COLORS.black,
+                                textAlign: "left",
+                                fontSize: SIZES.width * 0.04,
+                                opacity: 0.8,
+                                fontFamily: "Nexa-Book",
+                                justifyContent: "flex-start"
+                            }}
+                            buttonStyle={{
+                                width: "100%",
+                                backgroundColor: "#f5f5ff",
+                                borderRadius: 5,
+                                height: SIZES.width * 0.13,
+
+                            }}
+                        />
+                        <CustomTextInput
+                            props={{
+                                keyboardType: "numeric",
+                                maxLength: 10
+                            }}
+                            onBlur={async () => await ValidateAcctNum()}
+                            initialValue={acctNumber}
+                            onChange={acctNumber => {
+                                setAcctNumber(acctNumber)
+                                setFullName("")
+                                setIsError(false)
+                            }}
+                            placeholderText={"Enter Bank Account Number"}
+                            title={"Bank Account Number"}/>
+
+                        {isError ? <Text style={{color: "red"}}>Invalid account number</Text> : null}
 
 
-                    <CustomTextInput props={{
+                        {
 
-                        editable: false
-                    }} initialValue={fullName} onChange={setFullName} placeholderText={"Full Name"}
-                                     title={"Account Name"}/>
+                            isLoading ? <ActivityIndicator style={{alignSelf: "flex-start"}} size={"small"}
+                                                           color={COLORS.primary}/> : null
+
+                        }
+
+
+                        <CustomTextInput props={{
+
+                            editable: false
+                        }} initialValue={fullName} onChange={setFullName} placeholderText={"Full Name"}
+                                         title={"Account Name"}/>
+
+                    </View>
+
+
+                </KeyboardAwareScrollView>
+
+                <View style={{justifyContent: "flex-end", flex: 2}}>
+                    <CustomButton
+                        loading={loading}
+                        onPress={async () => {
+
+                            if (fullName !== "") {
+                                await SaveAcct()
+
+                            }
+                        }} filled={fullName !== ""} text={"Save"}/>
 
                 </View>
 
 
-            </KeyboardAwareScrollView>
-
-            <View style={{justifyContent: "flex-end", flex: 2}}>
-                <CustomButton
-                    loading={loading}
-                    onPress={async () => {
-
-                        if (fullName !== "") {
-                            await SaveAcct()
-
-                        }
-                    }} filled={fullName !== ""} text={"Save"}/>
-
             </View>
-
-
-        </View>
-
+        </>
     );
 };
 

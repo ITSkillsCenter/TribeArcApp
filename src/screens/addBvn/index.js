@@ -9,6 +9,7 @@ import {UserContext} from "../../context/UserContext";
 import SelectDropdown from 'react-native-select-dropdown'
 import axios from "axios";
 import {BASE_URL} from "../../config";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const AddBvn = ({navigation}) => {
@@ -144,113 +145,113 @@ const AddBvn = ({navigation}) => {
     }
 
 
-
-
-
     return (
-        <View style={styles.container}>
-            <BackButton onPress={() => navigation.pop()}/>
-            <Text style={styles.addBVN}>Add BVN</Text>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
+                <BackButton onPress={() => navigation.pop()}/>
+                <Text style={styles.addBVN}>Add BVN</Text>
 
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
-                <View style={styles.addBVNContainer}>
-                    <Image source={icons.addBvn} style={styles.image}/>
-                    <Text style={styles.text}>Your BVN is safe with us</Text>
-                    <Text style={styles.link} onPress={() => Linking.openURL("https://tribearc.com")}>Learn more</Text>
+                    <View style={styles.addBVNContainer}>
+                        <Image source={icons.addBvn} style={styles.image}/>
+                        <Text style={styles.text}>Your BVN is safe with us</Text>
+                        <Text style={styles.link} onPress={() => Linking.openURL("https://tribearc.com")}>Learn
+                            more</Text>
+                    </View>
+
+
+                    <SelectDropdown
+                        data={banks}
+                        onSelect={(selectedItem, index) => {
+                            console.log(selectedItem.code, index)
+                            setBankCode(selectedItem.code)
+
+                        }}
+                        buttonTextAfterSelection={(selectedItem, index) => {
+                            // text represented after item is selected
+                            // if data array is an array of objects then return selectedItem.property to render after item is selected
+                            return selectedItem.name
+                        }}
+                        rowTextForSelection={(item, index) => {
+                            // text represented for each item in dropdown
+                            // if data array is an array of objects then return item.property to represent item in dropdown
+                            return item.name
+                        }}
+                        rowStyle={{width: "100%"}}
+                        dropdownStyle={{width: "90%"}}
+                        defaultButtonText={"Select Bank"}
+                        buttonTextStyle={{
+                            color: COLORS.black,
+                            fontFamily: "Nexa-Book",
+                            textAlign: "left",
+                            fontSize: 15,
+                            opacity: 0.7
+                        }}
+                        buttonStyle={{
+                            width: "100%",
+                            backgroundColor: COLORS.white,
+                            borderWidth: 0.5,
+                            borderColor: COLORS.secondary,
+                            borderRadius: 5,
+                            height: SIZES.width * 0.14,
+                        }}
+                    />
+
+
+                    <TextInput
+                        placeholder={"Enter Account Number"}
+                        value={acctNumber}
+                        placeholderTextColor={"#999999"}
+                        onChangeText={value => {
+                            setAcctNumber(value)
+                            setError(false)
+                        }}
+                        style={styles.textInput}
+                        keyboardType={"numeric"}
+                        maxLength={10}
+                    />
+
+                    <TextInput
+                        placeholder={"Enter BVN"}
+                        value={bvn}
+                        placeholderTextColor={"#999999"}
+                        onChangeText={value => {
+                            setBvn(value)
+                            setError(false)
+
+                        }}
+                        style={styles.textInput}
+                        keyboardType={"numeric"}
+                        maxLength={13}
+                    />
+
+                    {error && <Text style={{color: "red", marginVertical: 10}}>Invalid Details</Text>}
+
+                    <Text style={styles.dontKnow}>Don't know your BVN? <Text
+                        onPress={() => Linking.openURL(`tel:*565*0%23`)}
+                        style={styles.dial}> Dial *565*0#</Text></Text>
+
+                </KeyboardAwareScrollView>
+
+
+                <View style={{flex: 2, justifyContent: "flex-end"}}>
+                    <CustomButton
+                        onPress={async () => {
+                            try {
+                                // await AddBvn()
+                                await ValidateBVN()
+
+                            } catch (e) {
+                                console.log(e, "error")
+                            }
+                        }}
+                        loading={isLoading} filled
+                        text={"Validate BVN"}/>
                 </View>
-
-
-                <SelectDropdown
-                    data={banks}
-                    onSelect={(selectedItem, index) => {
-                        console.log(selectedItem.code, index)
-                        setBankCode(selectedItem.code)
-
-                    }}
-                    buttonTextAfterSelection={(selectedItem, index) => {
-                        // text represented after item is selected
-                        // if data array is an array of objects then return selectedItem.property to render after item is selected
-                        return selectedItem.name
-                    }}
-                    rowTextForSelection={(item, index) => {
-                        // text represented for each item in dropdown
-                        // if data array is an array of objects then return item.property to represent item in dropdown
-                        return item.name
-                    }}
-                    rowStyle={{width: "100%"}}
-                    dropdownStyle={{width: "90%"}}
-                    defaultButtonText={"Select Bank"}
-                    buttonTextStyle={{
-                        color: COLORS.black,
-                        fontFamily: "Nexa-Book",
-                        textAlign: "left",
-                        fontSize: 15,
-                        opacity: 0.7
-                    }}
-                    buttonStyle={{
-                        width: "100%",
-                        backgroundColor: COLORS.white,
-                        borderWidth: 0.5,
-                        borderColor: COLORS.secondary,
-                        borderRadius: 5,
-                        height: SIZES.width * 0.14,
-                    }}
-                />
-
-
-                <TextInput
-                    placeholder={"Enter Account Number"}
-                    value={acctNumber}
-                    placeholderTextColor={"#999999"}
-                    onChangeText={value => {
-                        setAcctNumber(value)
-                        setError(false)
-                    }}
-                    style={styles.textInput}
-                    keyboardType={"numeric"}
-                    maxLength={10}
-                />
-
-                <TextInput
-                    placeholder={"Enter BVN"}
-                    value={bvn}
-                    placeholderTextColor={"#999999"}
-                    onChangeText={value => {
-                        setBvn(value)
-                        setError(false)
-
-                    }}
-                    style={styles.textInput}
-                    keyboardType={"numeric"}
-                    maxLength={13}
-                />
-
-                {error && <Text style={{color: "red", marginVertical: 10}}>Invalid Details</Text>}
-
-                <Text style={styles.dontKnow}>Don't know your BVN? <Text
-                    onPress={() => Linking.openURL(`tel:*565*0%23`)}
-                    style={styles.dial}> Dial *565*0#</Text></Text>
-
-            </KeyboardAwareScrollView>
-
-
-            <View style={{flex: 2, justifyContent: "flex-end"}}>
-                <CustomButton
-                    onPress={async () => {
-                        try {
-                            // await AddBvn()
-                            await ValidateBVN()
-
-                        } catch (e) {
-                            console.log(e, "error")
-                        }
-                    }}
-                    loading={isLoading} filled
-                    text={"Validate BVN"}/>
             </View>
-        </View>
-
+        </>
     );
 };
 

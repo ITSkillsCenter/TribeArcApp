@@ -8,6 +8,7 @@ import {handleQueryNoToken} from "../../graphql/requests";
 import CustomInputBox from "../../components/CustomInputBox";
 import CustomButton from "../../components/CustomButton";
 import CustomTextInput from "../../components/CustomTextInput";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const OtpScreen = ({navigation, route}) => {
@@ -66,63 +67,68 @@ const OtpScreen = ({navigation, route}) => {
     }
 
     return (
-        <View style={styles.container}>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
 
-            <Text style={styles.enterOtp}>Enter your OTP</Text>
-            <Text style={styles.desc}>To verify email, we’ve sent a one time password (OTP) to your email address</Text>
+                <Text style={styles.enterOtp}>Enter your OTP</Text>
+                <Text style={styles.desc}>To verify email, we’ve sent a one time password (OTP) to your email
+                    address</Text>
 
 
-            <View style={styles.inputBox}>
+                <View style={styles.inputBox}>
 
-                {/*ENTER OTP CODE*/}
-                <CustomTextInput
-                    title={"Enter OTP"}
-                    inputContainerStyle={styles.textInput}
-                    placeholderTextColor={"#999999"}
-                    placeholderText={"Enter one time password"}
-                    initialValue={otpCode}
-                    props={{
-                        maxLength: 6
-                    }}
-                    keyboardType={"numeric"}
-                    onChange={(value) => {
-                        setOtpCode(value)
-                        setErrMsg("")
-                        setLoading(false)
-                    }}
-                />
-                <Text style={{color: "red"}}>{errMsg}</Text>
+                    {/*ENTER OTP CODE*/}
+                    <CustomTextInput
+                        title={"Enter OTP"}
+                        inputContainerStyle={styles.textInput}
+                        placeholderTextColor={"#999999"}
+                        placeholderText={"Enter one time password"}
+                        initialValue={otpCode}
+                        props={{
+                            maxLength: 6
+                        }}
+                        keyboardType={"numeric"}
+                        onChange={(value) => {
+                            setOtpCode(value)
+                            setErrMsg("")
+                            setLoading(false)
+                        }}
+                    />
+                    <Text style={{color: "red"}}>{errMsg}</Text>
+                </View>
+
+                {/*RESEND OTP CODE*/}
+                <View style={{alignSelf: "flex-start", bottom: 20}}>
+                    <TextButtonComponent
+                        text={"Did not receive OTP?  "}
+                        pressable={"Resend Code"}
+                        onPress={async () => {
+                            await ResendOTP()
+                            setErrMsg(false)
+                        }}
+                    />
+                </View>
+                {loading && <ActivityIndicator color={COLORS.primary} size="large"/>}
+
+
+                {/*VERIFY OTP CODE*/}
+                <View style={styles.saveButton}>
+                    <CustomButton
+                        loading={loading}
+                        filled={otpCode !== ""}
+                        text={"Verify"}
+                        onPress={async () => {
+                            setErrMsg(false)
+                            if (otpCode !== "") {
+                                await VerifyOTP()
+                            }
+                        }}/>
+                </View>
+
             </View>
 
-            {/*RESEND OTP CODE*/}
-            <View style={{alignSelf: "flex-start", bottom: 20}}>
-                <TextButtonComponent
-                    text={"Did not receive OTP?  "}
-                    pressable={"Resend Code"}
-                    onPress={async () => {
-                        await ResendOTP()
-                        setErrMsg(false)
-                    }}
-                />
-            </View>
-            {loading && <ActivityIndicator color={COLORS.primary} size="large"/>}
-
-
-            {/*VERIFY OTP CODE*/}
-            <View style={styles.saveButton}>
-                <CustomButton
-                    loading={loading}
-                    filled={otpCode !== ""}
-                    text={"Verify"}
-                    onPress={async () => {
-                        setErrMsg(false)
-                        if (otpCode !== "") {
-                            await VerifyOTP()
-                        }
-                    }}/>
-            </View>
-
-        </View>
+        </>
     );
 };
 

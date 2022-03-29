@@ -108,14 +108,15 @@ export const useAuth = () => {
                             let createSavingAcctRes = await handleQuery(createSavingAcct, res.data.login.jwt)
                         }
 
-                        // console.log(qrySavingsRes.data.users[0].saving_account, "REZXXX")
+                        console.log(qrySavingsRes.data.users[0].saving_account, "REZXXX")
 
                         const user = {
                             token: res.data.login.jwt,
                             id: res.data.login.user.id,
                             email: res.data.login.user.email,
                             firstname: res.data.login.user.firstname,
-                            lastname: res.data.login.user.lastname
+                            lastname: res.data.login.user.lastname,
+                            savingsId:qrySavingsRes.data.users[0].saving_account.id
                             // avatar: res.data.login.user.avatar
 
                         };

@@ -1,5 +1,15 @@
 import React, {useContext, useEffect, useState} from "react";
-import {ActivityIndicator, Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {
+    ActivityIndicator,
+    Image,
+    Platform,
+    SafeAreaView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import SplashScreen from "react-native-splash-screen";
 import {COLORS, icons, SIZES} from "./src/constants";
 import SignUp from "./src/screens/signUp";
@@ -60,6 +70,8 @@ import PaymentSuccessScreen from "./src/screens/paymentSuccessScreen";
 import {handleQuery} from "./src/graphql/requests";
 import OnBoarding from "./src/screens/onBoardng";
 import TermsCondition from "./src/screens/termsCondition";
+import {FONTS} from "./src/constants/theme";
+import Notification from "./src/screens/notification";
 // import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 const App = () => {
@@ -229,6 +241,7 @@ const App = () => {
                                       component={ProfileCompletedSuccessScreen}/>
                     <MainStack.Screen name={"RegFeeSuccessScreen"} component={RegFeeSuccessScreen}/>
                     <MainStack.Screen name={"Savings"} component={Savings}/>
+                    <MainStack.Screen name={"Notification"} component={Notification}/>
                     <MainStack.Screen name={"SavingsMainScreen"} component={SavingsMainScreen}/>
                     <MainStack.Screen name={"SavingsAccountPage"} component={SavingsAccountPage}/>
                     <MainStack.Screen name={"SavingsTransactionPage"} component={SavingsTransactionPage}/>
@@ -358,15 +371,15 @@ const App = () => {
                         left: 0,
                         paddingHorizontal: 15,
                         right: 0,
-                        elevation: 5,
+                        elevation: 0.5,
                         shadowOpacity: 0.1,
                         shadowOffset: {
-                            width: 5,
-                            height: -3,
+                            width: 0,
+                            height: 0,
                         },
                         // backgroundColor: "cyan",
                         borderTopColor: "rgba(175,174,174,0.7)",
-                        height: Platform.OS === "android" ? 80 : 50,
+                        height: Platform.OS === "android" ? SIZES.font1 * 2.3 : 50,
                     },
 
 
@@ -384,9 +397,8 @@ const App = () => {
                                                }}/>
 
                                         <Text style={{
-                                            fontSize: 11,
+                                            ...FONTS.h10,
                                             color: focused ? COLORS.primary : COLORS.secondary,
-                                            fontFamily: "Nexa-Bold"
                                         }}>Home</Text>
                                     </View>
                                 ),
@@ -408,9 +420,8 @@ const App = () => {
                                        }}/>
 
                                 <Text style={{
-                                    fontSize: 11,
+                                    ...FONTS.h10,
                                     color: focused ? COLORS.primary : COLORS.secondary,
-                                    fontFamily: "Nexa-Bold"
                                 }}>Savings</Text>
                             </View>
                         ),
@@ -448,7 +459,6 @@ const App = () => {
                                         <Image
                                             source={icons.addIcon}
                                             resizeMode={"center"}
-
                                             style={{
                                                 width: 53,
                                                 height: 53,
@@ -458,16 +468,13 @@ const App = () => {
                                 </View>
                             );
                         },
-
                         tabBarButton: (props) => (
                             <TabBarCustomButton
                                 {...props}
                                 onPress={() => navigation.navigate("TopUpScreen")}
                             />
                         ),
-
                     }}
-
                 />
                 <Tab.Screen
                     name="StartInvesting"
@@ -484,9 +491,8 @@ const App = () => {
                                             tintColor: focused ? COLORS.primary : COLORS.secondary
                                         }}/>
                                 <Text style={{
-                                    fontSize: 11,
+                                    ...FONTS.h10,
                                     color: focused ? COLORS.primary : COLORS.secondary,
-                                    fontFamily: "Nexa-Bold"
                                 }}>Investment</Text>
 
                             </View>
@@ -508,9 +514,8 @@ const App = () => {
                                                }}/>
                                         <Text
                                             style={{
-                                                fontSize: 11,
+                                                ...FONTS.h10,
                                                 color: focused ? COLORS.primary : COLORS.secondary,
-                                                fontFamily: "Nexa-Bold"
                                             }}>Account</Text>
 
                                     </View>
@@ -535,8 +540,10 @@ const App = () => {
 
         <AuthContext.Provider value={auth}>
             <PaperProvider theme={theme}>
-                <SafeAreaView style={styles.container}>
+                <View style={styles.container}>
                     {/*<StatusBar translucent={false} backgroundColor={"transparent"} />*/}
+                    <StatusBar translucent={true} backgroundColor={COLORS.white} barStyle={"dark-content"}/>
+
                     <NavigationContainer>
                         <RootStack.Navigator screenOptions={{
                             headerShown: false, // backgroundColor:"white"
@@ -551,7 +558,7 @@ const App = () => {
 
                     <Toast config={toastConfig}/>
 
-                </SafeAreaView>
+                </View>
             </PaperProvider>
 
         </AuthContext.Provider>
@@ -567,7 +574,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.white,
-        paddingTop: 10,
+        // paddingTop: 10,
         // height: SIZES.height,
         // alignItems: 'center',
         // justifyContent: 'center'

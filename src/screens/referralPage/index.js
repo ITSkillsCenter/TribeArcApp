@@ -8,6 +8,7 @@ import Toast from "react-native-toast-message";
 import Clipboard from '@react-native-clipboard/clipboard';
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const ReferralPage = ({navigation}) => {
@@ -64,46 +65,50 @@ const ReferralPage = ({navigation}) => {
     }
 
     return (
-        <View style={styles.container}>
-            <BackButton onPress={() => navigation.pop()}/>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
+                <BackButton onPress={() => navigation.pop()}/>
 
 
-            <Image style={styles.img} source={icons.referralImg} resizeMode={"contain"}/>
-            <Text style={styles.refer}>Refer a friend</Text>
-            <Text style={styles.secureFutureText}>To Secure their future too</Text>
+                <Image style={styles.img} source={icons.referralImg} resizeMode={"contain"}/>
+                <Text style={styles.refer}>Refer a friend</Text>
+                <Text style={styles.secureFutureText}>To Secure their future too</Text>
 
-            <View style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: 30,
-                marginBottom:10
-            }}>
-                <Text style={{fontSize: 14, fontFamily: "Nexa-Book", color: COLORS.black}}>Copy Referral Message</Text>
+                <View style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginTop: 30,
+                    marginBottom: 10
+                }}>
+                    <Text style={{fontSize: 14, fontFamily: "Nexa-Book", color: COLORS.black}}>Copy Referral
+                        Message</Text>
 
-                <View style={{alignItems: "center", flexDirection: "row", justifyContent: "center"}}>
-                    <Image style={{width: 20, height: 20}}
-                           source={icons.clipboard}/>
-                    <Text
-                        onPress={() => copyToClipboard()}
-                        style={{
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: 12,
-                            fontFamily: "Nexa-Book",
-                            color: COLORS.primary
-                        }}>Copy</Text>
+                    <View style={{alignItems: "center", flexDirection: "row", justifyContent: "center"}}>
+                        <Image style={{width: 20, height: 20}}
+                               source={icons.clipboard}/>
+                        <Text
+                            onPress={() => copyToClipboard()}
+                            style={{
+                                alignItems: "center",
+                                justifyContent: "center",
+                                fontSize: 12,
+                                fontFamily: "Nexa-Book",
+                                color: COLORS.primary
+                            }}>Copy</Text>
+
+                    </View>
 
                 </View>
 
+                <View style={styles.box}>
+                    <Text style={styles.desc}>Join the moving train with TribeArc business community. Use my referral
+                        code- {code}</Text>
+                </View>
+
             </View>
-
-            <View style={styles.box}>
-                <Text style={styles.desc}>Join the moving train with TribeArc business community. Use my referral code- {code}</Text>
-            </View>
-
-
-        </View>
+        </>
     );
 };
 
@@ -139,14 +144,14 @@ const styles = StyleSheet.create({
         color: "#999999",
         marginVertical: 15
     },
-    box:{
+    box: {
 
-        padding:20,
-        borderWidth:0.5,
-        borderColor:COLORS.primary,
-        borderRadius:10,
+        padding: 20,
+        borderWidth: 0.5,
+        borderColor: COLORS.primary,
+        borderRadius: 10,
     },
-    desc:{
+    desc: {
         fontSize: 16,
         alignSelf: "center",
         fontFamily: "Nexa-Book",

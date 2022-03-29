@@ -6,11 +6,14 @@ import LottieView from "lottie-react-native";
 import CustomButton from "../../components/CustomButton";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import NotchResponsive from "../../components/NotchResponsive";
 
 const ProfileCompletedSuccessScreen = ({navigation, route}) => {
 
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
         <View style={styles.container}>
 
             <View style={styles.checkMark}>
@@ -31,6 +34,7 @@ const ProfileCompletedSuccessScreen = ({navigation, route}) => {
             </View>
 
         </View>
+            </>
     );
 };
 

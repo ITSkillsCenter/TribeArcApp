@@ -3,6 +3,7 @@ import React, {useRef, useState} from 'react';
 import {Animated, FlatList, Image, StyleSheet, Text, View} from "react-native";
 import {COLORS, SIZES} from "../../constants";
 import CustomButton from "../../components/CustomButton";
+import NotchResponsive from "../../components/NotchResponsive";
 
 const slides = [
     {
@@ -82,58 +83,61 @@ const OnBoarding = ({navigation}) => {
 
 
     return (
-        <View style={styles.container}>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
 
 
-            <View style={styles.box}>
+                <View style={styles.box}>
 
-                <FlatList
-                    data={slides}
-                    keyExtractor={item => item.id}
-                    horizontal
-                    pagingEnabled
-                    showsHorizontalScrollIndicator={false}
-                    initialNumToRender={1}
-                    maxToRenderPerBatch={1}
-                    windowSize={3}
-                    snapToAlignment={"center"}
-                    bounces={"false"}
-                    renderItem={({item}) => <OnBoardingItem item={item}/>}
-                    onScroll={Animated.event(
-                        [{nativeEvent: {contentOffset: {x: scrollX}}}],
-                        {useNativeDriver: false},
-                    )}
-                    onViewableItemsChanged={viewableItemsChanged}
-                    viewabilityConfig={viewConfig}
-                    scrollEventThrottle={32}
-                    ref={slidesRef}
-                />
+                    <FlatList
+                        data={slides}
+                        keyExtractor={item => item.id}
+                        horizontal
+                        pagingEnabled
+                        showsHorizontalScrollIndicator={false}
+                        initialNumToRender={1}
+                        maxToRenderPerBatch={1}
+                        windowSize={3}
+                        snapToAlignment={"center"}
+                        bounces={"false"}
+                        renderItem={({item}) => <OnBoardingItem item={item}/>}
+                        onScroll={Animated.event(
+                            [{nativeEvent: {contentOffset: {x: scrollX}}}],
+                            {useNativeDriver: false},
+                        )}
+                        onViewableItemsChanged={viewableItemsChanged}
+                        viewabilityConfig={viewConfig}
+                        scrollEventThrottle={32}
+                        ref={slidesRef}
+                    />
+
+
+                </View>
+
+
+                <View style={{flex: 2, justifyContent: "flex-end",}}>
+
+                    <Paginator data={slides} scrollX={scrollX}/>
+
+
+                    <CustomButton onPress={() => navigation.navigate("SignUp")} filled text={"Register"}/>
+                    <CustomButton
+                        onPress={() => navigation.navigate("Login")}
+                        textStyle={{
+                            color: COLORS.primary
+                        }}
+                        containerStyle={{
+                            backgroundColor: "white",
+                            borderColor: COLORS.primary,
+                            borderWidth: 1,
+                            bottom: 15
+                        }} text={"Login"}/>
+                </View>
 
 
             </View>
-
-
-            <View style={{flex: 2, justifyContent: "flex-end",}}>
-
-                <Paginator data={slides} scrollX={scrollX}/>
-
-
-                <CustomButton onPress={() => navigation.navigate("SignUp")} filled text={"Register"}/>
-                <CustomButton
-                    onPress={() => navigation.navigate("Login")}
-                    textStyle={{
-                        color: COLORS.primary
-                    }}
-                    containerStyle={{
-                        backgroundColor: "white",
-                        borderColor: COLORS.primary,
-                        borderWidth: 1,
-                        bottom: 15
-                    }} text={"Login"}/>
-            </View>
-
-
-        </View>
+        </>
     );
 };
 

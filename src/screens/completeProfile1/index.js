@@ -9,6 +9,7 @@ import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import CustomTextInput from "../../components/CustomTextInput";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const CompleteProfile1 = ({navigation}) => {
@@ -152,6 +153,8 @@ const CompleteProfile1 = ({navigation}) => {
 
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
         <ScrollView style={styles.container}>
             {/*<BackButton onPress={() => navigation.pop()}/>*/}
 
@@ -277,6 +280,8 @@ const CompleteProfile1 = ({navigation}) => {
             </View>
 
         </ScrollView>
+
+            </>
     );
 };
 

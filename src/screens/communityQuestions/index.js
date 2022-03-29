@@ -7,6 +7,7 @@ import RNPoll, {IChoice} from "react-native-poll";
 import RNAnimated from "react-native-animated-component";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 // const questions = [
@@ -169,6 +170,8 @@ const CommunityQuestions = ({navigation}) => {
 
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
             <Text style={styles.CommQues}>Community Polls</Text>
@@ -228,7 +231,7 @@ const CommunityQuestions = ({navigation}) => {
 
             </ScrollView>
         </View>
-
+</>
 
     );
 };

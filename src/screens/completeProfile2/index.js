@@ -9,6 +9,7 @@ import {UserContext} from "../../context/UserContext";
 import CustomTextInput from "../../components/CustomTextInput";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const CompleteProfile2 = ({navigation}) => {
@@ -60,6 +61,8 @@ const CompleteProfile2 = ({navigation}) => {
 
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
         <ScrollView style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
 
@@ -122,6 +125,7 @@ const CompleteProfile2 = ({navigation}) => {
             </View>
 
         </ScrollView>
+            </>
     );
 };
 

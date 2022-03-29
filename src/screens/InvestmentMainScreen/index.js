@@ -19,6 +19,7 @@ import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import CustomTextInput from "../../components/CustomTextInput";
 import moment from "moment";
 import LottieView from "lottie-react-native";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const tabs = [
@@ -387,6 +388,9 @@ const InvestmentMainScreen = ({navigation, route}) => {
 
     return (
 
+        <>
+            <NotchResponsive color={COLORS.white}/>
+
         <ScrollView style={styles.container}>
 
 
@@ -486,6 +490,8 @@ const InvestmentMainScreen = ({navigation, route}) => {
 
 
         </ScrollView>
+
+            </>
     );
 };
 

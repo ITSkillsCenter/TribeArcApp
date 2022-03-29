@@ -12,6 +12,7 @@ import CustomButton from "../../components/CustomButton";
 import FastImage from 'react-native-fast-image'
 
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const tabs = [
@@ -45,18 +46,18 @@ const EditProfile = ({navigation}) => {
 
 
     const [isLoading, setIsLoading] = useState(false)
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [email, setEmail] = useState("")
-    const [phoneNum, setPhoneNum] = useState("")
-    const [profession, setProfession] = useState("")
-    const [designation, setDesignation] = useState("")
-    const [remuneration, setRemuneration] = useState("")
+    const [firstName, setFirstName] = useState(" ")
+    const [lastName, setLastName] = useState(" ")
+    const [email, setEmail] = useState(" ")
+    const [phoneNum, setPhoneNum] = useState(" ")
+    const [profession, setProfession] = useState(" ")
+    const [designation, setDesignation] = useState(" ")
+    const [remuneration, setRemuneration] = useState(" ")
     const [filePath, setFilePath] = useState(null);
     const [imageInfo, setImageInfo] = useState('');
     const [avatar, setAvatar] = useState(null);
-    const [nextOfKin, setNextOfKin] = useState("")
-    const [nextOfKinPhoneNum, setNextOfKinPhoneNum] = useState("")
+    const [nextOfKin, setNextOfKin] = useState(" ")
+    const [nextOfKinPhoneNum, setNextOfKinPhoneNum] = useState(" ")
 
 
     // const GetImg = async () => {
@@ -247,7 +248,6 @@ const EditProfile = ({navigation}) => {
 
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
-
                     <CustomTextInput
                         initialValue={firstName}
                         onFocus={() => setFirstName("")}
@@ -286,7 +286,6 @@ const EditProfile = ({navigation}) => {
                         props={{
                             keyboardType: "numeric",
                             maxLength: 11
-
                         }}
                     />
 
@@ -297,7 +296,6 @@ const EditProfile = ({navigation}) => {
                         onFocus={() => setNextOfKin("")}
                         onChange={value => setNextOfKin(value)}
                         placeholderText={"Next of kin's Name"}
-
                     />
 
 
@@ -313,12 +311,8 @@ const EditProfile = ({navigation}) => {
                         }}
                     />
 
-
                 </KeyboardAwareScrollView>
-
             </View>
-
-
         )
     }
 
@@ -392,6 +386,8 @@ const EditProfile = ({navigation}) => {
 
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
         <ScrollView style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
             <Text style={styles.myProfile}>My Profile</Text>
@@ -469,7 +465,7 @@ const EditProfile = ({navigation}) => {
 
 
         </ScrollView>
-
+</>
 
     );
 };

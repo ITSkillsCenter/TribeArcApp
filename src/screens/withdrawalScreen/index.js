@@ -11,6 +11,7 @@ import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import axios from "axios";
 import {BASE_URL} from "../../config";
+import NotchResponsive from "../../components/NotchResponsive";
 
 const WithdrawalScreen = ({navigation}) => {
 
@@ -226,120 +227,128 @@ const WithdrawalScreen = ({navigation}) => {
     </View>);
 
 
-    return (<View style={styles.container}>
-        <BackButton onPress={() => navigation.pop()}/>
+    return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
+                <BackButton onPress={() => navigation.pop()}/>
 
 
-        <Modalize
-            modalHeight={SIZES.height * 0.5}
-            handleStyle={{backgroundColor: 'transparent'}}
-            childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
-            ref={modalizeRef}>
-            {renderHeader()}
-            {renderInner()}
-        </Modalize>
+                <Modalize
+                    modalHeight={SIZES.height * 0.5}
+                    handleStyle={{backgroundColor: 'transparent'}}
+                    childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
+                    ref={modalizeRef}>
+                    {renderHeader()}
+                    {renderInner()}
+                </Modalize>
 
 
-        <Text style={styles.withdraw}>Withdrawal</Text>
-        <Text style={styles.withdrawDesc}>Withdrawal from Voluntary Account</Text>
+                <Text style={styles.withdraw}>Withdrawal</Text>
+                <Text style={styles.withdrawDesc}>Withdrawal from Voluntary Account</Text>
 
-        <View style={{marginTop: 30}}>
-
-
-            <CustomTextInput
-                initialValue={withdrawalAmount}
-                onChange={setWithdrawalAmount}
-                placeholderText={"e.g 20,000"}
-                props={{
-                    keyboardType: "numeric"
-                }}
-                title={"Amount to withdraw"}/>
+                <View style={{marginTop: 30}}>
 
 
-            {withdrawalAmount > accountBalance &&
-                <Text style={{color: "red", fontFamily: "Nexa-Book", marginBottom: 10}}>Insufficient funds</Text>}
+                    <CustomTextInput
+                        initialValue={withdrawalAmount}
+                        onChange={setWithdrawalAmount}
+                        placeholderText={"e.g 20,000"}
+                        props={{
+                            keyboardType: "numeric"
+                        }}
+                        title={"Amount to withdraw"}/>
 
 
-            <Text style={styles.title}>Withdrawal Destination</Text>
-
-            <SelectDropdown
-                data={myAccts}
-                onSelect={(selectedItem, index) => {
-                    // console.log(selectedItem.id)
-
-                    if (withdrawalAmount !== "") {
-                        SendWithdrawalOtp()
-                        setBankAcctID(selectedItem.id)
-                    }
-
-                    // setBankCode(selectedItem.code)
-                }}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                    // text represented after item is selected
-                    // if data array is an array of objects then return selectedItem.property to render after item is selected
-                    return selectedItem.bank_name + "     " + selectedItem.account_number
-                }}
-                rowTextForSelection={(item, index) => {
-                    // text represented for each item in dropdown
-                    // if data array is an array of objects then return item.property to represent item in dropdown
-                    return item.bank_name + "     " + item.account_number
-                }}
-                rowStyle={{width: "100%"}}
-                dropdownStyle={{width: "90%"}}
-                defaultButtonText={"Select Account"}
-                buttonTextStyle={{
-                    color: COLORS.black,
-                    fontSize: 16,
-                    opacity: 0.6,
-                    fontFamily: "Nexa-Book",
-                    // justifyContent: "flex-start",
-                    textAlign: "left"
-                }}
-                buttonStyle={{
-                    width: "100%", backgroundColor: "#f5f5ff", borderRadius: 5,
-                }}
-            />
-
-            {otpLoading && <ActivityIndicator style={{alignSelf: "flex-start"}} size={"small"} color={COLORS.primary}/>}
-            {otpSent && <Text
-                style={{
-                    color: "green",
-                    fontFamily: "Nexa-Book",
-                    textAlign: "left",
-                    marginBottom: 10,
-                    marginTop: 5
-                }}> Withdrawal OTP
-                sent successfully</Text>}
-
-            <CustomTextInput
-                initialValue={otpCode}
-                onChange={value => {
-                    setOtpCode(value)
-                    setError(false)
-                }}
-                placeholderText={"Enter OTP"}
-                title={"Withdrawal OTP code"}
-                props={{
-                    keyboardType: "numeric"
-                }}
-
-            />
-
-            {error && <Text style={{color: "red"}}>Invalid Otp code</Text>}
-        </View>
+                    {withdrawalAmount > accountBalance &&
+                        <Text style={{color: "red", fontFamily: "Nexa-Book", marginBottom: 10}}>Insufficient
+                            funds</Text>}
 
 
-        <View style={{flex: 2, justifyContent: "flex-end"}}>
-            <CustomButton onPress={async () => {
-                await SubmitWithdrawal()
-            }}
-                          loading={loading}
-                          filled={withdrawalAmount !== "" && otpCode !== ""} text={"Submit"}/>
+                    <Text style={styles.title}>Withdrawal Destination</Text>
 
-        </View>
+                    <SelectDropdown
+                        data={myAccts}
+                        onSelect={(selectedItem, index) => {
+                            // console.log(selectedItem.id)
+
+                            if (withdrawalAmount !== "") {
+                                SendWithdrawalOtp()
+                                setBankAcctID(selectedItem.id)
+                            }
+
+                            // setBankCode(selectedItem.code)
+                        }}
+                        buttonTextAfterSelection={(selectedItem, index) => {
+                            // text represented after item is selected
+                            // if data array is an array of objects then return selectedItem.property to render after item is selected
+                            return selectedItem.bank_name + "     " + selectedItem.account_number
+                        }}
+                        rowTextForSelection={(item, index) => {
+                            // text represented for each item in dropdown
+                            // if data array is an array of objects then return item.property to represent item in dropdown
+                            return item.bank_name + "     " + item.account_number
+                        }}
+                        rowStyle={{width: "100%"}}
+                        dropdownStyle={{width: "90%"}}
+                        defaultButtonText={"Select Account"}
+                        buttonTextStyle={{
+                            color: COLORS.black,
+                            fontSize: 16,
+                            opacity: 0.6,
+                            fontFamily: "Nexa-Book",
+                            // justifyContent: "flex-start",
+                            textAlign: "left"
+                        }}
+                        buttonStyle={{
+                            width: "100%", backgroundColor: "#f5f5ff", borderRadius: 5,
+                        }}
+                    />
+
+                    {otpLoading &&
+                        <ActivityIndicator style={{alignSelf: "flex-start"}} size={"small"} color={COLORS.primary}/>}
+                    {otpSent && <Text
+                        style={{
+                            color: "green",
+                            fontFamily: "Nexa-Book",
+                            textAlign: "left",
+                            marginBottom: 10,
+                            marginTop: 5
+                        }}> Withdrawal OTP
+                        sent successfully</Text>}
+
+                    <CustomTextInput
+                        initialValue={otpCode}
+                        onChange={value => {
+                            setOtpCode(value)
+                            setError(false)
+                        }}
+                        placeholderText={"Enter OTP"}
+                        title={"Withdrawal OTP code"}
+                        props={{
+                            keyboardType: "numeric"
+                        }}
+
+                    />
+
+                    {error && <Text style={{color: "red"}}>Invalid Otp code</Text>}
+                </View>
 
 
-    </View>);
+                <View style={{flex: 2, justifyContent: "flex-end"}}>
+                    <CustomButton onPress={async () => {
+                        await SubmitWithdrawal()
+                    }}
+                                  loading={loading}
+                                  filled={withdrawalAmount !== "" && otpCode !== ""} text={"Submit"}/>
+
+                </View>
+
+
+            </View>
+        </>
+
+    );
 };
 
 export default WithdrawalScreen

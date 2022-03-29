@@ -4,29 +4,33 @@ import {StyleSheet, Text, View} from "react-native";
 import {COLORS, SIZES} from "../../constants";
 import LottieView from "lottie-react-native";
 import CustomButton from "../../components/CustomButton";
+import NotchResponsive from "../../components/NotchResponsive";
 
 const PasswordSuccessScreen = ({navigation}) => {
     return (
-        <View style={styles.container}>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
 
-            <View style={styles.checkMark}>
-                <LottieView source={require("../../assets/images/checkMark.json")}
-                            autoPlay loop={false}
-                            style={{width: SIZES.width*0.6, height: SIZES.width*0.6}}/>
-            </View>
+                <View style={styles.checkMark}>
+                    <LottieView source={require("../../assets/images/checkMark.json")}
+                                autoPlay loop={false}
+                                style={{width: SIZES.width * 0.6, height: SIZES.width * 0.6}}/>
+                </View>
 
-            <View style={styles.tsBox}>
-                <Text style={styles.ts}>Password Updated!</Text>
-            </View>
-            <View style={styles.tsBox}>
-                <Text style={styles.desc}>Dear User your password has been successfully changed</Text>
-            </View>
+                <View style={styles.tsBox}>
+                    <Text style={styles.ts}>Password Updated!</Text>
+                </View>
+                <View style={styles.tsBox}>
+                    <Text style={styles.desc}>Dear User your password has been successfully changed</Text>
+                </View>
 
-            <View style={{marginVertical: 20}}>
-                <CustomButton onPress={() => navigation.navigate("BottomTabs")} filled text={"Ok"}/>
-            </View>
+                <View style={{marginVertical: 20}}>
+                    <CustomButton onPress={() => navigation.navigate("BottomTabs")} filled text={"Ok"}/>
+                </View>
 
-        </View>
+            </View>
+        </>
     );
 };
 

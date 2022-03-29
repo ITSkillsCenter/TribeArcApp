@@ -6,6 +6,7 @@ import BackButton from "../../components/BackButton";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import moment from "moment";
+import NotchResponsive from "../../components/NotchResponsive";
 
 const RecentTransactions = ({navigation}) => {
 
@@ -97,23 +98,26 @@ const RecentTransactions = ({navigation}) => {
 
 
     return (
-        <View style={styles.container}>
-            <BackButton onPress={() => navigation.pop()}/>
-            <View>
-                <Text style={styles.recentTran}>Recent Transactions</Text>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
+                <BackButton onPress={() => navigation.pop()}/>
+                <View>
+                    <Text style={styles.recentTran}>Recent Transactions</Text>
+                </View>
+
+                {isLoading && <ActivityIndicator color={COLORS.secondary} size={"small"}/>}
+                <FlatList
+                    data={transactions}
+                    renderItem={Transactions}
+                    showsVerticalScrollIndicator={false}
+                    ItemSeparatorComponent={renderSeparator}
+
+                />
+
+
             </View>
-
-            {isLoading && <ActivityIndicator color={COLORS.secondary} size={"small"}/>}
-            <FlatList
-                data={transactions}
-                renderItem={Transactions}
-                showsVerticalScrollIndicator={false}
-                ItemSeparatorComponent={renderSeparator}
-
-            />
-
-
-        </View>
+        </>
     );
 };
 
@@ -124,7 +128,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.white,
-        paddingHorizontal: SIZES.width*0.04,
+        paddingHorizontal: SIZES.width * 0.04,
 
     },
     recentTran: {

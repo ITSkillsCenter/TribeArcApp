@@ -7,6 +7,7 @@ import CustomButton from "../../components/CustomButton";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import LottieView from "lottie-react-native";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const CardSettings = ({navigation}) => {
@@ -65,6 +66,8 @@ const CardSettings = ({navigation}) => {
 
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
 
@@ -120,6 +123,8 @@ const CardSettings = ({navigation}) => {
 
 
         </View>
+
+            </>
     );
 };
 

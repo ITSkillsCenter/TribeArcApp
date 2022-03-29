@@ -10,34 +10,40 @@ import LottieView from "lottie-react-native";
 import CustomButton from "../../components/CustomButton";
 import axios from "axios";
 import {BASE_URL} from "../../config";
+import moment from "moment";
+import NotchResponsive from "../../components/NotchResponsive";
 // import WebView from "react-native-webview";
 
 const PaymentWebPage = ({navigation, route}) => {
 
     const user = useContext(UserContext)
-
-    const amount = parseFloat(route.params.replace(",", ""))
-    // console.log(amount, " amount")
-
     const [cancelled, setCancelled] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+
+    // console.log(user.savingsId)
+
+
+    const amount = parseFloat(route.params.amountToSave.replace(",", ""))
+
+
+    const nextMonthDate = moment().add(1, 'months').format('YYYY-MM-DD');
+
+
+    // console.log(nextMonthDate.slice(0, -2).concat(route.params.value));
 
 
     const paystackWebViewRef = useRef();
 
-
-    const [liveKey, setLiveKey] = useState("")
-    const [testKey, setTestKey] = useState("")
-
     const [feeBridge, setFeeBridge] = useState("")
     const [extraFee, setExtraFee] = useState("")
     const [percentageBelow, setPercentageBelow] = useState("")
+    const [liveKey, setLiveKey] = useState("")
+    const [testKey, setTestKey] = useState("")
 
 
     useEffect(() => {
 
         GetPaymentKey()
-
 
     }, [])
 
@@ -128,61 +134,99 @@ const PaymentWebPage = ({navigation, route}) => {
         }
     }
 
+    const SetNextPaymentDayAndFee = async () => {
+
+        const mtn = `mutation {
+  updateSavingAccount(
+    input: {
+      where: { id: ${user.savingsId} }
+      data: { next_payment_date: "${nextMonthDate.slice(0, -2).concat(route.params.value)}",
+       amount_to_save: ${amount} }
+    }
+  ) {
+    savingAccount {
+      id
+      next_payment_date
+      amount_to_save
+    }
+  }
+}`
+
+        try {
+
+            console.log(mtn)
+
+            const mtnRez = handleQuery(mtn, user.token, false)
+
+            console.log(mtnRez)
+
+
+        } catch (e) {
+            console.log(e.response.data)
+        }
+
+    }
+
 
     return (
 
-        isLoading ? <ActivityIndicator
-                style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
-                color={COLORS.primary}/> :
-            <View style={styles.container}>
-                <BackButton onPress={() => navigation.pop()}/>
+        <>
+            <NotchResponsive color={COLORS.white}/>
 
-                <Paystack
-                    paystackKey={liveKey || testKey}
-                    amount={amount < feeBridge ? (amount * percentageBelow) + parseFloat(amount) : (amount * percentageBelow) + parseFloat(amount) + parseFloat(extraFee)}
-                    billingEmail={user.email}
-                    activityIndicatorColor={COLORS.primary}
-                    onCancel={async (e) => {
-                        // handle response here
-                        await Cancelled()
-                        console.log(e, "PaymentError")
-                        await setCancelled(true)
-                    }}
-                    // channels={JSON.stringify(["card","ussd"])}
-                    onSuccess={async (res) => {
-                        setIsLoading(true)
+            {isLoading ? <ActivityIndicator
+                    style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
+                    color={COLORS.primary}/> :
+                <View style={styles.container}>
+                    <BackButton onPress={() => navigation.pop()}/>
 
-                        await TransactionData(res.data.transactionRef.reference, amount)
-                        console.log(res, "RESDSD")
-                        // handle response here
-                    }}
-                    autoStart={true}
-                    ref={paystackWebViewRef}
-                />
+                    <Paystack
+                        paystackKey={liveKey || testKey}
+                        amount={amount < feeBridge ? (amount * percentageBelow) + parseFloat(amount) : (amount * percentageBelow) + parseFloat(amount) + parseFloat(extraFee)}
+                        billingEmail={user.email}
+                        activityIndicatorColor={COLORS.primary}
+                        onCancel={async (e) => {
+                            // handle response here
+                            await Cancelled()
+                            console.log(e, "PaymentError")
+                            await setCancelled(true)
+                        }}
+                        // channels={JSON.stringify(["card","ussd"])}
+                        onSuccess={async (res) => {
+                            setIsLoading(true)
 
-                {cancelled && <View>
+                            await SetNextPaymentDayAndFee()
+                            await TransactionData(res.data.transactionRef.reference, amount)
+                            console.log(res, "RESDSD")
+                            // handle response here
+                        }}
+                        autoStart={true}
+                        ref={paystackWebViewRef}
+                    />
 
-                    <View style={styles.checkMark}>
-                        <LottieView
-                            source={require("../../assets/images/cancelMark.json")}
-                            autoPlay
-                            loop={false}
-                            style={{width: 268, height: 263}}/>
-                    </View>
+                    {cancelled && <View>
 
-                    <View style={styles.tsBox}>
-                        <Text style={styles.ts}>Transaction failed!</Text>
-                    </View>
+                        <View style={styles.checkMark}>
+                            <LottieView
+                                source={require("../../assets/images/cancelMark.json")}
+                                autoPlay
+                                loop={false}
+                                style={{width: 268, height: 263}}/>
+                        </View>
 
-                    <View style={{marginVertical: 20}}>
-                        <CustomButton filled onPress={() => {
-                            paystackWebViewRef.current.startTransaction()
-                            setCancelled(false)
-                        }} text={"Retry"}/>
-                    </View>
+                        <View style={styles.tsBox}>
+                            <Text style={styles.ts}>Transaction failed!</Text>
+                        </View>
+
+                        <View style={{marginVertical: 20}}>
+                            <CustomButton filled onPress={() => {
+                                paystackWebViewRef.current.startTransaction()
+                                setCancelled(false)
+                            }} text={"Retry"}/>
+                        </View>
+                    </View>}
+
                 </View>}
-
-            </View>
+        </>
     );
 };
 export default PaymentWebPage

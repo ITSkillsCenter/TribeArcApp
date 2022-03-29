@@ -8,6 +8,7 @@ import {UserContext} from "../../context/UserContext";
 import CheckBox from '@react-native-community/checkbox';
 import moment from "moment";
 import {useNavigation} from "@react-navigation/native";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const TermsCondition = () => {
@@ -88,81 +89,86 @@ const TermsCondition = () => {
 
 
     return (
-        <SafeAreaView style={styles.container}>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
 
-            <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView showsVerticalScrollIndicator={false}>
 
-                <Text style={styles.header}>
-                    TribeArc Cooperative Membership and Subscription Agreement
-                </Text>
+                    <Text style={styles.header}>
+                        TribeArc Cooperative Membership and Subscription Agreement
+                    </Text>
 
-                <Text style={styles.dateUpdated}>Last updated on {moment(updated).format("dddd, MMMM Do YYYY")}</Text>
+                    <Text style={styles.dateUpdated}>Last updated
+                        on {moment(updated).format("dddd, MMMM Do YYYY")}</Text>
 
-                <View style={{marginVertical: 20,}}>
+                    <View style={{marginVertical: 20,}}>
 
-                    {/*ENTER NAME*/}
-                    <CustomTextInput
-                        title={"Full Name"}
-                        initialValue={fullname}
-                        onChange={setFullname}
-                        inputContainerStyle={{
-                            borderWidth: 0.5,
-                            borderColor: COLORS.primary,
-                            marginBottom: 15
-                        }}
-                        placeholderText={"Enter full Name"}/>
+                        {/*ENTER NAME*/}
+                        <CustomTextInput
+                            title={"Full Name"}
+                            initialValue={fullname}
+                            onChange={setFullname}
+                            inputContainerStyle={{
+                                borderWidth: 0.5,
+                                borderColor: COLORS.primary,
+                                marginBottom: 15
+                            }}
+                            placeholderText={"Enter full Name"}/>
 
-                    {/*ENTER ADDRESS*/}
-                    <CustomTextInput
-                        title={"Address"}
-                        initialValue={address}
-                        onChange={setAddress}
-                        inputContainerStyle={{borderWidth: 0.5, borderColor: COLORS.primary}}
-                        placeholderText={"Enter your address"}/>
+                        {/*ENTER ADDRESS*/}
+                        <CustomTextInput
+                            title={"Address"}
+                            initialValue={address}
+                            onChange={setAddress}
+                            inputContainerStyle={{borderWidth: 0.5, borderColor: COLORS.primary}}
+                            placeholderText={"Enter your address"}/>
 
-                </View>
+                    </View>
 
 
-                {/*TERMS AND CONDITION BODY*/}
-                {isLoading ? <ActivityIndicator size={"small"} color={COLORS.primary}/> :
-                    <Text style={styles.body}>{terms}
-                        {"\n"}
-                        In witness whereof, I have hereunto agreed by checking the box below on this
-                        day <Text>{moment().format("dddd, MMMM Do YYYY")}</Text>
-                    </Text>}
+                    {/*TERMS AND CONDITION BODY*/}
+                    {isLoading ? <ActivityIndicator size={"small"} color={COLORS.primary}/> :
+                        <Text style={styles.body}>{terms}
+                            {"\n"}
+                            In witness whereof, I have hereunto agreed by checking the box below on this
+                            day <Text>{moment().format("dddd, MMMM Do YYYY")}</Text>
+                        </Text>}
 
-                <View style={{flexDirection: "row", alignItems: "center", paddingHorizontal: 5, marginVertical: 5}}>
+                    <View style={{flexDirection: "row", alignItems: "center", paddingHorizontal: 5, marginVertical: 5}}>
 
-                    <CheckBox
-                        disabled={false}
-                        value={toggleCheckBox}
-                        boxType={"square"}
-                        tintColors={true ? COLORS.primary : "black"}
-                        style={{borderColor: "black"}}
-                        onValueChange={(newValue) => {
-                            setToggleCheckBox(newValue)
-                        }}
-                    />
-                    <Text style={{paddingHorizontal: 5, color: COLORS.black, fontFamily: "Nexa-Book"}}> I agree to the
-                        terms and conditions</Text>
-                </View>
+                        <CheckBox
+                            disabled={false}
+                            value={toggleCheckBox}
+                            boxType={"square"}
+                            tintColors={true ? COLORS.primary : "black"}
+                            style={{borderColor: "black"}}
+                            onValueChange={(newValue) => {
+                                setToggleCheckBox(newValue)
+                            }}
+                        />
+                        <Text style={{paddingHorizontal: 5, color: COLORS.black, fontFamily: "Nexa-Book"}}> I agree to
+                            the
+                            terms and conditions</Text>
+                    </View>
 
-                <CustomButton
-                    loading={loading}
-                    filled={fullname !== "" && address !== ""}
-                    text={"Continue"}
-                    onPress={async () => {
-                        try {
-                            if (toggleCheckBox) {
-                                await AcceptTerms()
+                    <CustomButton
+                        loading={loading}
+                        filled={fullname !== "" && address !== ""}
+                        text={"Continue"}
+                        onPress={async () => {
+                            try {
+                                if (toggleCheckBox) {
+                                    await AcceptTerms()
+                                }
+                            } catch (e) {
+                                console.log(e, "ERR")
                             }
-                        } catch (e) {
-                            console.log(e, "ERR")
-                        }
-                    }}/>
-                <View style={{marginVertical: 50}}/>
-            </ScrollView>
-        </SafeAreaView>
+                        }}/>
+                    <View style={{marginVertical: 50}}/>
+                </ScrollView>
+            </View>
+        </>
     );
 };
 

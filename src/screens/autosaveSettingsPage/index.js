@@ -7,10 +7,12 @@ import {Modalize} from "react-native-modalize";
 import CustomButton from "../../components/CustomButton";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
+import NotchResponsive from "../../components/NotchResponsive";
 
 const AutosaveSettingsPage = ({navigation}) => {
 
     const user = useContext(UserContext);
+
 
     const [isEnabled, setIsEnabled] = useState(false)
     const [savingsAcctId, setSavingsAcctId] = useState(null)
@@ -159,34 +161,36 @@ const AutosaveSettingsPage = ({navigation}) => {
     );
 
     return (
-        <View style={styles.container}>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
 
 
-            <Modalize
-                modalHeight={SIZES.height * 0.5}
-                handleStyle={{backgroundColor: 'transparent'}}
-                childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
-                ref={modalizeRef}>
-                {renderHeader()}
-                {renderInner()}
-            </Modalize>
+                <Modalize
+                    modalHeight={SIZES.height * 0.5}
+                    handleStyle={{backgroundColor: 'transparent'}}
+                    childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
+                    ref={modalizeRef}>
+                    {renderHeader()}
+                    {renderInner()}
+                </Modalize>
 
 
-            <BackButton onPress={() => navigation.pop()}/>
+                <BackButton onPress={() => navigation.pop()}/>
 
-            <Text style={styles.acctSettings}>Account Settings</Text>
-            <Text style={styles.acctDesc}>Manage your savings account on tribe arc</Text>
+                <Text style={styles.acctSettings}>Account Settings</Text>
+                <Text style={styles.acctDesc}>Manage your savings account on tribe arc</Text>
 
-            <TouchableOpacity onPress={OpenModal} activeOpacity={0.8} style={styles.box}>
-                <Image style={{width: 50, height: 50}} source={icons.onImage}/>
-                <View style={{justifyContent: "space-between", width: "70%"}}>
-                    <Text style={styles.textAutocharge}>Turn {isEnabled ? "OFF" : "ON"} Auto charge</Text>
-                    <Text style={styles.desc}>Next auto charge date is 2nd may, 2022</Text>
-                </View>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={OpenModal} activeOpacity={0.8} style={styles.box}>
+                    <Image style={{width: 50, height: 50}} source={icons.onImage}/>
+                    <View style={{justifyContent: "space-between", width: "70%"}}>
+                        <Text style={styles.textAutocharge}>Turn {isEnabled ? "OFF" : "ON"} Auto charge</Text>
+                        <Text style={styles.desc}>Next auto charge date is 2nd may, 2022</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
 
-
-        </View>
+        </>
     );
 };
 

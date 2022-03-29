@@ -4,9 +4,12 @@ import {Image, StyleSheet, Text, View} from "react-native";
 import {COLORS, SIZES} from "../../constants";
 import CustomButton from "../../components/CustomButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import NotchResponsive from "../../components/NotchResponsive";
 
 const StartSaving = ({navigation}) => {
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
         <View style={styles.container}>
             <Text style={styles.savings}>Savings</Text>
 
@@ -23,6 +26,7 @@ const StartSaving = ({navigation}) => {
 
 
         </View>
+            </>
     );
 };
 

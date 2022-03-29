@@ -8,6 +8,7 @@ import {UserContext} from "../../context/UserContext";
 import {BASE_URL} from "../../config";
 import axios from "axios";
 import {handleQuery} from "../../graphql/requests";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 export const RegistrationFee = ({navigation}) => {
@@ -92,65 +93,71 @@ export const RegistrationFee = ({navigation}) => {
 
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
 
-        isLoading ? <ActivityIndicator
-                style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
-                color={COLORS.primary}/> :
-            <View style={styles.container}>
-                <TouchableOpacity activeOpacity={0.7} style={styles.skipBackground}
-                                  onPress={() => navigation.navigate("BottomTabs")}>
-                    <Text style={styles.skip}>Skip</Text>
-                </TouchableOpacity>
+            {isLoading ? <ActivityIndicator
+                    style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
+                    color={COLORS.primary}/> :
+                <View style={styles.container}>
+                    <TouchableOpacity activeOpacity={0.7} style={styles.skipBackground}
+                                      onPress={() => navigation.navigate("BottomTabs")}>
+                        <Text style={styles.skip}>Skip</Text>
+                    </TouchableOpacity>
 
-                <Text style={styles.regFee}>Registration Fee</Text>
-                <Text style={styles.regFeeInfo}>You're required to pay a registration fee to start saving and investing
-                    on
-                    tribe arc</Text>
+                    <Text style={styles.regFee}>Registration Fee</Text>
+                    <Text style={styles.regFeeInfo}>You're required to pay a registration fee to start saving and
+                        investing
+                        on
+                        tribe arc</Text>
 
-                <ImageBackground resizeMode={"contain"} source={icons.balFrame} style={styles.balanceFrame}>
+                    <ImageBackground resizeMode={"contain"} source={icons.balFrame} style={styles.balanceFrame}>
+                        <View style={{
+                            justifyContent: 'space-between', paddingHorizontal: 40, alignItems: 'center'
+                        }}>
+                            <Text style={styles.regFeeText}>Registration Fee</Text>
+                            <Text style={styles.balance}>₦ 20,000</Text>
+                        </View>
+                    </ImageBackground>
+
                     <View style={{
-                        justifyContent: 'space-between', paddingHorizontal: 40, alignItems: 'center'
+                        justifyContent: "flex-end",
+                        flex: 2,
                     }}>
-                        <Text style={styles.regFeeText}>Registration Fee</Text>
-                        <Text style={styles.balance}>₦ 20,000</Text>
+                        <CustomButton
+                            filled
+                            text={"Pay Now"}
+                            onPress={() => {
+                                paystackWebViewRef.current.startTransaction()
+                            }}
+                        />
                     </View>
-                </ImageBackground>
 
-                <View style={{
-                    justifyContent: "flex-end",
-                    flex: 2,
-                }}>
-                    <CustomButton
-                        filled
-                        text={"Pay Now"}
-                        onPress={() => {
-                            paystackWebViewRef.current.startTransaction()
+
+                    <Paystack
+                        paystackKey={testKey || liveKey}
+                        amount={(20000 * percentageBelow) + parseFloat(20000) + parseFloat(extraFee)}
+                        billingEmail={user.email}
+                        activityIndicatorColor={COLORS.primary}
+                        onCancel={async (e) => {
+                            console.log(e, "PaymentError")
                         }}
+                        onSuccess={async (res) => {
+                            // await TransactionData(res)
+                            // await navigation.navigate("RegFeeSuccessScreen")
+                            console.log(res.data.transactionRef.reference, "RESDSD")
+                            setIsLoading(true)
+                            await PayRegFee(res.data.transactionRef.reference)
+                        }}
+                        autoStart={false}
+                        ref={paystackWebViewRef}
                     />
-                </View>
 
 
-                <Paystack
-                    paystackKey={testKey || liveKey}
-                    amount={(20000 * percentageBelow) + parseFloat(20000) + parseFloat(extraFee)}
-                    billingEmail={user.email}
-                    activityIndicatorColor={COLORS.primary}
-                    onCancel={async (e) => {
-                        console.log(e, "PaymentError")
-                    }}
-                    onSuccess={async (res) => {
-                        // await TransactionData(res)
-                        // await navigation.navigate("RegFeeSuccessScreen")
-                        console.log(res.data.transactionRef.reference, "RESDSD")
-                        setIsLoading(true)
-                        await PayRegFee(res.data.transactionRef.reference)
-                    }}
-                    autoStart={false}
-                    ref={paystackWebViewRef}
-                />
+                </View>}
+        </>
 
-
-            </View>);
+    );
 };
 
 export default RegistrationFee

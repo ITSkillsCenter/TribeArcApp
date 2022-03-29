@@ -6,6 +6,7 @@ import TextButtonComponent from "../../components/TextButtonComponent";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {AuthContext} from "../../context/AuthContext";
 import CustomTextInput from "../../components/CustomTextInput";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const Login = ({navigation, route}) => {
@@ -24,103 +25,107 @@ const Login = ({navigation, route}) => {
 
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
 
-        <SafeAreaView style={styles.container}>
-            <KeyboardAwareScrollView style={styles.container2} showsVerticalScrollIndicator={false}>
-                <View>
-                    <Image
-                        source={require("../../assets/images/login.png")}
-                        resizeMode={"contain"}
-                        style={styles.img}/>
-                </View>
+            <View style={styles.container}>
+                <KeyboardAwareScrollView style={styles.container2} showsVerticalScrollIndicator={false}>
+                    <View>
+                        <Image
+                            source={require("../../assets/images/login.png")}
+                            resizeMode={"contain"}
+                            style={styles.img}/>
+                    </View>
 
-                <View style={styles.registerBox}>
-                    <Text style={styles.register}>Login</Text>
-                </View>
+                    <View style={styles.registerBox}>
+                        <Text style={styles.register}>Login</Text>
+                    </View>
 
-                <View>
-                    {otpSuccess && <Text style={{color: "green"}}>OTP verified, login with your data</Text>}
-                    {/*ENTER EMAIL*/}
-                    <CustomTextInput
-                        title={"Email Address"}
-                        placeholderText={"Enter Email Address"}
-                        isPassword={false}
-                        onFocus={() => setFocused(true)}
-                        onBlur={() => setFocused(false)}
-                        initialValue={emailOrNumber}
-                        onChange={emailOrNumber => {
-                            setEmailOrNumber(emailOrNumber);
-                            setIsError(false)
-                        }}
-                        inputContainerStyle={{
-                            backgroundColor: "#FFF",
-                            borderColor: focused ? COLORS.primary : "grey",
-                            borderWidth: focused ? 1 : 0.5,
-                            height: SIZES.width * 0.13,
-                        }}
-                    />
-
-
-                    {/*ENTER PASSWORD*/}
-                    <CustomTextInput
-                        title={"Enter Password"}
-                        placeholderText={"Enter your Password"}
-                        isPassword={true}
-                        initialValue={password}
-                        onFocus={() => setFocused2(true)}
-                        onBlur={() => setFocused2(false)}
-                        onChange={password => {
-                            setPassword(password);
-                            setIsError(false)
-                        }}
-                        inputContainerStyle={{
-                            backgroundColor: "#FFF",
-                            borderColor: focused2 ? COLORS.primary : "grey",
-                            borderWidth: focused2 ? 1 : 0.5,
-                            height: SIZES.width * 0.13,
-                        }}
-                    />
-                </View>
+                    <View>
+                        {otpSuccess && <Text style={{color: "green"}}>OTP verified, login with your data</Text>}
+                        {/*ENTER EMAIL*/}
+                        <CustomTextInput
+                            title={"Email Address"}
+                            placeholderText={"Enter Email Address"}
+                            isPassword={false}
+                            onFocus={() => setFocused(true)}
+                            onBlur={() => setFocused(false)}
+                            initialValue={emailOrNumber}
+                            onChange={emailOrNumber => {
+                                setEmailOrNumber(emailOrNumber);
+                                setIsError(false)
+                            }}
+                            inputContainerStyle={{
+                                backgroundColor: "#FFF",
+                                borderColor: focused ? COLORS.primary : "grey",
+                                borderWidth: focused ? 1 : 0.5,
+                                height: SIZES.width * 0.13,
+                            }}
+                        />
 
 
-                {isError && <Text style={{color: "red"}}>{errMsg}</Text>}
-                {/*LOGIN BUTTON*/}
-                <CustomButton
-                    text={"Login"}
-                    loading={isLoading}
-                    filled={!!(emailOrNumber && password !== "")}
-                    onPress={async () => {
-                        try {
-                            if (emailOrNumber.includes("@")) {
-                                if (emailOrNumber && password !== "") {
-                                    setIsLoading(true)
-                                    await login(emailOrNumber, password);
+                        {/*ENTER PASSWORD*/}
+                        <CustomTextInput
+                            title={"Enter Password"}
+                            placeholderText={"Enter your Password"}
+                            isPassword={true}
+                            initialValue={password}
+                            onFocus={() => setFocused2(true)}
+                            onBlur={() => setFocused2(false)}
+                            onChange={password => {
+                                setPassword(password);
+                                setIsError(false)
+                            }}
+                            inputContainerStyle={{
+                                backgroundColor: "#FFF",
+                                borderColor: focused2 ? COLORS.primary : "grey",
+                                borderWidth: focused2 ? 1 : 0.5,
+                                height: SIZES.width * 0.13,
+                            }}
+                        />
+                    </View>
+
+
+                    {isError && <Text style={{color: "red"}}>{errMsg}</Text>}
+                    {/*LOGIN BUTTON*/}
+                    <CustomButton
+                        text={"Login"}
+                        loading={isLoading}
+                        filled={!!(emailOrNumber && password !== "")}
+                        onPress={async () => {
+                            try {
+                                if (emailOrNumber.includes("@")) {
+                                    if (emailOrNumber && password !== "") {
+                                        setIsLoading(true)
+                                        await login(emailOrNumber, password);
+                                    }
+                                } else {
+                                    Alert.alert("Invalid Email", "Enter a valid email address")
                                 }
-                            } else {
-                                Alert.alert("Invalid Email", "Enter a valid email address")
-                            }
 
-                        } catch (e) {
-                            console.log("login error:", e[0].extensions.exception.data.data[0].messages[0].message)
-                            await setIsLoading(false)
-                            {
-                                e && setIsError(true)
-                            }
+                            } catch (e) {
+                                console.log("login error:", e[0].extensions.exception.data.data[0].messages[0].message)
+                                await setIsLoading(false)
+                                {
+                                    e && setIsError(true)
+                                }
 
-                            {
-                                e[0].extensions.exception.data.data[0].messages[0].message && setErrMsg((e[0].extensions.exception.data.data[0].messages[0].message).replace("Identifier or password invalid.", "Invalid Email or password "))
+                                {
+                                    e[0].extensions.exception.data.data[0].messages[0].message && setErrMsg((e[0].extensions.exception.data.data[0].messages[0].message).replace("Identifier or password invalid.", "Invalid Email or password "))
+                                }
                             }
-                        }
-                    }}
-                />
+                        }}
+                    />
 
-                <TextButtonComponent
-                    text={"Don't have an account?"}
-                    pressable={"Register"}
-                    onPress={() => navigation.navigate("SignUp")}
-                />
-            </KeyboardAwareScrollView>
-        </SafeAreaView>
+                    <TextButtonComponent
+                        text={"Don't have an account?"}
+                        pressable={"Register"}
+                        onPress={() => navigation.navigate("SignUp")}
+                    />
+                </KeyboardAwareScrollView>
+            </View>
+
+        </>
     )
 }
 

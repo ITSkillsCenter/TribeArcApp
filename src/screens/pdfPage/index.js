@@ -3,6 +3,7 @@ import {Dimensions, StyleSheet, View} from 'react-native';
 import Pdf from 'react-native-pdf';
 import {COLORS} from "../../constants";
 import BackButton from "../../components/BackButton";
+import NotchResponsive from "../../components/NotchResponsive";
 
 const PdfPage = ({navigation, route}) => {
 
@@ -17,6 +18,8 @@ const PdfPage = ({navigation, route}) => {
     //const source = {uri:"blob:xxxxxxxx-...?offset=0&size=xxx"};
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
             <Pdf
@@ -35,6 +38,7 @@ const PdfPage = ({navigation, route}) => {
                 }}
                 style={styles.pdf}/>
         </View>
+            </>
     )
 }
 

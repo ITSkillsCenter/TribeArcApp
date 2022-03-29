@@ -4,6 +4,7 @@ import {ScrollView, StyleSheet, Text, View} from "react-native";
 import {COLORS, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
+import NotchResponsive from "../../components/NotchResponsive";
 
 const clause = [
 
@@ -29,6 +30,8 @@ const InvestmentTermsPage = ({navigation}) => {
     const date = new Date()
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
         <View style={styles.container2}>
             {/*<BackButton onPress={() => navigation.pop()}/>*/}
             <Text style={styles.title2}>Tribe arc Terms & Condition </Text>
@@ -51,6 +54,8 @@ const InvestmentTermsPage = ({navigation}) => {
             </ScrollView>
 
         </View>
+
+            </>
     );
 };
 

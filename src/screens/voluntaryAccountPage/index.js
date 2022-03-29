@@ -17,6 +17,7 @@ import BackButton from "../../components/BackButton";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import LottieView from "lottie-react-native";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const data3 = []
@@ -239,9 +240,9 @@ const VoluntaryAccountPage = ({navigation, route}) => {
 
                                       <View style={{justifyContent: "space-between", height: SIZES.width * 0.13}}>
                                           {item.status === "SUCCESS" ?
-                                              <Text style={styles.recentTransactionText}>Card Deposit
+                                              <Text style={styles.recentTransactionText}>Deposit
                                                   Successful</Text> :
-                                              <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
+                                              <Text style={styles.recentTransactionText}>Deposit Failed</Text>}
                                           <Text style={{
                                               color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
                                           }}>₦{item?.amount_paid.toLocaleString()}</Text>
@@ -438,75 +439,80 @@ const VoluntaryAccountPage = ({navigation, route}) => {
 
 
     return (
-        <View style={styles.container}>
-            <BackButton onPress={() => navigation.pop()}/>
+
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
+                <BackButton onPress={() => navigation.pop()}/>
 
 
-            <Text style={styles.savings}>Voluntary Account</Text>
-            <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
-                <View style={{paddingHorizontal: 20,}}>
-                    <View>
-                        <Text style={styles.tsb}>Voluntary Account Balance</Text>
-                        <Text style={styles.balance}>₦ {voluntary_bal?.toLocaleString()}</Text>
+                <Text style={styles.savings}>Voluntary Account</Text>
+                <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
+                    <View style={{paddingHorizontal: 20,}}>
+                        <View>
+                            <Text style={styles.tsb}>Voluntary Account Balance</Text>
+                            <Text style={styles.balance}>₦ {voluntary_bal?.toLocaleString()}</Text>
+                        </View>
+                    </View>
+                </ImageBackground>
+
+
+                <View style={styles.autosaveBox}>
+
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("TopUpScreen")}
+                        activeOpacity={0.7}
+                        style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            width: "30%"
+                        }}>
+                        <Image style={{width: 40, height: 40}} source={icons.topUpicon}/>
+                        <Text style={{fontSize: 14, color: COLORS.primary, fontFamily: "Nexa-Book"}}>Top Up</Text>
+
+
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("WithdrawalScreen")}
+
+                        activeOpacity={0.7}
+                        style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            width: "35%"
+                        }}>
+
+                        <Image style={{width: 40, height: 40}} source={icons.withdraw}/>
+                        <Text style={{fontSize: 14, color: COLORS.primary, fontFamily: "Nexa-Book"}}>Withdraw</Text>
+
+
+                    </TouchableOpacity>
+                </View>
+
+
+                <View style={styles.recentTransaction}>
+                    <Text style={styles.todo}>Transactions</Text>
+
+                    <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
+                        <Text onPress={() => {
+                            navigation.navigate("VoluntaryTransactionPage")
+                        }} style={styles.seeAll}>See
+                            all</Text>
+                        <Image resizeMode={"contain"}
+                               style={{width: 15, height: 15, alignSelf: "center", bottom: 2}}
+                               source={icons.arrowRight}/>
                     </View>
                 </View>
-            </ImageBackground>
+
+                {loading ? <ActivityIndicator color={COLORS.secondary} size={"small"}/> : TopTab()}
 
 
-            <View style={styles.autosaveBox}>
-
-                <TouchableOpacity
-                    onPress={() => navigation.navigate("TopUpScreen")}
-                    activeOpacity={0.7}
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        width: "30%"
-                    }}>
-                    <Image style={{width: 40, height: 40}} source={icons.topUpicon}/>
-                    <Text style={{fontSize: 14, color: COLORS.primary, fontFamily: "Nexa-Book"}}>Top Up</Text>
-
-
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    onPress={() => navigation.navigate("WithdrawalScreen")}
-
-                    activeOpacity={0.7}
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        width: "35%"
-                    }}>
-
-                    <Image style={{width: 40, height: 40}} source={icons.withdraw}/>
-                    <Text style={{fontSize: 14, color: COLORS.primary, fontFamily: "Nexa-Book"}}>Withdraw</Text>
-
-
-                </TouchableOpacity>
             </View>
 
-
-            <View style={styles.recentTransaction}>
-                <Text style={styles.todo}>Transactions</Text>
-
-                <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
-                    <Text onPress={() => {
-                        navigation.navigate("VoluntaryTransactionPage")
-                    }} style={styles.seeAll}>See
-                        all</Text>
-                    <Image resizeMode={"contain"}
-                           style={{width: 15, height: 15, alignSelf: "center", bottom: 2}}
-                           source={icons.arrowRight}/>
-                </View>
-            </View>
-
-            {loading ? <ActivityIndicator color={COLORS.secondary} size={"small"}/> : TopTab()}
-
-
-        </View>
+        </>
     );
 };
 

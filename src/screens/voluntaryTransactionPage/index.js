@@ -8,6 +8,7 @@ import moment from "moment";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import LottieView from "lottie-react-native";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const data3 = []
@@ -201,7 +202,6 @@ const VoluntaryTransactionPage = ({navigation}) => {
         )
     }
 
-
     const TabTwo = () => {
 
         return (
@@ -226,9 +226,9 @@ const VoluntaryTransactionPage = ({navigation}) => {
 
                                       <View style={{justifyContent: "space-between", height: 50}}>
                                           {item.status === "SUCCESS" ?
-                                              <Text style={styles.recentTransactionText}>Card Deposit
+                                              <Text style={styles.recentTransactionText}>Deposit
                                                   Successful</Text> :
-                                              <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
+                                              <Text style={styles.recentTransactionText}>Deposit Failed</Text>}
                                           <Text style={{
                                               color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
                                           }}>₦{item?.amount_paid.toLocaleString()}</Text>
@@ -426,6 +426,8 @@ const VoluntaryTransactionPage = ({navigation}) => {
 
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
         <View style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
             <Text style={styles.savings}>Transactions</Text>
@@ -435,6 +437,7 @@ const VoluntaryTransactionPage = ({navigation}) => {
 
 
         </View>
+            </>
     );
 };
 

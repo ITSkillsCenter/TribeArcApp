@@ -8,6 +8,7 @@ import moment from "moment";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import LottieView from "lottie-react-native";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const data = [
@@ -225,6 +226,8 @@ const SavingsTransactionPage = ({navigation}) => {
     const TabOne = () => {
 
         return (
+            <>
+                <NotchResponsive color={COLORS.white}/>
             <View style={styles.tabOneContainer}>
                 <FlatList data={allTrx}
                           key={item => item.index}
@@ -247,9 +250,9 @@ const SavingsTransactionPage = ({navigation}) => {
 
                                       <View style={{justifyContent: "space-between", height: 50}}>
                                           {item.status === "SUCCESS" ?
-                                              <Text style={styles.recentTransactionText}>Card Deposit
+                                              <Text style={styles.recentTransactionText}>Deposit
                                                   Successful</Text> :
-                                              <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
+                                              <Text style={styles.recentTransactionText}>Deposit Failed</Text>}
                                           <Text style={{
                                               color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
                                           }}>₦{item?.amount_paid.toLocaleString()}</Text>
@@ -295,6 +298,8 @@ const SavingsTransactionPage = ({navigation}) => {
 
                           )}/>
             </View>
+
+                </>
         )
     }
 
@@ -323,9 +328,9 @@ const SavingsTransactionPage = ({navigation}) => {
 
                                       <View style={{justifyContent: "space-between", height: 50}}>
                                           {item.status === "SUCCESS" ?
-                                              <Text style={styles.recentTransactionText}>Card Deposit
+                                              <Text style={styles.recentTransactionText}>Deposit
                                                   Successful</Text> :
-                                              <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
+                                              <Text style={styles.recentTransactionText}>Deposit Failed</Text>}
                                           <Text style={{
                                               color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
                                           }}>₦{item?.amount_paid.toLocaleString()}</Text>
@@ -400,9 +405,9 @@ const SavingsTransactionPage = ({navigation}) => {
 
                                       <View style={{justifyContent: "space-between", height: 50}}>
                                           {item.status === "SUCCESS" ?
-                                              <Text style={styles.recentTransactionText}>Card Deposit
+                                              <Text style={styles.recentTransactionText}>Deposit
                                                   Successful</Text> :
-                                              <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
+                                              <Text style={styles.recentTransactionText}>Deposit Failed</Text>}
                                           <Text style={{
                                               color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
                                           }}>₦{item?.amount_paid.toLocaleString()}</Text>

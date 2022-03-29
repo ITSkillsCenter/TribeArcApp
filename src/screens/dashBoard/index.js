@@ -19,6 +19,8 @@ import {useIsFocused} from "@react-navigation/native";
 import FastImage from 'react-native-fast-image'
 import moment from "moment";
 import axios from "axios";
+import {FONTS} from "../../constants/theme";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const DashBoard = ({navigation}) => {
@@ -183,239 +185,247 @@ const DashBoard = ({navigation}) => {
 
     return (
 
-        loading ? <ActivityIndicator
-                style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
-                color={COLORS.primary}/> :
-            <SafeAreaView style={styles.container}>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            {loading ? <ActivityIndicator
+                    style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
+                    color={COLORS.primary}/> :
+                <View style={styles.container}>
 
-                <View style={styles.container2}>
-                    {/*WELCOME BACK SECTION*/}
-                    <View style={styles.header}>
-                        <Pressable onPress={() => navigation.navigate("Profile")} style={styles.imgContainer}>
-                            <FastImage style={styles.img}
-                                       source={avatar ? {
-                                           uri: avatar,
-                                           priority: FastImage.priority.normal
-                                       } : require("../../assets/images/userImg.png")}/>
-                        </Pressable>
-                        <View style={styles.nameContainer}>
-                            <Text style={styles.username}>Hello {firstname},</Text>
-                            <Text style={styles.welcomeText}>Welcome Back!</Text>
+                    <View style={styles.container2}>
+                        {/*WELCOME BACK SECTION*/}
+                        <View style={styles.header}>
+                            <Pressable onPress={() => navigation.navigate("Profile")} style={styles.imgContainer}>
+                                <FastImage style={styles.img}
+                                           source={avatar ? {
+                                               uri: avatar,
+                                               priority: FastImage.priority.normal
+                                           } : require("../../assets/images/userImg.png")}/>
+                            </Pressable>
+                            <View style={styles.nameContainer}>
+                                <Text style={styles.username}>Hello {firstname},</Text>
+                                <Text style={styles.welcomeText}>Welcome Back!</Text>
+                            </View>
+                            <Pressable onPress={() => {
+                                navigation.navigate("Notification")
+                                // Alert.alert("Notification", "Notification feature coming soon")
+                            }}>
+                                <Image resizeMode={"contain"}
+                                       source={notification ? icons.notificationBell : icons.notificationDot}
+                                       style={styles.notification}/>
+                            </Pressable>
                         </View>
-                        <Pressable activeOpacity={0.9} onPress={() => {
-                            // Alert.alert("Notification", "Notification feature coming soon")
-                        }}>
-                            <Image resizeMode={"contain"}
-                                   source={notification ? icons.notificationBell : icons.notificationDot}
-                                   style={styles.notification}/>
-                        </Pressable>
+
+                        {/*BALANCE CARD SECTION*/}
+                        <ScrollView snapToAlignment={"center"} decelerationRate={"fast"}
+                                    showsVerticalScrollIndicator={false}>
+                            <View style={{width: "100%", marginBottom: 15}}>
+                                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+
+                                    <ImageBackground resizeMode={"contain"} source={icons.balFrame}
+                                                     style={styles.balanceFrame}>
+                                        <View style={{
+                                            flexDirection: "row",
+                                            justifyContent: 'space-between',
+                                            paddingHorizontal: 20,
+                                            alignItems: 'center'
+                                        }}>
+                                            <View>
+                                                <Text style={styles.tsb}>Total Savings Balance</Text>
+                                                <Text style={styles.balance}>₦ {totalBalance?.toLocaleString()}</Text>
+                                            </View>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate(regFeePaid ? "SavingsMainScreen" : "RegistrationFee", "backButton")}>
+                                                <Image resizeMode={"contain"} style={{width: 30, height: 30}}
+                                                       source={icons.plusIcon}/>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </ImageBackground>
+                                    <ImageBackground resizeMode={"contain"} source={icons.balFrame}
+                                                     style={styles.balanceFrame}>
+                                        <View style={{
+                                            flexDirection: "row",
+                                            justifyContent: 'space-between',
+                                            paddingHorizontal: 20,
+                                            alignItems: 'center'
+                                        }}>
+                                            <View>
+                                                <Text style={styles.tsb}>Investment Account Balance</Text>
+                                                <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
+                                            </View>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate(regFeePaid ? "Savings" : "RegistrationFee")}>
+                                                <Image resizeMode={"contain"} style={{width: 30, height: 30}}
+                                                       source={icons.plusIcon}/>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </ImageBackground>
+                                    <ImageBackground resizeMode={"contain"} source={icons.balFrame}
+                                                     style={[styles.balanceFrame, {marginRight: 0}]}>
+                                        <View style={{
+                                            flexDirection: "row",
+                                            justifyContent: 'space-between',
+                                            paddingHorizontal: 20,
+                                            alignItems: 'center'
+                                        }}>
+                                            <View>
+                                                <Text style={styles.tsb}>Voluntary Account Balance</Text>
+                                                <Text style={styles.balance}>₦ {voluntary?.toLocaleString()}</Text>
+                                            </View>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate(regFeePaid ? "TopUpScreen" : "RegistrationFee", "backButton")}>
+                                                <Image resizeMode={"contain"} style={{width: 30, height: 30}}
+                                                       source={icons.plusIcon}/>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </ImageBackground>
+
+                                </ScrollView>
+                            </View>
+
+
+                            {/*<TouchableOpacity activeOpacity={0.8} style={styles.saveFrame}*/}
+                            {/*                  onPress={() => navigation.navigate(regFeePaid ? "SavingsMainScreen" : "RegistrationFee", "backButton")}>*/}
+                            {/*    /!*<View>*!/*/}
+                            {/*    <Image source={icons.pigIcon} resizeMode={"contain"} style={{width: 50, height: 50}}/>*/}
+                            {/*    /!*</View>*!/*/}
+                            {/*    <View style={{justifyContent: "space-between", height: 50, width: "70%", alignSelf: "center"}}>*/}
+                            {/*        <Text style={{fontFamily: "Nexa-Book", color: COLORS.black, letterSpacing: 0.7,}}>SAVE FOR*/}
+                            {/*            THE*/}
+                            {/*            FUTURE</Text>*/}
+                            {/*        <Text style={{color: "#A19FCD", fontFamily: "Nexa-Book"}}>Tap to get started with*/}
+                            {/*            Tribearc</Text>*/}
+                            {/*    </View>*/}
+                            {/*    <Image source={icons.arrowRight} style={{width: 20, height: 20}} resizeMode={"contain"}/>*/}
+                            {/*</TouchableOpacity>*/}
+
+
+                            {/*TO-DOS SECTION*/}
+                            <View style={styles.cardContainer}>
+                                {creditCards.length < 0 || !bvn || questions.length > 0 ? (<View style={styles.TodoBox}>
+                                    <Text style={styles.todo}>To - Dos</Text>
+                                </View>) : null}
+
+                                {/*CREDIT CARDS*/}
+                                {creditCards.length < 0 &&
+                                    <>
+                                        <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
+                                                          onPress={() => navigation.navigate(regFeePaid ? "LinkCard" : "RegistrationFee")}>
+                                            <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
+                                            <Text style={styles.linkCardText}>Link a Card</Text>
+                                            <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
+                                                   resizeMode={"contain"}/>
+                                        </TouchableOpacity>
+                                        <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+                                    </>
+                                }
+
+
+                                {/*ADD BVN TO-DO*/}
+                                {!bvn &&
+                                    <>
+                                        <TouchableOpacity onPress={() => {
+                                            navigation.navigate(regFeePaid ? "AddBvn" : "RegistrationFee")
+                                        }} style={styles.cardBox} activeOpacity={0.8}>
+                                            <Image source={icons.addBvn} style={{width: 50, height: 50}}/>
+                                            <Text style={styles.linkCardText}>Add your BVN</Text>
+                                            <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
+                                                   resizeMode={"contain"}/>
+                                        </TouchableOpacity>
+                                        <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+                                    </>
+                                }
+
+                                {/*POLLS*/}
+                                {questions.length > 0 && <>
+                                    <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
+                                                      onPress={() => navigation.navigate(regFeePaid ? "CommunityQuestions" : "RegistrationFee")}>
+                                        <Image source={icons.commQuestion} style={{width: 50, height: 50}}/>
+                                        <Text style={styles.linkCardText}>Community Questions</Text>
+                                        <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
+                                               resizeMode={"contain"}/>
+                                    </TouchableOpacity>
+                                    <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
+                                </>}
+
+                                {/*{!firstname || !lastname || !phoneNumber || !profession && <>*/}
+                                {/*    <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>*/}
+                                {/*    <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}*/}
+                                {/*                      onPress={() => navigation.navigate("EditProfile")}>*/}
+                                {/*        <Image source={icons.completeProfile} style={{width: 50, height: 50}}/>*/}
+                                {/*        <Text style={styles.linkCardText}>Complete Your profile</Text>*/}
+                                {/*        <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}*/}
+                                {/*               resizeMode={"contain"}/>*/}
+                                {/*    </TouchableOpacity>*/}
+                                {/*</>}*/}
+
+                                {/*RECENT TRANSACTION SECTION*/}
+                                {transactions.length !== 0 && <View style={styles.recentTransaction}>
+                                    <Text style={styles.todo}>Recent Transactions</Text>
+
+                                    <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
+                                        <Text
+                                            onPress={() => navigation.navigate(regFeePaid ? "RecentTransactions" : "RegistrationFee")}
+                                            style={styles.seeAll}>See
+                                            all</Text>
+                                        <Image resizeMode={"contain"}
+                                               style={{width: 15, height: 15, alignSelf: "center", bottom: 2}}
+                                               source={icons.arrowRight}/>
+                                    </View>
+                                </View>}
+                                {transactions.map((item, index) => (
+                                    <View key={index}>
+                                        <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
+                                                          onPress={() => {
+                                                          }}>
+                                            <Image
+                                                source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
+                                                style={{width: SIZES.width * 0.1, height: SIZES.width * 0.1}}/>
+                                            <Text style={styles.recentTransactionText}>Card Deposit</Text>
+
+                                            <View style={{
+                                                alignItems: 'center',
+                                                justifyContent: "space-between",
+                                                height: SIZES.width * 0.1
+                                            }}>
+                                                <Text style={{
+                                                    color: COLORS.black,
+                                                    fontFamily: "Nexa-Bold",
+                                                    fontSize: SIZES.width * 0.04
+                                                }}>₦{item?.amount_paid?.toLocaleString()}</Text>
+                                                <Text style={{
+                                                    color: COLORS.black,
+                                                    fontFamily: "Nexa-Book",
+                                                    fontSize: SIZES.width * 0.025
+                                                }}>{moment(item?.created_at).format("MMM D, YYYY")}</Text>
+                                            </View>
+                                        </TouchableOpacity>
+
+                                        <View
+                                            style={{
+                                                backgroundColor: "#EEF1F5",
+                                                height: 0.5,
+                                                width: SIZES.width * 0.9,
+                                                alignSelf: "center",
+                                            }}
+                                        />
+
+                                    </View>
+
+                                ))}
+
+                                <View style={{height: 60, marginBottom: 80,}}/>
+                            </View>
+                        </ScrollView>
+
+
                     </View>
 
-                    {/*BALANCE CARD SECTION*/}
-                    <ScrollView snapToAlignment={"center"} decelerationRate={"fast"}
-                                showsVerticalScrollIndicator={false}>
-                        <View style={{width: "100%", marginBottom: 15}}>
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                </View>}
 
-                                <ImageBackground resizeMode={"contain"} source={icons.balFrame}
-                                                 style={styles.balanceFrame}>
-                                    <View style={{
-                                        flexDirection: "row",
-                                        justifyContent: 'space-between',
-                                        paddingHorizontal: 20,
-                                        alignItems: 'center'
-                                    }}>
-                                        <View>
-                                            <Text style={styles.tsb}>Total Savings Balance</Text>
-                                            <Text style={styles.balance}>₦ {totalBalance?.toLocaleString()}</Text>
-                                        </View>
-                                        <TouchableOpacity
-                                            onPress={() => navigation.navigate(regFeePaid ? "SavingsMainScreen" : "RegistrationFee", "backButton")}>
-                                            <Image resizeMode={"contain"} style={{width: 30, height: 30}}
-                                                   source={icons.plusIcon}/>
-                                        </TouchableOpacity>
-                                    </View>
-                                </ImageBackground>
-                                <ImageBackground resizeMode={"contain"} source={icons.balFrame}
-                                                 style={styles.balanceFrame}>
-                                    <View style={{
-                                        flexDirection: "row",
-                                        justifyContent: 'space-between',
-                                        paddingHorizontal: 20,
-                                        alignItems: 'center'
-                                    }}>
-                                        <View>
-                                            <Text style={styles.tsb}>Investment Account Balance</Text>
-                                            <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
-                                        </View>
-                                        <TouchableOpacity
-                                            onPress={() => navigation.navigate(regFeePaid ? "Savings" : "RegistrationFee")}>
-                                            <Image resizeMode={"contain"} style={{width: 30, height: 30}}
-                                                   source={icons.plusIcon}/>
-                                        </TouchableOpacity>
-                                    </View>
-                                </ImageBackground>
-                                <ImageBackground resizeMode={"contain"} source={icons.balFrame}
-                                                 style={[styles.balanceFrame, {marginRight: 0}]}>
-                                    <View style={{
-                                        flexDirection: "row",
-                                        justifyContent: 'space-between',
-                                        paddingHorizontal: 20,
-                                        alignItems: 'center'
-                                    }}>
-                                        <View>
-                                            <Text style={styles.tsb}>Voluntary Account Balance</Text>
-                                            <Text style={styles.balance}>₦ {voluntary?.toLocaleString()}</Text>
-                                        </View>
-                                        <TouchableOpacity
-                                            onPress={() => navigation.navigate(regFeePaid ? "TopUpScreen" : "RegistrationFee", "backButton")}>
-                                            <Image resizeMode={"contain"} style={{width: 30, height: 30}}
-                                                   source={icons.plusIcon}/>
-                                        </TouchableOpacity>
-                                    </View>
-                                </ImageBackground>
+        </>
 
-                            </ScrollView>
-                        </View>
-
-
-                        {/*<TouchableOpacity activeOpacity={0.8} style={styles.saveFrame}*/}
-                        {/*                  onPress={() => navigation.navigate(regFeePaid ? "SavingsMainScreen" : "RegistrationFee", "backButton")}>*/}
-                        {/*    /!*<View>*!/*/}
-                        {/*    <Image source={icons.pigIcon} resizeMode={"contain"} style={{width: 50, height: 50}}/>*/}
-                        {/*    /!*</View>*!/*/}
-                        {/*    <View style={{justifyContent: "space-between", height: 50, width: "70%", alignSelf: "center"}}>*/}
-                        {/*        <Text style={{fontFamily: "Nexa-Book", color: COLORS.black, letterSpacing: 0.7,}}>SAVE FOR*/}
-                        {/*            THE*/}
-                        {/*            FUTURE</Text>*/}
-                        {/*        <Text style={{color: "#A19FCD", fontFamily: "Nexa-Book"}}>Tap to get started with*/}
-                        {/*            Tribearc</Text>*/}
-                        {/*    </View>*/}
-                        {/*    <Image source={icons.arrowRight} style={{width: 20, height: 20}} resizeMode={"contain"}/>*/}
-                        {/*</TouchableOpacity>*/}
-
-
-                        {/*TO-DOS SECTION*/}
-                        <View style={styles.cardContainer}>
-                            {creditCards.length < 0 || !bvn || questions.length > 0 ? (<View style={styles.TodoBox}>
-                                <Text style={styles.todo}>To - Dos</Text>
-                            </View>) : null}
-
-                            {/*CREDIT CARDS*/}
-                            {creditCards.length < 0 &&
-                                <>
-                                    <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                                      onPress={() => navigation.navigate(regFeePaid ? "LinkCard" : "RegistrationFee")}>
-                                        <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
-                                        <Text style={styles.linkCardText}>Link a Card</Text>
-                                        <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
-                                               resizeMode={"contain"}/>
-                                    </TouchableOpacity>
-                                    <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
-                                </>
-                            }
-
-
-                            {/*ADD BVN TO-DO*/}
-                            {!bvn &&
-                                <>
-                                    <TouchableOpacity onPress={() => {
-                                        navigation.navigate(regFeePaid ? "AddBvn" : "RegistrationFee")
-                                    }} style={styles.cardBox} activeOpacity={0.8}>
-                                        <Image source={icons.addBvn} style={{width: 50, height: 50}}/>
-                                        <Text style={styles.linkCardText}>Add your BVN</Text>
-                                        <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
-                                               resizeMode={"contain"}/>
-                                    </TouchableOpacity>
-                                    <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
-                                </>
-                            }
-
-                            {/*POLLS*/}
-                            {questions.length > 0 && <>
-                                <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                                  onPress={() => navigation.navigate(regFeePaid ? "CommunityQuestions" : "RegistrationFee")}>
-                                    <Image source={icons.commQuestion} style={{width: 50, height: 50}}/>
-                                    <Text style={styles.linkCardText}>Community Questions</Text>
-                                    <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}
-                                           resizeMode={"contain"}/>
-                                </TouchableOpacity>
-                                <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>
-                            </>}
-
-                            {/*{!firstname || !lastname || !phoneNumber || !profession && <>*/}
-                            {/*    <View style={{height: 0.5, backgroundColor: "#E9E9E9", marginVertical: 5}}/>*/}
-                            {/*    <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}*/}
-                            {/*                      onPress={() => navigation.navigate("EditProfile")}>*/}
-                            {/*        <Image source={icons.completeProfile} style={{width: 50, height: 50}}/>*/}
-                            {/*        <Text style={styles.linkCardText}>Complete Your profile</Text>*/}
-                            {/*        <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}}*/}
-                            {/*               resizeMode={"contain"}/>*/}
-                            {/*    </TouchableOpacity>*/}
-                            {/*</>}*/}
-
-                            {/*RECENT TRANSACTION SECTION*/}
-                            {transactions.length !== 0 && <View style={styles.recentTransaction}>
-                                <Text style={styles.todo}>Recent Transactions</Text>
-
-                                <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
-                                    <Text
-                                        onPress={() => navigation.navigate(regFeePaid ? "RecentTransactions" : "RegistrationFee")}
-                                        style={styles.seeAll}>See
-                                        all</Text>
-                                    <Image resizeMode={"contain"}
-                                           style={{width: 15, height: 15, alignSelf: "center", bottom: 2}}
-                                           source={icons.arrowRight}/>
-                                </View>
-                            </View>}
-                            {transactions.map((item, index) => (
-                                <View key={index}>
-                                    <TouchableOpacity style={styles.cardBox} activeOpacity={0.8}
-                                                      onPress={() => {
-                                                      }}>
-                                        <Image source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
-                                               style={{width: SIZES.width * 0.1, height: SIZES.width * 0.1}}/>
-                                        <Text style={styles.recentTransactionText}>Card Deposit</Text>
-
-                                        <View style={{
-                                            alignItems: 'center',
-                                            justifyContent: "space-between",
-                                            height: SIZES.width * 0.1
-                                        }}>
-                                            <Text style={{
-                                                color: COLORS.black,
-                                                fontFamily: "Nexa-Bold",
-                                                fontSize: SIZES.width * 0.04
-                                            }}>₦{item?.amount_paid?.toLocaleString()}</Text>
-                                            <Text style={{
-                                                color: COLORS.black,
-                                                fontFamily: "Nexa-Book",
-                                                fontSize: SIZES.width * 0.025
-                                            }}>{moment(item?.created_at).format("MMM D, YYYY")}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-
-                                    <View
-                                        style={{
-                                            backgroundColor: "#EEF1F5",
-                                            height: 0.5,
-                                            width: SIZES.width * 0.9,
-                                            alignSelf: "center",
-                                        }}
-                                    />
-
-                                </View>
-
-                            ))}
-
-                            <View style={{height: 60, marginBottom: 80,}}/>
-                        </View>
-                    </ScrollView>
-
-
-                </View>
-
-            </SafeAreaView>);
+    );
 };
 
 export default DashBoard
@@ -427,7 +437,7 @@ const styles = StyleSheet.create({
     },
     container2: {
         paddingHorizontal: 20,
-        paddingVertical: 10,
+        paddingVertical: SIZES.font10,
         backgroundColor: COLORS.white
     },
     header: {
@@ -449,14 +459,12 @@ const styles = StyleSheet.create({
         right: SIZES.width * 0.03
     },
     username: {
-        fontSize: SIZES.width * 0.04,
+        ...FONTS.body8,
         color: COLORS.black,
-        fontFamily: "Nexa-Book"
     },
     welcomeText: {
+        ...FONTS.h6,
         color: COLORS.primary,
-        fontSize: SIZES.width * 0.05,
-        fontFamily: "Nexa-Bold"
     },
     notification: {
         width: SIZES.width * 0.07,
@@ -466,7 +474,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         backgroundColor: COLORS.white,
         justifyContent: "center",
-        marginVertical: 50
+        marginVertical: SIZES.font10
     },
     balanceFrame: {
         borderRadius: 15,
@@ -488,21 +496,20 @@ const styles = StyleSheet.create({
     },
     tsb: {
         color: COLORS.white,
-        fontFamily: "Nexa-Bold",
-        marginVertical: 20
+        marginVertical: SIZES.font10,
+        ...FONTS.h8
     },
     balance: {
         color: COLORS.white,
-        fontFamily: "Nexa-Bold",
-        fontSize: 24
+        ...FONTS.h5
+
     },
     TodoBox: {
-        marginTop: 10
+        marginTop: SIZES.font10
     },
     todo: {
         color: COLORS.black,
-        fontFamily: "Nexa-Bold",
-        fontSize: 16
+        ...FONTS.h8
     },
     cardContainer: {
         height: "100%"
@@ -511,29 +518,26 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        marginVertical: 10,
+        marginVertical: SIZES.font10,
     },
     linkCardText: {
-        fontSize: 18,
+        ...FONTS.h8,
         width: SIZES.width * 0.6,
-        fontFamily: "Nexa-Bold",
         color: COLORS.black,
     },
     recentTransaction: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginVertical: 20
+        marginVertical: SIZES.font10
     },
     seeAll: {
         color: COLORS.primary,
-        fontFamily: "Nexa-Book",
-        fontSize: 18,
+        ...FONTS.body8,
         alignSelf: "center",
     },
     recentTransactionText: {
-        fontSize: SIZES.width * 0.04,
+        ...FONTS.h8,
         width: SIZES.width * 0.4,
-        fontFamily: "Nexa-Bold",
         color: COLORS.black,
     },
 })

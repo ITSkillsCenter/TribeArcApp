@@ -10,6 +10,7 @@ import {UserContext} from "../../context/UserContext";
 import axios from "axios";
 import {BASE_URL} from "../../config";
 import {handleQuery} from "../../graphql/requests";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const TopUpScreen = ({navigation, route}) => {
@@ -119,73 +120,77 @@ const TopUpScreen = ({navigation, route}) => {
 
 
     return (
-        isLoading ? <ActivityIndicator
-                style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
-                color={COLORS.primary}/> :
 
-            // <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            {isLoading ? <ActivityIndicator
+                    style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
+                    color={COLORS.primary}/> :
 
-                <View style={styles.container}>
+                // <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+                <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 
-                    <BackButton onPress={() => navigation.pop()}/>
+                    <View style={styles.container}>
 
-
-                    <Text style={styles.topUp}>Top-Up</Text>
-                    <Text style={styles.withdrawDesc}>Enter Amount to save</Text>
-                    <View style={{marginTop: 10}}>
+                        <BackButton onPress={() => navigation.pop()}/>
 
 
-                        <CustomTextInput
-                            initialValue={topUp}
-                            onChange={value => parseFloat(setTopUp(value))}
-                            placeholderText={"e.g 20,000"}
-                            props={{
-                                keyboardType: "numeric"
+                        <Text style={styles.topUp}>Top-Up</Text>
+                        <Text style={styles.withdrawDesc}>Enter Amount to save</Text>
+                        <View style={{marginTop: 10}}>
+
+
+                            <CustomTextInput
+                                initialValue={topUp}
+                                onChange={value => parseFloat(setTopUp(value))}
+                                placeholderText={"e.g 20,000"}
+                                props={{
+                                    keyboardType: "numeric"
+                                }}
+                                title={"Amount to Top-Up"}/>
+
+
+                            <CustomTextInput props={{
+                                editable: false
+                            }} placeholderText={"Voluntary Account"} title={"Destination"}/>
+                        </View>
+
+
+                        <Paystack
+                            paystackKey={liveKey || testKey}
+                            amount={topUp < feeBridge ? (topUp * percentageBelow) + parseFloat(topUp) : (topUp * percentageBelow) + parseFloat(topUp) + parseFloat(extraFee)}
+                            billingEmail={user.email}
+                            activityIndicatorColor={COLORS.primary}
+                            onCancel={async (e) => {
+                                console.log(e, "PaymentError")
                             }}
-                            title={"Amount to Top-Up"}/>
+                            onSuccess={async (res) => {
+                                // console.log(res, "RESDSD")
+                                setIsLoading(true)
+                                await TopUp(res.data.transactionRef.reference, topUp)
 
-
-                        <CustomTextInput props={{
-                            editable: false
-                        }} placeholderText={"Voluntary Account"} title={"Destination"}/>
-                    </View>
-
-
-                    <Paystack
-                        paystackKey={liveKey || testKey}
-                        amount={topUp < feeBridge ? (topUp * percentageBelow) + parseFloat(topUp) : (topUp * percentageBelow) + parseFloat(topUp) + parseFloat(extraFee)}
-                        billingEmail={user.email}
-                        activityIndicatorColor={COLORS.primary}
-                        onCancel={async (e) => {
-                            console.log(e, "PaymentError")
-                        }}
-                        onSuccess={async (res) => {
-                            // console.log(res, "RESDSD")
-                            setIsLoading(true)
-                            await TopUp(res.data.transactionRef.reference, topUp)
-
-                        }}
-                        autoStart={false}
-                        ref={paystackWebViewRef}
-                    />
-
-
-                    <View style={{flex: 2, justifyContent: "flex-end"}}>
-                        <CustomButton
-                            onPress={() => {
-                                if (topUp !== "") {
-                                    paidRegFee ? paystackWebViewRef.current.startTransaction() : navigation.navigate("RegistrationFee")
-                                }
                             }}
-                            filled={topUp !== ""}
-                            text={"Proceed"}
+                            autoStart={false}
+                            ref={paystackWebViewRef}
                         />
+
+
+                        <View style={{flex: 2, justifyContent: "flex-end"}}>
+                            <CustomButton
+                                onPress={() => {
+                                    if (topUp !== "") {
+                                        paidRegFee ? paystackWebViewRef.current.startTransaction() : navigation.navigate("RegistrationFee")
+                                    }
+                                }}
+                                filled={topUp !== ""}
+                                text={"Proceed"}
+                            />
+                        </View>
+
                     </View>
 
-                </View>
-
-            </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback>}
+        </>
 
         // </KeyboardAwareScrollView>
 

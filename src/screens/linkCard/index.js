@@ -12,6 +12,7 @@ import {Modalize} from "react-native-modalize";
 import {Paystack} from "react-native-paystack-webview/lib";
 import axios from "axios";
 import {BASE_URL} from "../../config";
+import NotchResponsive from "../../components/NotchResponsive";
 
 const LinkCard = ({navigation}) => {
 
@@ -280,54 +281,56 @@ const LinkCard = ({navigation}) => {
 
 
     return (
-        <View style={styles.container}>
 
-            <Modalize
-                modalHeight={SIZES.height * 0.55}
-                handleStyle={{backgroundColor: 'transparent'}}
-                childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
-                ref={modalizeRef}>
-                {renderHeader()}
-                {renderInner()}
-            </Modalize>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
 
-            <BackButton onPress={() => navigation.pop()}/>
-            <Text style={styles.linkCard}>Link a Card</Text>
+                <Modalize
+                    modalHeight={SIZES.height * 0.55}
+                    handleStyle={{backgroundColor: 'transparent'}}
+                    childrenStyle={{backgroundColor: COLORS.white, borderRadius: 55,}}
+                    ref={modalizeRef}>
+                    {renderHeader()}
+                    {renderInner()}
+                </Modalize>
 
-
-            <TouchableOpacity style={styles.cardBox} activeOpacity={0.6}
-                              onPress={() => paystackWebViewRef.current.startTransaction()}>
-                <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
-                <Text style={styles.linkCardText}>Debit Card</Text>
-                <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}} resizeMode={"contain"}/>
-            </TouchableOpacity>
+                <BackButton onPress={() => navigation.pop()}/>
+                <Text style={styles.linkCard}>Link a Card</Text>
 
 
-            <Paystack
-                paystackKey={liveKey || testKey}
-                amount={(100 * percentageBelow) + parseFloat(100)}
-                billingEmail={user.email}
-                activityIndicatorColor={COLORS.primary}
-                onCancel={async (e) => {
-                    console.log(e, "PaymentError")
-                }}
-                onSuccess={async (res) => {
-                    // await TransactionData(res)
-                    console.log(res.data.transactionRef.reference, "RESDSD")
-                    await LinkCard(res.data.transactionRef.reference)
-
-                }}
-                autoStart={false}
-                ref={paystackWebViewRef}
-            />
+                <TouchableOpacity style={styles.cardBox} activeOpacity={0.6}
+                                  onPress={() => paystackWebViewRef.current.startTransaction()}>
+                    <Image source={icons.linkCard} style={{width: 50, height: 50}}/>
+                    <Text style={styles.linkCardText}>Debit Card</Text>
+                    <Image source={icons.arrowRight} style={{width: 20, height: 20, right: 20}} resizeMode={"contain"}/>
+                </TouchableOpacity>
 
 
-            <View style={styles.cancelButton}>
-                <CustomButton onPress={() => navigation.pop()} filled text={"Cancel"}/>
+                <Paystack
+                    paystackKey={liveKey || testKey}
+                    amount={(100 * percentageBelow) + parseFloat(100)}
+                    billingEmail={user.email}
+                    activityIndicatorColor={COLORS.primary}
+                    onCancel={async (e) => {
+                        console.log(e, "PaymentError")
+                    }}
+                    onSuccess={async (res) => {
+                        // await TransactionData(res)
+                        console.log(res.data.transactionRef.reference, "RESDSD")
+                        await LinkCard(res.data.transactionRef.reference)
+
+                    }}
+                    autoStart={false}
+                    ref={paystackWebViewRef}
+                />
+
+
+                <View style={styles.cancelButton}>
+                    <CustomButton onPress={() => navigation.pop()} filled text={"Cancel"}/>
+                </View>
             </View>
-
-
-        </View>
+        </>
     );
 };
 

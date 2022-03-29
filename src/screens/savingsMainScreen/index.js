@@ -6,6 +6,7 @@ import BackButton from "../../components/BackButton";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import {useFocusEffect} from "@react-navigation/native";
+import NotchResponsive from "../../components/NotchResponsive";
 
 const SavingsMainScreen = ({navigation, route}) => {
 
@@ -15,6 +16,7 @@ const SavingsMainScreen = ({navigation, route}) => {
     const [voluntary, setVoluntary] = useState("")
     const [totalBalance, setTotalBalance] = useState("")
     const [autocharge, setAutocharge] = useState("")
+    const [next_payment_date, setNext_payment_date] = useState("")
 
 
     const [paidRegFee, setPaidRegFee] = useState(false);
@@ -62,16 +64,19 @@ const SavingsMainScreen = ({navigation, route}) => {
                     voluntary_funds
                     amount_saved
                     amount_to_save
+                    next_payment_date
                                 }
                             }`
         try {
 
+
             const bal = await handleQuery(qry, user.token, false)
-            // console.log(bal.data.savingAccounts[0].amount_to_save)
+            // console.log(bal.data.savingAccounts[0].next_payment_date)
 
             await setSavings(bal.data.savingAccounts[0].amount_saved)
             await setVoluntary(bal.data.savingAccounts[0].voluntary_funds)
             await setAutocharge(bal.data.savingAccounts[0].amount_to_save)
+            await setNext_payment_date(bal.data.savingAccounts[0].next_payment_date)
             await setTotalBalance(bal.data.savingAccounts[0].amount_saved + bal.data.savingAccounts[0].voluntary_funds)
 
 
@@ -83,58 +88,65 @@ const SavingsMainScreen = ({navigation, route}) => {
 
 
     return (
-        <View style={styles.container}>
 
-            {route.params && <BackButton onPress={() => navigation.pop()}/>}
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
+
+                {route.params && <BackButton onPress={() => navigation.pop()}/>}
 
 
-            <Text style={styles.sav}>Savings</Text>
-            <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
-                <View style={{
-                    // flexDirection: "row",
-                    // justifyContent: 'space-between',
-                    paddingHorizontal: 20,
-                    // alignItems: 'center'
-                }}>
-                    <View>
-                        <Text style={styles.tsb}>Total Savings Balance</Text>
-                        <Text style={styles.balance}>₦ {totalBalance?.toLocaleString()}</Text>
+                <Text style={styles.sav}>Savings</Text>
+                <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
+                    <View style={{
+                        // flexDirection: "row",
+                        // justifyContent: 'space-between',
+                        paddingHorizontal: 20,
+                        // alignItems: 'center'
+                    }}>
+                        <View>
+                            <Text style={styles.tsb}>Total Savings Balance</Text>
+                            <Text style={styles.balance}>₦ {totalBalance?.toLocaleString()}</Text>
+                        </View>
+
                     </View>
+                </ImageBackground>
+
+                <View style={styles.rootBox}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate(paidRegFee ? "SavingsAccountPage" : "RegistrationFee", {
+                            savings,
+                            autocharge,
+                            next_payment_date
+                        })}
+                        activeOpacity={0.85}
+                        style={styles.box}>
+                        <Image source={icons.savPig} style={{width: SIZES.width * 0.15, height: SIZES.width * 0.15}}/>
+                        <View style={styles.textBox}>
+                            <Text style={styles.savAcct}>Savings Account</Text>
+                            <Text style={styles.savDesc}>Total monthly saving automatically debited</Text>
+                            <Text style={styles.amt}>₦ {savings?.toLocaleString()}</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate(paidRegFee ? "VoluntaryAccountPage" : "RegistrationFee", voluntary)}
+                        activeOpacity={0.85}
+                        style={styles.box}>
+                        <Image source={icons.savHand} style={{width: SIZES.width * 0.15, height: SIZES.width * 0.15}}/>
+                        <View style={styles.textBox}>
+                            <Text style={styles.savAcct}>Voluntary Account</Text>
+                            <Text style={styles.savDesc}>Total voluntary saving that can be withdrawn anytime</Text>
+                            <Text style={styles.amt}>₦ {voluntary?.toLocaleString()}</Text>
+                        </View>
+                    </TouchableOpacity>
 
                 </View>
-            </ImageBackground>
 
-            <View style={styles.rootBox}>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate(paidRegFee ? "SavingsAccountPage" : "RegistrationFee", {
-                        savings,
-                        autocharge
-                    })}
-                    activeOpacity={0.85}
-                    style={styles.box}>
-                    <Image source={icons.savPig} style={{width: SIZES.width * 0.15, height: SIZES.width * 0.15}}/>
-                    <View style={styles.textBox}>
-                        <Text style={styles.savAcct}>Savings Account</Text>
-                        <Text style={styles.savDesc}>Total monthly saving automatically debited</Text>
-                        <Text style={styles.amt}>₦ {savings?.toLocaleString()}</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate(paidRegFee ? "VoluntaryAccountPage" : "RegistrationFee", voluntary)}
-                    activeOpacity={0.85}
-                    style={styles.box}>
-                    <Image source={icons.savHand} style={{width: SIZES.width * 0.15, height: SIZES.width * 0.15}}/>
-                    <View style={styles.textBox}>
-                        <Text style={styles.savAcct}>Voluntary Account</Text>
-                        <Text style={styles.savDesc}>Total voluntary saving that can be withdrawn anytime</Text>
-                        <Text style={styles.amt}>₦ {voluntary?.toLocaleString()}</Text>
-                    </View>
-                </TouchableOpacity>
 
             </View>
 
-
-        </View>
+        </>
     );
 };
 

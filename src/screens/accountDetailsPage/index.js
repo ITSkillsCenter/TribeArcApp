@@ -6,6 +6,7 @@ import BackButton from "../../components/BackButton";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import LottieView from "lottie-react-native";
+import NotchResponsive from "../../components/NotchResponsive";
 
 export const AccountDetailsPage = ({navigation}) => {
 
@@ -56,58 +57,70 @@ export const AccountDetailsPage = ({navigation}) => {
 
 
     return (
-        <View style={styles.container}>
-            <BackButton onPress={() => navigation.pop()}/>
-            <Text style={styles.acctDet}>Account Details</Text>
 
 
-            {loading ? <ActivityIndicator color={COLORS.secondary} size={"small"}/> :
-                <FlatList
-                    data={acct}
-                    ListEmptyComponent={
-                        <View style={{alignItems: "center", justifyContent: "center",}}>
+        <>
 
-                            <LottieView style={{width: SIZES.width * 0.6, height: SIZES.width * 0.6}}
-                                        source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
+                <BackButton onPress={() => navigation.pop()}/>
+                <Text style={styles.acctDet}>Account Details</Text>
 
-                            <Text style={{color:COLORS.primary, fontSize:18, fontFamily:"Nexa-Bold"}}>Your have not added any account</Text>
-                        </View>
-                    }
-                    renderItem={({item}) => (
-                        <>
-                            <View style={styles.addAcctBox}>
-                                <View style={{justifyContent: "space-between", height: 50}}>
-                                    <Text style={{
-                                        color: COLORS.black,
-                                        fontSize: 18,
-                                        fontFamily: "Nexa-Bold"
-                                    }}>{item.account_name}</Text>
-                                    <View style={{flexDirection: "row", width: "70%", justifyContent: "space-between"}}>
+
+                {loading ? <ActivityIndicator color={COLORS.secondary} size={"small"}/> :
+                    <FlatList
+                        data={acct}
+                        ListEmptyComponent={
+                            <View style={{alignItems: "center", justifyContent: "center",}}>
+
+                                <LottieView style={{width: SIZES.width * 0.6, height: SIZES.width * 0.6}}
+                                            source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
+
+                                <Text style={{color: COLORS.primary, fontSize: 18, fontFamily: "Nexa-Bold"}}>Your have
+                                    not added any account</Text>
+                            </View>
+                        }
+                        renderItem={({item}) => (
+                            <>
+                                <View style={styles.addAcctBox}>
+                                    <View style={{justifyContent: "space-between", height: 50}}>
                                         <Text style={{
                                             color: COLORS.black,
-                                            fontSize: 14,
-                                            fontFamily: "Nexa-Book",
-                                            paddingRight: 10
-                                        }}>{item.bank_name}</Text>
-                                        <Text style={{
-                                            color: COLORS.black,
-                                            fontSize: 14,
-                                            fontFamily: "Nexa-Book"
-                                        }}>{item.account_number}</Text>
+                                            fontSize: 18,
+                                            fontFamily: "Nexa-Bold"
+                                        }}>{item.account_name}</Text>
+                                        <View style={{
+                                            flexDirection: "row",
+                                            width: "70%",
+                                            justifyContent: "space-between"
+                                        }}>
+                                            <Text style={{
+                                                color: COLORS.black,
+                                                fontSize: 14,
+                                                fontFamily: "Nexa-Book",
+                                                paddingRight: 10
+                                            }}>{item.bank_name}</Text>
+                                            <Text style={{
+                                                color: COLORS.black,
+                                                fontSize: 14,
+                                                fontFamily: "Nexa-Book"
+                                            }}>{item.account_number}</Text>
+                                        </View>
                                     </View>
+
                                 </View>
 
-                            </View>
+                            </>
+                        )
+                        }/>}
+                <TouchableOpacity onPress={() => navigation.navigate("AddAccountDetailsScreen")}
+                                  style={styles.addAcctButton}>
+                    <Text style={styles.addAcctText}>Add New Account</Text>
+                </TouchableOpacity>
 
-                        </>
-                    )
-                    }/>}
-            <TouchableOpacity onPress={() => navigation.navigate("AddAccountDetailsScreen")}
-                              style={styles.addAcctButton}>
-                <Text style={styles.addAcctText}>Add New Account</Text>
-            </TouchableOpacity>
+            </View>
 
-        </View>
+        </>
     );
 };
 
@@ -127,7 +140,7 @@ const styles = StyleSheet.create({
         // marginVertical: 25
     },
     addAcctBox: {
-        alignSelf:"center",
+        alignSelf: "center",
         flexDirection: "row",
         alignItems: "center",
         height: 130,
@@ -135,7 +148,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 20,
         marginVertical: 5,
-        elevation:3,
+        elevation: 3,
         width: "99%",
         justifyContent: "space-between",
         shadowOpacity: 0.08,

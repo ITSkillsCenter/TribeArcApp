@@ -6,6 +6,7 @@ import TextButtonComponent from "../../components/TextButtonComponent";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {AuthContext} from "../../context/AuthContext";
 import CustomTextInput from "../../components/CustomTextInput";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const SignUp = ({navigation}) => {
@@ -24,8 +25,10 @@ const SignUp = ({navigation}) => {
 
 
     return (
+        <>
+            <NotchResponsive color={COLORS.white}/>
 
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <KeyboardAwareScrollView style={styles.container2} showsVerticalScrollIndicator={false}>
                 <View>
                     <Image
@@ -162,7 +165,9 @@ const SignUp = ({navigation}) => {
                     onPress={() => navigation.navigate("Login")}
                 />
             </KeyboardAwareScrollView>
-        </SafeAreaView>
+        </View>
+
+            </>
     )
 
 }

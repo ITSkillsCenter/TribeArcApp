@@ -5,6 +5,7 @@ import {COLORS, icons, SIZES,} from "../../constants";
 import BackButton from "../../components/BackButton";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
+import NotchResponsive from "../../components/NotchResponsive";
 
 const MyInvestmentDetailsScreen = ({navigation, route}) => {
 
@@ -47,6 +48,9 @@ const MyInvestmentDetailsScreen = ({navigation, route}) => {
 
 
     return (
+
+        <>
+            <NotchResponsive color={COLORS.white}/>
         <ScrollView style={styles.container}>
             <BackButton onPress={() => navigation.pop()}/>
             <Text style={styles.title}>{investments.name}</Text>
@@ -109,6 +113,7 @@ const MyInvestmentDetailsScreen = ({navigation, route}) => {
 
 
         </ScrollView>
+            </>
     );
 };
 

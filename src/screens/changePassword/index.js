@@ -9,6 +9,7 @@ import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import axios from "axios";
 import {BASE_URL} from "../../config";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const ChangePassword = ({navigation}) => {
@@ -87,95 +88,99 @@ const ChangePassword = ({navigation}) => {
 
 
     return (
-        <View style={styles.container}>
 
-            <BackButton onPress={() => navigation.pop()}/>
-            <Text style={styles.changePassword}>Change Password</Text>
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
 
-                <View style={styles.box}>
+                <BackButton onPress={() => navigation.pop()}/>
+                <Text style={styles.changePassword}>Change Password</Text>
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
-
-                    <TextInput
-                        placeholder={"Enter Old Password"}
-                        value={oldPassword}
-                        onBlur={() => ConfirmOldPassword()}
-                        onChangeText={value => {
-                            setOldPassword(value)
-                            setPasswordLoading(false)
-                            setPasswordErr("")
-                            // console.log(value, "old")
-                        }}
-                        style={styles.textInput}
-                    />
-                    {passwordErr !== "" && <Text style={{color: "red",}}>{passwordErr}</Text>}
-                    {success && <Text style={{color:"green"}}>Enter new password</Text>}
-                    {passwordLoading &&
-                        <ActivityIndicator style={{alignSelf: "flex-start"}} color={COLORS.primary} size={"small"}/>}
-
-                    <TextInput
-                        placeholder={"Enter New Password"}
-                        value={newPassword}
-                        placeholderTextColor={"#999999"}
-                        editable={editable}
-                        onChangeText={value => {
-                            setNewPassword(value)
-                            // console.log(value,"new")
-
-                        }}
-                        style={styles.textInput}
-                    />
-
-                    <TextInput
-                        placeholder={"Confirm New Password"}
-                        placeholderTextColor={"#999999"}
-                        editable={editable}
-                        value={confirmPassword}
-                        onChangeText={value => {
-                            setConfirmPassword(value)
-                            // console.log(value,"confirm")
-
-                        }}
-                        style={styles.textInput}
-                    />
-
-                    {(newPassword !== confirmPassword && confirmPassword !== "") &&
-                        <Text style={{color: "red", fontFamily: "Nexa-Book", marginVertical: 10}}>Passwords do not
-                            match</Text>}
+                    <View style={styles.box}>
 
 
-                </View>
+                        <TextInput
+                            placeholder={"Enter Old Password"}
+                            value={oldPassword}
+                            onBlur={() => ConfirmOldPassword()}
+                            onChangeText={value => {
+                                setOldPassword(value)
+                                setPasswordLoading(false)
+                                setPasswordErr("")
+                                // console.log(value, "old")
+                            }}
+                            style={styles.textInput}
+                        />
+                        {passwordErr !== "" && <Text style={{color: "red",}}>{passwordErr}</Text>}
+                        {success && <Text style={{color: "green"}}>Enter new password</Text>}
+                        {passwordLoading &&
+                            <ActivityIndicator style={{alignSelf: "flex-start"}} color={COLORS.primary}
+                                               size={"small"}/>}
+
+                        <TextInput
+                            placeholder={"Enter New Password"}
+                            value={newPassword}
+                            placeholderTextColor={"#999999"}
+                            editable={editable}
+                            onChangeText={value => {
+                                setNewPassword(value)
+                                // console.log(value,"new")
+
+                            }}
+                            style={styles.textInput}
+                        />
+
+                        <TextInput
+                            placeholder={"Confirm New Password"}
+                            placeholderTextColor={"#999999"}
+                            editable={editable}
+                            value={confirmPassword}
+                            onChangeText={value => {
+                                setConfirmPassword(value)
+                                // console.log(value,"confirm")
+
+                            }}
+                            style={styles.textInput}
+                        />
+
+                        {(newPassword !== confirmPassword && confirmPassword !== "") &&
+                            <Text style={{color: "red", fontFamily: "Nexa-Book", marginVertical: 10}}>Passwords do not
+                                match</Text>}
 
 
-            </KeyboardAwareScrollView>
+                    </View>
 
-            <View style={{
-                flex: 2, justifyContent: "flex-end",
-            }}>
-                <CustomButton
-                    loading={isLoading}
-                    filled
-                    text={"Update Password"}
-                    onPress={async () => {
-                        try {
 
-                            if (confirmPassword !== "") {
-                                await UpdatePassword()
-                                navigation.navigate("PasswordSuccessScreen")
+                </KeyboardAwareScrollView>
+
+                <View style={{
+                    flex: 2, justifyContent: "flex-end",
+                }}>
+                    <CustomButton
+                        loading={isLoading}
+                        filled
+                        text={"Update Password"}
+                        onPress={async () => {
+                            try {
+
+                                if (confirmPassword !== "") {
+                                    await UpdatePassword()
+                                    navigation.navigate("PasswordSuccessScreen")
+                                }
+
+                            } catch (e) {
+                                console.log(e, "error: ")
                             }
 
-                        } catch (e) {
-                            console.log(e, "error: ")
-                        }
+                        }}
 
-                    }}
+                    />
+                </View>
 
-                />
             </View>
 
-        </View>
-
-
+        </>
     );
 };
 

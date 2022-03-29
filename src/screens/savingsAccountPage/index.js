@@ -17,6 +17,7 @@ import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import BackButton from "../../components/BackButton";
 import LottieView from "lottie-react-native";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const tabs = [
@@ -44,6 +45,9 @@ const SavingsAccountPage = ({navigation, route}) => {
 
     const savings = route.params.savings
     const autocharge = route.params.autocharge
+    const next_payment_date = route.params.next_payment_date
+
+    // console.log(next_payment_date)
 
     const user = useContext(UserContext);
 
@@ -150,7 +154,8 @@ const SavingsAccountPage = ({navigation, route}) => {
 
                                   <LottieView style={{width: 250, height: 250}}
                                               source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
-                                  <Text style={{color: COLORS.primary, alignSelf:"center"}}>No Transaction available</Text>
+                                  <Text style={{color: COLORS.primary, alignSelf: "center"}}>No Transaction
+                                      available</Text>
 
                               </View>
                           }
@@ -160,13 +165,13 @@ const SavingsAccountPage = ({navigation, route}) => {
                                                     onPress={() => {
                                                     }}>
                                       <Image source={item.status === "SUCCESS" ? icons.tranSucc : icons.transFailed}
-                                             style={{width: SIZES.width*0.12, height: SIZES.width*0.12}}/>
+                                             style={{width: SIZES.width * 0.12, height: SIZES.width * 0.12}}/>
 
                                       <View style={{justifyContent: "space-between", height: 50}}>
                                           {item.status === "SUCCESS" ?
-                                              <Text style={styles.recentTransactionText}>Card Deposit
+                                              <Text style={styles.recentTransactionText}>Deposit
                                                   Successful</Text> :
-                                              <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
+                                              <Text style={styles.recentTransactionText}>Deposit Failed</Text>}
                                           <Text style={{
                                               color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
                                           }}>₦ {item?.amount_paid.toLocaleString()}</Text>
@@ -186,8 +191,7 @@ const SavingsAccountPage = ({navigation, route}) => {
                                                       color: COLORS.white,
                                                       fontSize: 11,
                                                       fontFamily: "Nexa-Bold"
-                                                  }}>Try
-                                                      Again</Text>
+                                                  }}>Failed</Text>
                                               </View>
                                           }
 
@@ -227,7 +231,8 @@ const SavingsAccountPage = ({navigation, route}) => {
 
                                   <LottieView style={{width: 250, height: 250}}
                                               source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
-                                  <Text style={{color: COLORS.primary, alignSelf:"center"}}>No Transaction available</Text>
+                                  <Text style={{color: COLORS.primary, alignSelf: "center"}}>No Transaction
+                                      available</Text>
 
                               </View>
                           }
@@ -241,9 +246,9 @@ const SavingsAccountPage = ({navigation, route}) => {
 
                                       <View style={{justifyContent: "space-between", height: 50}}>
                                           {item.status === "SUCCESS" ?
-                                              <Text style={styles.recentTransactionText}>Card Deposit
+                                              <Text style={styles.recentTransactionText}>Deposit
                                                   Successful</Text> :
-                                              <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
+                                              <Text style={styles.recentTransactionText}>Deposit Failed</Text>}
                                           <Text style={{
                                               color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
                                           }}>₦ {item?.amount_paid.toLocaleString()}</Text>
@@ -263,8 +268,8 @@ const SavingsAccountPage = ({navigation, route}) => {
                                                       color: COLORS.white,
                                                       fontSize: 11,
                                                       fontFamily: "Nexa-Bold"
-                                                  }}>Try
-                                                      Again</Text>
+                                                  }}>Failed
+                                                  </Text>
                                               </View>
                                           }
 
@@ -305,7 +310,8 @@ const SavingsAccountPage = ({navigation, route}) => {
 
                                   <LottieView style={{width: 250, height: 250}}
                                               source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
-                                  <Text style={{color: COLORS.primary, alignSelf:"center"}}>No Transaction available</Text>
+                                  <Text style={{color: COLORS.primary, alignSelf: "center"}}>No Transaction
+                                      available</Text>
 
                               </View>
                           }
@@ -319,9 +325,9 @@ const SavingsAccountPage = ({navigation, route}) => {
 
                                       <View style={{justifyContent: "space-between", height: 50}}>
                                           {item.status === "SUCCESS" ?
-                                              <Text style={styles.recentTransactionText}>Card Deposit
+                                              <Text style={styles.recentTransactionText}>Deposit
                                                   Successful</Text> :
-                                              <Text style={styles.recentTransactionText}>Card Deposit Failed</Text>}
+                                              <Text style={styles.recentTransactionText}>Deposit Failed</Text>}
                                           <Text style={{
                                               color: COLORS.black, fontFamily: "Nexa-Bold", fontSize: 14
                                           }}>₦ {item?.amount_paid.toLocaleString()}</Text>
@@ -341,8 +347,7 @@ const SavingsAccountPage = ({navigation, route}) => {
                                                       color: COLORS.white,
                                                       fontSize: 11,
                                                       fontFamily: "Nexa-Bold"
-                                                  }}>Try
-                                                      Again</Text>
+                                                  }}>Failed</Text>
                                               </View>
                                           }
 
@@ -429,63 +434,66 @@ const SavingsAccountPage = ({navigation, route}) => {
 
 
     return (
-        <View style={styles.container}>
-            <BackButton onPress={() => navigation.pop()} ifSettings
-                        settingPress={() => navigation.navigate("AutosaveSettingsPage")}
-                        settingStyle={styles.settingsBox}/>
+
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <View style={styles.container}>
+                <BackButton onPress={() => navigation.pop()} ifSettings
+                            settingPress={() => navigation.navigate("AutosaveSettingsPage")}
+                            settingStyle={styles.settingsBox}/>
 
 
-            <Text style={styles.savings}>Savings Account</Text>
-            <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
-                <View style={{paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between"}}>
+                <Text style={styles.savings}>Savings Account</Text>
+                <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
+                    <View style={{paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between"}}>
+                        <View>
+                            <Text style={styles.tsb}>Savings Account Balance</Text>
+                            <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
+                        </View>
+
+
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate("Savings")}>
+                            <Image resizeMode={"contain"} style={{width: 35, height: 35}}
+                                   source={icons.plusIcon}/>
+                        </TouchableOpacity>
+
+                    </View>
+                </ImageBackground>
+
+
+                <View style={styles.autosaveBox}>
+
                     <View>
-                        <Text style={styles.tsb}>Savings Account Balance</Text>
-                        <Text style={styles.balance}>₦ {savings?.toLocaleString()}</Text>
+                        <Text style={styles.autosaveText}>Autocharge Amount</Text>
+                        <Text style={styles.autosaveAmt}>₦ {autocharge?.toLocaleString()}</Text>
                     </View>
 
-
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate("Savings")}>
-                        <Image resizeMode={"contain"} style={{width: 35, height: 35}}
-                               source={icons.plusIcon}/>
-                    </TouchableOpacity>
-
-                </View>
-            </ImageBackground>
-
-
-            <View style={styles.autosaveBox}>
-
-                <View>
-                    <Text style={styles.autosaveText}>Autocharge Amount</Text>
-                    <Text style={styles.autosaveAmt}>₦ {autocharge?.toLocaleString()}</Text>
+                    <View>
+                        <Text style={styles.autosaveText}>Next Payment Date</Text>
+                        <Text style={styles.autosaveAmt2}>{moment(next_payment_date).format('MMMM Do YYYY')}</Text>
+                    </View>
                 </View>
 
-                <View>
-                    <Text style={styles.autosaveText}>Next Payment Date</Text>
-                    <Text style={styles.autosaveAmt2}>2 April, 2022. Thursday</Text>
+
+                <View style={styles.recentTransaction}>
+                    <Text style={styles.todos}>Savings Transactions</Text>
+
+                    <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
+                        <Text onPress={() => {
+                            navigation.navigate("SavingsTransactionPage")
+                        }} style={styles.seeAll}>See
+                            all</Text>
+                        <Image resizeMode={"contain"}
+                               style={{width: 15, height: 15, alignSelf: "center", bottom: 2}}
+                               source={icons.arrowRight}/>
+                    </View>
                 </View>
+
+                {loading ? <ActivityIndicator color={COLORS.secondary} size={"small"}/> : TopTab()}
+
             </View>
-
-
-            <View style={styles.recentTransaction}>
-                <Text style={styles.todos}>Savings Transactions</Text>
-
-                <View style={{flexDirection: "row", justifyContent: "center", alignSelf: "center"}}>
-                    <Text onPress={() => {
-                        navigation.navigate("SavingsTransactionPage")
-                    }} style={styles.seeAll}>See
-                        all</Text>
-                    <Image resizeMode={"contain"}
-                           style={{width: 15, height: 15, alignSelf: "center", bottom: 2}}
-                           source={icons.arrowRight}/>
-                </View>
-            </View>
-
-            {loading ? <ActivityIndicator color={COLORS.secondary} size={"small"}/> : TopTab()}
-
-
-        </View>
+        </>
     );
 };
 
@@ -603,7 +611,7 @@ const styles = StyleSheet.create({
 
         width: 80,
         height: 30,
-        backgroundColor: COLORS.primary,
+        backgroundColor: "#d77e7e",
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 5

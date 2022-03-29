@@ -1,6 +1,6 @@
 // @flow
 import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
-import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import {UserContext} from "../../context/UserContext";
 import AccountOptions from "../../components/AccountOptions";
@@ -12,6 +12,8 @@ import {handleQuery} from "../../graphql/requests";
 import FastImage from 'react-native-fast-image'
 
 import {useFocusEffect} from "@react-navigation/native";
+import {FONTS} from "../../constants/theme";
+import NotchResponsive from "../../components/NotchResponsive";
 
 
 const Profile = ({navigation, route}) => {
@@ -176,79 +178,82 @@ const Profile = ({navigation, route}) => {
     );
 
     return (
-        <ScrollView style={{backgroundColor: COLORS.white, flex: 1}}>
+        <>
+            <NotchResponsive color={COLORS.white}/>
+            <ScrollView style={{backgroundColor: COLORS.white, flex: 1}}>
 
 
-            <View style={styles.container}>
-                <Modalize
+                <View style={styles.container}>
+                    <Modalize
 
-                    modalHeight={SIZES.height * 0.5}
-                    handleStyle={{backgroundColor: 'transparent'}}
-                    childrenStyle={{
-                        backgroundColor: COLORS.white,
-                        borderRadius: 55,
-                    }}
-                    ref={modalizeRef}>
-                    {renderHeader()}
-                    {renderInner()}
-                </Modalize>
+                        modalHeight={SIZES.height * 0.5}
+                        handleStyle={{backgroundColor: 'transparent'}}
+                        childrenStyle={{
+                            backgroundColor: COLORS.white,
+                            borderRadius: 55,
+                        }}
+                        ref={modalizeRef}>
+                        {renderHeader()}
+                        {renderInner()}
+                    </Modalize>
 
-                {/*<BackButton onPress={() => navigation.pop()}/>*/}
-                <Text style={styles.myAccount}>My Account</Text>
+                    {/*<BackButton onPress={() => navigation.pop()}/>*/}
+                    <Text style={styles.myAccount}>My Account</Text>
 
-                <TouchableOpacity activeOpacity={0.7} onPress={() => {
-                    navigation.navigate("EditProfile")
-                }} style={styles.userDetails}>
-                    <View style={styles.imgContainer}>
-                        <FastImage style={styles.img} resizeMode={"cover"}
-                                   source={avatar ? {
-                                       uri: avatar,
-                                       priority: FastImage.priority.normal
-                                   } : require("../../assets/images/userImg.png")}/>
-                    </View>
+                    <Pressable onPress={() => {
+                        navigation.navigate("EditProfile")
+                    }} style={styles.userDetails}>
+                        <View style={styles.imgContainer}>
+                            <FastImage style={styles.img} resizeMode={"cover"}
+                                       source={avatar ? {
+                                           uri: avatar,
+                                           priority: FastImage.priority.normal
+                                       } : require("../../assets/images/userImg.png")}/>
+                        </View>
 
-                    <View style={styles.fullNameContainer}>
-                        <Text style={styles.fullName}>{firstname} {lastname}</Text>
-                        <Text style={styles.editProfile}>Edit Profile</Text>
-                    </View>
+                        <View style={styles.fullNameContainer}>
+                            <Text style={styles.fullName}>{firstname} {lastname}</Text>
+                            <Text style={styles.editProfile}>Edit Profile</Text>
+                        </View>
 
-                    <Image source={icons.arrowRight} style={{width: 20, height: 20}}
-                           resizeMode={"contain"}/>
-
-
-                </TouchableOpacity>
+                        <Image source={icons.arrowRight} style={{width: 20, height: 20}}
+                               resizeMode={"contain"}/>
 
 
-                {!bvn && <AccountOptions onPress={() => {
-                    navigation.navigate(paidRegFee ? "AddBvn" : "RegistrationFee")
-                }} image={icons.addBvn} text={"Add your BVN"}/>}
+                    </Pressable>
 
-                <AccountOptions onPress={() => {
-                    navigation.navigate(paidRegFee ? "AccountDetailsPage" : "RegistrationFee")
-                }} image={icons.acctDet} text={"Account Details"}/>
 
-                <AccountOptions onPress={() => {
-                    navigation.navigate(paidRegFee ? "CardSettings" : "RegistrationFee")
+                    {!bvn && <AccountOptions onPress={() => {
+                        navigation.navigate(paidRegFee ? "AddBvn" : "RegistrationFee")
+                    }} image={icons.addBvn} text={"Add your BVN"}/>}
 
-                }} image={icons.linkCard} text={"Card Settings"}/>
-                <AccountOptions onPress={() => {
-                    navigation.navigate("ChangePassword")
+                    <AccountOptions onPress={() => {
+                        navigation.navigate(paidRegFee ? "AccountDetailsPage" : "RegistrationFee")
+                    }} image={icons.acctDet} text={"Account Details"}/>
 
-                }} image={icons.key} text={"Password Settings"}/>
-                <AccountOptions onPress={() => {
-                    navigation.navigate("ReferralPage")
-                }} image={icons.refer} text={"Refer your friends"}/>
-                <AccountOptions
-                    image={icons.logout}
-                    text={"Logout"}
-                    onPress={() => OpenModal()}
+                    <AccountOptions onPress={() => {
+                        navigation.navigate(paidRegFee ? "CardSettings" : "RegistrationFee")
 
-                />
-            </View>
+                    }} image={icons.linkCard} text={"Card Settings"}/>
+                    <AccountOptions onPress={() => {
+                        navigation.navigate("ChangePassword")
 
-            {/*<View style={{height: 20, marginBottom: 30,}}/>*/}
+                    }} image={icons.key} text={"Password Settings"}/>
+                    <AccountOptions onPress={() => {
+                        navigation.navigate("ReferralPage")
+                    }} image={icons.refer} text={"Refer your friends"}/>
+                    <AccountOptions
+                        image={icons.logout}
+                        text={"Logout"}
+                        onPress={() => OpenModal()}
 
-        </ScrollView>
+                    />
+                </View>
+
+                {/*<View style={{height: 20, marginBottom: 30,}}/>*/}
+
+            </ScrollView>
+        </>
     );
 };
 
@@ -265,15 +270,14 @@ const styles = StyleSheet.create({
     },
     myAccount: {
         color: COLORS.primary,
-        fontFamily: "Nexa-Bold",
-        fontSize: SIZES.width * 0.07,
+        ...FONTS.h3,
         marginVertical: 15
     },
     userDetails: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        height: SIZES.height * 0.13,
+        height: SIZES.height * 0.12,
         width: "100%",
         backgroundColor: 'white',
         borderRadius: 15,
@@ -281,6 +285,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         elevation: 2,
         shadowColor: "black",
+        shadowRadius: 5,
         shadowOpacity: 0.15,
         shadowOffset: {
             width: 0,
@@ -296,20 +301,15 @@ const styles = StyleSheet.create({
         width: SIZES.width * 0.55,
         height: 50,
         justifyContent: "space-between",
-        // backgroundColor:"red",
-        paddingHorizontal:10
-
+        paddingHorizontal: 10
     },
     fullName: {
-        fontFamily: "Nexa-Bold",
-        fontSize: 18,
+        ...FONTS.h8,
         color: COLORS.black
     },
 
     editProfile: {
-        fontFamily: "Nexa-Book",
+        ...FONTS.body9,
         color: COLORS.primary,
-        fontSize: 16
-
     }
 })
