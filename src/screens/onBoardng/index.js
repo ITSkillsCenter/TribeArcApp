@@ -151,6 +151,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 20,
         backgroundColor: COLORS.white,
+        paddingTop:SIZES.font8
 
     },
     box: {
