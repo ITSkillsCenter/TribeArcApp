@@ -379,7 +379,7 @@ const App = () => {
                         },
                         // backgroundColor: "cyan",
                         borderTopColor: "rgba(175,174,174,0.7)",
-                        height: Platform.OS === "android" ? SIZES.font1 * 2.3 : 50,
+                        height: Platform.OS === "android" ? SIZES.font1 * 2.3 : SIZES.font1 * 2.3,
                     },
 
 
