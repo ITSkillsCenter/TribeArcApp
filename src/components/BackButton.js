@@ -1,19 +1,19 @@
 // @flow
 import * as React from 'react';
-import {Image, Platform, TouchableOpacity} from "react-native";
-import {icons} from "../constants";
+import {Image, Platform, Pressable, TouchableOpacity} from "react-native";
+import {icons, SIZES} from "../constants";
 
-const BackButton = ({onPress, containerStyle,settingPress,settingStyle,ifSettings}) => {
+const BackButton = ({onPress, containerStyle, settingPress, settingStyle, ifSettings}) => {
     return (
-        <TouchableOpacity style={{paddingVertical: 5,}} onPress={onPress}>
-            <Image resizeMode={"contain"} source={icons.arrowLeft} style={{width: 20, height: 20,}}/>
-            {ifSettings&&<TouchableOpacity onPress={settingPress} activeOpacity={0.8}
-                               style={settingStyle}>
+        <Pressable style={{paddingVertical: 5,}} onPress={onPress}>
+            <Image resizeMode={"contain"} source={icons.arrowLeft} style={{width: SIZES.font5, height: SIZES.font5,}}/>
+            {ifSettings && <Pressable onPress={settingPress}
+                                      style={settingStyle}>
                 <Image source={icons.settingsIcon} style={{width: 30, height: 30}}/>
-            </TouchableOpacity>}
+            </Pressable>}
 
 
-        </TouchableOpacity>
+        </Pressable>
     );
 };
 

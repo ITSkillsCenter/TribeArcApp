@@ -19,11 +19,11 @@ const CompleteProfile1 = ({navigation}) => {
     const [filePath, setFilePath] = useState(null);
     const [imageInfo, setImageInfo] = useState('');
     const [avatar, setAvatar] = useState(null);
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [phoneNumber, setPhoneNumber] = useState("")
-    const [nextOfKin, setNextOfKin] = useState("")
-    const [nofNumber, setNofNumber] = useState("")
+    const [firstName, setFirstName] = useState(" ")
+    const [lastName, setLastName] = useState(" ")
+    const [phoneNumber, setPhoneNumber] = useState(" ")
+    const [nextOfKin, setNextOfKin] = useState(" ")
+    const [nofNumber, setNofNumber] = useState(" ")
     const [isLoading, setIsLoading] = useState(false)
 
 

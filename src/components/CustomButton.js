@@ -2,8 +2,9 @@
 import React, {useState} from 'react';
 import {ActivityIndicator, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, SIZES} from "../constants";
+import {FONTS} from "../constants/theme";
 
-const CustomButton = ({filled, text, onPress, loading,containerStyle,textStyle }) => {
+const CustomButton = ({filled, text, onPress, loading, containerStyle, textStyle}) => {
 
     return (
         <View style={styles.container}>
@@ -24,9 +25,6 @@ export default CustomButton
 const styles = StyleSheet.create({
     container: {
         marginVertical: 15,
-        // width:SIZES.width*0.9
-        // alignItems: 'center',
-        // justifyContent: 'center',
     },
     button: {
         height: SIZES.width * 0.15,
@@ -35,10 +33,8 @@ const styles = StyleSheet.create({
         borderRadius: 8
     },
     text: {
-        fontSize: 18,
-        fontFamily: "Nexa-Bold",
+        ...FONTS.h8,
         color: COLORS.white,
-        // fontWeight: '700'
     }
 
 })

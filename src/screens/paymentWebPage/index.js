@@ -12,6 +12,7 @@ import axios from "axios";
 import {BASE_URL} from "../../config";
 import moment from "moment";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
 // import WebView from "react-native-webview";
 
 const PaymentWebPage = ({navigation, route}) => {
@@ -210,11 +211,12 @@ const PaymentWebPage = ({navigation, route}) => {
                                 source={require("../../assets/images/cancelMark.json")}
                                 autoPlay
                                 loop={false}
-                                style={{width: 268, height: 263}}/>
+                                style={{width: SIZES.font1*5, height: SIZES.font1*5}}/>
                         </View>
 
                         <View style={styles.tsBox}>
-                            <Text style={styles.ts}>Transaction failed!</Text>
+                            <Text style={styles.ts}>Transaction Cancelled!</Text>
+                            <Text style={{...FONTS.body9, color: COLORS.black, marginTop:5}}>The transaction was interrupted</Text>
                         </View>
 
                         <View style={{marginVertical: 20}}>
@@ -240,8 +242,8 @@ const styles = StyleSheet.create({
     },
     checkMark: {
         alignItems: "center",
-        paddingVertical: 40,
-        marginTop: 30
+        paddingVertical: SIZES.font1,
+        marginTop: SIZES.font1
 
     },
     tsBox: {
@@ -249,16 +251,8 @@ const styles = StyleSheet.create({
         marginVertical: 10
     },
     ts: {
-        fontFamily: "Nexa-Bold",
-        fontSize: 26,
+      ...FONTS.h5,
         color: COLORS.black
     },
-    desc: {
-        fontSize: 18,
-        fontFamily: "Nexa-Book",
-        textAlign: 'center',
-        color: "#999999",
-        width: SIZES.width * 0.7,
-        letterSpacing: 0.6
-    }
+
 })

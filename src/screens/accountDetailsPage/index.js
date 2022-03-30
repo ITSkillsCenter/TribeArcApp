@@ -7,6 +7,7 @@ import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import LottieView from "lottie-react-native";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
 
 export const AccountDetailsPage = ({navigation}) => {
 
@@ -63,7 +64,7 @@ export const AccountDetailsPage = ({navigation}) => {
 
             <NotchResponsive color={COLORS.white}/>
             <View style={styles.container}>
-                <BackButton onPress={() => navigation.pop()}/>
+                <BackButton onPress={() => navigation.goBack()}/>
                 <Text style={styles.acctDet}>Account Details</Text>
 
 
@@ -73,10 +74,12 @@ export const AccountDetailsPage = ({navigation}) => {
                         ListEmptyComponent={
                             <View style={{alignItems: "center", justifyContent: "center",}}>
 
-                                <LottieView style={{width: SIZES.width * 0.6, height: SIZES.width * 0.6}}
+                                <LottieView style={{width: SIZES.font1 * 5, height: SIZES.font1 * 5}}
                                             source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
 
-                                <Text style={{color: COLORS.primary, fontSize: 18, fontFamily: "Nexa-Bold"}}>Your have
+                                <Text style={{
+                                    color: COLORS.primary, ...FONTS.h8,
+                                }}>Your have
                                     not added any account</Text>
                             </View>
                         }
@@ -85,9 +88,8 @@ export const AccountDetailsPage = ({navigation}) => {
                                 <View style={styles.addAcctBox}>
                                     <View style={{justifyContent: "space-between", height: 50}}>
                                         <Text style={{
+                                            ...FONTS.h8,
                                             color: COLORS.black,
-                                            fontSize: 18,
-                                            fontFamily: "Nexa-Bold"
                                         }}>{item.account_name}</Text>
                                         <View style={{
                                             flexDirection: "row",
@@ -96,14 +98,12 @@ export const AccountDetailsPage = ({navigation}) => {
                                         }}>
                                             <Text style={{
                                                 color: COLORS.black,
-                                                fontSize: 14,
-                                                fontFamily: "Nexa-Book",
+                                                ...FONTS.body9,
                                                 paddingRight: 10
                                             }}>{item.bank_name}</Text>
                                             <Text style={{
                                                 color: COLORS.black,
-                                                fontSize: 14,
-                                                fontFamily: "Nexa-Book"
+                                                ...FONTS.body9,
                                             }}>{item.account_number}</Text>
                                         </View>
                                     </View>
@@ -134,9 +134,8 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white
     },
     acctDet: {
+        ...FONTS.h5,
         color: COLORS.primary,
-        fontFamily: "Nexa-Bold",
-        fontSize: SIZES.width * 0.07,
         // marginVertical: 25
     },
     addAcctBox: {
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         borderRadius: 15,
         padding: 20,
-        marginVertical: 5,
+        marginVertical: SIZES.font9,
         elevation: 3,
         width: "99%",
         justifyContent: "space-between",
@@ -173,8 +172,7 @@ const styles = StyleSheet.create({
     },
     addAcctText: {
         color: COLORS.black,
-        fontFamily: "Nexa-Book",
-        fontSize: 14
+        ...FONTS.body9
     }
 
 })

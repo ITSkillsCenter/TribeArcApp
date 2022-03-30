@@ -5,6 +5,7 @@ import {COLORS, SIZES} from "../../constants";
 import CustomButton from "../../components/CustomButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
 
 const StartInvesting = ({navigation}) => {
     return (
@@ -40,23 +41,19 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     savings: {
+        ...FONTS.h5,
         color: COLORS.primary,
-        fontFamily: "Nexa-Bold",
-        fontSize: 22,
-        marginTop: 20
     },
     startSavings: {
+        ...FONTS.h5,
         alignSelf: "center",
         color: COLORS.primary,
-        fontFamily: "Nexa-Bold",
-        fontSize: 24,
         marginTop: 40
     },
     startSavingText: {
+        ...FONTS.h9,
         alignSelf: "center",
         color: COLORS.black,
-        fontFamily: "Nexa-Bold",
-        fontSize: 14,
         opacity: 0.6,
         marginTop: 10
 

@@ -8,6 +8,8 @@ import CustomButton from "../../components/CustomButton";
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
+import moment from "moment";
 
 const AutosaveSettingsPage = ({navigation}) => {
 
@@ -17,6 +19,7 @@ const AutosaveSettingsPage = ({navigation}) => {
     const [isEnabled, setIsEnabled] = useState(false)
     const [savingsAcctId, setSavingsAcctId] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [nextDate, setNextDate] = useState("")
 
 
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -36,16 +39,19 @@ const AutosaveSettingsPage = ({navigation}) => {
                 savingAccounts(where: { user_id: ${user.id} }) {
                     id
                         auto_charge
+                        next_payment_date
                                 }
                             }`
 
 
         try {
 
+
             const qryRes = await handleQuery(qry, user.token, false)
-            // console.log(qryRes.data.savingAccounts[0].id)
+            // console.log(qryRes.data.savingAccounts[0].next_payment_date)
             await setIsEnabled(qryRes.data.savingAccounts[0].auto_charge)
             await setSavingsAcctId(qryRes.data.savingAccounts[0].id)
+            await setNextDate(qryRes.data.savingAccounts[0].next_payment_date)
 
 
         } catch (e) {
@@ -185,7 +191,7 @@ const AutosaveSettingsPage = ({navigation}) => {
                     <Image style={{width: 50, height: 50}} source={icons.onImage}/>
                     <View style={{justifyContent: "space-between", width: "70%"}}>
                         <Text style={styles.textAutocharge}>Turn {isEnabled ? "OFF" : "ON"} Auto charge</Text>
-                        <Text style={styles.desc}>Next auto charge date is 2nd may, 2022</Text>
+                        <Text style={styles.desc}>Next auto charge date is {moment(nextDate).format("DD MMMM, YYYY")}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -203,19 +209,17 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     acctSettings: {
-        fontSize: 26,
+        ...FONTS.h5,
         color: COLORS.primary,
-        fontFamily: "Nexa-Bold",
         marginVertical: 20
     },
     acctDesc: {
-        fontSize: 14,
-        fontFamily: "Nexa-Book",
+        ...FONTS.body9,
         color: COLORS.black
     },
     box: {
         flexDirection: "row",
-        marginTop: 50,
+        marginTop: SIZES.font1 * 1.5,
         justifyContent: "space-evenly",
         height: 60
 
@@ -227,21 +231,18 @@ const styles = StyleSheet.create({
 
     },
     desc: {
+        ...FONTS.body10,
         color: COLORS.black,
-        fontSize: 14,
-        fontFamily: "Nexa-Book",
         letterSpacing: 0.2,
         opacity: 0.6
     },
     modalAutoCharge: {
-        fontSize: SIZES.width * 0.05,
-        fontFamily: "Nexa-Bold",
+        ...FONTS.h7,
         color: COLORS.black,
         marginVertical: 10
     },
     modalAutoChargeDesc: {
-        fontSize: 14,
-        fontFamily: "Nexa-Book",
+        ...FONTS.body9,
         color: COLORS.black,
         marginVertical: 10,
         opacity: 0.6,

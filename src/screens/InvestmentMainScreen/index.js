@@ -20,6 +20,7 @@ import CustomTextInput from "../../components/CustomTextInput";
 import moment from "moment";
 import LottieView from "lottie-react-native";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
 
 
 const tabs = [
@@ -391,107 +392,107 @@ const InvestmentMainScreen = ({navigation, route}) => {
         <>
             <NotchResponsive color={COLORS.white}/>
 
-        <ScrollView style={styles.container}>
+            <ScrollView style={styles.container}>
 
 
-            {route.params && <BackButton onPress={() => navigation.pop()}/>}
-            <Text style={styles.inv}>Investments</Text>
+                {route.params && <BackButton onPress={() => navigation.pop()}/>}
+                <Text style={styles.inv}>Investments</Text>
 
-            <>
-                <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame}
-                                 style={styles.balanceFrame}>
-                    <View style={{
-                        paddingHorizontal: 40,
-                    }}>
-                        <View>
-                            <Text style={styles.tsb}>Investment Balance</Text>
-                            <Text style={styles.balance}>₦ {invBal?.toLocaleString()}</Text>
+                <>
+                    <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame}
+                                     style={styles.balanceFrame}>
+                        <View style={{
+                            paddingHorizontal: 40,
+                        }}>
+                            <View>
+                                <Text style={styles.tsb}>Investment Balance</Text>
+                                <Text style={styles.balance}>₦ {invBal?.toLocaleString()}</Text>
+                            </View>
+
                         </View>
+                    </ImageBackground>
 
-                    </View>
-                </ImageBackground>
+                    {
+                        <>
+                            {myInvestments.length > 0 && <Text style={styles.allInv}>My Investments</Text>}
 
-                {
-                    <>
-                        {myInvestments.length > 0 && <Text style={styles.allInv}>My Investments</Text>}
-
-                        {loading ? <ActivityIndicator size={"large"} color={COLORS.primary}/> :
+                            {loading ? <ActivityIndicator size={"large"} color={COLORS.primary}/> :
 
 
-                            <FlatList
-                                data={myInvestments}
-                                showsVerticalScrollIndicator={false}
-                                scrollEnabled={false}
-                                renderItem={({item}) => (
+                                <FlatList
+                                    data={myInvestments}
+                                    showsVerticalScrollIndicator={false}
+                                    scrollEnabled={false}
+                                    renderItem={({item}) => (
 
-                                    <TouchableOpacity
-                                        onPress={() => navigation.navigate(paidRegFee ? "MyInvestmentDetailsScreen" : "RegistrationFee", {
-                                            ...item,
-                                        })}
-                                        activeOpacity={0.8} style={styles.box}>
-                                        <Image source={{uri: item?.image}}
-                                               style={{
-                                                   width: SIZES.width * 0.25,
-                                                   height: SIZES.height * 0.14,
-                                                   borderRadius: 10,
-                                               }}/>
-                                        <View style={{width: SIZES.width * 0.4, paddingHorizontal: 5,}}>
-                                            <Text style={styles.title}>{item?.name}</Text>
-                                            <Text style={styles.duration}><Text
-                                                style={{color: COLORS.primary}}>{item?.roi}%</Text> return
-                                                in {item?.duration_in_months} months</Text>
-                                            <View style={{
-                                                flexDirection: "row",
-                                                width: "100%",
-                                                justifyContent: "space-between",
-                                                alignItems: 'center',
-                                                // backgroundColor:"red"
-                                            }}>
-                                                <View>
-                                                    <Text
-                                                        style={styles.amtInv}>₦{item?.price_per_slot?.toLocaleString()}</Text>
-                                                    <Text style={styles.perSlot}>Per Slot</Text>
-                                                </View>
+                                        <TouchableOpacity
+                                            onPress={() => navigation.navigate(paidRegFee ? "MyInvestmentDetailsScreen" : "RegistrationFee", {
+                                                ...item,
+                                            })}
+                                            activeOpacity={0.8} style={styles.box}>
+                                            <Image source={{uri: item?.image}}
+                                                   style={{
+                                                       width: SIZES.width * 0.25,
+                                                       height: SIZES.height * 0.14,
+                                                       borderRadius: 10,
+                                                   }}/>
+                                            <View style={{width: SIZES.width * 0.4, paddingHorizontal: 5,}}>
+                                                <Text style={styles.title}>{item?.name}</Text>
+                                                <Text style={styles.duration}><Text
+                                                    style={{color: COLORS.primary}}>{item?.roi}%</Text> return
+                                                    in {item?.duration_in_months} months</Text>
+                                                <View style={{
+                                                    flexDirection: "row",
+                                                    width: "100%",
+                                                    justifyContent: "space-between",
+                                                    alignItems: 'center',
+                                                    // backgroundColor:"red"
+                                                }}>
+                                                    <View>
+                                                        <Text
+                                                            style={styles.amtInv}>₦{item?.price_per_slot?.toLocaleString()}</Text>
+                                                        <Text style={styles.perSlot}>Per Slot</Text>
+                                                    </View>
 
-                                                <View style={{alignItems: "center"}}>
-                                                    <Text
-                                                        style={styles.amtInv}>{item?.users_investments?.length}</Text>
-                                                    <Text style={styles.perSlot}>Investors</Text>
+                                                    <View style={{alignItems: "center"}}>
+                                                        <Text
+                                                            style={styles.amtInv}>{item?.users_investments?.length}</Text>
+                                                        <Text style={styles.perSlot}>Investors</Text>
+                                                    </View>
                                                 </View>
                                             </View>
-                                        </View>
-                                        <View>
-                                            {item?.status === "ACTIVE" ?
-                                                <View style={styles.status1}>
-                                                    <Text style={styles.active}>Active</Text>
+                                            <View>
+                                                {item?.status === "ACTIVE" ?
+                                                    <View style={styles.status1}>
+                                                        <Text style={styles.active}>Active</Text>
 
-                                                </View>
-                                                :
-                                                <View style={styles.status2}>
-                                                    <Text style={styles.ended}>Ended</Text>
-                                                </View>
-                                            }
-                                        </View>
+                                                    </View>
+                                                    :
+                                                    <View style={styles.status2}>
+                                                        <Text style={styles.ended}>Ended</Text>
+                                                    </View>
+                                                }
+                                            </View>
 
-                                    </TouchableOpacity>
-                                )
-                                }/>}
-                    </>
-                }
-                <Text style={styles.allInv}>All Investments</Text>
-            </>
+                                        </TouchableOpacity>
+                                    )
+                                    }/>}
+                        </>
+                    }
+                    <Text style={styles.allInv}>All Investments</Text>
+                </>
 
-            {TopTab()}
+                {TopTab()}
 
-            {tabStatus === "Open" ? TabOne() : TabTwo()}
-
-
-            <View style={{marginBottom: "20%", backgroundColor: "transparent"}}/>
+                {tabStatus === "Open" ? TabOne() : TabTwo()}
 
 
-        </ScrollView>
+                <View style={{marginBottom: "20%", backgroundColor: "transparent"}}/>
 
-            </>
+
+            </ScrollView>
+
+        </>
     );
 };
 
@@ -504,43 +505,39 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     inv: {
+        ...FONTS.h5,
         color: COLORS.primary,
-        fontSize: 24,
         marginVertical: 10,
-        fontFamily: "Nexa-Bold"
     },
     balanceFrame: {
         borderRadius: 15, // padding: 20,
-        height: 140,
+        height: SIZES.height * 0.17,
         width: "100%",
         alignSelf: "center",
         justifyContent: "center", // alignItems: 'center'
     },
     saveFrame: {
-        backgroundColor: '#EFF2FF',
-        height: 120,
-        width: SIZES.width * 0.9,
-        borderRadius: 15,
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: "space-between",
-        padding: 20
+        // backgroundColor: '#EFF2FF',
+        // height: 120,
+        // width: SIZES.width * 0.9,
+        // borderRadius: 15,
+        // alignItems: 'center',
+        // flexDirection: 'row',
+        // justifyContent: "space-between",
+        // padding: 20
     },
     tsb: {
-        fontSize: 18,
+        ...FONTS.h8,
         color: COLORS.white,
-        fontFamily: "Nexa-Bold",
         marginVertical: 20
     },
     balance: {
+        ...FONTS.h6,
         color: COLORS.white,
-        fontFamily: "Nexa-Bold",
-        fontSize: 24
     },
     allInv: {
+        ...FONTS.h8,
         color: COLORS.black,
-        fontSize: 18,
-        fontFamily: "Nexa-Bold",
         marginVertical: 10
     },
     box: {
@@ -567,38 +564,33 @@ const styles = StyleSheet.create({
 
     },
     active: {
+        ...FONTS.h10,
         color: "#00711F",
-        fontSize: 12,
-        fontFamily: "Nexa-Bold"
     },
     ended: {
+        ...FONTS.h10,
         color: "#EB996E",
-        fontSize: 12,
-        fontFamily: "Nexa-Bold"
     },
     title: {
-        fontSize: 18,
+        ...FONTS.body8,
         fontFamily: "Nexa-Book",
         lineHeight: 24,
         color: COLORS.black
     },
     duration: {
+        ...FONTS.body10,
         color: COLORS.black,
-        fontFamily: "Nexa-Book",
         marginVertical: 10
     },
     perSlot: {
+        ...FONTS.body10,
         color: COLORS.black,
-        fontFamily: "Nexa-Book",
-        fontSize: 12,
         opacity: 0.6
 
     },
     amtInv: {
+        ...FONTS.body9,
         color: COLORS.black,
-        fontFamily: "Nexa-Bold",
-        fontSize: 16
-
 
     },
     tabOneContainer: {
@@ -614,8 +606,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.primary,
     },
     tabStatusText: {
-        fontSize: 16,
-        fontFamily: "Nexa-Bold",
+        ...FONTS.h8,
         color: COLORS.black
     },
     emptyDesc: {

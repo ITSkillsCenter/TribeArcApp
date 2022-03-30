@@ -4,6 +4,7 @@ import {Animated, FlatList, Image, StyleSheet, Text, View} from "react-native";
 import {COLORS, SIZES} from "../../constants";
 import CustomButton from "../../components/CustomButton";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
 
 const slides = [
     {
@@ -215,15 +216,14 @@ const styles = StyleSheet.create({
         // backgroundColor: "cyan"
     },
     title: {
-        fontSize: SIZES.width * 0.07,
-        fontFamily: "Nexa-Bold",
+        ...FONTS.h5,
         color: COLORS.black,
         width: SIZES.width * 0.85,
         textAlign: "center",
         marginTop: 20
     },
     descs: {
-        fontSize: SIZES.width * 0.04,
+        ...FONTS.body8,
         textAlign: "center",
         width: "100%",
         lineHeight: 28,

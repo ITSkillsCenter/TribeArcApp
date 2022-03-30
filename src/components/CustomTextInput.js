@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../constants";
+import {FONTS} from "../constants/theme";
 
 const CustomTextInput = ({
                              initialValue,
@@ -12,7 +13,7 @@ const CustomTextInput = ({
                              title,
                              onEndEditing,
                              onFocus,
-                             onBlur,isPassword
+                             onBlur, isPassword
 
                          }) => {
 
@@ -66,22 +67,17 @@ const styles = StyleSheet.create({
         // marginTop:50
     },
     title: {
+        ...FONTS.body10,
         color: COLORS.primary,
-        fontSize: 12,
         marginBottom: 5,
         opacity: 0.6,
-        fontFamily: "Nexa-Book"
 
     },
     input: {
+        ...FONTS.body9,
         height: SIZES.width * 0.12,
-        fontSize: 14,
         paddingHorizontal: 10,
         borderRadius: 5,
-        // opacity:0.7,
-        fontFamily: "Nexa-Book",
-        // position: "absolute",
-        // color:"red"
         backgroundColor: "#f5f5ff",
         color: COLORS.black
 
@@ -90,7 +86,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginRight: 20,
         zIndex: 10,
-        backgroundColor:"red",
+        backgroundColor: "red",
     },
     eye: {
         marginRight: 40,
@@ -99,7 +95,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         position: "absolute",
         // backgroundColor:"red",
-        bottom:SIZES.width*0.03
+        bottom: SIZES.width * 0.03
 
 
     }

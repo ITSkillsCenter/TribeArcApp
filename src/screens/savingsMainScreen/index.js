@@ -1,12 +1,13 @@
 // @flow
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import {useFocusEffect} from "@react-navigation/native";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
 
 const SavingsMainScreen = ({navigation, route}) => {
 
@@ -99,8 +100,6 @@ const SavingsMainScreen = ({navigation, route}) => {
                 <Text style={styles.sav}>Savings</Text>
                 <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame} style={styles.balanceFrame}>
                     <View style={{
-                        // flexDirection: "row",
-                        // justifyContent: 'space-between',
                         paddingHorizontal: 20,
                         // alignItems: 'center'
                     }}>
@@ -113,13 +112,12 @@ const SavingsMainScreen = ({navigation, route}) => {
                 </ImageBackground>
 
                 <View style={styles.rootBox}>
-                    <TouchableOpacity
+                    <Pressable
                         onPress={() => navigation.navigate(paidRegFee ? "SavingsAccountPage" : "RegistrationFee", {
                             savings,
                             autocharge,
                             next_payment_date
                         })}
-                        activeOpacity={0.85}
                         style={styles.box}>
                         <Image source={icons.savPig} style={{width: SIZES.width * 0.15, height: SIZES.width * 0.15}}/>
                         <View style={styles.textBox}>
@@ -127,11 +125,10 @@ const SavingsMainScreen = ({navigation, route}) => {
                             <Text style={styles.savDesc}>Total monthly saving automatically debited</Text>
                             <Text style={styles.amt}>₦ {savings?.toLocaleString()}</Text>
                         </View>
-                    </TouchableOpacity>
+                    </Pressable>
 
-                    <TouchableOpacity
+                    <Pressable
                         onPress={() => navigation.navigate(paidRegFee ? "VoluntaryAccountPage" : "RegistrationFee", voluntary)}
-                        activeOpacity={0.85}
                         style={styles.box}>
                         <Image source={icons.savHand} style={{width: SIZES.width * 0.15, height: SIZES.width * 0.15}}/>
                         <View style={styles.textBox}>
@@ -139,13 +136,9 @@ const SavingsMainScreen = ({navigation, route}) => {
                             <Text style={styles.savDesc}>Total voluntary saving that can be withdrawn anytime</Text>
                             <Text style={styles.amt}>₦ {voluntary?.toLocaleString()}</Text>
                         </View>
-                    </TouchableOpacity>
-
+                    </Pressable>
                 </View>
-
-
             </View>
-
         </>
     );
 };
@@ -160,11 +153,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     sav: {
-        marginTop: 10,
+        ...FONTS.h5,
         color: COLORS.primary,
-        fontSize: 24,
-        // marginVertical: 10,
-        fontFamily: "Nexa-Bold"
     },
     balanceFrame: {
         borderRadius: 15, // padding: 20,
@@ -172,59 +162,38 @@ const styles = StyleSheet.create({
         width: "100%",
         alignSelf: "center",
         justifyContent: "center",
-        // marginVertical: 20
-
-    },
-    saveFrame: {
-        backgroundColor: '#EFF2FF',
-        height: 120,
-        width: SIZES.width * 0.9,
-        borderRadius: 15,
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: "space-between",
-        padding: 20
     },
     tsb: {
-        fontSize: 18,
+        ...FONTS.h7,
         color: COLORS.white,
-        fontFamily: "Nexa-Bold",
         marginVertical: 10
     },
     balance: {
+        ...FONTS.h4,
         color: COLORS.white,
-        fontFamily: "Nexa-Bold",
-        fontSize: 24
     },
-    rootBox: {},
     box: {
         flexDirection: "row",
         justifyContent: "space-between",
         marginVertical: 20,
         marginTop: 30
-
     },
     textBox: {
         width: SIZES.width * 0.7,
     },
     savAcct: {
-        fontSize: SIZES.width * 0.05,
+        ...FONTS.h6,
         color: COLORS.black,
-        fontFamily: "Nexa-Bold",
     },
     savDesc: {
-        fontSize: 12,
+        ...FONTS.h10,
         color: COLORS.black,
-        fontFamily: "Nexa-Bold",
         marginVertical: 10,
         opacity: 0.5
-
     },
     amt: {
+        ...FONTS.h6,
         marginTop: 5,
-        fontSize: 22,
         color: COLORS.black,
-        fontFamily: "Nexa-Bold",
-
     }
 })

@@ -8,6 +8,7 @@ import {handleQuery} from "../../graphql/requests";
 import {UserContext} from "../../context/UserContext";
 import moment from "moment";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
 // import RNFetchBlob from "rn-fetch-blob";
 // import InvestmentTermsPage from "../investmentTermsPage";
 
@@ -239,7 +240,7 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
 
         return (<View style={styles.container2}>
             {/*<BackButton onPress={() => navigation.pop()}/>*/}
-            <Text style={styles.title}>Tribe arc Terms & Condition </Text>
+            <Text style={styles.title}>{investments.name} Terms & Condition </Text>
             {/*<Text style={styles.updatedAt}>Last updated on {date.toJSON().slice(0, 10).replace(/-/g, '/')} </Text>*/}
 
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -454,6 +455,8 @@ const InvestmentDetailsScreen = ({navigation, route}) => {
                         if (counter > 0) {
                             setModalVisible(true)
 
+                        } else {
+                            Alert.alert("Invalid Slots", "Please set number of slots to proceed")
                         }
 
                         // if (counter > 0 && counter < investments?.total_slot - slotBought) {
@@ -551,13 +554,22 @@ export default InvestmentDetailsScreen
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, backgroundColor: COLORS.white, paddingHorizontal: 20
-    }, title: {
-        color: COLORS.primary, fontFamily: "Nexa-Bold", fontSize: 26, marginVertical: 20
-    }, box: {
-        marginVertical: 20, flexDirection: "row", justifyContent: "space-between"
+        flex: 1,
+        backgroundColor: COLORS.white,
+        paddingHorizontal: 20
+    },
+    title: {
+        ...FONTS.h5,
+        color: COLORS.primary,
+        marginBottom: 20
+    },
+    box: {
+        marginVertical: 20,
+        flexDirection: "row",
+        justifyContent: "space-between"
 
-    }, pdf: {
+    },
+    pdf: {
         height: 40,
         width: "45%",
         flexDirection: "row",
@@ -572,30 +584,47 @@ const styles = StyleSheet.create({
         shadowOffset: {
             width: 0, height: 0
         }
-    }, invDet: {
-        color: COLORS.black, fontSize: 26, marginVertical: 10, fontFamily: "Nexa-Bold"
-    }, invContainer: {
-        flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between",
-    }, invBox: {
+    },
+    invDet: {
+        color: COLORS.black,
+        ...FONTS.h5,
         marginVertical: 10,
-        height: 70,
+    },
+    invContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+    },
+    invBox: {
+        marginVertical: 10,
+        height: SIZES.font1 * 2,
         width: "45%",
         borderWidth: 0.5,
         borderRadius: 10,
         borderColor: "#D7D7D7",
-        padding: 15,
+        padding: 10,
         justifyContent: "space-between"
-    }, invTitle: {
-        fontSize: 12, fontFamily: "nexa-Book", opacity: 0.6
-    }, invBoxDet: {
-        fontFamily: "Nexa-Bold", fontSize: 18,
-
-    }, invNowBox: {
-        // flex: 2,
-        flexDirection: "row", justifyContent: "space-between", width: "100%", alignItems: "center", marginTop: 30
-    }, counter: {
-        fontSize: SIZES.width * 0.05,
+    },
+    invTitle: {
+        ...FONTS.body10,
+        opacity: 0.6
+    },
+    invBoxDet: {
+        ...FONTS.h7,
         fontFamily: "Nexa-Bold",
+        color: COLORS.black
+
+    },
+    invNowBox: {
+        // flex: 2,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: "100%",
+        alignItems: "center",
+        marginTop: 30
+    },
+    counter: {
+        ...FONTS.h5,
         backgroundColor: COLORS.white,
         justifyContent: "center",
         elevation: 2,

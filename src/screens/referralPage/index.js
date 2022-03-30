@@ -9,6 +9,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
 
 
 const ReferralPage = ({navigation}) => {
@@ -68,7 +69,7 @@ const ReferralPage = ({navigation}) => {
         <>
             <NotchResponsive color={COLORS.white}/>
             <View style={styles.container}>
-                <BackButton onPress={() => navigation.pop()}/>
+                <BackButton onPress={() => navigation.goBack()}/>
 
 
                 <Image style={styles.img} source={icons.referralImg} resizeMode={"contain"}/>
@@ -79,22 +80,21 @@ const ReferralPage = ({navigation}) => {
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    marginTop: 30,
+                    marginTop: SIZES.font1,
                     marginBottom: 10
                 }}>
-                    <Text style={{fontSize: 14, fontFamily: "Nexa-Book", color: COLORS.black}}>Copy Referral
+                    <Text style={{...FONTS.body9, color: COLORS.black}}>Copy Referral
                         Message</Text>
 
                     <View style={{alignItems: "center", flexDirection: "row", justifyContent: "center"}}>
-                        <Image style={{width: 20, height: 20}}
+                        <Image style={{width: SIZES.font3, height: SIZES.font3}}
                                source={icons.clipboard}/>
                         <Text
                             onPress={() => copyToClipboard()}
                             style={{
+                                ...FONTS.body10,
                                 alignItems: "center",
                                 justifyContent: "center",
-                                fontSize: 12,
-                                fontFamily: "Nexa-Book",
                                 color: COLORS.primary
                             }}>Copy</Text>
 
@@ -132,15 +132,13 @@ const styles = StyleSheet.create({
         marginVertical: SIZES.height * 0.05
     },
     refer: {
-        fontSize: 26,
+       ...FONTS.h5,
         alignSelf: "center",
-        fontFamily: "Nexa-Bold",
         color: COLORS.black
     },
     secureFutureText: {
-        fontSize: 18,
+        ...FONTS.body8,
         alignSelf: "center",
-        fontFamily: "Nexa-Book",
         color: "#999999",
         marginVertical: 15
     },
@@ -152,9 +150,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     desc: {
-        fontSize: 16,
+        ...FONTS.body8,
         alignSelf: "center",
-        fontFamily: "Nexa-Book",
         color: COLORS.black
     }
 

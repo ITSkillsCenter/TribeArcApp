@@ -8,6 +8,7 @@ import {UserContext} from "../../context/UserContext";
 import {handleQuery} from "../../graphql/requests";
 import LottieView from "lottie-react-native";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
 
 
 const CardSettings = ({navigation}) => {
@@ -68,63 +69,62 @@ const CardSettings = ({navigation}) => {
     return (
         <>
             <NotchResponsive color={COLORS.white}/>
-        <View style={styles.container}>
-            <BackButton onPress={() => navigation.pop()}/>
+            <View style={styles.container}>
+                <BackButton onPress={() => navigation.goBack()}/>
 
+                <Text style={styles.inv}>Card Settings</Text>
 
-            <Text style={styles.inv}>Card Settings</Text>
+                {loading ? <ActivityIndicator size={"large"} color={COLORS.primary}/> :
+                    <FlatList
+                        data={cards}
+                        key={item => item.id}
+                        style={{width: "100%", height: "70%"}}
+                        showsVerticalScrollIndicator={false}
+                        ListEmptyComponent={
+                            <>
+                                <View style={{alignItems: "center", justifyContent: "center",}}>
 
-            {loading ? <ActivityIndicator size={"large"} color={COLORS.primary}/> :
-                <FlatList
-                    data={cards}
-                    key={item => item.id}
-                    style={{width: "100%", height: "70%"}}
-                    showsVerticalScrollIndicator={false}
-                    ListEmptyComponent={
-                        <>
-                            <View style={{alignItems: "center", justifyContent: "center",}}>
-
-                                <LottieView style={{width: 250, height: 250}}
-                                            source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
-                            </View>
-
-                            <Text style={styles.emptyDesc}> No investment available</Text>
-
-                        </>
-                    }
-                    renderItem={({item}) => (
-
-                        <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame}
-                                         style={styles.balanceFrame}>
-                            <View style={{
-                                // flexDirection: "row",
-                                // justifyContent: 'space-between',
-                                paddingHorizontal: 40,
-                                // alignItems: 'center'
-                            }}>
-                                <View>
-                                    <Text style={styles.tsb}>**** **** **** {item.last4}</Text>
-                                    <Text
-                                        style={styles.cardType}>{item.card_type} {item.exp_month}/{item.exp_year}</Text>
+                                    <LottieView style={{width: SIZES.font1 * 5, height: SIZES.font1 * 5}}
+                                                source={require("../../assets/images/emptyAnim.json")} autoPlay={true}/>
                                 </View>
 
-                            </View>
-                        </ImageBackground>
+                                <Text style={styles.emptyDesc}> No investment available</Text>
 
-                    )}
+                            </>
+                        }
+                        renderItem={({item}) => (
 
-                />}
+                            <ImageBackground resizeMode={"contain"} source={icons.shortBalFrame}
+                                             style={styles.balanceFrame}>
+                                <View style={{
+                                    // flexDirection: "row",
+                                    // justifyContent: 'space-between',
+                                    paddingHorizontal: 40,
+                                    // alignItems: 'center'
+                                }}>
+                                    <View>
+                                        <Text style={styles.tsb}>**** **** **** {item.last4}</Text>
+                                        <Text
+                                            style={styles.cardType}>{item.card_type} {item.exp_month}/{item.exp_year}</Text>
+                                    </View>
+
+                                </View>
+                            </ImageBackground>
+
+                        )}
+
+                    />}
 
 
-            {/*<View style={{ justifyContent: "flex-end"}}>*/}
-            {/*    <CustomButton filled text={"Remove Card"}/>*/}
+                {/*<View style={{ justifyContent: "flex-end"}}>*/}
+                {/*    <CustomButton filled text={"Remove Card"}/>*/}
 
-            {/*</View>*/}
+                {/*</View>*/}
 
 
-        </View>
+            </View>
 
-            </>
+        </>
     );
 };
 
@@ -137,10 +137,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     inv: {
+        ...FONTS.h5,
         color: COLORS.primary,
-        fontSize: 24,
+        // fontSize: 24,
         marginVertical: 10,
-        fontFamily: "Nexa-Bold"
+        // fontFamily: "Nexa-Bold"
     },
     balanceFrame: {
         borderRadius: 15, // padding: 20,
@@ -160,15 +161,13 @@ const styles = StyleSheet.create({
         padding: 20
     },
     tsb: {
-        fontSize: 18,
+        ...FONTS.h8,
         color: COLORS.white,
-        fontFamily: "Nexa-Bold",
         marginVertical: 20
     },
     cardType: {
+        ...FONTS.h8,
         color: COLORS.white,
-        fontFamily: "Nexa-Bold",
-        fontSize: 18
     },
 
 

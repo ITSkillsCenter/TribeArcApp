@@ -10,14 +10,13 @@ import {handleQuery} from "../../graphql/requests";
 import axios from "axios";
 import {BASE_URL} from "../../config";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
 
 
 const ChangePassword = ({navigation}) => {
 
     const user = useContext(UserContext)
 
-
-    // const [oldPassword, setOldPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [oldPassword, setOldPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
@@ -93,7 +92,7 @@ const ChangePassword = ({navigation}) => {
             <NotchResponsive color={COLORS.white}/>
             <View style={styles.container}>
 
-                <BackButton onPress={() => navigation.pop()}/>
+                <BackButton onPress={() => navigation.goBack()}/>
                 <Text style={styles.changePassword}>Change Password</Text>
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
@@ -191,29 +190,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 20,
-        // paddingVertical: 20,
-        // height: SIZES.height,
         backgroundColor: COLORS.white
     },
     box: {
-        // flex: 1,
-
-        // paddingHorizontal: 20,
-        // paddingVertical: 20,
         height: SIZES.height * 0.6,
         backgroundColor: COLORS.white
 
     },
     changePassword: {
+        ...FONTS.h5,
         color: COLORS.primary,
-        fontFamily: "Nexa-Bold",
-        fontSize: 30,
-        // marginVertical: 25
     },
     textInput: {
         borderColor: "#cbc8c8",
         borderWidth: 0.3,
-        height: 55,
+        height: SIZES.font1 * 1.8,
         borderRadius: 5,
         marginVertical: 10,
         paddingHorizontal: 20,

@@ -42,6 +42,7 @@ const plusIconWhite = require("../assets/icons/plusIconWhite.png");
 const smallCheck = require("../assets/icons/smallCheck.png");
 const acctDet = require("../assets/icons/acctDet.png");
 const downloadArrow = require("../assets/icons/downloadArrow.png");
+const notifiBell = require("../assets/icons/notifiBell.png");
 
 
 export default {
@@ -88,5 +89,6 @@ export default {
     plusIconWhite,
     smallCheck,
     acctDet,
-    downloadArrow
+    downloadArrow,
+    notifiBell
 };

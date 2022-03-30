@@ -16,9 +16,9 @@ const CompleteProfile2 = ({navigation}) => {
 
     const user = useContext(UserContext)
 
-    const [profession, setProfession] = useState("")
-    const [designation, setDesignation] = useState("")
-    const [remuneration, setRemuneration] = useState("")
+    const [profession, setProfession] = useState(" ")
+    const [designation, setDesignation] = useState(" ")
+    const [remuneration, setRemuneration] = useState(" ")
     const [isLoading, setIsLoading] = useState(false)
 
 

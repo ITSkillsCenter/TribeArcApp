@@ -11,6 +11,7 @@ import axios from "axios";
 import {BASE_URL} from "../../config";
 import {handleQuery} from "../../graphql/requests";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
 
 
 const TopUpScreen = ({navigation, route}) => {
@@ -207,10 +208,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     topUp: {
-        fontSize: 26,
+        ...FONTS.h5,
         color: COLORS.primary,
-        fontFamily: "Nexa-Bold",
-        marginVertical: 20
+        marginBottom: SIZES.font10
     },
     withdrawDesc: {
         fontSize: 16,
@@ -225,36 +225,7 @@ const styles = StyleSheet.create({
         fontFamily: "Nexa-Book"
 
     },
-    modalAutoCharge: {
-        fontSize: SIZES.width * 0.05,
-        fontFamily: "Nexa-Bold",
-        color: COLORS.black,
-        marginVertical: 10
-    },
-    modalAutoChargeDesc: {
-        fontSize: 14,
-        fontFamily: "Nexa-Book",
-        color: COLORS.black,
-        marginVertical: 10,
-        opacity: 0.6,
-        lineHeight: 24
 
-    }, addAcctBox: {
-        flexDirection: "row",
-        alignItems: "center",
-        height: 80,
-        backgroundColor: "#FAFAFF",
-        borderRadius: 15,
-        padding: 20,
-        marginVertical: 5
-        // justifyContent:"space-between"
-    },
-    addAcct: {
-        color: COLORS.black,
-        opacity: 0.6,
-        fontFamily: "Nexa-Book",
-        paddingHorizontal: 20
-    },
     addAcctBox2: {
         flexDirection: "row",
         alignItems: "center",
