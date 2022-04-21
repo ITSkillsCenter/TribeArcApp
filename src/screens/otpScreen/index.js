@@ -86,9 +86,9 @@ const OtpScreen = ({navigation, route}) => {
                         placeholderText={"Enter one time password"}
                         initialValue={otpCode}
                         props={{
-                            maxLength: 6
+                            maxLength: 6,
+                            keyboardType: "numeric"
                         }}
-                        keyboardType={"numeric"}
                         onChange={(value) => {
                             setOtpCode(value)
                             setErrMsg("")

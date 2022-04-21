@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useEffect, useState} from 'react';
-import {Image, Linking, StyleSheet, Text, TextInput, View} from "react-native";
+import {Alert, Image, Linking, Modal, Pressable, StatusBar, StyleSheet, Text, TextInput, View} from "react-native";
 import BackButton from "../../components/BackButton";
 import {COLORS, icons, SIZES} from "../../constants";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
@@ -10,12 +10,16 @@ import SelectDropdown from 'react-native-select-dropdown'
 import axios from "axios";
 import {BASE_URL} from "../../config";
 import NotchResponsive from "../../components/NotchResponsive";
+import {FONTS} from "../../constants/theme";
 
 
 const AddBvn = ({navigation}) => {
 
     const user = useContext(UserContext)
     // console.log(user)
+
+    const [modalVisible, setModalVisible] = useState(false);
+
 
     const [bvn, setBvn] = useState("")
     const [acctNumber, setAcctNumber] = useState("")
@@ -110,9 +114,7 @@ const AddBvn = ({navigation}) => {
 
     const ValidateBVN = async () => {
 
-        // console.log(`${bvn}`)
-        // console.log(`${acctNumber}`)
-        // console.log(`${bankCode}`)
+
         setIsLoading(true)
 
 
@@ -147,6 +149,8 @@ const AddBvn = ({navigation}) => {
 
     return (
         <>
+
+
             <NotchResponsive color={COLORS.white}/>
             <View style={styles.container}>
                 <BackButton onPress={() => navigation.pop()}/>
@@ -157,7 +161,7 @@ const AddBvn = ({navigation}) => {
                     <View style={styles.addBVNContainer}>
                         <Image source={icons.addBvn} style={styles.image}/>
                         <Text style={styles.text}>Your BVN is safe with us</Text>
-                        <Text style={styles.link} onPress={() => Linking.openURL("https://tribearc.com")}>Learn
+                        <Text style={styles.link} onPress={() => setModalVisible(true)}>Learn
                             more</Text>
                     </View>
 
@@ -251,6 +255,42 @@ const AddBvn = ({navigation}) => {
                         text={"Validate BVN"}/>
                 </View>
             </View>
+
+
+            <View style={styles.centeredView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setModalVisible(!modalVisible);
+                    }}>
+                    <Pressable
+                        onPress={() => setModalVisible(!modalVisible)}
+                        style={styles.centeredView2}>
+                        <View style={styles.modalView}>
+
+
+                            <Text style={styles.learnMoreDesc}>
+                                To better protect your identity as well as our ecosystem, TribeArc
+                                will request various pieces of information to help verify your
+                                identity. Your BVN helps us to keep you safe and fulfil our
+                                regulatory requirements.
+                                Please note that your BVN does NOT give us access to your bank details nor do we share
+                                it with any third party. It is only used
+                                for verification which makes it easy for you to deposit and withdraw your funds as well
+                                as keep our platform safe from scammers.
+
+
+                            </Text>
+
+
+                        </View>
+                    </Pressable>
+                </Modal>
+            </View>
+
         </>
     );
 };
@@ -316,5 +356,51 @@ const styles = StyleSheet.create({
         fontFamily: "Nexa-Book",
         fontSize: 14,
         marginVertical: 20
-    }
+    },
+    centeredView: {
+        // flex: 1,
+        marginTop: 20,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    centeredView2: {
+        height: "100%",
+        // marginTop: 20,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#797676A3",
+    },
+    modalView: {
+        margin: 10,
+        width: "90%",
+        height: SIZES.height * 0.5,
+        backgroundColor: "white",
+        borderRadius: 10,
+        padding: 20, // alignItems: "center",
+        shadowColor: "rgba(0,0,0,0.48)",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    cancelIcon: {
+        width: SIZES.font1 * 2,
+        height: SIZES.font1 * 2,
+        alignSelf: "center",
+        // marginTop:SIZES.font10
+        // margin:10
+    },
+    learnMoreDesc: {
+        ...FONTS.body8,
+        color: COLORS.black,
+        // opacity: 0.8,
+        lineHeight: SIZES.font4,
+        // marginVertical: SIZES.font4,
+        width: "90%",
+        // textAlign: "center",
+        alignSelf: "center",
+    },
 })

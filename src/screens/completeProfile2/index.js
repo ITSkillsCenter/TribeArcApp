@@ -1,6 +1,6 @@
 // @flow
 import React, {useContext, useState} from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Alert, Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {COLORS, icons, SIZES} from "../../constants";
 import BackButton from "../../components/BackButton";
 import CustomButton from "../../components/CustomButton";
@@ -16,9 +16,9 @@ const CompleteProfile2 = ({navigation}) => {
 
     const user = useContext(UserContext)
 
-    const [profession, setProfession] = useState(" ")
-    const [designation, setDesignation] = useState(" ")
-    const [remuneration, setRemuneration] = useState(" ")
+    const [profession, setProfession] = useState("")
+    const [designation, setDesignation] = useState("")
+    const [remuneration, setRemuneration] = useState("")
     const [isLoading, setIsLoading] = useState(false)
 
 
@@ -53,7 +53,6 @@ const CompleteProfile2 = ({navigation}) => {
             await setIsLoading(false)
 
 
-
         } catch (e) {
             console.log(e, "GetUserDataError")
         }
@@ -63,21 +62,21 @@ const CompleteProfile2 = ({navigation}) => {
     return (
         <>
             <NotchResponsive color={COLORS.white}/>
-        <ScrollView style={styles.container}>
-            <BackButton onPress={() => navigation.pop()}/>
+            <ScrollView style={styles.container}>
+                <BackButton onPress={() => navigation.pop()}/>
 
-            <View style={styles.box}>
-                <Image style={{height: SIZES.width*0.2, width: SIZES.width*0.2,}} source={icons.circular2}/>
-                <View style={styles.box2}>
-                    <Text style={styles.text1}>Complete your Profile</Text>
-                    <Text style={styles.text2}>please complete the fields below</Text>
+                <View style={styles.box}>
+                    <Image style={{height: SIZES.width * 0.2, width: SIZES.width * 0.2,}} source={icons.circular2}/>
+                    <View style={styles.box2}>
+                        <Text style={styles.text1}>Complete your Profile</Text>
+                        <Text style={styles.text2}>please complete the fields below</Text>
+                    </View>
                 </View>
-            </View>
 
-            <Text style={styles.perInfo}>Work Info</Text>
+                <Text style={styles.perInfo}>Work Info</Text>
 
 
-            {/*<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>*/}
+                {/*<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>*/}
 
                 <CustomTextInput
                     initialValue={profession}
@@ -98,34 +97,39 @@ const CompleteProfile2 = ({navigation}) => {
                     placeholderText={"Enter Remuneration"}
                     title={"Remuneration"}
                     props={{
-                        keyboardType:"numeric"
-                }}
+                        keyboardType: "numeric"
+                    }}
                 />
 
-            {/*</KeyboardAwareScrollView>*/}
+                {/*</KeyboardAwareScrollView>*/}
 
 
-            <View style={styles.saveButton}>
-                <CustomButton
-                    loading={isLoading}
-                    filled={profession !== "" && designation !== "" && remuneration !== ""}
-                    text={"Submit"}
-                    onPress={async () => {
-                        try {
-                            await UpdateUserData()
-                            await navigation.navigate("ProfileCompletedSuccessScreen")
+                <View style={styles.saveButton}>
+                    <CustomButton
+                        loading={isLoading}
+                        filled={profession !== "" && designation !== "" && remuneration !== ""}
+                        text={"Submit"}
+                        onPress={async () => {
+                            try {
 
-                        } catch (e) {
-                            console.log(e, "UpdateUserError2")
-                        }
+                                if (profession && designation && remuneration !== "") {
+                                    await UpdateUserData()
+                                    await navigation.navigate("ProfileCompletedSuccessScreen")
+                                } else {
+                                    Alert.alert("Required Fields", "Fill in all fields to continue")
+                                }
 
 
+                            } catch (e) {
+                                console.log(e, "UpdateUserError2")
+                            }
 
-                    }}/>
-            </View>
 
-        </ScrollView>
-            </>
+                        }}/>
+                </View>
+
+            </ScrollView>
+        </>
     );
 };
 
@@ -136,12 +140,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.white,
-        paddingHorizontal: SIZES.width*0.04,
+        paddingHorizontal: SIZES.width * 0.04,
 
     },
     box: {
         flexDirection: "row",
-        height: SIZES.width*0.2,
+        height: SIZES.width * 0.2,
         // marginVertical: 20
         // backgroundColor: "red"
 
@@ -165,7 +169,7 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         fontFamily: "Nexa-Bold",
         fontSize: 18,
-        marginVertical: SIZES.width*0.03,
+        marginVertical: SIZES.width * 0.03,
 
     },
     saveButton: {

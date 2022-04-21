@@ -212,7 +212,7 @@ const Profile = ({navigation, route}) => {
                         </View>
 
                         <View style={styles.fullNameContainer}>
-                            <Text style={styles.fullName}>{firstname} {lastname}</Text>
+                            <Text style={styles.fullName}>{firstname? firstname:"User"} {lastname?lastname:"Name"}</Text>
                             <Text style={styles.editProfile}>Edit Profile</Text>
                         </View>
 

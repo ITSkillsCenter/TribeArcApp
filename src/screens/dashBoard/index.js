@@ -2,11 +2,11 @@
 import React, {useContext, useEffect, useState} from 'react';
 
 import {
-    ActivityIndicator,
+    ActivityIndicator, Alert,
     Image,
-    ImageBackground, Pressable,
+    ImageBackground, Modal, Pressable,
     SafeAreaView,
-    ScrollView,
+    ScrollView, StatusBar,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -26,6 +26,8 @@ import NotchResponsive from "../../components/NotchResponsive";
 const DashBoard = ({navigation}) => {
     let notification = true;
     const isFocused = useIsFocused()
+
+
 
     const [savings, setSavings] = useState("")
     const [voluntary, setVoluntary] = useState("")
@@ -186,6 +188,8 @@ const DashBoard = ({navigation}) => {
     return (
 
         <>
+            <StatusBar translucent={true} backgroundColor={COLORS.white} barStyle={"dark-content"}/>
+
             <NotchResponsive color={COLORS.white}/>
             {loading ? <ActivityIndicator
                     style={{alignSelf: "center", flex: 1, backgroundColor: COLORS.white, width: SIZES.width}} size={"large"}
@@ -203,7 +207,7 @@ const DashBoard = ({navigation}) => {
                                            } : require("../../assets/images/userImg.png")}/>
                             </Pressable>
                             <View style={styles.nameContainer}>
-                                <Text style={styles.username}>Hello {firstname},</Text>
+                                <Text style={styles.username}>Hello {firstname? firstname:"User"},</Text>
                                 <Text style={styles.welcomeText}>Welcome Back!</Text>
                             </View>
                             <Pressable onPress={() => {
@@ -217,10 +221,18 @@ const DashBoard = ({navigation}) => {
                         </View>
 
                         {/*BALANCE CARD SECTION*/}
-                        <ScrollView snapToAlignment={"center"} decelerationRate={"fast"}
-                                    showsVerticalScrollIndicator={false}>
+                        <ScrollView
+
+
+                            showsVerticalScrollIndicator={false}>
                             <View style={{width: "100%", marginBottom: 15}}>
-                                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                                <ScrollView
+                                    alwaysBounceHorizontal={"true"}
+                                    snapToInterval={SIZES.width * 0.8}
+                                    snapToStart={true}
+                                    snapToAlignment={"start"}
+                                    decelerationRate={"fast"}
+                                    horizontal showsHorizontalScrollIndicator={false}>
 
                                     <ImageBackground resizeMode={"contain"} source={icons.balFrame}
                                                      style={styles.balanceFrame}>
@@ -423,6 +435,11 @@ const DashBoard = ({navigation}) => {
 
                 </View>}
 
+
+
+
+
+
         </>
 
     );
@@ -540,4 +557,5 @@ const styles = StyleSheet.create({
         width: SIZES.width * 0.4,
         color: COLORS.black,
     },
+
 })
