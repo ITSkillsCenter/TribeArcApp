@@ -15,5 +15,3 @@ export const requests = {
         )
     }
 }
-
-console.log("working")
