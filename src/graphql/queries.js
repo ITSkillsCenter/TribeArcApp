@@ -1,17 +1,19 @@
 export const requests = {
-  queries: (query) => {
-    return (
-      `query{
+    queries: (query) => {
+        return (
+            `query{
         ${query}
       }`
-    )
-  },
-  mutation: (query, condition) => {
-    return (
-      `mutation{
+        )
+    },
+    mutation: (query, condition) => {
+        return (
+            `mutation{
         ${query}
       }
       `
-    )
-  }
+        )
+    }
 }
+
+console.log("working")
